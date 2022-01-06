@@ -1,0 +1,58 @@
+import React from "react";
+import clsx from "clsx";
+import Layout from "@theme/Layout";
+import Link from "@docusaurus/Link";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import styles from "./index.module.css";
+import HomepageFeatures from "../components/HomepageFeatures";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+function HomepageHeader() {
+  const { siteConfig } = useDocusaurusContext();
+  return (
+    <header className={clsx("hero hero--primary", styles.heroBanner)}>
+      <div className="container">
+        <img
+          src={useBaseUrl("img/czertainly_color_H.svg")}
+          className={styles.introImage}
+        />
+        <br />
+        <br />
+        <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
+        <p className={styles.heroSubtitle}>{siteConfig.tagline}</p>
+        <div className={styles.buttons}>
+          <Link
+            className="button button--success button--lg buttonTextWhite"
+            // className={[styles.buttonTextColor, styles.button, styles.buttonSuccess, styles.buttonLg].join(' ')}
+            to={useBaseUrl("docs/")}
+          >
+            Get Started️
+          </Link>
+        </div>
+        <br />
+        <br />
+        <div>
+          <img
+            src={useBaseUrl("img/undraw_doctors.svg")}
+            className={styles.introImage}
+          />
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export default function Home(): JSX.Element {
+  const { siteConfig } = useDocusaurusContext();
+  return (
+    <Layout
+      title={`Hello from ${siteConfig.title}`}
+      description="Medicine for your certificates!/>"
+    >
+      <HomepageHeader />
+      <main>
+        <HomepageFeatures />
+      </main>
+    </Layout>
+  );
+}
