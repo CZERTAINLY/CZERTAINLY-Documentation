@@ -34,6 +34,11 @@ const config = {
       {
         specs: [
           {
+            id: 'core-acme',
+            specUrl: 'https://api.czertainly.com/doc-openapi-core-acme.yaml',
+            routePath: '/api/core-acme/',
+          },
+          {
             id: 'core-local',
             specUrl: 'https://api.czertainly.com/doc-openapi-core-local.yaml',
             routePath: '/api/core-local/',
@@ -108,6 +113,11 @@ const config = {
             specUrl: 'https://api.czertainly.com/doc-openapi-connector-discovery-provider.yaml',
             routePath: '/api/connector-discovery-provider/',
           },
+          {
+            id: 'protocol-acme',
+            specUrl: 'https://api.czertainly.com/doc-openapi-protocol-acme.yaml',
+            routePath: '/api/protocol-acme/',
+          },
         ],
         theme: {
           /**
@@ -157,6 +167,10 @@ const config = {
             label: 'Core API',
             position: 'left',
             items: [
+              {
+                label: 'ACME',
+                to: '/api/core-acme/',
+              },
               {
                 label: 'Administrator',
                 to: '/api/core-admin/',
@@ -222,6 +236,16 @@ const config = {
               {
                 label: 'Discovery Provider',
                 to: '/api/connector-discovery-provider/',
+              },
+            ],
+          },
+          {
+            label: 'Protocol API',
+            position: 'left',
+            items: [
+              {
+                label: 'ACME',
+                to: '/api/protocol-acme/',
               },
             ],
           },
