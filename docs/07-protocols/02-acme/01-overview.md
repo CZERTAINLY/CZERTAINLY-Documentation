@@ -1,87 +1,67 @@
 # Overview
 
-CZERTAINLY implements the power of ACME protocol to automate the process of Certificate Lifecycle. The platform offers simple integration with ACME Server with the help of ACME Objects that are easy to configure and to manage.
+The platform implements the ACME (Automatic Certificate Management Environment) protocol to automate the process of certificate management. it offers simple integration with ACME server with the help of ACME objects that are easy to configure and to manage.
+
+Implementation of ACME provides a flexibility for the clients and administrators to choose between running ACME endpoint that are bound to [RA Profile](../../concept-design/core-components/ra-profile).
 
 :::info
-ACME in the platform is implemented as per [RFC 8555](https://datatracker.ietf.org/doc/html/rfc8555).
-All objects implemented complies with the RFC
+ACME implementation follows [RFC 8555 - Automatic Certificate Management Environment (ACME)](https://datatracker.ietf.org/doc/html/rfc8555).
+See [ACME protocol API](#/api/protocol-acme/) for more information about implemented end points.
 :::
 
-## ACME Objects
+## Platform ACME management
 
-The following represents the ACME Objects available in the platform
+In order to start with the ACME protocol, the platform must be configured and act as the ACME server.
+For this purpose we define the following management objects:
 
-- `ACME Profiles`
-- `ACME Accounts`
+| ACME management object | Description |
+| ----------------------- | ----------- |
+| [`ACME Profile`](acme-profile) | Contains configuration of the ACME server |
+| [`ACME Account`](acme-account) | Registered ACME account that consumes the ACME operations |
 
-### ACME Profiles
+You can manage `ACME Profiles` and `ACME Accounts` through the web interface or through the [`Core ACME API`](#/api/core-acme/).
 
-`ACME Profile` specify the configurations for the ACME account. It consist of configuration like
+## ACME Profile vs RA Profile ACME API
 
-- DNS Configurations for Challenges
-- Order retry and interval configurations
-- Terms of Service related information
-- `RA Profile` relations
+You can configure `ACME Profile` with or without `RA Profile`. And you can enable ACME API for any particular `RA Profile` only.
+There are 2 ACME APIs that are implemented in the platform:
 
-See [`ACME Profile`](./acme-profiles) for more information
+| ACME API | Description |
+| ------- | ----------- |
+| `ACME Profile`<br/>`https://<hostname>:<port>/acme/{acmeProfileName}/directory` | To use `ACME Profile` directly from the client. In this case, the `ACME Profile` must have configure default `RA Profile`, otherwise the API won't be working |
+| `RA Profile`<br/>`https://<hostname>:<port>/acme/raProfile/{raProfileName}/directory` | Any `RA Profile` can have enabled specific `ACME Profile`. The ACME API is in this case managed by the `RA Profile` and you do not have to configure it as a default for `ACME Profile` |
 
-### ACME Accounts
+**When to use `ACME Profile` and when `RA Profile` ACME API?**
 
-The platform provides the power to control the Accounts registered by the clients. This adds additional management capabilities and allow the users to have more control on the Accounts. The Account objects are the Objects defined by the [RFC 8555](https://datatracker.ietf.org/doc/html/rfc8555) under section [7.1.2.](https://datatracker.ietf.org/doc/html/rfc8555#section-7.1.2) with additional capabilities to enable and disable them.
-
-To know more details click on [ACME Accounts]("./acme-accounts")
-
-### Operations
-
-Listed below are the operations supported by the platform for ACME.
-
-| Operation            | Description                                                                                                                                                                   | End Points                                                                                                         | Ref                                                                        |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| Directory            | Get the directory object containing the URL for operations and other details including Terms of Service                                                                       | `/acme/{acmeProfileName}/directory` (or) `/acme/raProfile/{raProfileName}/directory`                               | [Directory](https://datatracker.ietf.org/doc/html/rfc8555#section-7.1.1)   |
-| New Nonce            | Create a new Anti-Replay Nonce that should be used in the following requests in the header field by the client                                                                | `/acme/{acmeProfileName}/new-nonce` (or) `/acme/raProfile/{raProfileName}/new-nonce`                               | [Nonce](https://datatracker.ietf.org/doc/html/rfc8555#section-7.2)         |
-| New Account          | Create a new account using the key pair generated by the client, get the existing account using the public key                                                                | `/acme/{acmeProfileName}/new-account` (or) `/acme/raProfile/{raProfileName}/new-account`                           | [Account](https://datatracker.ietf.org/doc/html/rfc8555#section-7.3)       |
-| Update Account       | Update the account including the Terms of Service and External account binding                                                                                                | `/acme/{acmeProfileName}/acct/{accountId}` (or) `/acme/raProfile/{raProfileName}/acct/{accountId}`                 | [Account](https://datatracker.ietf.org/doc/html/rfc8555#section-7.3.2)     |
-| New Order            | Place a new order for a certificate. The order will contain the identifiers to which the certificate is being issued. New Order marks the first step in issuing a certificate | `/acme/{acmeProfileName}/new-order` (or) `/acme/raProfile/{raProfileName}/new-order`                               | [Order](https://datatracker.ietf.org/doc/html/rfc8555#section-7.4)         |
-| Challenge            | Initiate the challenge validation from the server side once the client has satisfied the challenges                                                                           | `/acme/{acmeProfileName}/chall/{challengeId}` (or) `/acme/raProfile/{raProfileName}/chall/{challengeId}`           | [Challenge](https://datatracker.ietf.org/doc/html/rfc8555#section-7.5)     |
-| Finalize             | Finalize the order for new certificate by providing the CSR                                                                                                                   | `/acme/{acmeProfileName}/order/{orderId}/finalize` (or) `/acme/raProfile/{raProfileName}/order/{orderId}/finalize` | [Finalize](https://datatracker.ietf.org/doc/html/rfc8555#section-7.4.2)    |
-| Download Certificate | Download the certificate once the certificate issuance is completed                                                                                                           | `/acme/{acmeProfileName}/cert/{certificateId}` (or) `/acme/raProfile/{raProfileName}/cert/{certificateId}`         | [Certificate](https://datatracker.ietf.org/doc/html/rfc8555#section-7.3.2) |
-| Revoke Certificate   | Revoke a certificate if it is no longer viable. Revocation operation uses the certificate content for the server to identify                                                  | `/acme/{acmeProfileName}/revoke-cert` (or) `/acme/raProfile/{raProfileName}/order/revoke-cert`                     | [Revoke](https://datatracker.ietf.org/doc/html/rfc8555#section-7.6)        |
-
-### End Points
-
-To work with ACME, the platform requires the combination of `ACME Profiles` and `RA Profiles`. This can be achieved by two different approaches:
-
-- Using `ACME Profile` with default `RA Profile`
-- Activating ACME for `RA Profile`
-
-#### Using ACME with default RA Profile
-
-When an acme profile is created, it can be tagged with a default `RA Profile`. This enables the server to use the selected `RA Profile` for Certificate Issuance Information and the `ACME Profile` for ACME Configurations. This mode is best for the scenario where an ACME account has one-to-one relation with RA Profile
-
-##### End Point
-
-The end point for this mode starts `https://<acme-server-ip>:<acme-server-port>/acme/{acme-profile-name}/*`
-
-where acme-profile-name refers to the name of the new profile created.
-
-#### Activating ACME for existing RA Profile
-
-`ACME Profiles` can be created without default `RA Profiles`. These profiles can then be used to activate multiple RA Profiles for ACME Operations. This comes handy when multiple configurations are needed with different CA Configuration and same ACME configuration.
+Depends on what you would like to achieve:
+- if you would like to allow ACME clients to work only with one specific `RA Profile` then use `RA Profile` ACME API
+- if you would like to have the flexibility in changing the `RA Profile` which is used by the ACME client, then use `ACME Profile` ACME API
 
 :::info
-`ACME Profile` can be used with multiple `RA Profiles` with this mode
+`ACME Profile` can be used with multiple `RA Profiles`.
 :::
 
-##### End Point
-
-The end point for this mode starts with `https://<acme-server-ip>:<acme-server-port>/acme/raProfile/{ra-profile-name}/*`
-
-:::warning
-The server performs various validations on the end point including the following
-
-- Availability of the profile
-- Status of the profile
-- If Both `ACME Profile` and `RA Profile` is available and enabled for the configuration
-
-If the validation fails then the server returns appropriate error to the client
+:::caution
+The platform performs various validations on the end point including the following:
+- Availability of the `ACME Profile` or `RA Profile`
+- Status of the `ACME Profile` or `RA Profile`
+- If both `ACME Profile` and `RA Profile` are available and enabled
 :::
+
+The `ACME Profile` that has no configuration of default `RA Profile` is usually bound to one or multiple `RA Profiles`. In this case the `ACME Profile` configuration consist of consistent attributes that are used by ACME clients. 
+
+## Supported operations
+
+Supported operations are listed below:
+
+| Operation | Description | End Points | RFC Reference |
+| --------- | ----------- | ---------- | ------------- |
+| **Directory** | Get the directory object containing the URL for operations and other details including Terms of Service | `/acme/{acmeProfileName}/directory` <br/> (or) <br/> `/acme/raProfile/{raProfileName}/directory` | [RFC 8555, section 7.1.1](https://datatracker.ietf.org/doc/html/rfc8555#section-7.1.1) |
+| **New Nonce** | Create a new Anti-Replay Nonce that should be used in the following requests in the header field by the client | `/acme/{acmeProfileName}/new-nonce` <br/> (or) <br/> `/acme/raProfile/{raProfileName}/new-nonce` | [RFC 8555, section 7.2](https://datatracker.ietf.org/doc/html/rfc8555#section-7.2) |
+| **New Account** | Create a new account using the key pair generated by the client, get the existing account using the public key  | `/acme/{acmeProfileName}/new-account` <br/> (or) <br/> `/acme/raProfile/{raProfileName}/new-account` | [RFC 8555, section 7.3](https://datatracker.ietf.org/doc/html/rfc8555#section-7.3) |
+| **Update Account** | Update the account including the Terms of Service and External account binding | `/acme/{acmeProfileName}/acct/{accountId}` <br/> (or) <br/> `/acme/raProfile/{raProfileName}/acct/{accountId}` | [RFC 8555, section 7.3.2](https://datatracker.ietf.org/doc/html/rfc8555#section-7.3.2) |
+| **New Order** | Place a new order for a certificate. The order will contain the identifiers to which the certificate is being issued. New Order marks the first step in issuing a certificate | `/acme/{acmeProfileName}/new-order` <br/> (or) <br/> `/acme/raProfile/{raProfileName}/new-order` | [RFC 8555, section 7.4](https://datatracker.ietf.org/doc/html/rfc8555#section-7.4) |
+| **Challenge** | Initiate the challenge validation from the server side once the client has satisfied the challenges | `/acme/{acmeProfileName}/chall/{challengeId}` <br/> (or) <br/> `/acme/raProfile/{raProfileName}/chall/{challengeId}` | [RFC 8555, section 7.5](https://datatracker.ietf.org/doc/html/rfc8555#section-7.5) |
+| **Finalize** | Finalize the order for new certificate by providing the CSR | `/acme/{acmeProfileName}/order/{orderId}/finalize` <br/> (or) <br/> `/acme/raProfile/{raProfileName}/order/{orderId}/finalize` | [RFC 8555, section 7.4.2](https://datatracker.ietf.org/doc/html/rfc8555#section-7.4.2) |
+| **Download Certificate** | Download the certificate once the certificate issuance is completed | `/acme/{acmeProfileName}/cert/{certificateId}` <br/> (or) <br/> `/acme/raProfile/{raProfileName}/cert/{certificateId}` | [RFC 8555, section 7.3.2](https://datatracker.ietf.org/doc/html/rfc8555#section-7.3.2) |
+| **Revoke Certificate** | Revoke a certificate if it is no longer viable. Revocation operation uses the certificate content for the server to identify | `/acme/{acmeProfileName}/revoke-cert` <br/> (or) <br/> `/acme/raProfile/{raProfileName}/order/revoke-cert` | [RFC 8555, section 7.6](https://datatracker.ietf.org/doc/html/rfc8555#section-7.6) |
