@@ -1,24 +1,24 @@
 # ACME Profiles
 
-This section of the document describes the `ACME Profile` Object in the platform. `ACME Profile` Object holds the configuration listed below
+This section of the document describes the `ACME Profile`. It holds the configuration listed below
 
-| Configuration                                  | Purpose                                                                              | Default Value      |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------ |
-| Name                                           | `ACME Profile` Name                                                                  |                    |
-| Description                                    | Description of the `ACME Profile `                                                   | None               |
-| Terms of Service URL                           | URL for the Terms of Service the client has to agree                                 | None               |
-| Website URL                                    | Website URL containing additional information                                        | None               |
-| DNS Resolver IP                                | IP of the DNS Resolver if a custom dns is required                                   | System default DNS |
-| DNS Resolver Port                              | Port of the DNS Resolver                                                             | 53                 |
-| Retry Interval                                 | Retry Interval to set in the `Retry-After` header                                    | 30                 |
-| validity                                       | Order Validity                                                                       | 10 Hours           |
-| Disable new Order (Change in Terms of Service) | Disable new Order requests until the new terms are agreed                            | false              |
-| Changes in Terms of Service URL                | New Terms of Service URL that will be set if the Disable new Order is set to true    | None               |
-| Require Contacts for new Accounts              | Field representing if the contacts are required for registering a new account        | false              |
-| Require agree to Terms of Service              | Field representing if the Terms of Service should be agreed for new account creation | false              |
-| RA Profile                                     | RA Profile that will be set as default profile for this ACME Profile                 | None               |
+| Configuration                                  | Purpose                                                                              | Default Value        | Mandatory                                     |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------- | --------------------------------------------- |
+| Name                                           | `ACME Profile` Name                                                                  |                      | <span class="badge badge--success">Yes</span> |
+| Description                                    | Description of the `ACME Profile `                                                   | `None`               | <span class="badge badge--danger">No</span>   |
+| Terms of Service URL                           | URL for the Terms of Service the client has to agree                                 | `None`               | <span class="badge badge--danger">No</span>   |
+| Website URL                                    | Website URL containing additional information                                        | `None`               | <span class="badge badge--danger">No</span>   |
+| DNS Resolver IP                                | IP of the DNS Resolver if a custom dns is required                                   | `System default DNS` | <span class="badge badge--danger">No</span>   |
+| DNS Resolver Port                              | Port of the DNS Resolver                                                             | `53`                 | <span class="badge badge--danger">No</span>   |
+| Retry Interval                                 | Retry Interval to set in the `Retry-After` header                                    | `30`                 | <span class="badge badge--danger">No</span>   |
+| validity                                       | Order Validity                                                                       | `10 Hours`           | <span class="badge badge--danger">No</span>   |
+| Disable new Order (Change in Terms of Service) | Disable new Order requests until the new terms are agreed                            | `false`              | <span class="badge badge--danger">No</span>   |
+| Changes in Terms of Service URL                | New Terms of Service URL that will be set if the Disable new Order is set to true    | `None`               | <span class="badge badge--danger">No</span>   |
+| Require Contacts for new Accounts              | Field representing if the contacts are required for registering a new account        | `false`              | <span class="badge badge--danger">No</span>   |
+| Require agree to Terms of Service              | Field representing if the Terms of Service should be agreed for new account creation | `false`              | <span class="badge badge--danger">No</span>   |
+| RA Profile                                     | RA Profile that will be set as default profile for this ACME Profile                 | `None`               | <span class="badge badge--danger">No</span>   |
 
-By default `ACME Profiles` will be created without any default RA Profile, if nothing is selected.
+By default `ACME Profiles` will be created without any default RA Profile, if not selected.
 
 ### Attributes
 

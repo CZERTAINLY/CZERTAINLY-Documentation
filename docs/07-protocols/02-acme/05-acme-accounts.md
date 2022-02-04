@@ -17,7 +17,6 @@ The following operations can be performed on `ACME Account`.
 :::info
 
 - `Account` should be Enable to place a new Order
-- Revocation of the `Account` is same as Server Side Deactivation mentioned in the RFC
-- Deactivated or Revoked account cannot be enabled.
+- Revocation of the `Account` is same as Server Side Deactivation mentioned in the [RFC 8555, section 7.1.6](https://datatracker.ietf.org/doc/html/rfc8555#:~:text=State%20Transitions%20for%20Account%20Objects)
+- Deactivated or Revoked account cannot be re-enabled.
 - Status of the deactivated account will be disabled and cannot be updated
-  :::
