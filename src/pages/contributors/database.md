@@ -29,15 +29,15 @@ Flyway recognizes integer numbers as version of the migration script. Increased 
 SQL migrations must comply with the following naming pattern:
 
 ```
- Prefix           Separator            Suffix
-   |                  |                  |
- |[VUR]|[YYYYMMDDHHMMSS]|__|[description]|.sql|
-            |                |
-         Version        Description
+ Prefix            Separator            Suffix
+   |                   |                  |
+ |[VUR]|[YYYYMMDDHHMM]|__|[description]|.sql|
+              |                |
+           Version        Description
 ```
 
 - **Prefix:** V for versioned, U for undo and R for repeatable migrations
-- **Version:** Version in the format YYYYMMDDHHMMSS, where YYYY represent current year, MM current month, DD current day, HH current hour, MM current minute, SS current second (Not for repeatable migrations)
+- **Version:** Version in the format YYYYMMDDHHMM, where YYYY represent current year, MM current month, DD current day, HH current hour, MM current minute (Not for repeatable migrations)
 - **Separator**: __ (two underscores)
 - **Description**: Underscores or spaces separate the words that describes the migration
 - **Suffix**: .sql
