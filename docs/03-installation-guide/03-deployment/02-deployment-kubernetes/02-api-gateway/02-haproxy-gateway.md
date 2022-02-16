@@ -1,12 +1,14 @@
-# API Gateway
+# HAProxy Gateway
 
-The `HA Proxy` is used as a simple API Gateway to the platform. The `HA Proxy` is configured to forward the request to the platform.
+`HAProxy` is a free, very fast and reliable reverse-proxy offering high availability, load balancing, and proxying for TCP and HTTP-based applications.
+
+The `HAProxy` is used as a simple API Gateway to the platform. The `HAProxy` is configured to forward the request to the platform. You can configure and run it using the following guide.
 
 It contains the following manifests:
 
 | Manifest | Description |
 |------|-------------|
-| `api-gateway-configmap.yaml` | `ConfigMap` holding the `haproxy.cfg` |
+| `api-gateway-configmap.yaml` | `ConfigMap` holding the `haproxy.cfg` configuration |
 | `api-gateway-deployment.yaml` | `Deployment` of the API Gateway |
 | `api-gateway-service.yaml` | `Service` to create access for the API Gateway |
 

@@ -16,7 +16,7 @@ The following table explains the deployment parts and provides references for fu
 
 | Part | Description | Reference |
 | ---- | ----------- | --------- |
-| **API Gateway** | Entry point for the platform | [API Gateway](api-gateway) |
+| **API Gateway** | Entry point for the platform. API gateway ensures correct routing and validation of the requests coming to the platform. Any API gateway can be used. In the references, you can find examples how to configure and run popular API gateways for the platform. | <ul> <li>[Kong](api-gateway/kong-gateway)</li> <li>[HAProxy](api-gateway/haproxy-gateway)</li> </ul> |
 | **Core** | The Core of the platform | [Core](core) |
 | **Administrator Web** (optional) | Administrator Web UI| [Administrator Web](administrator-web) |
 | **Operator Web** (optional) | Operator Web UI | [Operator Web](operator-web) |
