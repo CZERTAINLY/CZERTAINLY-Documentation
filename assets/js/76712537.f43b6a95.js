@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkczertainly=self.webpackChunkczertainly||[]).push([[2483],{2032:function(t){t.exports=JSON.parse('{"specUrl":"https://api.czertainly.com/doc-openapi-core-authority.yaml","type":"url","content":"https://api.czertainly.com/doc-openapi-core-authority.yaml"}')}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkczertainly=self.webpackChunkczertainly||[]).push([[3485],{1665:function(e){e.exports=JSON.parse('{"specUrl":"https://api.czertainly.com/doc-openapi-core-discovery.yaml","type":"url","content":"https://api.czertainly.com/doc-openapi-core-discovery.yaml"}')}}]);
