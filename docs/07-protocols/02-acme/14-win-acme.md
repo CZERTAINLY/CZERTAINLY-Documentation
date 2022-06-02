@@ -49,5 +49,5 @@ If the authorization has passed successfully, the Authorization result displays 
 If there are any problems chceck out [common issues](https://www.win-acme.com/manual/validation-problems). 
 
 ## DNS-01
-
+DNS is cool
 
