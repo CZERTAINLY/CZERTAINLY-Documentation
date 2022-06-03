@@ -36,16 +36,17 @@ Once every prerequisities are set up, you can simply run `win-acme` executable f
 - Enter email(s) for notifications about problems and abuse (comma-separated): **test@example.com**
 
 Now the ACME server CZERTAINLY launches the authorization process with `win-acme` client. 
+
 `win-acme` client picks the *http validation*, handled by self-hosting plugin, as the default mode during the authorization. 
 
 - [www.example.com] Authorizing...
 - [www.example.com] Authorizing using **http-01 validation** (SelfHosting)
 - [www.example.com] Authorization result: **valid**
 
-If the authorization has passed successfully, the Authorization result displays as **valid**, and the `win-acme` client receives the certificate. 
+If the authorization has passed successfully, the Authorization result displays **valid**, and the `win-acme` client receives the certificate. 
 
 
-If there are any problems with the authorization chceck out [common issues](https://www.win-acme.com/manual/validation-problems). 
+If there are any problems with the authorization check out [common issues](https://www.win-acme.com/manual/validation-problems). 
 
 
 ## DNS-01
@@ -59,10 +60,8 @@ To swith the authorization to *DNS validation* you need to use *full option mode
 - What kind of private key should be used for the certificate?: **2 (RSA key)**
 - How would you like to store the certificate?: **4 (Windows Certificate Store)**
 - Choose store to use, or type the name of another unlisted store: **2 (- Use global default, currently My)**
-- Would you like to store it in another way too?: **5 (No (additional) store steps
-)**
-- Which installation step should run first?: **3 (No (additional) installation steps
-)**
+- Would you like to store it in another way too?: **5 (No (additional) store steps)**
+- Which installation step should run first?: **3 (No (additional) installation steps)**
 
 Now the ACME server CZERTAINLY launches the authorization process and sends DNS challenge to `win-acme` client. 
 - [www.example.com] Authorizing...
