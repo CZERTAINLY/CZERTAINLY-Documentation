@@ -27,7 +27,7 @@ For more information follow [win-acme settings](https://www.win-acme.com/referen
 :::
 
 
-## Workflow 
+## HTTP-01
 Once every prerequisities are set up, you can simply run `win-acme` executable file callesd *wascs.exe* and follow these steps:
 - Please choose from the menu: **N** (Create certificate, default settings)
 - How shall we determine the domain to include in the certificate: **2** (manual input)
@@ -36,24 +36,25 @@ Once every prerequisities are set up, you can simply run `win-acme` executable f
 - Enter email(s) for notifications about problems and abuse (comma-separated): **test@example.com**
 
 Now the ACME server CZERTAINLY launches the authorization process with `win-acme` client. 
+`win-acme` client picks the *http validation*, handled by self-hosting plugin, as the default mode during the authorization. 
 
 - [www.example.com] Authorizing...
 - [www.example.com] Authorizing using **http-01 validation** (SelfHosting)
-- [www.example.com] Authorization result: **invalid**
+- [www.example.com] Authorization result: **valid**
 
 If the authorization has passed successfully, the Authorization result displays as **valid**, and the `win-acme` client receives the certificate. 
 
 
-## HTTP-01
-`win-acme` client picks the *http validation*, handled by self-hosting plugin, as the default mode during the authorization. 
-If there are any problems chceck out [common issues](https://www.win-acme.com/manual/validation-problems). 
+If there are any problems with the authorization chceck out [common issues](https://www.win-acme.com/manual/validation-problems). 
+
 
 ## DNS-01
-DNS is cool
-- Please choose from the menu: **M**
+To swith the authorization to *DNS validation* you need to use *full option mode*. 
+
+- Please choose from the menu: **M (Create certificate - full options)**
 - How shall we determine the domain(s) to include in the certificate?: **2 (Manual input)**
 - Host: **www.example.com**
-- Friendly name '(Manual) www.example.com'. Enter to accept or type desired name: 
+- Friendly name (Manual) www.example.com. Enter to accept or type desired name: 
 - How would you like prove ownership for the domain(s)?: **6 (dns-01 Create verification records manually (auto-renew not possible))**
 - What kind of private key should be used for the certificate?: **2 (RSA key)**
 - How would you like to store the certificate?: **4 (Windows Certificate Store)**
