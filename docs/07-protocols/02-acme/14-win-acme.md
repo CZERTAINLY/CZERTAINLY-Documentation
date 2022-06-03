@@ -50,4 +50,34 @@ If there are any problems chceck out [common issues](https://www.win-acme.com/ma
 
 ## DNS-01
 DNS is cool
+- Please choose from the menu: **M**
+- How shall we determine the domain(s) to include in the certificate?: **2 (Manual input)**
+- Host: **www.example.com**
+- Friendly name '(Manual) www.example.com'. Enter to accept or type desired name: 
+- How would you like prove ownership for the domain(s)?: **6 (dns-01 Create verification records manually (auto-renew not possible))**
+- What kind of private key should be used for the certificate?: **2 (RSA key)**
+- How would you like to store the certificate?: **4 (Windows Certificate Store)**
+- Choose store to use, or type the name of another unlisted store: **2 (- Use global default, currently My)**
+- Would you like to store it in another way too?: **5 (No (additional) store steps
+)**
+- Which installation step should run first?: **3 (No (additional) installation steps
+)**
+
+Now the ACME server CZERTAINLY launches the authorization process and sends DNS challenge to `win-acme` client. 
+- [www.example.com] Authorizing...
+- [www.example.com] Authorizing using dns-01 validation (Manual)
+
+DNS challenge includes: 
+- Domain:             www.example.com
+- Record:             _acme-challenge.www.example.com
+- Type:               TXT
+- Content:            < string >
+- Note:               Some DNS managers add quotes automatically. A single set
+                     is needed.
+
+
+            
+
+
+
 
