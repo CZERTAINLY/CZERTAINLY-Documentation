@@ -26,7 +26,6 @@ Before configuring `win-acme` with CZERTAINLY, you need to have the following:
 
 With these parameters, we are directly connecting to the already configured `RA Profile` czertainly. 
 For more information follow [win-acme settings](https://www.win-acme.com/reference/settings#acme). 
-:::
 
 
 ## Using win-acme with Internet Information Services with selfhosted HTTP challenge
@@ -51,6 +50,8 @@ Once every prerequisities and configurations are set up, you can simply run `win
 
 ![image](https://user-images.githubusercontent.com/97409110/171994019-a0a38c24-4605-46fb-b13b-7e9bbc94f5e0.png)
 
-::notes
+:::note
 - `win-acme` might have issues running properly on older versions of Windows Server (2012 and older) due to compatilbility with TLS 1.2 CipherSuite
 - `win-acme` supports lots of plugins for Sources (IIS, Exchange etc.) and validation methods (HTTP, WebDAV, DNS etc.), for details how to use them, please visit: https://www.win-acme.com/reference/plugins/
+:::
+
