@@ -41,6 +41,8 @@ For more information follow [win-acme settings](https://www.win-acme.com/referen
 
 Once each pre-requisite and configuration are set up, you can run `win-acme` executable file *`wascs.exe`* with administrator privileges (to enable automatic detection of `IIS` services) and follow these steps:
 
+### Interactive mode
+
 - Please choose from the menu: **`N`** (*Create certificate, default settings*)
 - Depending on your setup, we can either input the hostname of the certificate manually or detect it from the `IIS` configuration
 - If `IIS` bindings are configured correctly, you will be asked to point `win-acme` to the site you want to issue certificate for
@@ -52,7 +54,9 @@ Once each pre-requisite and configuration are set up, you can run `win-acme` exe
 Make sure that the web server is reachable on the specified port number with the domain name you selected for the certificate from CZERTAINLY platform to validate the challenge. If the server is not accessible for the CZERTAINLY, it will not be able to validate the challenge and the process will fail.
 :::
 
-The following represents a sample process of issuing certificate for self-hosted `IIS`: 
+### Unattended mode
+
+The following represents a sample process of issuing certificate for self-hosted `IIS` with binding to the host `www.example.com`: 
 
 ```powershell
 wacs.exe `
@@ -61,21 +65,28 @@ wacs.exe `
   --webroot C:\sites\wwwroot
 ```
 
-![image](https://user-images.githubusercontent.com/97409110/171993733-c1c17007-50ff-46f8-8a80-9faeef73b2bd.png)
+:::info
+For all `win-acme` command line arguments, refer to [win-acme documentation](https://www.win-acme.com/reference/cli).
+:::
 
 ## Automation of certificate renewal
 
 `win-acme` can automatically renew any certificate that it obtained from ACME server using Windows Scheduler task. To configure automated renewal, follow these steps:
 
+### Interactive mode
+
 - Run `win-acme` executable file *`wascs.exe`* with administrator privileges
 - Please choose from the menu: **`O`** (*More Options*)
-  - Please choose from the menu> **`T`** (*(Re)Create Scheduled Task*)
+- Please choose from the menu> **`T`** (*(Re)Create Scheduled Task*)
 - Please specify the user you want the task to be run under (user with administrator privileges is recommended to allow automatic binding configuration on the `IIS` server)
 - The scheduled task for automatic renewal of all certificates managed by `win-acme` is now created
 
-The following represents the steps of setting up the scheduler for the automated certificate renewal before expiration:
+### Unattended mode
 
-![image](https://user-images.githubusercontent.com/97409110/171994019-a0a38c24-4605-46fb-b13b-7e9bbc94f5e0.png)
+```powershell
+wacs.exe `
+  --setuptaskscheduler
+```
 
 :::danger Compatibility issues in older versions of Windows server
 `win-acme` might have issues running properly on older versions of Windows Server (2012 and older) due to compatibility with TLS 1.2 cipher suite. If you are struggling to establish the connection with the ACME server, try to consult your SSL and TLS settings with administrators of your system.
