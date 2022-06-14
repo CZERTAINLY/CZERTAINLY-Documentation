@@ -6,7 +6,7 @@ import styles from "./index.module.css";
 import CardLink from "@site/src/components/CardLink";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-import { faDatabase } from '@fortawesome/free-solid-svg-icons'
+import { faDatabase, faListAlt } from '@fortawesome/free-solid-svg-icons'
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -66,6 +66,12 @@ export default function Home(): JSX.Element {
                   title="Database"
                   body="How to work with the CZERTAINLY database in case there is a need to alter schema, tables, or data. How to manage database control with migrations."
                   to={useBaseUrl("contributors/database")}
+                  button="Learn More" />
+              <CardLink
+                  icon={faListAlt}
+                  title="Attributes and Callbacks"
+                  body="Attributes and Callbacks are one of the main principles how to work with different technologies. Learn how to use it to control the behavior of the integral component in CZERTAINLY."
+                  to={useBaseUrl("contributors/attributes")}
                   button="Learn More" />
             </div>
           </div>
