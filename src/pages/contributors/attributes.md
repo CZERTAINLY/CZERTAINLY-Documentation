@@ -6,7 +6,7 @@ hide_table_of_contents: false
 
 Although the CZERTAINLY platform is technology independent, each technology have its own specifics that the users should be able to use properly.
 
-CZERTAINLY is using `AttributeDefinition` objects to control such specific behaviour of different technologies, like certification authorities, credential providers, discovery of certificates, etc. So called `Attributes` are used in almost every `Connector` and develop must understand them in order to implement custom behaviour or extend the functionality of the platform.
+CZERTAINLY uses `AttributeDefinition` objects to control such specific behaviour for different technologies, like certification authorities, credential providers, discovery of certificates, etc. `Attributes` are used in almost all the `Connectors` and developer must understand them in order to implement custom behaviour or to extend the functionality of the platform.
 
 :::info
 For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](/docs/concept-design/overview).
@@ -17,7 +17,7 @@ Now let's take a look on what exactly is an `AttributeDefinition` and how it can
 ## It is all about the `Attributes`
 
 The concept works on the principle of exchanging and validation of `Attributes` between the `Client`, `Connector` and CZERTAINLY platform.
-Implementation of some specific `Connector` must be able to define and properly handle its specific `Attributes`. The definition is then exchanged with the `Client` and the platform validates it consistency and mediate the flow and logic between them:
+Implementation of some specific `Connector` must be able to define and properly handle its specific `Attributes`. The definition is then exchanged with the `Client` and the platform validates it consistency, mediate the flow and logic between them:
 
 ```
 Client                        CZERTAINLY                      Connector             Technology
@@ -39,17 +39,17 @@ Client                        CZERTAINLY                      Connector         
   |                               |                               | <-----------------> |
 ```
 
-Because the communication is controlled by the platform, it ensures the consistency and security of the `Attributes` that are exchanged between the `Client` and the `Connector`. and eventually applied in the target technology.
+Because the communication is controlled by the platform, it ensures the consistency and security of the `Attributes` that are exchanged between the `Client` and the `Connector`.
 
 ## `AttributeDefinition`
 
-`AttributeDefinition` contains set of properties that are defined for a specific parameter required for the `Connector` to work and process requests properly.
+`AttributeDefinition` contains a set of properties that are defined for a specific parameter required for the `Connector` to work and process requests properly.
 
-A typical example may be the `Connector` that implements `Authority Provider` interface. `Authority Provider` serves as a certification authority, and it needs to know how to issue, renew, and revoke certificates. To issue the certificate, we probably need something like certificate signing request, however each technology may required additional data based on which the certificate will be issued.
+A typical example can be the `Connector` that implements `Authority Provider` interface. `Authority Provider` serves as a certification authority, and it needs to know how to issue, renew, and revoke certificates. To issue the certificate, we probably need something like certificate signing request, however each technology may required additional data based on which the certificate will be issued.
 
-For example, in case of MS ADCS, you need to know at least the certificate template that should be used to issue the certificate. And this is the place where you can use the `AttributeDefinition` to define the `Attribute` that will contain information about the certificate templates.
+For example, in case of MS ADCS, one should know at least the certificate template that should be used to issue the certificate. And this is the place where you can use the `AttributeDefinition` to define the `Attribute` that will contain information about the certificate templates.
 
-You can find specification of the `AttributeDefinition` in the [CZERTAINLY Interfaces repository](https://github.com/3KeyCompany/CZERTAINLY-Interfaces). `Attribute` properties are following:
+You can find specification of the `AttributeDefinition` in the [CZERTAINLY Interfaces repository](https://github.com/3KeyCompany/CZERTAINLY-Interfaces). The following describes the properties of an `Attribute`:
 
 | `Attribute` property  | Short description                                                                                                                                                                                                                                                                        | Required                                      |
 |-----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
@@ -102,7 +102,7 @@ The following is a sample `AttributeDefinition` structure:
 
 ## `AttributeCallback`
 
-In some cases, the content of the `Attribute` depends on the content of some other `Attribute`. This is where we use `AttributeCallback` to define the callback that will be used to get the content of the `Attribute`. The callback will be triggered when the mapping rules will be satisfied.
+In some cases, the content of the `Attribute` depends on the content of some other `Attribute`. `AttributeCallback` can be used in this scenario to define the callback that will be used to get the content of the current `Attribute` based on the values of others. The callback will be triggered when the mapping rules are satisfied.
 
 Using this approach, `Connector` can use helper controllers and APIs to achieve loading of the data from the technology and communication with the technology without the need to define the `Attribute` content.
 
@@ -146,9 +146,9 @@ Mappings have various options how to include the data from other `Attributes` an
 
 CZERTAINLY defines special purpose callbacks that are used for specific treatment of the `Attributes` content.
 
-A typical example is `Attribute` of type `CREDENTIAL`. Working with the credentials, we would like to push the credentials to the `Connector` that should be authenticated and authorized based on selected credential to technology. However, we do not want to reveal the secret and sensitive value of the credential to the `Client`.
+A typical example is the `Attribute` of type `CREDENTIAL`. Working with the credentials, we would need to push the complete credential data to the `Connector` which uses it for authentication or authorization for its technology. However, we do not want to reveal the secret and sensitive value of the credential to the `Client`.
 
-For that purpose we have a special callback interface that will give the `Client` credentials with the specific kind, however not the content. The content is protected by the platform.
+For that purpose we have a special callback interface that will give the `Client` credentials with the specific kind, however it does not provide the `Client` with the complete content. The content is protected by the platform.
 
 
 ## Appendix A - Supported `AttributeType`
@@ -288,7 +288,7 @@ Associated `content` field
       ]
       "enabled": true,
       "connectorUuid": "UUID of the Credential Provider Connector",
-      "connectorName": "name of the Credential Provider Connector"
+      "connectorName": "Name of the Credential Provider Connector"
     }
   }
 }
