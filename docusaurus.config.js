@@ -64,9 +64,9 @@ const config = {
             route: '/api/core-authority/',
           },
           {
-            id: 'core-raprofile',
-            spec: 'https://api.czertainly.com/doc-openapi-core-raprofile.yaml',
-            route: '/api/core-raprofile/',
+            id: 'core-rap-rofile',
+            spec: 'https://api.czertainly.com/doc-openapi-core-ra-profile.yaml',
+            route: '/api/core-ra-profile/',
           },
           {
             id: 'core-discovery',
@@ -87,6 +87,21 @@ const config = {
             id: 'core-certificate',
             spec: 'https://api.czertainly.com/doc-openapi-core-certificate.yaml',
             route: '/api/core-certificate/',
+          },
+          {
+            id: 'core-entity',
+            spec: 'https://api.czertainly.com/doc-openapi-core-entity.yaml',
+            route: '/api/core-entity/',
+          },
+          {
+            id: 'core-location',
+            spec: 'https://api.czertainly.com/doc-openapi-core-location.yaml',
+            route: '/api/core-location/',
+          },
+          {
+            id: 'core-compliance-profile',
+            spec: 'https://api.czertainly.com/doc-openapi-core-compliance-profile.yaml',
+            route: '/api/core-compliance-profile/',
           },
           {
             id: 'core-other',
@@ -112,6 +127,16 @@ const config = {
             id: 'connector-discovery-provider',
             spec: 'https://api.czertainly.com/doc-openapi-connector-discovery-provider.yaml',
             route: '/api/connector-discovery-provider/',
+          },
+          {
+            id: 'connector-entity-provider',
+            spec: 'https://api.czertainly.com/doc-openapi-connector-entity-provider.yaml',
+            route: '/api/connector-entity-provider/',
+          },
+          {
+            id: 'connector-compliance-provider',
+            spec: 'https://api.czertainly.com/doc-openapi-connector-compliance-provider.yaml',
+            route: '/api/connector-compliance-provider/',
           },
           {
             id: 'protocol-acme',
@@ -209,7 +234,19 @@ const config = {
               },
               {
                 label: 'RA Profile',
-                to: '/api/core-raprofile/',
+                to: '/api/core-ra-profile/',
+              },
+              {
+                label: 'Entity',
+                to: '/api/core-Entity/',
+              },
+              {
+                label: 'Location',
+                to: '/api/core-location/',
+              },
+              {
+                label: 'Compliance Profile',
+                to: '/api/core-compliance-profile/',
               },
               {
                 label: 'Other',
@@ -236,6 +273,14 @@ const config = {
               {
                 label: 'Discovery Provider',
                 to: '/api/connector-discovery-provider/',
+              },
+              {
+                label: 'Entity Provider',
+                to: '/api/connector-entity-provider/',
+              },
+              {
+                label: 'Compliance Provider',
+                to: '/api/connector-compliance-provider/',
               },
             ],
           },
