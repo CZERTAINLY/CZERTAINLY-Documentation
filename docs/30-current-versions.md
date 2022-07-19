@@ -10,24 +10,27 @@ The following is a list of current versions of the CZERTAINLY platform and conne
 
 ## Core
 
-| Service | Version | Docker Image |
-| ------ | ------ | ------------ |
-| Core | `2.2.0` | `3keycompany/czertainly-core:2.2.0` |
+| Service | Version | Docker Image                                           |
+|---------|---------|--------------------------------------------------------|
+| Core    | `2.3.0` | `harbor.3key.company/czertainly/czertainly-core:2.3.0` |
 
 ## Front Ends
 
-| Front End | Version | Docker Image |
-| ------ | ------ | ------------ |
-| Administrator | `2.1.1` | `3keycompany/czertainly-frontend-administrator:2.1.1` |
-| Operator | `1.1.0` | `3keycompany/czertainly-frontend-operator:1.1.0` |
+:::info
+The Operator Web was merged with the Administrator Web in the version `2.2.0`.
+:::
+
+| Front End     | Version | Docker Image                                                             |
+|---------------|---------|--------------------------------------------------------------------------|
+| Administrator | `2.2.0` | `harbor.3key.company/czertainly/czertainly-frontend-administrator:2.2.1` |
 
 ## Connectors
 
-| Connector | Version | Docker Image |
-| ------ | ------ | ------------ |
-| Common Credential Provider | `1.0.2` | `3keycompany/czertainly-common-credential-provider:1.0.2` |
-| Network Discovery Provider | `1.0.1` | `3keycompany/czertainly-ip-discovery-provider:1.0.1` |
-| Cryptosense Discovery Provider | `1.0.2` | `3keycompany/czertainly-cryptosense-discovery-provider:1.0.2` |
-| MS ADCS Connector | `1.0.0` | `3keycompany/czertainly-ms-adcs-connector:1.0.0` |
-| EJBCA NG Connector | `1.0.0` | `3keycompany/czertainly-ejbca-ng-connector:1.0.0` |
-| EJBCA Legacy Connector | `1.0.1` | `3keycompany/czertainly-ejbca-legacy-ca-connector:1.0.1` |
+| Connector                      | Version | Docker Image                                                                     |
+|--------------------------------|---------|----------------------------------------------------------------------------------|
+| Common Credential Provider     | `1.1.0` | `harbor.3key.company/czertainly/czertainly-common-credential-provider:1.1.0`     |
+| Network Discovery Provider     | `1.1.0` | `harbor.3key.company/czertainly/czertainly-ip-discovery-provider:1.1.0`          |
+| Cryptosense Discovery Provider | `1.1.0` | `harbor.3key.company/czertainly/czertainly-cryptosense-discovery-provider:1.1.0` |
+| MS ADCS Connector              | `1.1.0` | `harbor.3key.company/czertainly/czertainly-ms-adcs-connector:1.1.0`              |
+| EJBCA NG Connector             | `1.1.0` | `harbor.3key.company/czertainly/czertainly-ejbca-ng-connector:1.1.0`             |
+| EJBCA Legacy Connector         | `1.1.0` | `harbor.3key.company/czertainly/czertainly-ejbca-legacy-ca-connector:1.1.1`      |
