@@ -29,58 +29,46 @@ This returns the list of applicable attributes for the `Discovery` process, such
 ```json
 [
     {
-        "uuid": "72f1ce7d-3e63-458c-8954-2b950240ca33",
-        "name": "discoveryType",
-        "label": "Discovery Type",
-        "type": "STRING",
-        "required": false,
-        "readOnly": true,
-        "editable": true,
-        "visible": true,
-        "multiValue": false,
-        "description": "Discovery Type",
-        "value": "IP/Hostname"
-    },
-    {
         "uuid": "1b6c48ad-c1c7-4c82-91ef-3b61bc9f52ac",
         "name": "ip",
-        "label": "IP/Hostname",
+        "label": "IPs/Hostnames",
         "type": "STRING",
         "required": true,
         "readOnly": false,
-        "editable": true,
         "visible": true,
-        "multiValue": false,
-        "description": "Multiple values can be given seperated by comma ','."
+        "list": false,
+        "description": "Multiple values can be given seperated by comma ','.",
+        "multiSelect": false
     },
     {
         "uuid": "a9091e0d-f9b9-4514-b275-1dd52aa870ec",
         "name": "port",
-        "label": "Port",
-        "type": "STRING",
+        "content": {
+            "value": 443
+        },
+        "label": "Ports",
+        "type": "INTEGER",
         "required": false,
         "readOnly": false,
-        "editable": true,
         "visible": true,
-        "multiValue": false,
+        "list": false,
         "description": "Multiple values can be given seperated by comma ','.",
-        "value": "443"
+        "multiSelect": false
     },
     {
         "uuid": "3c70d728-e8c3-40f9-b9b2-5d7256f89ef0",
         "name": "allPorts",
+        "content": {
+            "value": false
+        },
         "label": "All Ports?",
-        "type": "LIST",
+        "type": "BOOLEAN",
         "required": false,
         "readOnly": false,
-        "editable": true,
         "visible": true,
-        "multiValue": false,
-        "description": "Select to discover certificates from all ports.",
-        "value": [
-            "No",
-            "Yes"
-        ]
+        "list": false,
+        "description": "Check to discover certificates from all ports.",
+        "multiSelect": false
     }
 ]
 ```
@@ -100,8 +88,22 @@ curl -X POST \
     "kind": "IP-Hostname",
     "attributes": [
       {
+        "name": "port",
+        "content": {
+          "value": 443
+        }
+      },
+      {
+        "name": "allPorts",
+        "content": {
+          "value": false
+        }
+      },
+      {
         "name": "ip",
-        "value": "www.czertainly.com"
+        "content": {
+          "value": "www.czertainly.com"
+        }
       }
     ]
   }' \

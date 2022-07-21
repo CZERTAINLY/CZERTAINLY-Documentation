@@ -23,70 +23,74 @@ curl -X GET \
 This returns the list of applicable attributes for the `Authority`, such as:
 ```json
 [
-   {
-      "uuid": "93ca0ba2-3863-4ffa-a469-fd14ab3992bf",
-      "name": "address",
-      "label": "MS-ADCS Address",
-      "type": "STRING",
-      "required": true,
-      "readOnly": false,
-      "editable": true,
-      "visible": true,
-      "multiValue": false,
-      "description": "Address of ADCS server.",
-      "validationRegex": "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])|(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]))$"
-   },
-   {
-      "uuid": "d9f79ba6-47e5-437b-a7bc-82dbafa9cf01",
-      "name": "https",
-      "label": "HTTPS Enabled",
-      "type": "BOOLEAN",
-      "required": true,
-      "readOnly": false,
-      "editable": true,
-      "visible": true,
-      "multiValue": false,
-      "description": "Use https for connection with ADCS server.",
-      "value": false
-   },
-   {
-      "uuid": "9587a320-a487-4084-9645-0b6c24636fa6",
-      "name": "port",
-      "label": "Port",
-      "type": "NUMBER",
-      "required": true,
-      "readOnly": false,
-      "editable": true,
-      "visible": true,
-      "multiValue": false,
-      "description": "Define WinRM port, default port for http is 5985 and for https 5986.",
-      "value": 5985
-   },
-   {
-      "uuid": "d9f79ba6-47e5-437b-a7bc-82dbafa9cf03",
-      "name": "credential",
-      "label": "Credential",
-      "type": "CREDENTIAL",
-      "required": true,
-      "readOnly": false,
-      "editable": true,
-      "visible": true,
-      "multiValue": false,
-      "description": "Credential for the communication",
-      "attributeCallback": {
-         "callbackContext": "core/getCredentials",
-         "callbackMethod": "GET",
-         "mappings": [
-            {
-               "to": "credentialKind",
-               "targets": [
-                  "pathVariable"
-               ],
-               "value": "Basic"
-            }
-         ]
-      }
-   }
+    {
+        "uuid": "93ca0ba2-3863-4ffa-a469-fd14ab3992bf",
+        "name": "address",
+        "label": "MS-ADCS Address",
+        "type": "STRING",
+        "required": true,
+        "readOnly": false,
+        "visible": true,
+        "list": false,
+        "description": "Address of ADCS server.",
+        "validationRegex": "^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])|(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]))$",
+        "multiSelect": false
+    },
+    {
+        "uuid": "d9f79ba6-47e5-437b-a7bc-82dbafa9cf01",
+        "name": "https",
+        "content": {
+            "value": false
+        },
+        "label": "HTTPS Enabled",
+        "type": "BOOLEAN",
+        "required": false,
+        "readOnly": false,
+        "visible": true,
+        "list": false,
+        "description": "Use https for connection with ADCS server.",
+        "multiSelect": false
+    },
+    {
+        "uuid": "9587a320-a487-4084-9645-0b6c24636fa6",
+        "name": "port",
+        "content": {
+            "value": 5985
+        },
+        "label": "Port",
+        "type": "INTEGER",
+        "required": true,
+        "readOnly": false,
+        "visible": true,
+        "list": false,
+        "description": "Define WinRM port, default port for http is 5985 and for https 5986.",
+        "multiSelect": false
+    },
+    {
+        "uuid": "d9f79ba6-47e5-437b-a7bc-82dbafa9cf03",
+        "name": "credential",
+        "label": "Credential",
+        "type": "CREDENTIAL",
+        "required": true,
+        "readOnly": false,
+        "visible": true,
+        "list": true,
+        "description": "Credential for the communication",
+        "attributeCallback": {
+            "callbackContext": "core/getCredentials",
+            "callbackMethod": "GET",
+            "mappings": [
+                {
+                    "to": "credentialKind",
+                    "targets": [
+                        "pathVariable"
+                    ],
+                    "value": "Basic"
+                }
+            ]
+        },
+        "multiSelect": false
+    }
 ]
 ```
 
@@ -105,22 +109,31 @@ curl -X POST \
     "kind": "ADCS",
     "attributes": [
       {
-        "name": "address",
-        "value": "lab02.3key.company"
-      },
-      {
         "name": "https",
-        "value": false
+        "content": {
+          "value": false
+        }
       },
       {
         "name": "port",
-        "value": 5985
+        "content": {
+          "value": 5985
+        }
+      },
+      {
+        "name": "address",
+        "content": {
+          "value": "lab02.3key.company"
+        }
       },
       {
         "name": "credential",
-        "value": {
-            "name": "MS ADCS Basic Credential",
-            "uuid": "4c59aecd-1edc-47ea-b3cb-96a2468315bc"
+        "content": {
+          "value": "MS ADCS Basic Credential",
+          "data": {
+            "uuid": "4c59aecd-1edc-47ea-b3cb-96a2468315bc",
+            "name": "MS ADCS Basic Credential"
+          }
         }
       }
     ]
