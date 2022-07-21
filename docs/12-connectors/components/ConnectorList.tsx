@@ -46,6 +46,10 @@ const ConnectorList: ConnectorItem[] = [
                     <td><span className="badge">Authority Provider</span></td>
                     <td><span className="badge">ADCS</span></td>
                 </tr>
+                <tr>
+                    <td><span className="badge">Discovery Provider</span></td>
+                    <td><span className="badge">ADCS</span></td>
+                </tr>
             </table>
         ),
     },
@@ -74,6 +78,13 @@ const ConnectorList: ConnectorItem[] = [
                     <td><span className="badge">Authority Provider</span></td>
                     <td><span className="badge">EJBCA</span></td>
                 </tr>
+                <tr>
+                    <td><span className="badge">Discovery Provider</span></td>
+                    <td>
+                        <span className="badge">EJBCA</span><br/>
+                        <span className="badge">EJBCA_SCHEDULE</span>
+                    </td>
+                </tr>
             </table>
         ),
     },
@@ -101,6 +112,34 @@ const ConnectorList: ConnectorItem[] = [
                 <tr>
                     <td><span className="badge">Authority Provider</span></td>
                     <td><span className="badge">LegacyEjbca</span></td>
+                </tr>
+            </table>
+        ),
+    },
+    {
+        title: 'X509 Compliance Provider',
+        link: '',
+        description: (
+            <table className={styles.functionTable}>
+                <th>Function Group</th>
+                <th>Kind</th>
+                <tr>
+                    <td><span className="badge">Compliance Provider</span></td>
+                    <td><span className="badge">X509</span></td>
+                </tr>
+            </table>
+        ),
+    },
+    {
+        title: 'Keystore Entity Provider',
+        link: '',
+        description: (
+            <table className={styles.functionTable}>
+                <th>Function Group</th>
+                <th>Kind</th>
+                <tr>
+                    <td><span className="badge">Entity Provider</span></td>
+                    <td><span className="badge">Keystore</span></td>
                 </tr>
             </table>
         ),
