@@ -31,7 +31,7 @@ You can skip this step in case you already have administrator certificate or usi
 The certificate for the administrator is used to authenticate and authorize requests coming from the CZERTAINLY.
 
 You can enroll and request the certificate for the administrator usign the following steps:
-- Login ti EJBCA RA Web
+- Login to EJBCA RA Web
 - Click on **Make New Request** under the **Enroll** menu
 - In the **Certificate Type** field, select `AdministratorEndEntityProfile`.
 - Certificate subtype should pre-filled as `AdministratorEndEntityCertificateProfile`
