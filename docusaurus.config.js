@@ -360,6 +360,15 @@ const config = {
         darkTheme: darkCodeTheme,
         additionalLanguages: ['powershell','java'],
       },
+      algolia: {
+        // The application ID provided by Algolia
+        appId: '9LVBEQBLSX',
+        // Public API key: it is safe to commit it
+        apiKey: 'e5c6094c457339acfcd8114bef0f509a',
+        indexName: 'czertainly',
+        // Optional: see doc section below
+        contextualSearch: true,
+      },
     }),
 };
 
