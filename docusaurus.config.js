@@ -362,10 +362,10 @@ const config = {
       },
       algolia: {
         // The application ID provided by Algolia
-        appId: 'ZFCOJ6RV1I',
+        appId: '9LVBEQBLSX',
         // Public API key: it is safe to commit it
-        apiKey: '98606e09ef00e2d5d245d554298e116a',
-        indexName: 'docs.czertainly.com',
+        apiKey: 'e5c6094c457339acfcd8114bef0f509a',
+        indexName: 'czertainly',
         // Optional: see doc section below
         contextualSearch: true,
       },
