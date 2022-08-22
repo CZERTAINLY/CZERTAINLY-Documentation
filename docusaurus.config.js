@@ -19,10 +19,12 @@ const config = {
   presets: [
     [
       '@docusaurus/preset-classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          remarkPlugins: [[require('mdx-mermaid'), {
+            theme: { light: 'forest', dark: 'forest' }
+          }]],
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
