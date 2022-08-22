@@ -37,6 +37,7 @@ The platform consists of the following components:
 | **[Credential](core-components/credential)**   | Stores the credentials for the Connectors.                                                                                      |
 | **[Authority](core-components/authority)**     | Authority instances representing access to specific certification authority technology.                                         |
 | **[RA Profile](core-components/ra-profile)**   | RA Profile abstracts the configuration of certificate-related attributes and provides a service for the Clients to manage them. | |
+| **[Compliance Profile](core-components/compliance-profile)**   | Collection of rules to be applied on a certificate to determine whether it satisfies the organizational compliance policy |
 | **[Entity](core-components/entity)**           | Entity representing the end user of the certificates and cryptographic key.                                                     |
 | **[Certificate](core-components/certificate)** | Certificate is an inventory object that contains all information about its lifecycle.                                           |
 | **[Group](core-components/group)**             | Grouping allows to manage multiple certificates with the same characteristics.                                                  |
