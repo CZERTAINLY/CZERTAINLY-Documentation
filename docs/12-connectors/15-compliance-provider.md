@@ -78,7 +78,11 @@ To know more about the `Compliance Profile`, [click here](https://docs.czertainl
 
 `Compliance Providers` implement the following `Function Groups`:
 
-- Compliance Provider
+- [Compliance Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/ComplianceController.java)
+- [Compliance Rule Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/ComplianceRulesController.java)
+- [Health Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/HealthController.java)
+- [Info](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/InfoController.java)
+- [Attributes](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/AttributesController.java)
 
 :::info
 API specification can be found in the [API Specification](https://docs.czertainly.com/api/connector-compliance-provider/)
