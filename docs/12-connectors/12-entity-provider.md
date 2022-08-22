@@ -12,19 +12,20 @@ Entity Providers are the implementation of management of `Certificates` in the e
 
 ## How it works
 
-[//]: # (How the provider works in its specific context, it should describe its specifics that are part of its functionality. Here should be also a diagram showing all the components and their relation)
-
-How it works including the diagram with all components
+`Keystore Entity Provider` `Connector` provides access to the keystore locations on the remote servers. Multiple locations on one server are supported. The Connector can create multiple Entities and automate the certificate lifecycle on associated locations.
 
 ## Provider objects
 
-[//]: # (Description of the provider specific objects, their purpose, how it works)
+The table below contains the list of `Entity Provider` specific objects.
 
-Multiple certificates support and key management
+| Object | Purpose |
+| -------- | --------- |
+| `Entity` | The `entity` that is managed by the `Entity Provider`. Entities are comprised of multiple locations|
+| `Location` | The `location` of the `entity` that is managed by the `Entity Provider`. Location is the object that contains the details of the certificates and information about where they are currently deployed. A Single location can have more than one certificates |
 
 ## Processes
 
-[//]: # (Description of the provider processes, how it works from the client to provider, including the sequence diagram showing the messages that are exchanged between the client, core, and provider, endpoints)
+This section of the document explains the list of processes involved in managing the certificates on the entities using the `Entity Providers`.
 
 ### Register Entity
 
@@ -122,4 +123,13 @@ sequenceDiagram
 
 ## Specification and example
 
-[//]: # (Where to find specifications, e.g. OpenAPI, and related resources. Examples, maybe including the list enpoints?)
+`Entity Providers` implement the following `Function Groups`:
+
+- [Entity Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/entity/EntityController.java)
+- [Location Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/entity/LocationController.java)
+- [Health Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/HealthController.java)
+- [Info](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/InfoController.java)
+- [Attributes](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/AttributesController.java)
+
+:::info
+API specification can be found in the [API Specification](https://docs.czertainly.com/api/connector-entity-provider/)
