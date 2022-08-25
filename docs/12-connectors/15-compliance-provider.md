@@ -71,7 +71,7 @@ sequenceDiagram
 
 When a request is made to check the compliance of the certificate, the core gathers list of rules selected for the certificate from the associated `Compliance Profile`, group them based on the connectors. Once the grouping operation is completed, then the request is made to each of the `Compliance Providers` in the list. Core then computes the overall compliance status based on the result from the individual compliance providers.
 
-To know more about the `Compliance Profile`, [click here](https://docs.czertainly.com)
+To know more about the `Compliance Profile`, [click here](../concept-design/core-components/compliance-profile)
 
 
 ## Specifications
