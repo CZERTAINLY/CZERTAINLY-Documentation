@@ -40,3 +40,10 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
 .row .col {
   padding: 10px;
 }
+
+.messageText {
+  fill: red;
+  stroke: none;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-size: 14px;
+}
