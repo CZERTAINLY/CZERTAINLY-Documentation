@@ -23,6 +23,9 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          remarkPlugins: [[require('mdx-mermaid'), {
+            theme: { light: 'neutral', dark: 'dark' }
+          }]],
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
