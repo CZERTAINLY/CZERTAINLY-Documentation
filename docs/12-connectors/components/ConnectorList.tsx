@@ -69,7 +69,7 @@ const ConnectorList: ConnectorItem[] = [
     },
     {
         title: 'EJBCA NG Connector',
-        link: '',
+        link: 'ejbca-ng-connector/integration-guide',
         description: (
             <table className={styles.functionTable}>
                 <th>Function Group</th>
