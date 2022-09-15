@@ -307,6 +307,16 @@ const config = {
           //   position: 'left',
           // },
           {
+            href: 'https://github.com/3KeyCompany/CZERTAINLY/discussions',
+            className: 'pseudo-icon github-icon',
+            position: 'right',
+          },
+          {
+            href: 'https://discord.gg/XYsSZKjSt4',
+            className: 'pseudo-icon discord-icon',
+            position: 'right',
+          },
+          {
             href: 'https://www.czertainly.com',
             label: 'About CZERTAINLY',
             position: 'right',
