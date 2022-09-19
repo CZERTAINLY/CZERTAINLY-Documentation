@@ -91,7 +91,7 @@ then the request is made to each of the `Compliance Providers` in the list.
 Core then computes the overall compliance status based on the result from the individual compliance providers.
 :::
 
-To know more about the `Compliance Profile`, [click here](../concept-design/core-components/compliance-profile)
+To know more about the `Compliance Profile`, [click here](../../concept-design/core-components/compliance-profile)
 
 
 ## Specifications
