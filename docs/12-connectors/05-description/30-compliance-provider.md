@@ -31,52 +31,72 @@ The table below shows the provider specific objects that are part of the provide
 
 This section of the document describes the list of processes involved in checking the compliance of the certificate.
 
-### Rules and Groups
 
-:::info
-When a new `Compliance Provider` is added to the list of `Connectors`, the list of available `groups` and `rules` are fetched from the provider and are stored in the core.
-
-These rules are then used to pass the information to the client to get the inputs for Compliance check. There are sync mechanisms that will update the list of rules and groups from the connector to the core
-:::
+### Add Compliance Provider
 
 
-```mermaid
-sequenceDiagram
-    autonumber
-    
-    Client->>Core: Add a new Compliance Provider
-    Core->>Compliance Provider: Get list of Kinds and End Points
-    Compliance Provider->>Core: List of Kinds and End Points
-    Core->>Compliance Provider: Get list of Groups and Rules
-    Compliance Provider->>Core: List of Groups and Rules
-    Core->>Client: Connector added response
+```plantuml
+    @startuml
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-connector/#tag/Connector-Management-API/operation/createConnector]]: Add Compliance Provider
+        note over Client,Core: Add New Connector
+        Core -> Connector [[connector-compliance-provider/#tag/Info-API/operation/listSupportedFunctions]]: Get Function Group and Kind
+        note over Core,Connector: Function Group Details
+        Connector --> Core: Function Group and Kind
+        |||
+        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/getRules]]: List Compliance Rules
+        note over Core,Connector: Compliance Rules and Groups
+        Connector --> Core: List Compliance Rules
+        |||
+        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/getGroups]]: List Compliance Groups
+        Connector --> Core: List Compliance Groups
+        |||
+        Core -> Core: Store Rules and Groups
+        Core -> Client: Return Connector UUID
+    @enduml
 ```
 
-### Compliance
+### Check Certificate Compliance
 
 This section of the document describes the process of checking the compliance of the certificate.
 
-```mermaid
-sequenceDiagram
-    autonumber
-
-    Client->>Core: Check Compliance of Certificate xyz
-    Core->>Compliance Provider 1: Check Compliance (Inputs: Rules and Certificate)
-    Compliance Provider 1->>Core: Compliance Status (Output: Status)
-    Core->>Compliance Provider 2: Check Compliance (Inputs: Rules and Certificate)
-    Compliance Provider 2->>Core: Compliance Status (Output: Status)
-    Core->>Client: Compliance Status
+```plantuml
+    @startuml
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-certificate/#tag/Certificate-Inventory-API/operation/checkCompliance]]: Check Certificate Compliance
+        note over Client,Core: Certificate Compliance Check
+        Core --> Client: Return Async response
+        |||
+        Core -> Core: Get Compliance Profile of the Certificate
+        Core -> Core: Frame requests to the Compliance Providers
+        |||
+        loop for each Compliance Provider
+            Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/checkCompliance]]: Check Compliance
+            note over Core,Connector: Compliance Check
+            Connector --> Connector: Evaluate each rule
+            Connector --> Core: Return Compliance Check Result
+        end
+        |||
+        Core -> Core: Aggregate Compliance Result
+        Core -> Core: Store Compliance Result
+    @enduml
 ```
 
 
-When a request is made to check the compliance of the certificate, the core gathers list of rules selected for the certificate from the associated `Compliance Profile`, group them based on the connectors. Once the grouping operation is completed, then the request is made to each of the `Compliance Providers` in the list. Core then computes the overall compliance status based on the result from the individual compliance providers.
+:::info
+When a request is made to check the compliance of the certificate, the core gathers list of rules selected 
+for the certificate from the associated `Compliance Profile`, 
+group them based on the connectors. Once the grouping operation is completed, 
+then the request is made to each of the `Compliance Providers` in the list. 
+Core then computes the overall compliance status based on the result from the individual compliance providers.
+:::
 
 To know more about the `Compliance Profile`, [click here](../concept-design/core-components/compliance-profile)
 
 
 ## Specifications
 
-`Compliance Providers` implement the following `Function Groups`:
+`Compliance Providers` implement the following interfaces:
 
 - [Compliance Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/ComplianceController.java)
 - [Compliance Rule Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/ComplianceRulesController.java)
