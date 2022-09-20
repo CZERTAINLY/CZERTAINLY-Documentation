@@ -19,74 +19,80 @@ The following processes are associated with the Credential Provider and manageme
 
 ### Add `Credential`
 
-```mermaid
-sequenceDiagram
-    autonumber
-    
-    Client->>Core: POST /v1/credentials
-    Note over Client,Core: Add Credential with Attributes
-    Core->>Core: Check existence of Connector and Credential
-    Core->>Connector: POST /v1/{functionalGroup}/{kind}/attributes/validate
-    Note over Core,Connector: Validate Attributes
-    Connector-->>Core: Return validation result
-    Core->>Core: Store Credential
-    Core-->>Client: Return Credential UUID
+```plantuml
+    @startuml
+    skinparam topurl https://docs.czertainly.com/api/
+
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/createCredential]]: Create Credential
+        Note over Client,Core: Add Credential with Attributes
+        Core->Core: Check existence of Connector and Credential
+        Core->Connector [[connector-credential-provider/#tag/Attributes-API/operation/validateAttributes]]: Validate attributes
+        Note over Core,Connector: Validate Attributes
+        Connector-->Core: Return validation result
+        |||
+        Core->Core: Store Credential
+        Core-->Client: Return Credential UUID
+    @enduml
 ```
 
 ### Get `Credential` details
 
-```mermaid
-sequenceDiagram
-    autonumber
+```plantuml
+    @startuml
+    skinparam topurl https://docs.czertainly.com/api/
     
-    Client->>Core: GET /v1/credentials/{uuid}
-    Note over Client,Core: Request Credential details
-    Core->>Core: Process secrets
-    Core-->>Client: Return Credential details
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/getCredential]]: Get Credential details
+        Note over Client,Core: Request Credential details
+        Core->Core: Process secrets
+        Core-->Client: Return Credential details
+    @enduml
 ```
 
 ### Update `Credential`
 
-```mermaid
-sequenceDiagram
-    autonumber
+```plantuml
+    @startuml
+    skinparam topurl https://docs.czertainly.com/api/
     
-    Client->>Core: POST /v1/credentials/{uuid}
-    Note over Client,Core: Update Credential
-    Core->>Core: Check existence of Connector and Credential
-    Core->>Connector: POST /v1/{functionalGroup}/{kind}/attributes/validate
-    Note over Core,Connector: Validate Attributes
-    Connector-->>Core: Return validation result
-    Core->>Core: Update Credential
-    Core-->>Client: Return updated Credential
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/updateCredential]]: Update request
+        Note over Client,Core: Update Credential
+        Core->Core: Check existence of Connector and Credential
+        Core->Connector: Validate attributes
+        Note over Core,Connector [[connector-credential-provider/#tag/Attributes-API/operation/validateAttributes]]: Validate Attributes
+        Connector-->Core: Return validation result
+        Core->Core: Update Credential
+        Core-->Client: Return updated Credential
+    @enduml
 ```
 
 ### Remove `Credential`
 
-```mermaid
-sequenceDiagram
-    autonumber
+```plantuml
+    @startuml
+    skinparam topurl https://docs.czertainly.com/api/
     
-    Client->>Core: DELETE /v1/credentials/{uuid}
-    Note over Client,Core: Remvoe Credential
-    Core->>Core: Check and remove Credential
-    Core-->>Client: Return result
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/bulkRemoveCredential]]: Remove request
+        Note over Client,Core: Remove Credential
+        Core->Core: Check and remove Credential
+        Core-->Client: Return result
+    @enduml
 ```
 
 ### Change state of the `Credential`
 
-```mermaid
-sequenceDiagram
-    autonumber
+```plantuml
+    @startuml
+    skinparam topurl https://docs.czertainly.com/api/
     
-    alt enable/disable
-        Client->>Core: PUT /v1/credentials/{uuid}/enable
-        Note over Client,Core: Enable Credential
-        Client->>Core: PUT /v1/credentials/{uuid}/disable
-        Note over Client,Core: Disable Credential
-    end
-    Core->>Core: Change Credential state
-    Core-->>Client: Return result
+        alt enable/disable
+            Client->Core [[core-credential/#tag/Credential-Management-API/operation/enableCredential]]: Enable request
+            Note over Client,Core: Enable Credential
+            Client->Core [[core-credential/#tag/Credential-Management-API/operation/disableCredential]]: Disable request
+            Note over Client,Core: Disable Credential
+        end
+        Core->Core: Change Credential state
+        Core-->Client: Return result
+    @enduml
 ```
 
 ## Specification and example

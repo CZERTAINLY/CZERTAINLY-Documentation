@@ -2,11 +2,11 @@
 
 ## Overview
 
-`Discovery Providers` are the implementation of the functionality to discover certificate from various sources. A `Discovery Provider` is responsible for discovering the certificates from the source and returning the list of certificates to the `Core`. The `Core` then stores the certificates in the database and makes it available for the users to perform various operations.
+Discovery Providers are the implementation of the functionality to discover certificate from various sources. A Discovery Provider is responsible for discovering the certificates from the source and returning the list of certificates to the `Core`. The `Core` then stores the certificates in the database and makes it available for the users to perform various operations.
 
 ## How it works
 
-This section of the document describes the process of working with the `Discovery Provider`.
+This section of the document describes the process of working with the Discovery Provider.
 
 The step by step process of working of `Discovery Provider` is as follows:
 1. Each `Discovery Providers` has their own list of `attributes` based on their integration with the technology.
@@ -22,18 +22,18 @@ For more information, refer to [`Discovery`](../../concept-design/modules/certif
 
 ## Processes
 
-This section of the document describes the list of processes involved in discovering the certificates using the discovery providers.
+This section of the document describes the list of processes involved in discovering the certificates using the Discovery Providers.
 
+### Create `Discovery`
 
-### Create Discovery
-
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to create an discovery.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to create a `Discovery`.
 
 ```plantuml
     @startuml
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/createDiscovery]]: Create Discovery
         note over Client,Core: Create Discovery with Attributes
+        Core->Core: Check existence of Connector and Discovery
         Core -> Connector [[connector-discovery-provider/#tag/Attributes-API/operation/validateAttributes]]: Validate Attributes
         note over Core,Connector: Validation of Attributes
         Connector --> Core: Result of attribute validation
@@ -57,9 +57,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @enduml
 ```
 
-### Get Discovery Details
+### Get `Discovery` Details
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to get the details a discovery.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to get the details of a `Discovery`.
 
 ```plantuml
     @startuml
@@ -73,7 +73,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ### Delete Discovery
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to delete a discovery.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to delete a `Discovery`.
 
 ```plantuml
     @startuml

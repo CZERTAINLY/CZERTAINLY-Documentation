@@ -12,7 +12,7 @@ Entity Providers are the implementation of management of `Certificates` in the e
 
 ## How it works
 
-`Keystore Entity Provider` `Connector` provides access to the keystore locations on the remote servers. Multiple locations on one server are supported. The Connector can create multiple Entities and automate the certificate lifecycle on associated locations.
+Keystore Entity Provider `Connector` provides access to the keystore locations on the remote servers. Multiple locations on one server are supported. The Connector can create multiple Entities and automate the certificate lifecycle on associated locations.
 
 ## Provider objects
 
@@ -20,8 +20,8 @@ The table below contains the list of `Entity Provider` specific objects.
 
 | Object | Purpose |
 | -------- | --------- |
-| `Entity` | The `entity` that is managed by the `Entity Provider`. Entities are comprised of multiple locations|
-| `Location` | The `location` of the `entity` that is managed by the `Entity Provider`. Location is the object that contains the details of the certificates and information about where they are currently deployed. A Single location can have more than one certificates |
+| `Entity` | The `Entity` that is managed by the `Entity Provider`. Entities are comprised of multiple locations|
+| `Location` | The `location` of the `Entity` that is managed by the `Entity Provider`. Location is the object that contains the details of the certificates and information about where they are currently deployed. A Single location can have more than one certificates |
 
 ## Processes
 
@@ -30,15 +30,16 @@ This section of the document explains the list of processes involved in managing
 ## Entity
 Sections below represents the list of processes involved in managing the entities.
 
-### Create Entity
+### Create `Entity`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to create an entity.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to create an `Entity`.
 
 ```plantuml
     @startuml
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/createEntityInstance]]: Add Entity Instance
         note over Client,Core: Add New Entity with Attributes
+        Core->Core: Check existence of Connector and Entity
         Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
         note over Core,Connector: Validation of Attributes
         Connector --> Core: Result of attribute validation
@@ -53,9 +54,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @enduml
 ```
 
-### Get Entity Details
+### Get `Entity` Details
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to get the details an entity.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to get the details an `Entity`.
 
 ```plantuml
     @startuml
@@ -67,9 +68,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @enduml
 ```
 
-### Update Entity
+### Update `Entity`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to update an entity.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to update an `Entity`.
 
 ```plantuml
     @startuml
@@ -91,9 +92,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```
 
 
-### Remove Entity
+### Remove `Entity`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to delete an entity.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to delete an `Entity`.
 
 ```plantuml
     @startuml
@@ -110,11 +111,11 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```
 
 ## Location
-Sections below represents the list of processes involved in managing the locations on an entity.
+Sections below represents the list of processes involved in managing the locations on an `Entity`.
 
-### Create Location
+### Create `Location`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to create a location.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to create a `Location`.
 
 ```plantuml
     @startuml
@@ -125,6 +126,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
         |||
         Client -> Core [[core-location/#tag/Location-Management-API/operation/addLocation]]: Add Location
         note over Client,Core: Add New Location with Attributes
+        Core->Core: Check existence of Connector, Entity and Location
         Core -> Connector [[connector-entity-provider/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
         note over Core,Connector: Validation of Attributes
         Connector --> Core: Result of attribute validation
@@ -136,9 +138,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @enduml
 ```
 
-### Location Details
+### `Location` Details
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to remove a location.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to remove a `Location`.
 
 ```plantuml
     @startuml
@@ -149,29 +151,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @enduml
 ```
 
-### Update Location
+### Update `Location`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to update a location.
-
-```plantuml
-    @startuml
-    skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/editLocation]]: Edit Location
-        note over Client,Core: Location with Attributes
-        Core -> Connector [[connector-entity-provider/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
-        note over Core,Connector: Validation of Attributes
-        Connector --> Core: Result of attribute validation
-        |||
-        Core -> Core: Update Location
-        note over Core: Update addition with Attributes
-        |||
-        Core --> Client: Location details
-    @enduml
-```
-
-### Remove Location
-
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to remove a location.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to update a `Location`.
 
 ```plantuml
     @startuml
@@ -189,9 +171,29 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @enduml
 ```
 
-### Change Location State
+### Remove `Location`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to enable/disable a location.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to remove a `Location`.
+
+```plantuml
+    @startuml
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-location/#tag/Location-Management-API/operation/editLocation]]: Edit Location
+        note over Client,Core: Location with Attributes
+        Core -> Connector [[connector-entity-provider/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
+        note over Core,Connector: Validation of Attributes
+        Connector --> Core: Result of attribute validation
+        |||
+        Core -> Core: Update Location
+        note over Core: Update addition with Attributes
+        |||
+        Core --> Client: Location details
+    @enduml
+```
+
+### Change `Location` State
+
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to enable/disable a `Location`.
 
 ```plantuml
     @startuml
@@ -206,9 +208,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @enduml
 ```
 
-### Issue Certificate in Location
+### Issue `Certificate` in `Location`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to issue a certificate in the location.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to issue a certificate in the `Location`.
 
 ```plantuml
     @startuml
@@ -241,9 +243,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```
 
 
-### Renew Certificate in Location
+### Renew `Certificate` in `Location`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to renew a certificate in the location.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to renew a certificate in the `Location`.
 
 ```plantuml
     @startuml
@@ -280,9 +282,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```
 
 
-### Push Certificate Location
+### Push `Certificate` to `Location`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to push a certificate to the location.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to push a certificate to the `Location`.
 
 ```plantuml
     @startuml
@@ -301,9 +303,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```
 
 
-### Delete certificate from Location
+### Delete `Certificate` from `Location`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to revoke and delete a certificate from the location.
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to revoke and delete a certificate from the `Location`.
 
 ```plantuml
     @startuml
