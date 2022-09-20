@@ -71,7 +71,7 @@ This section of the document describes the process of checking the compliance of
         Core -> Core: Frame requests to the Compliance Providers
         |||
         loop for each Compliance Provider
-            Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/checkCompliance]]: Check Compliance
+            Core -> Connector [[connector-compliance-provider/#tag/Compliance-API/operation/checkCompliance]]: Check Compliance
             note over Core,Connector: Compliance Check
             Connector --> Connector: Evaluate each rule
             Connector --> Core: Return Compliance Check Result

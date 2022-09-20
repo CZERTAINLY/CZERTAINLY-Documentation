@@ -178,15 +178,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```plantuml
     @startuml
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/editLocation]]: Edit Location
+        Client -> Core [[core-location/#tag/Location-Management-API/operation/removeLocation]]: Remove Location
         note over Client,Core: Location with Attributes
-        Core -> Connector [[connector-entity-provider/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
-        note over Core,Connector: Validation of Attributes
-        Connector --> Core: Result of attribute validation
-        |||
-        Core -> Core: Update Location
-        note over Core: Update addition with Attributes
-        |||
+        Core -> Core: Check and remove Location
         Core --> Client: Location details
     @enduml
 ```

@@ -33,7 +33,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```plantuml
     @startuml
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations-API/operation/issueCertificate]]: Issue Certificate
+        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations-API/operation/issueCertificate_1]]: Issue Certificate
         note over Client,Core: Issue Certificate with Attributes
         Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management-API/operation/issueCertificate]]: Issue Certificate
         note over Core,Connector: Issue of Certificate
@@ -55,7 +55,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```plantuml
     @startuml
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations-API/operation/revokeCertificate]]: Revoke Certificate
+        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations-API/operation/revokeCertificate_1]]: Revoke Certificate
         note over Client,Core: Revoke Certificate with Attributes and reason
         Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management-API/operation/revokeCertificate]]: Revoke Certificate
         note over Core,Connector: Revoke of Certificate
