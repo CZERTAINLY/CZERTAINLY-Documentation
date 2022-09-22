@@ -2,7 +2,7 @@
 
 ## Overview
 
-Each certificate and cryptographic key can contain various attributes and can be based on different algorithms. There are also various standards and regulations that require specific behaviour of the certificate, for example to be able to react on algorithm deprecation or vulnerabilities. The compliance checking helps to monitor the compliance status of each certificate that is included in the inventory of the platform.
+Each certificate and cryptographic key can contain various attributes and can be based on different algorithms. There are also various standards and regulations that require specific behavior of the certificate, for example to be able to react on algorithm deprecation or vulnerabilities. The compliance checking helps to monitor the compliance status of each certificate that is included in the inventory of the platform.
 
 Compliance Provider implements the functionality of compliance settings and checking for the certificates available in the platform. it applies specific compliance rules and group of compliance rules to `Certificate` and informs about the compliance status. Based on the compliance check, the `Certificate` will either be determined as compliant or not compliant.
 
@@ -18,15 +18,6 @@ Compliance checking can be executed on `RA Profile` level (for all `Certificates
 Each `Compliance Profile` contains a list of available compliance rules and groups that can be applied for a compliance checking.
 Many different `Compliance Profiles` with differenty compliance requirements can be managed and applied on certificates.
 
-
-[//]: # (This should be part of the Compliance Profile description)
-The table below shows the provider specific objects that are part of the provider.
-
-| Object | Purpose |
-| -------- | --------- |
-| `Rule` | The `rule` that is used to check the compliance of the `Certificate`. `Rules` contains specific logic that will apply it to the certificate. If the rule is satisfied, then the certificate is marked as `Compliant`. Else the certificate is marked as `Non Compliant`|
-| `Group` | The `group` of `rules` that are used to check the compliance of the certificate. The groups are the logical grouping of the `rules` provided by the `Compliance Provider`. A `rule` may or may not be a part of the `Group`|
-
 ## Processes
 
 The following processes are associated with the Compliance Provider and management of the `Compliance Profile` objects and checking compliance status of `Certificate` object.
@@ -37,19 +28,13 @@ The following processes are associated with the Compliance Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-connector/#tag/Connector-Management-API/operation/createConnector]]: Add Compliance Provider
-        note over Client,Core: Add New Connector
-        Core -> Connector [[connector-compliance-provider/#tag/Info-API/operation/listSupportedFunctions]]: Get Function Group and Kind
-        note over Core,Connector: Function Group Details
+        Client -> Core [[core-connector/#tag/Connector-Management-API/operation/createConnector]]: Create a new Connector
+        Core -> Connector [[connector-compliance-provider/#tag/Info-API/operation/listSupportedFunctions]]: List supported functions of the connector
         Connector --> Core: Function Group and Kind
-        |||
-        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/getRules]]: List Compliance Rules
-        note over Core,Connector: Compliance Rules and Groups
+        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/getRules]]: Get list of rules
         Connector --> Core: List Compliance Rules
-        |||
-        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/getGroups]]: List Compliance Groups
+        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/getGroups]]: Get list of groups
         Connector --> Core: List Compliance Groups
-        |||
         Core -> Core: Store Rules and Groups
         Core -> Client: Return Connector UUID
     @enduml
@@ -57,26 +42,19 @@ The following processes are associated with the Compliance Provider and manageme
 
 ### Check Certificate Compliance
 
-This section of the document describes the process of checking the compliance of the certificate.
-
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-certificate/#tag/Certificate-Inventory-API/operation/checkCompliance]]: Check Certificate Compliance
-        note over Client,Core: Certificate Compliance Check
+        Client -> Core [[core-certificate/#tag/Certificate-Inventory-API/operation/checkCompliance]]: Initiate Certificate Compliance Check
         Core --> Client: Return Async response
-        |||
         Core -> Core: Get Compliance Profile of the Certificate
         Core -> Core: Frame requests to the Compliance Providers
-        |||
         loop for each Compliance Provider
-            Core -> Connector [[connector-compliance-provider/#tag/Compliance-API/operation/checkCompliance]]: Check Compliance
-            note over Core,Connector: Compliance Check
+            Core -> Connector [[connector-compliance-provider/#tag/Compliance-API/operation/checkCompliance]]: Check certificate compliance
             Connector --> Connector: Evaluate each rule
             Connector --> Core: Return Compliance Check Result
         end
-        |||
         Core -> Core: Aggregate Compliance Result
         Core -> Core: Store Compliance Result
     @enduml

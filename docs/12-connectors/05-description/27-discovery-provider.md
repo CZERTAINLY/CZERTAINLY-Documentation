@@ -23,67 +23,56 @@ The following processes are associated with the Discovery Provider and managemen
 
 ### Create `Discovery`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to create a `Discovery`.
-
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/createDiscovery]]: Create Discovery
-        note over Client,Core: Create Discovery with Attributes
-        Core->Core: Check existence of Connector and Discovery
+        note over Client: Create Discovery with specific Attributes from Connector
+        Core->Core: Check existence of Connector
+        Core -> Core: Check existence of Discovery  with same name
         Core -> Connector [[connector-discovery-provider/#tag/Attributes-API/operation/validateAttributes]]: Validate Attributes
-        note over Core,Connector: Validation of Attributes
         Connector --> Core: Result of attribute validation
         |||
-        Core -> Connector [[connector-discovery-provider/#tag/Discovery-API/operation/discoverCertificate]]: Create Discovery
-        note over Core,Connector: Discovery of Certificates
+        Core -> Connector [[connector-discovery-provider/#tag/Discovery-API/operation/discoverCertificate]]: Initiate certificate Discovery
         Connector --> Core: Return discovery triggered async response
         Core --> Client: Return discovery UUID
-        |||
-        Connector -> Devices : Discover Certificates from the devices
+        Connector -> Devices : Discover Certificates
         Devices -> Connector : Certificates
-        |||
         Connector -> Connector: Store discovered certificates
         note over Core, Connector: Certificates retrieval phase
         loop till all certificates are retrieved
             Core --> Connector [[connector-discovery-provider/#tag/Discovery-API/operation/getDiscovery]]: List of Certificates request
             Connector --> Core: Certificates with pagination details
         end
-        |||
-        Core -> Core: Store Certificates in the database
+        Core -> Core: Store Certificates
+        Core -> Core: Initiate Certificate validation
     @enduml
 ```
 
 ### Get `Discovery` Details
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to get the details of a `Discovery`.
-
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/getDiscovery]]: Get Discovery details
+        Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/getDiscovery]]: Discovery Details
         Core -> Core: Formulate Discovery details
         Core -> Client: Return Discovery details
     @enduml
 ```
 
 
-### Delete Discovery
-
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to delete a `Discovery`.
+### Delete `Discovery`
 
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-discovery/#tag/Entity-Management-API/operation/removeDiscovery]]: Remove Discovery
-        note over Client,Core: Remove Discovery
-        Core -> Connector [[connector-discovery-provider/#tag/Discovery-API/operation/deleteDiscovery]]: Remove Discovery
-        note over Core,Connector: Remove Discovery
-        Connector --> Core: discovery removed
-        Core -> Core : Remove Discovery from the database
+        Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/removeDiscovery]]: Remove Discovery
+        Core -> Connector [[connector-discovery-provider/#tag/Discovery-API/operation/deleteDiscovery]]: Delete Discovery
+        Connector --> Core: Discovery removed
+        Core -> Core : Remove Discovery
         Core --> Client: Discovery reference removed
     @enduml
 ```

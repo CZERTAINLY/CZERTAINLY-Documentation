@@ -17,7 +17,7 @@ The interfaces of the Authority Provider Legacy contain:
 
 Authority Provider Legacy provides the ability to communicate with the EJBCA certification authorities.
 :::caution
-The Authority Provider Legacy interface is designed to work only with the EJBCA. If you are looking to support different technology, consider [Authority Provider v2](authority-provider-v2) interface.
+The Authority Provider Legacy interface is designed to work only with the EJBCA. If you are looking to support different technology, consider [Authority Provider v2](25-authority-provider-v2.md) interface.
 :::
 
 ## Provider objects
@@ -30,58 +30,110 @@ The following processes are associated with the Authority Provider Legacy and ma
 
 ## `Authority` Instance Management
 
-[//]: # (Description should be independent from v2, it can change in time)
-Management of the `Authority` instances are same as the V2 Authority Provider. Refer to the [`V2 Authority Provider`](v2-authority-provider) for more information.
+### Create `Authority` Instance
 
-## `Certificate `Management
+```plantuml
+    @startuml
+    autonumber
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/createAuthorityInstance]]: Add Authority Instance
+        Core->Core: Check existence of Connector and Authority
+        Core -> Connector : Validate Attributes
+        Connector --> Core: Result of Attribute validation
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/createAuthorityInstance]]: Create Authority instance
+        Connector -> Connector: Validation of connection to CA
+        note right of Connector: Connection to the CA with the attributes is validated
+        Connector --> Core: Return Authority Instance response
+        Core -> Core : Store Authority Instance Reference
+        Core --> Client: Return Authority UUID
+    @enduml
+```
 
-[//]: # (Description should be independent from v2, it can change in time)
-Management of the `Certificates` follows the same structure as V2 Authority Providers, but uses legacy interfaces for all the Certificate related operations . Sections below represents the list of processes involved in managing the certificates.
+### Get `Authority` Instance Details
+
+```plantuml
+    @startuml
+    autonumber
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/getAuthorityInstance]]: Details of an Authority instance
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/getAuthorityInstance]]: Get an Authority instance
+        note right of Core: Details of the Authority instance is processed and combined with Authority Instance Reference from core
+        Connector --> Core: Return Authority details
+        Core -> Client: Return Authority details
+    @enduml
+```
+
+### Update `Authority` Instance
+
+```plantuml
+    @startuml
+    autonumber
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority instance
+        Core -> Connector : Validate Attributes
+        Connector --> Core: Result of Attribute validation
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority instance
+        Connector -> Connector: Validation of connection to CA and update
+        note right of Connector: Connection to the CA with the attributes is validated
+        Connector --> Core: Return Authority Instance response
+        Core -> Core : Update Authority Instance Reference in the database
+        Core --> Client: Return Authority UUID
+    @enduml
+```
+
+### Delete `Authority` Instance
+
+The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to delete an Authority instance.
+
+```plantuml
+    @startuml
+    autonumber
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Remove Authority instance
+        Core -> Core : Check dependencies
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Remove Authority instance
+        Connector --> Core: Return Authority Instance deletion response
+        Core -> Core : Delete Authority Instance Reference
+        Core --> Client: Return deletion status
+    @enduml
+```
+
+## `Certificate` Management
 
 ### Issue `Certificate`
-
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to issue a certificate.
 
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations-API/operation/issueCertificate_1]]: Issue Certificate
-        note over Client,Core: Issue Certificate with Attributes
+        note over Client,Core: Issue Certificate with required Attributes and RA Profile data
         Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management-API/operation/issueCertificate]]: Issue Certificate
-        note over Core,Connector: Issue of Certificate
         Connector -> CA: Issue Certificate
-        note over Connector,CA: Certificate Issuance
         CA --> Connector: Return Certificate
         Connector --> Core: Return Certificate response
-        |||
-        Core -> Core : Store Certificate to the database
-        Core --> Client: Return certificate UUID
+        Core -> Core : Store Certificate
+        Core --> Client: Return Certificate UUID
     @enduml
 ```
 
 ### Renew `Certificate`
 
-[//]: # (What about renewal, this is supported I believe)
-
+:::caution
+Renewal of the certificate is not supported by the Authority Provider Legacy.
+:::
 ### Revoke `Certificate`
-
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to revoke a certificate.
 
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations-API/operation/revokeCertificate_1]]: Revoke Certificate
-        note over Client,Core: Revoke Certificate with Attributes and reason
         Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management-API/operation/revokeCertificate]]: Revoke Certificate
-        note over Core,Connector: Revoke of Certificate
         Connector -> CA: Revoke Certificate
         CA --> Connector: Return Certificate Revocation status
-        note over Connector,CA: Certificate Revocation
         Connector --> Core: Return Certificate revocation response
-        |||
-        Core -> Core : Update Certificate status
+        Core -> Core : Set Certificate status as revoked
         Core --> Client: Return revocation status
     @enduml
 ```

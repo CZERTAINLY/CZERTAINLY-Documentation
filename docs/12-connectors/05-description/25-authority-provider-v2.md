@@ -23,40 +23,32 @@ The following processes are associated with the Authority Provider v2 and manage
 
 ### Create `Authority` Instance
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider for creating a new Authority instance.
-
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/createAuthorityInstance]]: Create Authority
-        note over Client,Core: Create Authority with Attributes
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/createAuthorityInstance]]: Add Authority Instance
         Core->Core: Check existence of Connector and Authority
         Core -> Connector : Validate Attributes
-        note over Core,Connector: Validation of Attributes
         Connector --> Core: Result of Attribute validation
-        |||
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/createAuthorityInstance]]: Create Authority
-        note over Core,Connector: Creation of Authority
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/createAuthorityInstance]]: Create Authority instance
         Connector -> Connector: Validation of connection to CA
+        note right of Connector: Connection to the CA with the attributes is validated
         Connector --> Core: Return Authority Instance response
-        |||
-        Core -> Core : Store Authority Instance Reference in the database
+        Core -> Core : Store Authority Instance Reference
         Core --> Client: Return Authority UUID
     @enduml
 ```
 
 ### Get `Authority` Instance Details
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to get the details of an Authority instance.
-
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/getAuthorityInstance]]: Get Authority details
-        note over Client,Core: Get Authority details
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/getAuthorityInstance]]: Get Authority details
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/getAuthorityInstance]]: Details of an Authority instance
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/getAuthorityInstance]]: Get an Authority instance
+        note right of Core: Details of the Authority instance is processed and combined with Authority Instance Reference from core
         Connector --> Core: Return Authority details
         Core -> Client: Return Authority details
     @enduml
@@ -64,23 +56,17 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ### Update `Authority` Instance
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to update an Authority instance.
-
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority
-        note over Client,Core: Update Authority with Attributes
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority instance
         Core -> Connector : Validate Attributes
-        note over Core,Connector: Validation of Attributes
         Connector --> Core: Result of Attribute validation
-        |||
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority
-        note over Core,Connector: Update of Authority
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority instance
         Connector -> Connector: Validation of connection to CA and update
+        note right of Connector: Connection to the CA with the attributes is validated
         Connector --> Core: Return Authority Instance response
-        |||
         Core -> Core : Update Authority Instance Reference in the database
         Core --> Client: Return Authority UUID
     @enduml
@@ -94,14 +80,11 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Delete Authority
-        note over Client,Core: Delete Authority
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Remove Authority instance
         Core -> Core : Check dependencies
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Delete Authority
-        note over Core,Connector: Delete of Authority
-        Connector --> Core: Return Authority Instance response
-        |||
-        Core -> Core : Delete Authority Instance Reference in the database
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Remove Authority instance
+        Connector --> Core: Return Authority Instance deletion response
+        Core -> Core : Delete Authority Instance Reference
         Core --> Client: Return deletion status
     @enduml
 ```
@@ -111,49 +94,37 @@ Sections below represents the list of processes involved in managing the certifi
 
 ### Issue `Certificate`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to issue a Certificate.
-
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-client-operations/#tag/v2-Client-Operations-API/operation/issueCertificate]]: Issue Certificate
-        note over Client,Core: Issue Certificate with Attributes
         Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/validateIssueCertificateAttributes]]: Validate Attributes
-        note over Core,Connector: Validation of Attributes
         Connector --> Core: Result of Attribute validation
-        |||
         Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/issueCertificate]]: Issue Certificate
-        note over Core,Connector: Issue of Certificate
         Connector -> CA: Issue Certificate
-        note over Connector,CA: Certificate Issuance
         CA --> Connector: Return Certificate
         Connector --> Core: Return Certificate response
-        |||
-        Core -> Core : Store Certificate to the database
+        Core -> Core : Perform Certificate validation
+        Core -> Core : Store Certificate
         Core --> Client: Return Certificate UUID
     @enduml
 ```
 
 ### Renew `Certificate`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to renew a Certificate.
-
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-client-operations/#tag/v2-Client-Operations-API/operation/renewCertificate]]: Renew Certificate
-        note over Client,Core: Renew Certificate with Attributes
         Core -> Core: Get Attributes from parent Certificate
-        |||
+        note right Core: Attributes for renewal are taken from parent Certificate
         Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/renewCertificate]]: Renew Certificate
-        note over Core,Connector: Renew of Certificate
         Connector -> CA: Issue Certificate
-        note over Connector,CA: Certificate Renewal
         CA --> Connector: Return Certificate
         Connector --> Core: Return Certificate response
-        |||
+        Core -> Core : Perform Certificate validation
         Core -> Core : Store Certificate to the database
         Core --> Client: Return Certificate UUID
     @enduml
@@ -161,26 +132,18 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ### Revoke `Certificate`
 
-The below diagram shows the sequence of messages that are exchanged between the client, core, and provider to revoke a Certificate.
-
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-client-operations/#tag/v2-Client-Operations-API/operation/revokeCertificate]]: Revoke Certificate
-        note over Client,Core: Revoke Certificate with Attributes and reason
         Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/validateRevokeCertificateAttributes]]: Validate Attributes
-        note over Core,Connector: Validation of Attributes
         Connector --> Core: Result of Attribute validation
-        |||
         Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/revokeCertificate]]: Revoke Certificate
-        note over Core,Connector: Revoke of Certificate
         Connector -> CA: Revoke Certificate
-        CA --> Connector: Return Certificate Revocation status
-        note over Connector,CA: Certificate Revocation
+        CA --> Connector: Return Certificate revocation status
         Connector --> Core: Return Certificate revocation response
-        |||
-        Core -> Core : Update Certificate status
+        Core -> Core : Set Certificate status as revoked
         Core --> Client: Return revocation status
     @enduml
 ```
