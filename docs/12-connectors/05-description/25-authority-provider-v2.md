@@ -1,25 +1,23 @@
-# V2 Authority Provider
+# Authority Provider v2
 
 ## Overview
 
-Authority Providers are the implementations of the `Authority Provider` interface. The Authority Provider interface is used to manage the certificate authority. The Authority Provider acts as an interface between CZERTAINLY `Core` and the certificate authority providing the following functionalities:
-
-1. Issue certificates
-2. Revoke certificates
-3. Renew certificates 
+Authority Provider v2 interface is used to manage operations with certificates issued by certification authority. The Authority Provider v2 acts as an interface between the `Core` and the certification authority providing the following management functions:
+1. Issue
+2. Renew
+3. Revoke 
 
 ## How it works
 
-Authority Provider `Connector` provides the ability to communicate with the certificate authorities. Based on the CA the `Connector` connects with, it communicates with the CA using the appropriate protocol and enables the certificate management.
+Authority Provider v2 provides the ability to communicate with different types and technologies of certification authorities.
 
 ## Provider objects
 
-The `Authority Provider` is managing `Authority` objects.
-For more information, refer to [`Authority`](../../concept-design/core-components/authority).
+[`Authority`](../../concept-design/core-components/authority) objects are managed in the platform through the Authority Provider v2 implementation.
 
 ## Processes
 
-This section of the document explains the list of processes involved in managing the certificates on the platform using the `Authority Providers`.
+The following processes are associated with the Authority Provider v2 and management of the `Authority` objects.
 
 ## `Authority` Instance Management
 
@@ -29,6 +27,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-authority/#tag/Authority-Management-API/operation/createAuthorityInstance]]: Create Authority
         note over Client,Core: Create Authority with Attributes
@@ -53,6 +52,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-authority/#tag/Authority-Management-API/operation/getAuthorityInstance]]: Get Authority details
         note over Client,Core: Get Authority details
@@ -68,6 +68,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-authority/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority
         note over Client,Core: Update Authority with Attributes
@@ -91,6 +92,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-authority/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Delete Authority
         note over Client,Core: Delete Authority
@@ -104,7 +106,6 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @enduml
 ```
 
-
 ## `Certificate` Management
 Sections below represents the list of processes involved in managing the certificates.
 
@@ -114,6 +115,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-client-operations/#tag/v2-Client-Operations-API/operation/issueCertificate]]: Issue Certificate
         note over Client,Core: Issue Certificate with Attributes
@@ -139,6 +141,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-client-operations/#tag/v2-Client-Operations-API/operation/renewCertificate]]: Renew Certificate
         note over Client,Core: Renew Certificate with Attributes
@@ -162,6 +165,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-client-operations/#tag/v2-Client-Operations-API/operation/revokeCertificate]]: Revoke Certificate
         note over Client,Core: Revoke Certificate with Attributes and reason
@@ -183,13 +187,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ## Specification and example
 
-`Authority Providers` implement the following `Function Groups`:
+The Authority Provider v2 implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
+- [Authority Management](/api/connector-authority-provider-v2/#tag/Authority-Management-API)
+- [Certificate Management](/api/connector-authority-provider-v2/#tag/Certificate-Management-API)
 
-- [Authority Management Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/AuthorityInstanceController.java)
-- [V2 Certificate Management Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/v2/CertificateController.java)
-- [Health Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/HealthController.java)
-- [Info](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/InfoController.java)
-- [Attributes](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/AttributesController.java)
+The OpenAPI specification of the Authority Provider v2 can be found here: [Connector API - Authority Provider v2](/api/connector-authority-provider-v2/).
 
-:::info
-API specification can be found in the [API Specification](https://docs.czertainly.com/api/connector-authority-provider-v2/)

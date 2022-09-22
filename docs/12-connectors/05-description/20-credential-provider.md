@@ -10,8 +10,7 @@ The Credential Provider defines specific configuration of the credentials that c
 
 ## Provider objects
 
-The Credential Provider is managing `Credential` objects.
-For more information, refer to [`Credential Component`](../../concept-design/core-components/credential).
+[`Credential`](../../concept-design/core-components/credential) objects are managed in the platform through the Credential Provider implementation.
 
 ## Processes
 
@@ -21,15 +20,13 @@ The following processes are associated with the Credential Provider and manageme
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
-
-        Client->Core [[core-credential/#tag/Credential-Management-API/operation/createCredential]]: Create Credential
-        Note over Client,Core: Add Credential with Attributes
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/createCredential]]: Add Credential
+        Note over Client,Core: Add Credential with specific Attributes based on the implementation
         Core->Core: Check existence of Connector and Credential
         Core->Connector [[connector-credential-provider/#tag/Attributes-API/operation/validateAttributes]]: Validate attributes
-        Note over Core,Connector: Validate Attributes
         Connector-->Core: Return validation result
-        |||
         Core->Core: Store Credential
         Core-->Client: Return Credential UUID
     @enduml
@@ -39,11 +36,11 @@ The following processes are associated with the Credential Provider and manageme
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
-    
-        Client->Core [[core-credential/#tag/Credential-Management-API/operation/getCredential]]: Get Credential details
-        Note over Client,Core: Request Credential details
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/getCredential]]: Details of a Credentials
         Core->Core: Process secrets
+        Note right of Core: Secrets are securely processed before the Credential is returned
         Core-->Client: Return Credential details
     @enduml
 ```
@@ -52,13 +49,11 @@ The following processes are associated with the Credential Provider and manageme
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
-    
-        Client->Core [[core-credential/#tag/Credential-Management-API/operation/updateCredential]]: Update request
-        Note over Client,Core: Update Credential
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/updateCredential]]: Update Credential
         Core->Core: Check existence of Connector and Credential
-        Core->Connector: Validate attributes
-        Note over Core,Connector [[connector-credential-provider/#tag/Attributes-API/operation/validateAttributes]]: Validate Attributes
+        Core->Connector [[connector-credential-provider/#tag/Attributes-API/operation/validateAttributes]]: Validate attributes
         Connector-->Core: Return validation result
         Core->Core: Update Credential
         Core-->Client: Return updated Credential
@@ -69,11 +64,11 @@ The following processes are associated with the Credential Provider and manageme
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
-    
-        Client->Core [[core-credential/#tag/Credential-Management-API/operation/bulkRemoveCredential]]: Remove request
-        Note over Client,Core: Remove Credential
-        Core->Core: Check and remove Credential
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/removeCredential]]: Remove Credential
+        Core->Core: Check if the Credential can be removed
+        Core->Core: Remove Credential
         Core-->Client: Return result
     @enduml
 ```
@@ -82,14 +77,13 @@ The following processes are associated with the Credential Provider and manageme
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
-    
         alt enable/disable
-            Client->Core [[core-credential/#tag/Credential-Management-API/operation/enableCredential]]: Enable request
-            Note over Client,Core: Enable Credential
-            Client->Core [[core-credential/#tag/Credential-Management-API/operation/disableCredential]]: Disable request
-            Note over Client,Core: Disable Credential
+            Client->Core [[core-credential/#tag/Credential-Management-API/operation/enableCredential]]: Enable Credential
+            Client->Core [[core-credential/#tag/Credential-Management-API/operation/disableCredential]]: Disable Credential
         end
+        Core->Core: Check if the Credential state can be changed
         Core->Core: Change Credential state
         Core-->Client: Return result
     @enduml

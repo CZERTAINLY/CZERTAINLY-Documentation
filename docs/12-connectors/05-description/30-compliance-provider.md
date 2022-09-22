@@ -2,24 +2,24 @@
 
 ## Overview
 
-`Compliance Providers` are the implementation of the functionality of compliance checking for the certificates available in the platform. A `Compliance Provider` applies specific rules and group of rules to a `Certificate` and returns a status that contains the result of the compliance check. Based on the rules, the `Certificate` will either be determined as compliant or not compliant.
+Each certificate and cryptographic key can contain various attributes and can be based on different algorithms. There are also various standards and regulations that require specific behaviour of the certificate, for example to be able to react on algorithm deprecation or vulnerabilities. The compliance checking helps to monitor the compliance status of each certificate that is included in the inventory of the platform.
+
+Compliance Provider implements the functionality of compliance settings and checking for the certificates available in the platform. it applies specific compliance rules and group of compliance rules to `Certificate` and informs about the compliance status. Based on the compliance check, the `Certificate` will either be determined as compliant or not compliant.
 
 ## How it works
 
-This section of the document describes the process of working with the `Compliance Provider`.
+Compliance Provider have a set of applicable compliance rules and groups that can be configured as part of the `Compliance Profile`. This defines the set of compliance requirements. To check for the compliance status, `Compliance Profile` should be associated with `RA Profile`. After that every `Certificate` managed by such `RA Profile` will be checked against compliance rules configured in the `Compliance Profile`.
 
-`Compliance Providers` works on the basis of `Rules` and `Groups`. The `Connector` contains the list of `Rules` and `Groups` based on which the logics of the compliance check will be applied to the certificate.
-
-The step by step process of working of `Compliance Provider` is as follows:
-1. Core groups the list of rules to be applied on the certificate collected from the `Compliance Profile`
-2. For each `Connector` in the `Compliance Profile`, `Core` send the list of rules (UUIDs) and `Certificate` to the `Connector`.
-3. `Connector` applies the rules on the certificate and returns the result of the compliance check.
-4. `Core` aggregates the results of the compliance check and returns the final result.
-5. Final results are then stored in the database.
-
+Compliance checking can be executed on `RA Profile` level (for all `Certificates`), for every specific `Certificate` in the inventory, or for each `Compliance Profile`. 
 
 ## Provider objects
 
+[`Compliance Profiles`](../../concept-design/core-components/compliance-profile) objects are managed in the platform through the Compliance Provider implementation.
+Each `Compliance Profile` contains a list of available compliance rules and groups that can be applied for a compliance checking.
+Many different `Compliance Profiles` with differenty compliance requirements can be managed and applied on certificates.
+
+
+[//]: # (This should be part of the Compliance Profile description)
 The table below shows the provider specific objects that are part of the provider.
 
 | Object | Purpose |
@@ -29,14 +29,13 @@ The table below shows the provider specific objects that are part of the provide
 
 ## Processes
 
-This section of the document describes the list of processes involved in checking the compliance of the certificate.
-
+The following processes are associated with the Compliance Provider and management of the `Compliance Profile` objects and checking compliance status of `Certificate` object.
 
 ### Add Compliance Provider
 
-
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-connector/#tag/Connector-Management-API/operation/createConnector]]: Add Compliance Provider
         note over Client,Core: Add New Connector
@@ -62,6 +61,7 @@ This section of the document describes the process of checking the compliance of
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-certificate/#tag/Certificate-Inventory-API/operation/checkCompliance]]: Check Certificate Compliance
         note over Client,Core: Certificate Compliance Check
@@ -82,27 +82,14 @@ This section of the document describes the process of checking the compliance of
     @enduml
 ```
 
-
 :::info
-When a request is made to check the compliance of the certificate, the core gathers list of rules selected 
-for the certificate from the associated `Compliance Profile`, 
-group them based on the connectors. Once the grouping operation is completed, 
-then the request is made to each of the `Compliance Providers` in the list. 
-Core then computes the overall compliance status based on the result from the individual compliance providers.
+When a request is made to check the compliance of the `Certificate`, the `Core` gathers list of rules configure in the associated `Compliance Profile` and request each Compliance Profiles for the specific compliance rule result. After all compliance rules are evaluated, the `Core` then computes the overall compliance status.
 :::
 
-To know more about the `Compliance Profile`, [click here](../../concept-design/core-components/compliance-profile)
+## Specification and example
 
+The Compliance Provider implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
+- [Compliance Rules](/api/connector-compliance-provider/#tag/Compliance-Rules-API)
+- [Compliance](/api/connector-compliance-provider/#tag/Compliance-API)
 
-## Specifications
-
-`Compliance Providers` implement the following interfaces:
-
-- [Compliance Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/ComplianceController.java)
-- [Compliance Rule Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/ComplianceRulesController.java)
-- [Health Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/HealthController.java)
-- [Info](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/InfoController.java)
-- [Attributes](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/AttributesController.java)
-
-:::info
-API specification can be found in the [API Specification](https://docs.czertainly.com/api/connector-compliance-provider/)
+The OpenAPI specification of the Compliance Provider can be found here: [Connector API - Compliance Provider](/api/connector-compliance-provider/).

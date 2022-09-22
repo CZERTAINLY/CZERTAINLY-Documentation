@@ -1,34 +1,36 @@
 # Entity Provider
 
+:::info Using Entity Provider
+Entity Provider helps to integrate any technology (open and proprietary) that is not able, not capable, or you do not want to, use standard interface and protocols for management and automation of the certificate and cryptographic keys lifecycle.
+:::
+
 ## Overview
 
-Entity Providers are the implementation of management of `Certificates` in the end entities. These end entity can be of any type of devices like key stores, servers, mobile devices, etc. `Entity Providers` provides the communication channel between the entity and the core.
+The `Certificate` can be stored and managed in various locations in the infrastructure. Entity Provide gives you the capability of management entities that are the end user of `Certificates` and if supported, manage their location with associated `Certificate` and cryptographic key.
 
-`Entity Providers` provides the pathways to perform the following operations:
-- Discover the `Certificates` in the entity
-- Remove a `Certificate` from the entity
-- Issue a new `Certificate` to the entity
-- Push an existing `Certificate` to the entity
+Entity Provider can implement literally any type of the certificate store.
 
 ## How it works
 
+[//]: # (This is not a specific description of keystore entity provide, it should be general)
 Keystore Entity Provider `Connector` provides access to the keystore locations on the remote servers. Multiple locations on one server are supported. The Connector can create multiple Entities and automate the certificate lifecycle on associated locations.
 
 ## Provider objects
 
-The table below contains the list of `Entity Provider` specific objects.
+[`Entity`](../../concept-design/core-components/entity) and [Location](../../concept-design/core-components/location) objects are managed in the platform through the Entity Provider implementation.
+`Entity` represents end user of the `Certificate` and it can have access to multiple `Locations`.
+
+[//]: # (This should be described in the components)
+[//]: # (Description is brief, it should be extended with all features that locations and entities provide, for example there is no mention about the multiple entries or key management support, etc.)
 
 | Object | Purpose |
 | -------- | --------- |
 | `Entity` | The `Entity` that is managed by the `Entity Provider`. Entities are comprised of multiple locations|
 | `Location` | The `location` of the `Entity` that is managed by the `Entity Provider`. Location is the object that contains the details of the certificates and information about where they are currently deployed. A Single location can have more than one certificates |
 
-## Processes
+## Processes related to `Entity`
 
-This section of the document explains the list of processes involved in managing the certificates on the entities using the `Entity Providers`.
-
-## Entity
-Sections below represents the list of processes involved in managing the entities.
+The following processes are associated with the Entity Provider and management of the `Entity` objects.
 
 ### Create `Entity`
 
@@ -36,6 +38,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/createEntityInstance]]: Add Entity Instance
         note over Client,Core: Add New Entity with Attributes
@@ -60,6 +63,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/getEntityInstance]]: Get Entity details
         Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/getEntityInstance]]: Get Entity details
@@ -74,6 +78,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/updateEntityInstance]]: Update Entity Instance
         note over Client,Core: Update Existing Entity with Attributes
@@ -98,6 +103,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/removeEntityInstance]]: Remove Entity Instance
         note over Client,Core: Remove an Entity
@@ -110,8 +116,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @enduml
 ```
 
-## Location
-Sections below represents the list of processes involved in managing the locations on an `Entity`.
+## Processes related to `Location`
+
+The following processes are associated with the Entity Provider and management of the `Location` objects.
 
 ### Create `Location`
 
@@ -119,6 +126,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core: List Entities
         note over Client,Core: List Available Entities
@@ -144,6 +152,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/getLocation]]: Get Location Details
         note over Client,Core: Location Details
@@ -157,6 +166,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/editLocation]]: Edit Location
         note over Client,Core: Location with Attributes
@@ -177,6 +187,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/removeLocation]]: Remove Location
         note over Client,Core: Location with Attributes
@@ -191,6 +202,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         alt enable/disable
             Client -> Core [[core-location/#tag/Location-Management-API/operation/enableLocation]]: Enable
@@ -208,6 +220,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/issueCertificate]]: Issue Certificate
         note over Client,Core: Issue Certificate with Attributes
@@ -243,6 +256,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/renewCertificateInLocation]]: Renew Certificate
         note over Client,Core: Renew Certificate
@@ -282,6 +296,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/pushCertificate]]: Push Certificate
         note over Client,Core: Push Certificate with Attributes
@@ -303,6 +318,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ```plantuml
     @startuml
+    autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/removeCertificate]]: Delete Certificate
         note over Client,Core: Delete Certificate
@@ -315,13 +331,8 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ## Specification and example
 
-`Entity Providers` implement the following `Function Groups`:
+The Entity Provider implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
+- [Entity Management](/api/connector-entity-provider/#tag/Entity-Management-API)
+- [Location Operations](/api/connector-entity-provider/#tag/Location-Operations-API)
 
-- [Entity Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/entity/EntityController.java)
-- [Location Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/entity/LocationController.java)
-- [Health Interface](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/HealthController.java)
-- [Info](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/InfoController.java)
-- [Attributes](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/interfaces/connector/AttributesController.java)
-
-:::info
-API specification can be found in the [API Specification](https://docs.czertainly.com/api/connector-entity-provider/)
+The OpenAPI specification of the Entity Provider can be found here: [Connector API - Entity Provider](/api/connector-entity-provider/).
