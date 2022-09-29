@@ -49,8 +49,8 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/getEntityInstance]]: Details of Entity instance
-        Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/getEntityInstance]]: Details of Entity instance
+        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/getEntityInstance]]: Get Entity instance details
+        Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/getEntityInstance]]: Get Entity instance details
         Connector --> Core: Entity details
         Core -> Client: Return Entity details
     @enduml
@@ -109,7 +109,7 @@ The following processes are associated with the Entity Provider and management o
         Core -> Core: Check existence of Location
         Core -> Connector [[connector-entity-provider/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
         Connector --> Core: Result of attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/getLocationDetail]]: Get information about the Location content. All identified certificates are returned
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/getLocationDetail]]: Get Location Details
         Connector --> Connector: Get Location details and Certificates
         Connector --> Core: Location details and Certificates
         Core -> Core: Create and store Location
@@ -124,7 +124,7 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/getLocation]]: Get information about the Location
+        Client -> Core [[core-location/#tag/Location-Management-API/operation/getLocation]]: Get Location Details
         Core -> Core: Process location details
         Core --> Client: Location details
     @enduml
@@ -177,17 +177,17 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/issueCertificate]]: Issue Certificate for Location
+        Client -> Core [[core-location/#tag/Location-Management-API/operation/issueCertificate]]: Issue Certificate to Location
         Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validateGenerateCsrAttributes]]: Validate CSR Attributes
         Connector --> Core: Result of CSR Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/generateCsrLocation]]: Generate key pair and CSR for the Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/generateCsrLocation]]: Generate CSR
         Connector --> Core: CSR Data
         Core -> Authority [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/issueCertificate]]: Issue Certificate
         Authority --> Core: Base64 Certificate
         Core -> Core: Store Certificate
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validatePushCertificateAttributes]]: Validate list of Attributes to push Certificate into Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validatePushCertificateAttributes]]: Validate Push Certificate Attributes
         Connector --> Core: Result of Push Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/pushCertificateToLocation]]: Push the Certificate into the Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/pushCertificateToLocation]]: Push Certificate
         Connector --> Core: Certificate Pushed
         Core --> Client: Certificate Issued
     @enduml
@@ -203,16 +203,16 @@ The following processes are associated with the Entity Provider and management o
         Client -> Core [[core-location/#tag/Location-Management-API/operation/renewCertificateInLocation]]: Remove Certificate from Location
         Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/removeCertificateFromLocation]]: Remove Certificate
         Connector --> Core: Result of Certificate deletion
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validateGenerateCsrAttributes]]: Validate list of Attributes to generate key pair and CSR
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validateGenerateCsrAttributes]]: Validate CSR Attributes
         Connector --> Core: Result of CSR Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/generateCsrLocation]]: Generate key pair and CSR for the Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/generateCsrLocation]]: Generate CSR
         Connector --> Core: CSR Data
         Core -> Authority [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/renewCertificate]]: Renew Certificate
         Authority --> Core: Base64 Certificate
         Core -> Core: Store Certificate
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validatePushCertificateAttributes]]: Validate list of Attributes to push Certificate into Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validatePushCertificateAttributes]]: Validate Push Certificate Attributes
         Connector --> Core: Result of Push Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/pushCertificateToLocation]]: Push the Certificate into the Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/pushCertificateToLocation]]: Push Certificate
         Connector --> Core: Certificate Pushed
         Core --> Client: Certificate Renewed
     @enduml
@@ -226,9 +226,9 @@ The following processes are associated with the Entity Provider and management o
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/pushCertificate]]: Push Certificate to Location
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validatePushCertificateAttributes]]: Validate list of Attributes to push Certificate into Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validatePushCertificateAttributes]]: Validate Push Certificate Attributes
         Connector --> Core: Result of Push Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/pushCertificateToLocation]]: Push the Certificate into the Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/pushCertificateToLocation]]: Push Certificate
         Connector --> Core: Certificate Pushed
         Core --> Client: Certificate Pushed to Location
     @enduml
@@ -242,7 +242,7 @@ The following processes are associated with the Entity Provider and management o
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/removeCertificate]]: Remove Certificate from Location
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/removeCertificateFromLocation]]: Remove Certificate from Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/removeCertificateFromLocation]]: Remove Certificate
         Connector --> Core: Result of Certificate deletion
         Core --> Client: Certificate deleted
     @enduml
