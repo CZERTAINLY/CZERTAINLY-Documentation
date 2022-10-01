@@ -16,16 +16,19 @@ const config = {
   organizationName: '3KeyCompany', // Usually your GitHub org/user name.
   projectName: 'CZERTAINLY-Documentation', // Usually your repo name.
 
+  // plugins: [
+  //     './src/plugins/test'
+  // ],
   presets: [
     [
       '@docusaurus/preset-classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          remarkPlugins: [[require('mdx-mermaid'), {
-            theme: { light: 'neutral', dark: 'dark' }
-          }]],
+          remarkPlugins: [
+              [require('mdx-mermaid'), { theme: { light: 'neutral', dark: 'dark' } }],
+              [require('./src/plugins/remarkSimplePlantumlPlugin'), { baseUrl: 'https://www.plantuml.com/plantuml/svg', type: "svg" }]
+          ],
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
