@@ -19,6 +19,54 @@ Entity Provider `Connector` provides access to the locations on the remote devic
 [`Entity`](../../02-concept-design/04-core-components/09-entity.md) and [`Location`](../../02-concept-design/04-core-components/10-location.md) objects are managed in the platform through the Entity Provider implementation.
 `Entity` represents end user of the `Certificate` and it can have access to multiple `Locations`.
 
+The following diagram shows the relation (sample) between `Entity Provier`, `Entity`, `Location`, and `Certificate`:
+
+```plantuml
+@startuml
+
+map "Entity Provider" as ep {
+}
+
+package "Entity 1" as e1 {
+    map "Location 1" as e1l1 {
+    }
+    map "Location 2" as e1l2 {
+    }
+    map "Location 3" as e1l3 {
+    }
+}
+
+package "Entity 2" as e2 {
+    map "Location 1" as e2l1 {
+    }
+    map "Location 2" as e2l2 {
+    }
+}
+
+package Inventory {
+    map "Certificate 1" as c1 {
+    }
+    map "Certificate 2" as c2 {
+    }
+    map "Certificate 3" as c3 {
+    }
+    map "Certificate 4" as c4 {
+    }
+}
+
+ep --> e1
+ep --> e2
+e1l1 <-> c1
+e1l3 <--> c1
+e1l3 <--> c2
+e1l3 <--> c3
+e2l1 <--> c3
+e2l1 <--> c4
+e2l2 <--> c4
+
+@enduml
+```
+
 ## Processes related to `Entity`
 
 The following processes are associated with the Entity Provider and management of the `Entity` objects.

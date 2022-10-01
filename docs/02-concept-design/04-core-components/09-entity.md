@@ -2,8 +2,17 @@
 
 An `Entity` represents the end-user that actually uses the certificate and associated private key.
 
-Various `Entity` implementations may exist based on the `Entity Provider` `Function Group` of the `Connector`. Such `Connector` defines the `Entity` technology and can perform specific operations on the `Entity`, such as:
+As an example, `Entity` can be:
+- Server
+- Network appliance, like router, load balancer
+- Active Directory
+- IoT device
 
-- generate private key and certificate signing request
-- deploy certificate
-- get information about the certificate
+## Characteristics
+
+`Entity` provides access to the end-user that can be further managed by its [`Locations`](location).
+
+The `Entity` is always managed by specific implementation of [`Entity Provider`](../../connectors/description/entity-provider) that is connected with the platform.
+Based on that, we can perform operations with `Entity`, such as:
+- Add, edit, or remove `Entities`
+- Manage state and [`Locations`](location)

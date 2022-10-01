@@ -1,19 +1,31 @@
 # Location
 
-A `Location` describes where the `Certificate` is stored on an [`Entity`](09-entity.md). A `Location` can be a Key Store, SSL Profile, File System Path, Firewall Rule, etc.
+`Location` is a specific storage for certificates and cryptographic keys that can be accessed through the [`Entity`](entity).
 
-`Location` exists on top of an [`Entity`](09-entity.md) and each `Entity` can have multiple `Locations`. Each `Location` can have multiple `Certificates` associated with it based on the implementation of the `Entity Provider` `Function Group` of the `Connector`.
+As an example, `Location` can be:
+- Software Key Store
+- SSL Profile
+- File System PEM
+- Active Directory account
+
+`Location` cannot exists without [`Entity`](entity) and each `Entity` can have multiple `Locations` (if supported by the implementation of `Entity Provider`).
 
 ## Characteristics
 
-Characteristics of `Location` are:
+`Location` capabilities are defined by:
 
-- `Location` is associated with an `Entity`.
-- An `Entity` can hold multiple `Locations`.
-- A `Location` can have multiple `Certificates` in it. This is determined by the `Connector` implementation. An `Entity Provider` supporting multiple certificates in the location will set `multipleEntries` to `true` in the [`Location` detail response](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/connector/entity/LocationDetailResponseDto.java#:~:text=private%20boolean-,multipleEntries,-%3B)
-- A `Location` can provide support for Key Management. If an `Entity Provider` supports Key Management, it will set `supportKeyManagement` to `true` in the [`Location` detail response](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/connector/entity/LocationDetailResponseDto.java#:~:text=private%20boolean-,supportKeyManagement,-%3B)
-- Operations on the `Location` includes
-    - Issue Certificate
-    - Push Certificate
-    - Renew Certificate
-    - Remove Certificate
+| Item | Description |
+| - | - |
+| `Entity` | `Location` can be accessed only through `Entity` that holds it |
+| Multiple entries support | If the `Location` can store only one or multiple entries, typically certificates |
+| Key management support | If the `Location` is capable to store and manage cryptographic keys |
+| Status | Status of the `Location`, which can be <span class="badge badge--success">enabled</span> or <span class="badge badge--danger">disabled</span> |
+
+`Location` support the following operations:
+- Sync content with the inventory
+- Push `Certificate` from inventory
+- Remove `Certificate`
+
+When the `Location` supports key management, additional operations can be performed:
+- Issue new `Certificate`
+- Renew `Certificate`
