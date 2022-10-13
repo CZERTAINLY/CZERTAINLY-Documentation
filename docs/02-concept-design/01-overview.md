@@ -18,13 +18,13 @@ It is based on the principle that the `Core` is acting as a middleman between th
 
 The architecture of the platform is based on the following parts:
 
-| Part                                     | Brief description                                                                                                               |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **[Database](architecture/database)**          | Stores the data. SQL Database is used by default.                                                                               |
-| **[Core](architecture/core)**                  | This is the brain of the platform. It contains the full logic of request processing.                                               |
-| **[Interfaces](architecture/interfaces)**      | Interfaces provided and used by the platform.                                                                                       |
-| **[Connector](architecture/connector)**        | Technology implementations that interact with the `Core` to perform the designated operation on the technology.    |
-| **[Access Control](architecture/access-control)** | Roles and permissions in the platform.                                                                                      |
+| Part                                                | Brief description                                                                                                               |
+|-----------------------------------------------------| ------------------------------------------------------------------------------------------------------------------------------- |
+| **[Database](architecture/database)**               | Stores the data. SQL Database is used by default.                                                                               |
+| **[Core](architecture/core)**                       | This is the brain of the platform. It contains the full logic of request processing.                                               |
+| **[Interfaces](architecture/interfaces)**           | Interfaces provided and used by the platform.                                                                                       |
+| **[Connector](architecture/connector)**             | Technology implementations that interact with the `Core` to perform the designated operation on the technology.    |
+| **[Access Control](./architecture/access-control)** | Roles and permissions in the platform.                                                                                      |
 
 See the [Architecture Overview](architecture/overview) for more details about the architecture of the platform.
 
