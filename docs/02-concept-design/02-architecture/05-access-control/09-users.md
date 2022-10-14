@@ -14,4 +14,10 @@ The following system users are defined:
 
 | Name   | Short description                      |
 |--------|----------------------------------------|
-| `acme` | System user for ACME client operations | 
+| `acme` | System user for ACME client operations |
+
+## Anonymous user
+
+When user cannot be identified in any way, it will be considered as *anonymous*.
+Anonymous user has limited permissions and can execute only the following actions:
+- Register connector
