@@ -4,7 +4,7 @@ Each user is identified by one of the supported methods listed below:
 - X.509 certificate
 - JSON ID
 
-Identification is performed by the [CZERTAINLY Authorization Service](https://github.com/3KeyCompany/CZERTAINLY-Auth).
+Identification is performed by the [CZERTAINLY Auth Service](https://github.com/3KeyCompany/CZERTAINLY-Auth).
 
 ## X.509 certificate
 

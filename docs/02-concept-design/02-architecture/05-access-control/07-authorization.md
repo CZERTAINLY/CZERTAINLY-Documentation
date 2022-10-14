@@ -11,7 +11,7 @@ The following diagram shows the interaction with the OPA:
 @startuml
 autonumber
 participant "API Gateway" as API
-participant "Authentication Service" as Auth
+participant "Auth Service" as Auth
 
 API -> Core: Request with identification token
 Core -> Auth: Identification token
@@ -25,4 +25,4 @@ Core --> API: 200 / 403
 @enduml
 ```
 
-For more information about the authorization policies, refer to [CZERTAINLY Authorization OPA Policies](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies).
+For more information about the authorization policies, refer to [CZERTAINLY Auth OPA Policies](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies).
