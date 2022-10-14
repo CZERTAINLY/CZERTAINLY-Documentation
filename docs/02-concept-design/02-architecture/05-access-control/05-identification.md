@@ -26,14 +26,14 @@ User can be identified using JSON format.
 
 JSON ID has the following format of fields:
 
-| Item          | Data type | Description                                                   | Required                                      | 
-|---------------|-----------|---------------------------------------------------------------|-----------------------------------------------|
-| `sub`         | `string`  | Unique identification of the user in the external system      | <span class="badge badge--success">YES</span> |
-| `username`    | `string`  | Username of the user, username must be unique in the platform | <span class="badge badge--success">YES</span> |
-| `given_name`  | `string`  | Given name of the user                                        | <span class="badge badge--danger">NO</span>   |
-| `family_name` | `string`  | Family name of the user                                       | <span class="badge badge--danger">NO</span>   |
-| `email`       | `string`  | Email associated with the user                                | <span class="badge badge--danger">NO</span>   |
-| `roles`       | `string`  | Roles associated with the user                                | <span class="badge badge--danger">NO</span>   |
+| Item          | Data type          | Description                                                   | Required                                      | 
+|---------------|--------------------|---------------------------------------------------------------|-----------------------------------------------|
+| `sub`         | `string`           | Unique identification of the user in the external system      | <span class="badge badge--success">YES</span> |
+| `username`    | `string`           | Username of the user, username must be unique in the platform | <span class="badge badge--success">YES</span> |
+| `given_name`  | `string`           | Given name of the user                                        | <span class="badge badge--danger">NO</span>   |
+| `family_name` | `string`           | Family name of the user                                       | <span class="badge badge--danger">NO</span>   |
+| `email`       | `string`           | Email associated with the user                                | <span class="badge badge--danger">NO</span>   |
+| `roles`       | `array of strings` | Roles associated with the user                                | <span class="badge badge--danger">NO</span>   |
 
 The JSON ID is typically provided in the header as Base64-encoded data.
 
@@ -42,7 +42,10 @@ An example of the user identity provided as JSON token:
 {
   "sub": "2d73cf2a-5339-421e-81cd-8fa0d25a100b",
   "username": "test",
-  "roles": "test-role",
+  "roles": [
+    "test-role",
+    "new-role"
+  ],
   "given_name": "Test",
   "family_name": "Test",
   "email": "test@test.com"
