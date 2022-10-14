@@ -24,7 +24,7 @@ The user must exist and must be associated with the X.509 certificate to be succ
 
 User can be identified using JSON format.
 
-JSON ID has the following format of fields:
+JSON ID has the following format of fields (other field will be ignored):
 
 | Item          | Data type          | Description                                                   | Required                                      | 
 |---------------|--------------------|---------------------------------------------------------------|-----------------------------------------------|
