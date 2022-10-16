@@ -69,7 +69,7 @@ The following processes are associated with the Authority Provider Legacy and ma
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority instance
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/editAuthorityInstance]]: Update Authority instance
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
         Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority instance
@@ -89,7 +89,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Remove Authority instance
+        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/deleteAuthorityInstance]]: Remove Authority instance
         Core -> Core : Check dependencies
         Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Remove Authority instance
         Connector --> Core: Return Authority Instance deletion response

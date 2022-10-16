@@ -69,7 +69,7 @@ The following processes are associated with the Discovery Provider and managemen
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/removeDiscovery]]: Remove Discovery
+        Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/deleteDiscovery]]: Remove Discovery
         Core -> Connector [[connector-discovery-provider/#tag/Discovery-API/operation/deleteDiscovery]]: Delete Discovery
         Connector --> Core: Discovery removed
         Core -> Core : Remove Discovery
