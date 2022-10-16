@@ -23,8 +23,8 @@ curl -X POST \
   {
     "pkcs10": "MIICzTCCAbcCAQAwWjFYMAgGA1UEAwwBeDANBgkqhkiG9w0BCQETADAHBgNVBAsTADAHBgNVBAoTADAHBgNVBAkTADAHBgNVBAcTADAHBgNVBAgTADAHBgNVBBETADAHBgNVBAYTADCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANJ2sKsyNhQWrF3QTgJnL9GO8g4WEiJjlY6Cp6Q5dhUrjv6i2m0pL9uFovopbXkPCW8UuDda5ws79PRhRHEPhuPwdTy/UMXLYoiTnjAYP5jalp4UQ/di7tT5BBUxPPzGAMNWVw0IEKlgJnw67xqYP3nbY9u3LEcbBxfAadLR7RVQNJebyRVXLIWstWGMtuVoDcT+I8pdoLEuSlJE2RXiyPXZSvlm8m2qs5912zNbrA3Mi8b/jU/H+lbS5RZ/sphIhrgWpBH4nq8g95VYwcBNhhmcpyUDeeLDHhWpJwlx8p+g+At6u/PMnEvPfnlQ9MZaFTc6PWTKtGAE+lv0803TZjUCAwEAAaAwMC4GCSqGSIb3DQEJDjEhMB8wHQYDVR0OBBYEFEWyex+1M1ZaTYBL0ERQAnBSnld2MAsGCSqGSIb3DQEBCwOCAQEAWO1hjH5f0BPOnR0zmmmf8riNQGwTs+/ySCn5oMQjzoyNDHOB95ZdhYih7UM5u5LKJxEvrX2AJxeAttYsCZhjwkmUutzg6cWqhmpKTHVeRWpqD00u/FBy6hpUdhRCi4FEYIXTkjFnMzrp+M7bQmjuDKgFVO4NMwophKCJoJifh8JE1Fz2jmO/mixLyUAgFIAuC1Odxakx6wyQnwfwX3Xi2zQtHC/bTH2u8XqpPD+epWUqKK5P02vk2kPq2y6e1BpNl6vdvS6Qy73/qX34vIfwf3guJhp99oESmW4TkR3ccT1Dbv9JJCZoyvJ6RSUi+skz4IGQ6YqVDoRp+qREpW+Dlw=="
   }' \
-  https://[domain]:[port]/api/v2/operations/e045a12a-e114-45ed-90b8-bac7e750e803/1a90cc6c-76e0-48cb-a027-e52a84c071c2/renew
-  #https://[domain]:[port]/api/v2/operations/{raProfileUuid}/{certificateUuid}/renew
+  https://[domain]:[port]/api/v2/operations/authorities/e045a12a-e114-45ed-90b8-bac7e750e803/raProfiles/166b5cf52-63f2-11ec-90d6-0242ac120003/certificates/renew
+  #https://[domain]:[port]/api/v2/operations/authorities/{authorityUuid}/raProfiles{raProfileUuid}/certificates/renew
 ```
 
 When the `Certificate` is successfully renews, its content and `uuid` is sent back in the response:
@@ -39,9 +39,8 @@ When the `Certificate` is successfully renews, its content and `uuid` is sent ba
 
 Follow these steps to renew a `Certificate`:
 
-1. Log in to the Operator Interface `https://[domain]:[port]/operator`
-2. Click **Certificates** in the left menu 
-3. In the **List of Certificates** select the `Certificate` to renewal
+1. Click **Certificates** in the left menu 
+2. In the **List of Certificates** select the `Certificate` to renewal
 3. Click **Renew** (symbol <span style={{color: '#1473b5',}}><FontAwesomeIcon icon={faRetweet} /></span>)
 4. Upload the certificate signing request (CSR file)
 5. Click **Renew**

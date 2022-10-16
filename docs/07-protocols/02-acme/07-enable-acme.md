@@ -65,12 +65,11 @@ curl -X POST \
   -H "Accept: application/json" \
   --data '
   {
-    "acmeProfileUuid": "b6be5014-b8f8-4b4f-b96d-a54c38f54b48",
     "issueCertificateAttributes": [],
     "revokeCertificateAttributes": []
   }' \
-  https://[domain]:[port]/api/v1/raprofiles/61c7d882-9336-4c9e-b380-8d2fd83f7c26/activateAcme
-  #https://[domain]:[port]/api/v1/raprofiles/{uuid}/activateAcme
+  https://[domain]:[port]/api/v1/authorities/61c7d882-9336-4c9e-b380-8d2fd83f7c26/raProfiles/d1a95ebc-4d73-11ed-bdc3-0242ac120002/acme/activate/b6be5014-b8f8-4b4f-b96d-a54c38f54b48
+  #https://[domain]:[port]v1/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/acme/activate/{acmeProfileUuid}
 ```
 
 When succeed, we will receive in the response ACME server directory endpoint to use:
