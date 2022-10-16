@@ -40,6 +40,11 @@ const config = {
       {
         specs: [
           {
+            id: 'core-auth',
+            spec: 'https://api.czertainly.com/doc-openapi-core-auth.yaml',
+            route: '/api/core-auth/',
+          },
+          {
             id: 'core-acme',
             spec: 'https://api.czertainly.com/doc-openapi-core-acme.yaml',
             route: '/api/core-acme/',
@@ -78,16 +83,6 @@ const config = {
             id: 'core-discovery',
             spec: 'https://api.czertainly.com/doc-openapi-core-discovery.yaml',
             route: '/api/core-discovery/',
-          },
-          {
-            id: 'core-admin',
-            spec: 'https://api.czertainly.com/doc-openapi-core-admin.yaml',
-            route: '/api/core-admin/',
-          },
-          {
-            id: 'core-client',
-            spec: 'https://api.czertainly.com/doc-openapi-core-client.yaml',
-            route: '/api/core-client/',
           },
           {
             id: 'core-certificate',
@@ -203,12 +198,12 @@ const config = {
             position: 'left',
             items: [
               {
-                label: 'ACME',
-                to: '/api/core-acme/',
+                label: 'Auth',
+                to: '/api/core-auth/',
               },
               {
-                label: 'Administrator',
-                to: '/api/core-admin/',
+                label: 'ACME',
+                to: '/api/core-acme/',
               },
               {
                 label: 'Authority',
@@ -217,10 +212,6 @@ const config = {
               {
                 label: 'Certificate',
                 to: '/api/core-certificate/',
-              },
-              {
-                label: 'Client',
-                to: '/api/core-client/',
               },
               {
                 label: 'Client Operations',
