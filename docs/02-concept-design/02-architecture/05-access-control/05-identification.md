@@ -65,4 +65,4 @@ When identifying user, the following order is applied:
 1. X.509 certificate
 2. JSON token
 
-When none of the identification methods is successful, user is considered to be **anonymous** (unidentified).
+When none of the identification data of user is provided, user is considered to be **anonymous** (unidentified).
