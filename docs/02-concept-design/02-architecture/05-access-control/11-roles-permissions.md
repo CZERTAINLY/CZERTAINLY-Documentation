@@ -11,10 +11,11 @@ It is used mainly for internal purposes and in connection with system user, howe
 
 The following system roles are defined:
 
-| Role         | Description                                                                                                                                                |
-|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `superadmin` | Highest level of privilege in the platform. `superadmin` has the full permission in the platform.                                                          |
-| `acme`       | Internal role that is allowed to manage certificates and related operations that are needed as part of the [ACME](../../protocols/acme/overview) protocol. |
+| Role         | Description                                                                                                                                                                                    |
+|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `superadmin` | Highest level of privilege in the platform. `superadmin` has the full permissions in the platform. Should be used as initial user and for the breaking glass in case of exceptional situation. |
+| `admin`      | `admin` has the full permissions in the platform, manages users and roles, performs system configuration and administration.                                                                   |
+| `acme`       | Internal role that is allowed to manage certificates and related operations that are needed as part of the [ACME](../../protocols/acme/overview) protocol.                                     |
 
 :::caution
 `superadmin` has the full permission in the platform. Therefore, it is recommended to use the `superadmin` role only if needed, for example, as a break glass functionality.
