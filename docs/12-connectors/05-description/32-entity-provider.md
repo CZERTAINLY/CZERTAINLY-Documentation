@@ -226,9 +226,11 @@ The following processes are associated with the Entity Provider and management o
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/issueCertificate]]: Issue Certificate to Location
+        Core -> Core: Perform Pre Checks for Certificate Issuance
         Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validateGenerateCsrAttributes]]: Validate CSR Attributes
         Connector --> Core: Result of CSR Attribute validation
         Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/generateCsrLocation]]: Generate CSR
+        Connector -> Connector: Generate CSR with new Key Pair
         Connector --> Core: CSR Data
         Core -> Authority [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/issueCertificate]]: Issue Certificate
         Authority --> Core: Base64 Certificate
@@ -249,11 +251,13 @@ The following processes are associated with the Entity Provider and management o
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-location/#tag/Location-Management-API/operation/renewCertificateInLocation]]: Remove Certificate from Location
+        Core -> Core: Perform Pre Checks for Certificate Renewal
         Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/removeCertificateFromLocation]]: Remove Certificate
         Connector --> Core: Result of Certificate deletion
         Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validateGenerateCsrAttributes]]: Validate CSR Attributes
         Connector --> Core: Result of CSR Attribute validation
         Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/generateCsrLocation]]: Generate CSR
+        Connector -> Connector: Generate CSR with existing Key Pair
         Connector --> Core: CSR Data
         Core -> Authority [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/renewCertificate]]: Renew Certificate
         Authority --> Core: Base64 Certificate
