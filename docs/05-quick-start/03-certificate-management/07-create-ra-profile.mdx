@@ -16,8 +16,8 @@ curl -X GET \
   --cert [client-cert] \
   --cert-type [type] \
   -H "Accept: application/json" \
-  https://[domain]:[port]/api/v1/authorities/83265efb-35a1-4b48-ae6f-1269b7c41668/raProfile/attributes
-  #https://[domain]:[port]/api/v1/authorities/{uuid}/raProfile/attributes
+  https://[domain]:[port]/api/v1/authorities/83265efb-35a1-4b48-ae6f-1269b7c41668/raProfiles/attributes
+  #https://[domain]:[port]/api/v1/authorities/{uuid}/raProfiles/attributes
 ```
 
 This returns the list of applicable attributes for the `RA Profile`, such as:
@@ -97,7 +97,8 @@ curl -X POST \
       }
     ]
   }' \
-  https://[domain]:[port]/api/v1/raprofiles
+  https://[domain]:[port]/api/v1/authorities/83265efb-35a1-4b48-ae6f-1269b7c41668/raProfiles
+  #https://[domain]:[port]/api/v1/authorities/{uuid}/raProfiles
 ```
 
 When the `RA Profile` is successfully created, its `uuid` is sent back:
