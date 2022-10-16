@@ -110,7 +110,7 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/updateEntityInstance]]: Update Entity instance
+        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/editEntityInstance]]: Update Entity instance
         note over Client,Core: Update Existing Entity with Attributes from the connector
         Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
         Connector --> Core: Result of attribute validation
@@ -130,7 +130,7 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/removeEntityInstance]]: Remove Entity instance
+        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/deleteEntityInstance]]: Remove Entity instance
         Core -> Core: Check for dependent objects
         Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/removeEntityInstance]]: Remove Entity instance
         Connector --> Core: Entity Instance removed
@@ -198,7 +198,7 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/removeLocation]]: Remove Location
+        Client -> Core [[core-location/#tag/Location-Management-API/operation/deleteLocation]]: Remove Location
         Core -> Core: Check for dependent objects
         Core -> Core: Remove Location
         Core --> Client: Location details
@@ -250,10 +250,8 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/renewCertificateInLocation]]: Remove Certificate from Location
+        Client -> Core [[core-location/#tag/Location-Management-API/operation/renewCertificateInLocation]]: Renew Certificate in Location
         Core -> Core: Perform Pre Checks for Certificate Renewal
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/removeCertificateFromLocation]]: Remove Certificate
-        Connector --> Core: Result of Certificate deletion
         Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validateGenerateCsrAttributes]]: Validate CSR Attributes
         Connector --> Core: Result of CSR Attribute validation
         Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/generateCsrLocation]]: Generate CSR

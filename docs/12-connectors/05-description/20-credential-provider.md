@@ -51,7 +51,7 @@ The following processes are associated with the Credential Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client->Core [[core-credential/#tag/Credential-Management-API/operation/updateCredential]]: Update Credential
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/editCredential]]: Update Credential
         Core->Core: Check existence of Connector and Credential
         Core->Connector [[connector-credential-provider/#tag/Attributes-API/operation/validateAttributes]]: Validate attributes
         Connector-->Core: Return validation result
@@ -66,7 +66,7 @@ The following processes are associated with the Credential Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client->Core [[core-credential/#tag/Credential-Management-API/operation/removeCredential]]: Remove Credential
+        Client->Core [[core-credential/#tag/Credential-Management-API/operation/deleteCredential]]: Remove Credential
         Core->Core: Check if the Credential can be removed
         Core->Core: Remove Credential
         Core-->Client: Return result
