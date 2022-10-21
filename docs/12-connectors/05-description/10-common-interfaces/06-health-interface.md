@@ -27,16 +27,16 @@ The status can be one of the following:
 The `Client` with proper permissions can request health-check of the `Connectors` and invoke API that works with the `Health` interface of the `Connector`.
 The following diagrams represents the requests and communication flow.
 
-```mermaid
-sequenceDiagram
+```plantuml
+    @startuml
     autonumber
-    
-    Client->>Core: GET /v1/connectors/{uuid}/health
-    Note over Client,Core: Check health of the Connector
-    Core->>Connector: GET /v1/health
-    Note over Core,Connector: Get status information of the Connector
-    Connector-->>Core: Return status
-    Core-->>Client: Return status
+    skinparam topurl https://docs.czertainly.com/api/
+        Client->>Core [[core-connector/#tag/Connector-Management-API/operation/checkHealth]]: Check Health of a Connector
+        Core->>Connector: Health check
+        Note over Core,Connector: Get status information of the Connector and its services
+        Connector-->>Core: Return status
+        Core-->>Client: Return status
+    @enduml
 ```
 
 ## Specification and example
