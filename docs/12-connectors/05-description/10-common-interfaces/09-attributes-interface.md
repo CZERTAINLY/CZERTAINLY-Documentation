@@ -18,17 +18,15 @@ Each `Connector` implements interface for listing available `Attributes` and the
 
 Because each `Connector` defines its own specific `Attributes`, we need to get information about that before we can start creating and managing objects.
 
-```mermaid
- %%{init: { 'sequence': {'messageFontSize':12} } }%%
-sequenceDiagram
+```plantuml
+    @startuml
     autonumber
-    
-    Client->>Core: GET<br/>/v1/connectors/{uuid}/{functionGroup}/{kind}/attributes
-    Note over Client,Core: Get Attributes definition from the Connector
-    Core->>Connector: GET<br/>/v1/{functionalGroup}/{kind}/attributes
-    Note over Core,Connector: List available Attributes
-    Connector-->>Core: Return Attributes
-    Core-->>Client: Return Attributes
+    skinparam topurl https://docs.czertainly.com/api/
+        Client->>Core [[core-connector/#tag/Connector-Management-API/operation/getAttributes]]: Get Attributes from a Connector
+        Core->>Connector: List available Attributes
+        Connector-->>Core: Return Attributes
+        Core-->>Client: Return Attributes
+    @enduml
 ```
 
 ### Create object using `Attributes`
@@ -39,18 +37,18 @@ When you have a list of available `Attributes` supported by the `Connector`, you
 The following example is creating `Credential` object. The same approach can be used for other objects that can be created based on the `Attributes` definition and specific `Connector`.
 :::
 
-```mermaid
-sequenceDiagram
+```plantuml
+    @startuml
     autonumber
-    
-    Client->>Core: POST /v1/credentials
-    Note over Client,Core: Add Credential with Attributes
-    Core->>Core: Check existence of Connector and Credential
-    Core->>Connector: POST /v1/{functionalGroup}/{kind}/attributes/validate
-    Note over Core,Connector: Validate Attributes
-    Connector-->>Core: Return validation result
-    Core->>Core: Store Credential
-    Core-->>Client: Return Credential UUID
+    skinparam topurl https://docs.czertainly.com/api/
+        Client->>Core [[core-credential/#tag/Credential-Management-API/operation/createCredential]]: Add Credential
+        Note over Client,Core: Add Credential with specific Attributes
+        Core->>Core: Check existence of Connector and Credential
+        Core->>Connector: Validate Attributes
+        Connector-->>Core: Return validation result
+        Core->>Core: Store Credential
+        Core-->>Client: Return Credential UUID
+    @enduml
 ```
 
 ## Specification and example

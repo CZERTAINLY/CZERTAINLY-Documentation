@@ -16,24 +16,23 @@ The `Info` interface is used during the `Connector` registration and reconnectin
 The `Client` with proper permissions can manage the `Connectors` and invoke API that works with the `Info` interface of the `Connector`.
 The following diagrams represents the requests and communication flow.
 
-```mermaid
-sequenceDiagram
+```plantuml
+    @startuml
     autonumber
-    
-    alt requests
-        Client->>Core: PUT /v1/connectors/connect
-        Note over Client,Core: Connect to the Connector on specified URL and auth
-        Client->>Core: GET /v1/connectors/{uuid}
-        Note over Client,Core: Get details about the Connector
-        Client->>Core: POST /v1/connectors/{uuid}
-        Note over Client,Core: Update Connector
-        Client->>Core: PUT /v1/connectors/{uuid}/reconnect
-        Note over Client,Core: Reconnect to Connector
-    end
-    Core->>Connector: GET /v1
-    Note over Core,Connector: Get information about the Connector
-    Connector-->>Core: Function Groups, Kinds, and EndPoints
-    Core-->>Client: Function Groups, Kinds, and EndPoints
+    skinparam topurl https://docs.czertainly.com/api/
+        alt requests
+            Client->>Core [[core-connector/#tag/Connector-Management-API/operation/connect]]: Connect to a Connector
+            Note over Client,Core: Connect to the Connector on specified URL and authentication method
+            Client->>Core [[core-connector/#tag/Connector-Management-API/operation/getConnector]]: Get details of a Connector
+            Client->>Core [[core-connector/#tag/Connector-Management-API/operation/editConnector]]: Edit a Connector
+            Note over Client,Core: Update Connector
+            Client->>Core [[core-connector/#tag/Connector-Management-API/operation/reconnect]]: Reconnect to a Connector
+        end
+        Core->>Connector: List supported functions of the connector
+        Note over Core,Connector: Get information about the Connector
+        Connector-->>Core: Function Groups, Kinds, and EndPoints
+        Core-->>Client: Function Groups, Kinds, and EndPoints
+    @enduml
 ```
 
 ### Connector self-registration
@@ -41,16 +40,16 @@ sequenceDiagram
 The `Connector` is allowed to self-register in the platform. In this case the information about the `Connector` is stored and waiting for approval by the user or administrator.
 The registration of the `Connector` may be executed by any external entity.
 
-```mermaid
-sequenceDiagram
+```plantuml
+    @startuml
     autonumber
-    
-    Connector->>Core: POST /v1/connector/register
-    Note over Connector,Core: Register Connector (also self-register)
-    Core->>Connector: GET /v1
-    Note over Core,Connector: Get information about the Connector
-    Connector-->>Core: List of supported Function Groups, Kinds, and EndPoints
-    Core-->>Connector: Registered UUID of the Connector
+    skinparam topurl https://docs.czertainly.com/api/
+        Connector->>Core [[core-connector/#tag/Connector-Registration-API/operation/register]]: Register a Connector
+        Core->>Connector: List supported functions of the connector
+        Note over Core,Connector: Get information about the Connector
+        Connector-->>Core: List of supported Function Groups, Kinds, and EndPoints
+        Core-->>Connector: Registered UUID of the Connector
+    @enduml
 ```
 
 ## Specification and example
