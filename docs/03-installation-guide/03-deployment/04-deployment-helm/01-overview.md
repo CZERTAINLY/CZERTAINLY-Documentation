@@ -1,0 +1,91 @@
+# Overview
+
+Helm chart simplifies the deployment of the platform using already pre-defined templates that are parsed as Kubernetes manifests and managed by Helm.
+
+## Prerequisites
+
+- Kubernetes 1.19+
+- Helm 3.8.0+
+- PostgreSQL 11+
+
+In case you want to enable Ingress you need to have installed Ingress Controller, for example:
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+```
+
+:::caution Ingres Controller
+Configuration of Ingress resources depends on the type and technology that is being used as Ingress Controller.
+:::
+
+If you are using internal CA for Ingress and/or Administrator certificate, you also need to have installed [cert-manager](https://cert-manager.io/docs/).
+
+> cert-manager is only required to use certificates issued by internally generated CA:
+> - `ingress.certificate.source=internal` for internally generated Ingress certificate
+> - `ingress.certificate.source=letsEncrypt` for Ingress Let’s Encrypt issued certificate
+> - `registerAdmin.source=generated` for internally generated certificate for first administrator
+
+## Using the Chart
+
+### Installation
+
+**Create namespace**
+
+We’ll need to define a Kubernetes namespace where the resources created by the Chart should be installed:
+```bash
+kubectl create namespace czertainly
+```
+
+**Create `czertainly-values.yaml`**
+
+Copy the default `values.yaml` from the CZERTAINLY Helm chart and modify the values accordingly:
+```bash
+helm show values oci://harbor.3key.company/czertainly-helm/czertainly > czertainly-values.yaml
+```
+Now edit the `czertainly-values.yaml` according to your desired stated, see [Configurable parameters](#configurable-parameters) for more information.
+
+**Prepare list of trusted CA certificates**
+
+Create new file called `trusted-certificates.pem` and add to the file PEM certificates of all certification authorities that should be trusted by the platform. No worries, you can always change the list of trusted certificates in the future.
+
+The list of trusted certificates is need for the installation of the CZERTAINLY using Helm chart.
+
+**Install CZERTAINLY**
+
+There are couple of options to install CZERTAINLY based on you TLS configuration and administrator certificate handling. See the [Configurable parameters](#configurable-parameters) for more information.
+
+For the basic installation, run:
+```bash
+helm install --namespace czertainly -f czertainly-values.yaml --set-file trusted.certificates=trusted-certificates.pem czertainly-tlm oci://harbor.3key.company/czertainly-helm/czertainly
+```
+
+**Save your configuration**
+
+Always make sure you save the `czertainly-values.yaml` and all `--set` and `--set-file` options you used. You will need to use the same options when you upgrade CZERTAINLY to new versions with Helm. In case you are changing the configuration, save the new configuration.
+
+### Upgrade
+
+> **Warning**
+> Be sure that you always save your previous configuration!
+
+For upgrading the CZERTAINLY installation, update your configuration and run:
+```bash
+helm upgrade --namespace czertainly -f czertainly-values.yaml --set-file trusted.certificates=trusted-certificates.pem czertainly-tlm oci://harbor.3key.company/czertainly-helm/czertainly
+```
+
+### Uninstall
+
+You can use the `helm uninstall` command to uninstall the CZERTAINLY:
+```bash
+helm uninstall --namespace czertainly czertainly-tlm
+```
+
+## Configurable parameters
+
+You can find current values in the `values.yaml`.
+You can also Specify each parameter using the `--set` or `--set-file` argument to `helm install`.
+
+For more information about all configurable parameters, see [CZERTAINLY-Helm-Chart](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/develop/charts/czertainly/README.md).
+
+:::info Helm chart
+See [CZERTAINLY-Helm-Charts](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts) for description of all charts and sub-charts that are available for the platform.
+:::

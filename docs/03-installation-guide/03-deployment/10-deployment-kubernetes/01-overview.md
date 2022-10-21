@@ -1,14 +1,12 @@
 # Overview
 
+:::warning Deprecated deployment 
+Deployment using Kubernetes manifests becomes complex especially in case you want to manage multiple connectors and platform grows. Therefore, this type of deployment is considered to be deprecated in favor of the deployment using Helm charts or Virtual appliance and will not be further maintained and extended. 
+:::
+
 The platform can be easily deployed using Kubernetes. The following provides a simple Kubernetes manifests for the platform that can be uased out-of-the-box to deploy in few minutes.
 
 Entry point for the platform differs based on the environment setup and technology used. To create a complete solution, we will use `Ingress`, but any approach can be used.
-
-## Kubernetes deployment
-
-The following diagram represents the deployment of the platform in Kubernetes. Each part of the Kubernetes deployment is described further. The deployment can be extended by specific Kubernetes implementation supported in the target environment.
-
-![Kubernetes deployment diagram](../../../assets/kubernetes/kubernetes-deployment-diagram.png)
 
 ## Deployment of the platform services
 
