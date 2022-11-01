@@ -29,7 +29,7 @@ The list of trusted certificate must always include at least the following certi
 ## Changing trusted certificates
 
 When you need to change the list of trusted certificates (add / remove trusted certificates), the changes must be applied to the deployment of the platform.
-This is done automatically installing and upgrading using [Helm chart](deployment/deployment-helm/overview.md).
+This is done automatically installing and upgrading using [Helm chart](deployment/deployment-helm/overview).
 
 :::caution Management of trusted certificates
 Be sure that all changes in the list of trusted certificates are properly propagated in the deployment when managing the list manually or externally to Helm chart.
