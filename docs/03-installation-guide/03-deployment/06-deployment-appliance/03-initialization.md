@@ -79,10 +79,21 @@ Generate the CSR using the following command:
 sudo -s czertainly-manager.sh generatecsr
 ```
 
-:::warning TODO
-The CSR file is store as ???
-Where to put the key and issued certificate?
-:::
+The CSR and the private key will be stored in the following locations:
+```
+/home/czertainly/czertainly.csr
+/home/czertainly/czertainly.key
+```
+
+Once the server certificate is issued by the CA of your choice, it should be uploaded into the following location:
+```
+/home/czertainly/czertainly.crt
+```
+
+To import the server certificate, execute the following command:
+```bash
+sudo -s czertainly-manager.sh importcert
+```
 
 ## Deploy CZERTAINLY
 
