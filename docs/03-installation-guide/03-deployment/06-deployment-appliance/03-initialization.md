@@ -90,10 +90,9 @@ Once the server certificate is issued by the CA of your choice, it should be upl
 /home/czertainly/czertainly.crt
 ```
 
-To import the server certificate, execute the following command:
-```bash
-sudo -s czertainly-manager.sh importcert
-```
+:::info Certificate installation
+The server certificate will be installed during the first deployment of the CZERTAINLY. Certificate can be changed later. For more information about how to change the certificate in already deployed platform, see [Import TLS server certificate](operations#import-tls-server-certificate).
+:::
 
 ## Deploy CZERTAINLY
 
