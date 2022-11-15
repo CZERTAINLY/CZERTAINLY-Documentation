@@ -12,7 +12,7 @@ The following is a list of current versions of the CZERTAINLY platform and conne
 
 | Service           | Version | Docker Image                               |
 |-------------------|---------|--------------------------------------------|
-| Core              | `2.5.0` | `3keycompany/czertainly-core`              |
+| Core              | `2.5.2` | `3keycompany/czertainly-core`              |
 | Auth              | `1.0.0` | `3keycompany/czertainly-auth`              |
 | Auth OPA policies | `1.0.0` | `3keycompany/czertainly-auth-opa-policies` |
 
