@@ -73,6 +73,12 @@ export default function Home(): JSX.Element {
                   body="Attributes and Callbacks are one of the main principles how to work with different technologies. Learn how to use it to control the behavior of the integral component in CZERTAINLY."
                   to={useBaseUrl("contributors/attributes")}
                   button="Learn More" />
+              <CardLink
+                  icon={faListAlt}
+                  title="Access Control"
+                  body="Access control and authorization is integral part of CZERTAINLY. Learn more about authorization mechanism and how to define and trigger authorization evaluation when calling service methods of CZERTAINLY Core."
+                  to={useBaseUrl("contributors/access-control")}
+                  button="Learn More" />
             </div>
           </div>
         </section>
