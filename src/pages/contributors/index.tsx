@@ -6,7 +6,7 @@ import styles from "./index.module.css";
 import CardLink from "@site/src/components/CardLink";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-import { faDatabase, faListAlt } from '@fortawesome/free-solid-svg-icons'
+import { faDatabase, faListAlt, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -74,7 +74,7 @@ export default function Home(): JSX.Element {
                   to={useBaseUrl("contributors/attributes")}
                   button="Learn More" />
               <CardLink
-                  icon={faListAlt}
+                  icon={faUsers}
                   title="Access Control"
                   body="Access control and authorization is integral part of CZERTAINLY. Learn more about authorization mechanism and how to define and trigger authorization evaluation when calling service methods of CZERTAINLY Core."
                   to={useBaseUrl("contributors/access-control")}

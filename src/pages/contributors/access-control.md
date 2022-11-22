@@ -5,15 +5,30 @@ hide_table_of_contents: false
 
 # Access control
 
-Authorization is an integral part of CZERTAINLY platform. Each authenticated identified user and its permissions are represented by internal authorization token which is evaluated using [Open Policy Agent](https://www.openpolicyagent.org/) (OPA) and defined policies. For more information about the authorization policies, refer to [CZERTAINLY Auth OPA Policies](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies). Individual permissions are set for roles existing in `Auth` service which then can be assigned to users.
+Authorization is an integral part of CZERTAINLY platform. Each authenticated user and permissions are represented by internal authorization token which is evaluated using [Open Policy Agent](https://www.openpolicyagent.org/) (OPA) and pre-defined policies. For more information, refer to [Access Control](/docs/concept-design/architecture/access-control/overview).
+
+For more information about the definition of authorization policies, refer to [CZERTAINLY Auth OPA Policies](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies) repository. Individual permissions are set for roles existing in `Auth` service which then can be assigned to users.
 
 ## Resources and actions
 
-CZERTAINLY platform and its `Core` service works with different type of objects (entities) that are called resources. Each resource then has defined set of actions that are available for that particular resource. Both available resources and actions are defined as `enum` type to easily refer to.
-Therefore, permission to perform some request represented by some endpoint can be described as set of actions performed on resources that needs to be allowed.
+`Core` service works with different types of objects (entities) that are called **resources**. Each resource then has defined set of **actions** that are available for that particular resource. Available resources and actions are defined as `enum` type to easily refer to.
 
-Individual permission can be evaluated on two levels (represented by different OPA policies), generally if action is allowed/denied on some resource level or on object level for specific object UUID.
-Example of permissions for some resource can be seen on following excerpt from authorization token:
+| Access Control Enum | Reference                                                                                                                                          |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Resources**       | [Resource enum](https://github.com/3KeyCompany/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/model/auth/Resource.java)             |
+| **Actions**         | [ResourceAction enum](https://github.com/3KeyCompany/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/model/auth/ResourceAction.java) |
+
+The list of available actions for particular resources is dynamically constructed by the `Core` service based on the `@ExternalAuthorization` annotation. Continue reading to get more details.
+
+## Permissions object
+
+The permissions object represents set of actions performed on resources that need to be evaluated. It conforms with the JSON data structure and is constructed by the `Auth` service and evaluated by the `OPA` service.
+
+Individual permissions can be evaluated on two levels (represented by different OPA policies), generally if action is allowed / denied on:
+- resource level or ([Method policy](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies/blob/develop/policies/method_policy.rego))
+- on object level for specific object UUID. ([Objects policy](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies/blob/develop/policies/objects_policy.rego))
+
+Example of permissions objects for some resource can be seen on following excerpt from authorization token:
 
 ```json
 {
@@ -45,61 +60,107 @@ Example of permissions for some resource can be seen on following excerpt from a
 }
 ```
 
-In an example there are permissions defined for two resources - `raProfiles` and `certificates`. For `certificates` resource all actions are allowed in general and for `raProfiles` detail and list action on any profile except RA profile *NG-RA-Profile1* where detail action is denied. 
+In this example there are permissions defined for two resources:
+- `raProfiles` and 
+- `certificates`.
+For `certificates` resource all actions are allowed and for `raProfiles` detail and list action on any RA Profile except RA Profile named *NG-RA-Profile1* where detail action is denied.
 
-## Authorization mechanism and annotations
+:::info OPA evaluation input
+You can see [`input.json`](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies/blob/master/samples/input.json) for a complete input sample for OPA evaluation.
+:::
 
-Authorization process (OPA evaluation) is triggered by calling methods annotated with `@ExternalAuthorization` annotation. Usually, public methods of service implementations are annotated with this annotation, to require authorization if service is called from anywhere across `Core` service.
+## `@ExternalAuthorization` annotation
 
-Authorization mechanism itself is driven by Spring framework security layer and custom implementations of `AccessDecisionVoter`.
-For example, voter responsible for evaluating `method` policies extracts parameters of annotation of method called and constructs input to include in request to OPA. Based on response from OPA, result can be `ACCESS_GRANTED` or `ACCESS_DENIED.`
+Authorization process is triggered by accessing methods annotated with [`@ExternalAuthorization` annotation](https://github.com/3KeyCompany/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/security/authz/ExternalAuthorization.java). Typically, public methods of service implementations are annotated with this annotation, to require authorization if service is called from anywhere across `Core` service.
 
-`@ExternalAuthorization` annotation has parameters to define two pairs of resource and action. One for resource accessed and other for parent resource. Both can be evaluated simultaneously to authorize access to resources in hierarchical dependency.
+Authorization mechanism itself is driven by [Spring framework](https://docs.spring.io/spring-security/reference/servlet/authorization/architecture.html) security layer and custom implementations of `AccessDecisionVoter`.
+
+For example, voter responsible for evaluating `method` policies extracts parameters of annotation of method that is being accessed and constructs input to include in request to OPA evaluation. Based on response from `OPA` service, result can be `ACCESS_GRANTED` or `ACCESS_DENIED`.
+
+`@ExternalAuthorization` annotation has parameters to define two pairs of `Resource` and `ResourceAction`. One is for resource that is being accessed and the second for parent resource. Both can be evaluated simultaneously to authorize access to resources in hierarchical dependency.
 Resource and action names are codes for enums defined in `Core` service.
 
-For example, method annotated with `@ExternalAuthorization(resource = Resource.RA_PROFILE, action = ResourceAction.DELETE, parentResource = Resource.AUTHORITY, parentAction = ResourceAction.DETAIL)` means that calling this method triggers evaluation of permission for `delete` action on resource `raProfiles` and `detail` action on parent resource `authorities`.
+:::warning
+why we have two resource pairs? what is the purpose and how it should be used?
+I do not understand the concept...
+:::
 
-### Object access level permissions evaluation
+For example, method annotated with 
+```java
+@ExternalAuthorization(
+  resource = Resource.RA_PROFILE,
+  action = ResourceAction.DELETE,
+  parentResource = Resource.AUTHORITY,
+  parentAction = ResourceAction.DETAIL
+)
+```
+means that accessing this method triggers evaluation of permissions for `delete` action on resource `raProfiles` and `detail` action on parent resource `authorities`.
 
-In case we want to evaluate also permissions for resource/action on object access level, `@ExternalAuthorization` annotation is combined with method parameters. Parameter representing UUID of object that should be evaluated needs to be of type `SecuredUUID`. To evaluate object access level for parent resource/action, we use similarly type `SecuredParentUUID`.
-If we have list of UUIDs to evaluate, we can use `List<SecuredUuid>` type in similar fashion.
+## Object access level permissions evaluation
 
-``` Java
-@ExternalAuthorization(resource = Resource.RA_PROFILE, action = ResourceAction.DELETE, parentResource = Resource.AUTHORITY, parentAction = ResourceAction.DETAIL)
+In case we want to evaluate permissions for resource / action on object access level, `@ExternalAuthorization` annotation is combined with method parameters. Parameter representing UUID of object that should be evaluated needs to be of type `SecuredUUID`. To evaluate object access level for parent resource / action, we use similarly type `SecuredParentUUID`.
+
+If we have list of UUIDs to evaluate, we can use `List<SecuredUuid>` type in similar fashion:
+```java
+@ExternalAuthorization(
+  resource = Resource.RA_PROFILE,
+  action = ResourceAction.DELETE,
+  parentResource = Resource.AUTHORITY,
+  parentAction = ResourceAction.DETAIL
+)
 public void deleteRaProfile(SecuredParentUUID authorityUuid, SecuredUUID uuid) throws NotFoundException {
-    // some code here
+    // your code
 } 
 ```
-In the example above we can see how should look annotation and method signature if we want to evaluate permissions to delete RA profile object with UUID specified by parameter `uuid` and permissions to retrieve detail of object of parent resource authority with UUID specified by parameter `authorityUuid`.
+
+In the example above we can see how annotation and method signature should look if we want to evaluate permissions to delete RA Profile object with UUID specified by parameter `uuid` and permissions to retrieve detail of object of parent resource authority with UUID specified by parameter `authorityUuid`.
 
 Other use case for evaluation object access level permissions is when we want to filter list of retrieved objects to contain only objects that have allowed action specified in the annotation (usually applicable in listing endpoints).
+
 This can be achieved by passing `SecurityFilter` object to method annotated with `@ExternalAuthorization`. `SecurityFilter` contains resource filters with list of allowed and denied object UUIDs that are populated with response from OPA `object` policy evaluation. `SecurityFilter` can then be used for example to filter out records retrieved from DB.  
 
-``` Java
-@ExternalAuthorization(resource = Resource.RA_PROFILE, action = ResourceAction.LIST, parentResource = Resource.AUTHORITY, parentAction = ResourceAction.LIST)
+```java
+@ExternalAuthorization(
+  resource = Resource.RA_PROFILE,
+  action = ResourceAction.LIST,
+  parentResource = Resource.AUTHORITY,
+  parentAction = ResourceAction.LIST
+)
 public List<RaProfileDto> listRaProfiles(SecurityFilter filter, Optional<Boolean> enabled) {
     filter.setParentRefProperty("authorityInstanceReferenceUuid");
     
-    // some additional code here
+    // your code
 } 
 ```
-In the example above, we are using security filter to get filters for RA profile objects that have permission for list action and their parent resource authority, too.
-To be able to automatize retrieving records from DB based on SecurityFilter with help of `SecurityFilterRepository`, it is necessary to define property of entity (representing resource object) that holds reference UUID of parent resource. 
 
-### Extending resources and actions
+In this example, we are using security filter to get filters for RA Profile objects that have permission for list action and their parent resource authority, too.
+To be able to automatize retrieving records from database based on `SecurityFilter` with help of `SecurityFilterRepository`, it is necessary to define property of entity (representing resource object) that holds reference UUID of parent resource. 
 
-When we need to extend set of available resource and/or actions usable in Access control components, first we can add new items to enums defined in `Core`. Then they can be used as values of `@ExternalAuthorization` properties.
+## How are resource and actions synchronized
 
-To achieve that changes in available set of resources and their actions are reflected in role permissions, `Core` service manages changes automatically with help of syncing mechanism.
-When `Core` service starts, it collects all `@ExternalAuthorization` annotation instances and builds map of available resources and their actions. This information is then passed to `Auth` service which can then store role permissions with reference to corresponding resource/action. This way, `Core` and `Auth` services are in sync and permissions can refer to all resources/actions that are actually used and require authorization.
+To achieve that changes in available set of resources and their actions are reflected in role permissions, `Core` service manages changes automatically with the help of syncing mechanism.
 
-In addition, we can mark resources to allow adding permissions on object access level. It can be achieved by annotating listing endpoint in corresponding controller that can be used to list objects. The annotation `@AuthEndpoint` is used to set object listing endpoint path for a resource which can be later used in permissions editor to dynamically retrieve available objects of that resource.
+When `Core` service starts, it collects all `@ExternalAuthorization` annotation instances and builds map of available resources and their actions. This information is then passed to `Auth` service which can then store role permissions with reference to corresponding resource/action.
+
+This way, `Core` and `Auth` services are in sync and permissions can refer to all resources and actions that are actually used and require authorization.
+
+## `@AuthEndpoint` annotation
+
+In addition, you can mark resources to allow adding permissions on object access level. It can be achieved by annotating listing endpoint in corresponding controller that can be used to list objects. The annotation `@AuthEndpoint` is used to set object listing endpoint path for a resource which can be later used in permissions editor to dynamically retrieve available objects of that resource.
 
 Example of using `@AuthEndpoint` annotation to mark RA profile resource to have object access level permissions:
 
-``` Java
-@AuthEndpoint(resourceName = Resource.RA_PROFILE)
+```java
+@AuthEndpoint(
+  resourceName = Resource.RA_PROFILE
+)
 public List<RaProfileDto> listRaProfiles(Optional<Boolean> enabled) {
     return raProfileService.listRaProfiles(SecurityFilter.create(), enabled);
 }
 ```
+
+## Extending resources and actions
+
+Finally, when you need to extend set of available resources and / or actions that can be used within platform access control, you need to do the following:
+- add new items to `enums` specified in [Resources and actions](#resources-and-actions)
+- implement methods with proper `@ExternalAuthorization` annotation properties
