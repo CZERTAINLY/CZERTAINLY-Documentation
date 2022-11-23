@@ -6,7 +6,7 @@ import styles from "./index.module.css";
 import CardLink from "@site/src/components/CardLink";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-import { faDatabase, faListAlt } from '@fortawesome/free-solid-svg-icons'
+import { faDatabase, faListAlt, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -72,6 +72,12 @@ export default function Home(): JSX.Element {
                   title="Attributes and Callbacks"
                   body="Attributes and Callbacks are one of the main principles how to work with different technologies. Learn how to use it to control the behavior of the integral component in CZERTAINLY."
                   to={useBaseUrl("contributors/attributes")}
+                  button="Learn More" />
+              <CardLink
+                  icon={faUsers}
+                  title="Access Control"
+                  body="Learn more about authorization mechanism and how to define and trigger authorization evaluation when calling service methods of CZERTAINLY `Core` service."
+                  to={useBaseUrl("contributors/access-control")}
                   button="Learn More" />
             </div>
           </div>
