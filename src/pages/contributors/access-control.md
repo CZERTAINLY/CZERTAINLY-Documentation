@@ -80,9 +80,11 @@ For example, voter responsible for evaluating `method` policies extracts paramet
 `@ExternalAuthorization` annotation has parameters to define two pairs of `Resource` and `ResourceAction`. One is for resource that is being accessed and the second for parent resource. Both can be evaluated simultaneously to authorize access to resources in hierarchical dependency.
 Resource and action names are codes for enums defined in `Core` service.
 
-:::warning
-why we have two resource pairs? what is the purpose and how it should be used?
-I do not understand the concept...
+To specify parent resource/action is optional and its usage depends on the context, if method requires authorization for more resources. Typically, you can use evaluation of permissions together with parent resource when input of your method are two resources that are hierarchically related (e.g. concept of principal and dependent entities in DB).
+But in case access to other resource is in separate corresponding service method, permissions for that resource can be evaluated separately in its own context (service).
+
+:::info Parent resource
+Even the name parent resource suggests some dependency between resources specified, you can use parent resource/action pair to evaluate any resource pair without any relation.
 :::
 
 For example, method annotated with 
@@ -94,13 +96,12 @@ For example, method annotated with
   parentAction = ResourceAction.DETAIL
 )
 ```
-means that accessing this method triggers evaluation of permissions for `delete` action on resource `raProfiles` and `detail` action on parent resource `authorities`.
+means that accessing this method triggers evaluation of permissions for `delete` action on resource `raProfiles` and `detail` action on parent resource `authorities`. (Note: Between resource `raProfiles` and parent resource `authorities` is one-to-many relationship).
 
 ## Object access level permissions evaluation
 
 In case we want to evaluate permissions for resource / action on object access level, `@ExternalAuthorization` annotation is combined with method parameters. Parameter representing UUID of object that should be evaluated needs to be of type `SecuredUUID`. To evaluate object access level for parent resource / action, we use similarly type `SecuredParentUUID`.
 
-If we have list of UUIDs to evaluate, we can use `List<SecuredUuid>` type in similar fashion:
 ```java
 @ExternalAuthorization(
   resource = Resource.RA_PROFILE,
@@ -110,14 +111,28 @@ If we have list of UUIDs to evaluate, we can use `List<SecuredUuid>` type in sim
 )
 public void deleteRaProfile(SecuredParentUUID authorityUuid, SecuredUUID uuid) throws NotFoundException {
     // your code
-} 
+}
 ```
 
 In the example above we can see how annotation and method signature should look if we want to evaluate permissions to delete RA Profile object with UUID specified by parameter `uuid` and permissions to retrieve detail of object of parent resource authority with UUID specified by parameter `authorityUuid`.
 
+If we have list of UUIDs to evaluate, we can use `List<SecuredUuid>` type in similar fashion:
+```java
+@ExternalAuthorization(
+  resource = Resource.RA_PROFILE,
+  action = ResourceAction.DELETE
+)
+public void bulkDeleteRaProfile(List<SecuredUUID> uuids) {
+    // your code
+}
+```
+
 Other use case for evaluation object access level permissions is when we want to filter list of retrieved objects to contain only objects that have allowed action specified in the annotation (usually applicable in listing endpoints).
 
-This can be achieved by passing `SecurityFilter` object to method annotated with `@ExternalAuthorization`. `SecurityFilter` contains resource filters with list of allowed and denied object UUIDs that are populated with response from OPA `object` policy evaluation. `SecurityFilter` can then be used for example to filter out records retrieved from DB.  
+This can be achieved by passing `SecurityFilter` object to method annotated with `@ExternalAuthorization`. `SecurityFilter` contains resource filters (for resource and parent resource from annotation) with list of allowed and denied object UUIDs that are populated with response from OPA `object` policy evaluation. `SecurityFilter` can then be used for example to filter out records retrieved from DB.
+
+If you want to automatize retrieving records from database based on `SecurityFilter`, `Core` service offers generic implementation of `SecurityFilterRepository`. Its method `findUsingSecurityFilter` constructs query with `WHERE IN` and `WHERE NOT IN` conditions based on lists of allowed and denied UUIDs in security filter.
+In case if parent resource is set, it is necessary to set property of entity (representing resource object) that holds reference UUID for parent resource (DB table column). It can be done by setting `parentRefProperty` of `SecurityFilter`.
 
 ```java
 @ExternalAuthorization(
@@ -126,15 +141,13 @@ This can be achieved by passing `SecurityFilter` object to method annotated with
   parentResource = Resource.AUTHORITY,
   parentAction = ResourceAction.LIST
 )
-public List<RaProfileDto> listRaProfiles(SecurityFilter filter, Optional<Boolean> enabled) {
+public List<RaProfileDto> listRaProfiles(SecurityFilter filter) {
     filter.setParentRefProperty("authorityInstanceReferenceUuid");
-    
-    // your code
-} 
+    return securityFilterRepository.findUsingSecurityFilter(filter).stream().map(RaProfile::mapToDtoSimple).collect(Collectors.toList());
+}
 ```
 
-In this example, we are using security filter to get filters for RA Profile objects that have permission for list action and their parent resource authority, too.
-To be able to automatize retrieving records from database based on `SecurityFilter` with help of `SecurityFilterRepository`, it is necessary to define property of entity (representing resource object) that holds reference UUID of parent resource. 
+In this example, we are using security filter to get filters for RA Profile objects that have permission for list action and their parent resource authority, too. Since `SecurityFilterRepository` is used to retrieve list of allowed RA profiles based on authorization, `parentRefProperty` of filter is set to `"authorityInstanceReferenceUuid"` which contains reference to `Authority` of `RaProfile` entity.
 
 ## How are resource and actions synchronized
 
@@ -163,4 +176,6 @@ public List<RaProfileDto> listRaProfiles(Optional<Boolean> enabled) {
 
 Finally, when you need to extend set of available resources and / or actions that can be used within platform access control, you need to do the following:
 - add new items to `enums` specified in [Resources and actions](#resources-and-actions)
+- annotate corresponding object listing endpoint with annotation `@AuthEndpoint` to allow setting permissions on objects access level
 - implement methods with proper `@ExternalAuthorization` annotation properties
+- map parameters of method representing object UUIDs to resources used in annotation by using correct parameter type `SecuredUUID` / `SecuredParentUUID` to evaluate [object access level permissions](#object-access-level-permissions-evaluation)
