@@ -172,10 +172,15 @@ public List<RaProfileDto> listRaProfiles(Optional<Boolean> enabled) {
 }
 ```
 
+:::info Parent resource
+Entity and DTO that is returned from listing endpoint which is representing resource that has object access level has to contain `name` property. That way any object can be properly labeled also with human readable name instead of its UUID.
+:::
+
 ## Extending resources and actions
 
 Finally, when you need to extend set of available resources and / or actions that can be used within platform access control, you need to do the following:
 - add new items to `enums` specified in [Resources and actions](#resources-and-actions)
 - annotate corresponding object listing endpoint with annotation `@AuthEndpoint` to allow setting permissions on objects access level
+- make sure that entity and response objects from listing endpoint contain `name` property 
 - implement methods with proper `@ExternalAuthorization` annotation properties
 - map parameters of method representing object UUIDs to resources used in annotation by using correct parameter type `SecuredUUID` / `SecuredParentUUID` to evaluate [object access level permissions](#object-access-level-permissions-evaluation)
