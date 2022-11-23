@@ -80,11 +80,11 @@ For example, voter responsible for evaluating `method` policies extracts paramet
 `@ExternalAuthorization` annotation has parameters to define two pairs of `Resource` and `ResourceAction`. One is for resource that is being accessed and the second for parent resource. Both can be evaluated simultaneously to authorize access to resources in hierarchical dependency.
 Resource and action names are codes for enums defined in `Core` service.
 
-To specify parent resource/action is optional and its usage depends on the context, if method requires authorization for more resources. Typically, you can use evaluation of permissions together with parent resource when input of your method are two resources that are hierarchically related (e.g. concept of principal and dependent entities in DB).
+To specify parent resource/action is optional and its usage depends on the context, if method requires authorization for more resources. Typically, you can use evaluation of permissions together with parent resource when input of your method are two resources that are hierarchically related (e.g., concept of principal and dependent entities in DB).
 But in case access to other resource is in separate corresponding service method, permissions for that resource can be evaluated separately in its own context (service).
 
 :::info Parent resource
-Even the name parent resource suggests some dependency between resources specified, you can use parent resource/action pair to evaluate any resource pair without any relation.
+Even the name parent resource suggests some dependency between resources specified, you can use parent resource / action pair to evaluate any resource pair without any relation.
 :::
 
 For example, method annotated with 
@@ -159,7 +159,7 @@ This way, `Core` and `Auth` services are in sync and permissions can refer to al
 
 ## `@AuthEndpoint` annotation
 
-In addition, you can mark resources to allow adding permissions on object access level. It can be achieved by annotating listing endpoint in corresponding controller that can be used to list objects. The annotation `@AuthEndpoint` is used to set object listing endpoint path for a resource which can be later used in permissions editor to dynamically retrieve available objects of that resource.
+In addition, you can mark resources to allow adding permissions on object access level. It can be achieved by annotating listing endpoint in corresponding **controller** that can be used to list objects. The [annotation `@AuthEndpoint`](https://github.com/3KeyCompany/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/auth/AuthEndpoint.java) is used to set object listing endpoint path for a resource which can be later used in permissions editor to dynamically retrieve available objects of that resource.
 
 Example of using `@AuthEndpoint` annotation to mark RA profile resource to have object access level permissions:
 
@@ -172,15 +172,15 @@ public List<RaProfileDto> listRaProfiles(Optional<Boolean> enabled) {
 }
 ```
 
-:::info Parent resource
-Entity and DTO that is returned from listing endpoint which is representing resource that has object access level has to contain `name` property. That way any object can be properly labeled also with human readable name instead of its UUID.
+:::caution Object `uuid` and `name` property
+Entity and DTO that is returned from listing endpoint which is representing resource that has object access level has to contain `name` property. That way any object can be properly labeled also with human readable name instead of its UUID. Without `name` property, objects will be identified only through its UUID.
 :::
 
 ## Extending resources and actions
 
 Finally, when you need to extend set of available resources and / or actions that can be used within platform access control, you need to do the following:
 - add new items to `enums` specified in [Resources and actions](#resources-and-actions)
-- annotate corresponding object listing endpoint with annotation `@AuthEndpoint` to allow setting permissions on objects access level
+- annotate corresponding object listing endpoint with annotation [`@AuthEndpoint`](#authendpoint-annotation) to allow setting permissions on objects access level
 - make sure that entity and response objects from listing endpoint contain `name` property 
-- implement methods with proper `@ExternalAuthorization` annotation properties
+- implement methods with proper [`@ExternalAuthorization`](#externalauthorization-annotation) annotation properties
 - map parameters of method representing object UUIDs to resources used in annotation by using correct parameter type `SecuredUUID` / `SecuredParentUUID` to evaluate [object access level permissions](#object-access-level-permissions-evaluation)

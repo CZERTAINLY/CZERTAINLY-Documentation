@@ -76,7 +76,7 @@ export default function Home(): JSX.Element {
               <CardLink
                   icon={faUsers}
                   title="Access Control"
-                  body="Access control and authorization is integral part of CZERTAINLY. Learn more about authorization mechanism and how to define and trigger authorization evaluation when calling service methods of CZERTAINLY Core."
+                  body="Learn more about authorization mechanism and how to define and trigger authorization evaluation when calling service methods of CZERTAINLY `Core` service."
                   to={useBaseUrl("contributors/access-control")}
                   button="Learn More" />
             </div>
