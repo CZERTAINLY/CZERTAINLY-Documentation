@@ -8,7 +8,7 @@ Fo more information, refer to [Connector Architecture](../../../concept-design/a
 
 ## How it works
 
-The `Attributes` interface provides information about all supported mandatory or optional `Attributes` for the `Connector`. `Attributes` are necessary to manage `Connector` specific objects. For more information about how `Attributes` can be used and implemented, including details about `Attribute` types, refer to [Contribution guide - Attributes and Callbacks](/contributors/attributes).
+The `Attributes` interface provides information about all supported mandatory or optional `Attributes` for the `Connector`. `Attributes` are necessary to manage `Connector` specific objects. For more information about how `Attributes` can be used and implemented, including details about `Attribute` types, refer to [Contribution guide - Attributes and Callbacks](../../../contributors/attributes).
 
 Each `Connector` implements interface for listing available `Attributes` and their validation.
 

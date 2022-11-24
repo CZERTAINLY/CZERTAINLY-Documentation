@@ -1,8 +1,3 @@
----
-title: Database control
-hide_table_of_contents: false
----
-
 # Database control
 
 The platform is using [Flyway](https://flywaydb.org/) as a version control for the database and all related migration scripts.
