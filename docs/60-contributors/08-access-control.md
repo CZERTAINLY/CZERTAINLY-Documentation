@@ -1,8 +1,3 @@
----
-title: Access control
-hide_table_of_contents: false
----
-
 # Access control
 
 Authorization is an integral part of CZERTAINLY platform. Each authenticated user and permissions are represented by internal authorization token which is evaluated using [Open Policy Agent](https://www.openpolicyagent.org/) (OPA) and pre-defined policies. For more information, refer to [Access Control](/docs/concept-design/architecture/access-control/overview).
@@ -61,9 +56,9 @@ Example of permissions objects for some resource can be seen on following excerp
 ```
 
 In this example there are permissions defined for two resources:
-- `raProfiles` and 
+- `raProfiles` and
 - `certificates`.
-For `certificates` resource all actions are allowed and for `raProfiles` detail and list action on any RA Profile except RA Profile named *NG-RA-Profile1* where detail action is denied.
+  For `certificates` resource all actions are allowed and for `raProfiles` detail and list action on any RA Profile except RA Profile named *NG-RA-Profile1* where detail action is denied.
 
 :::info OPA evaluation input
 You can see [`input.json`](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies/blob/master/samples/input.json) for a complete input sample for OPA evaluation.
@@ -87,7 +82,7 @@ But in case access to other resource is in separate corresponding service method
 Even the name parent resource suggests some dependency between resources specified, you can use parent resource / action pair to evaluate any resource pair without any relation.
 :::
 
-For example, method annotated with 
+For example, method annotated with
 ```java
 @ExternalAuthorization(
   resource = Resource.RA_PROFILE,
@@ -181,6 +176,6 @@ Entity and DTO that is returned from listing endpoint which is representing reso
 Finally, when you need to extend set of available resources and / or actions that can be used within platform access control, you need to do the following:
 - add new items to `enums` specified in [Resources and actions](#resources-and-actions)
 - annotate corresponding object listing endpoint with annotation [`@AuthEndpoint`](#authendpoint-annotation) to allow setting permissions on objects access level
-- make sure that entity and response objects from listing endpoint contain `name` property 
+- make sure that entity and response objects from listing endpoint contain `name` property
 - implement methods with proper [`@ExternalAuthorization`](#externalauthorization-annotation) annotation properties
 - map parameters of method representing object UUIDs to resources used in annotation by using correct parameter type `SecuredUUID` / `SecuredParentUUID` to evaluate [object access level permissions](#object-access-level-permissions-evaluation)

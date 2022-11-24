@@ -189,11 +189,6 @@ const config = {
             to: '/docs',
           },
           {
-            label: 'Contributors',
-            position: 'left',
-            to: '/contributors',
-          },
-          {
             label: 'Core API',
             position: 'left',
             items: [

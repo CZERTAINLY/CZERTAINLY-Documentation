@@ -1,7 +1,3 @@
----
-title: Attributes and Callbacks
-hide_table_of_contents: false
----
 # Attributes and Callbacks
 
 Although the CZERTAINLY platform is technology independent, each technology have its own specifics that the users should be able to use properly.
@@ -9,7 +5,7 @@ Although the CZERTAINLY platform is technology independent, each technology have
 CZERTAINLY is using `AttributeDefinition` objects to control such specific behaviour of different technologies, like certification authorities, credential providers, discovery of certificates, etc. So called `Attributes` are used in almost every `Connector` and developer must understand them in order to implement custom behaviour or extend the functionality of the platform.
 
 :::info
-For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](/docs/concept-design/overview).
+For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](../concept-design/overview).
 :::
 
 Now let's take a look on what exactly is an `AttributeDefinition` and how it can be used.
