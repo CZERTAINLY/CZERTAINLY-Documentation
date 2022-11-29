@@ -57,7 +57,7 @@ Optionally, configure proxy settings:
 
 Use your favorite editor to edit default values file:
 ```bash
-nano /home/czertainly/czertainly-values.yaml
+nano /home/czertainly/czertainly-values-default.yaml
 ```
 
 :::info CZERTAINLY Helm chart
