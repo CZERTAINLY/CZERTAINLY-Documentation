@@ -1,3 +1,5 @@
+import DocCardList from '@theme/DocCardList';
+
 # Overview
 
 Although the CZERTAINLY platform is technology independent, each technology have its own specifics that the users should be able to use properly.
@@ -8,7 +10,7 @@ CZERTAINLY uses `Attribute` to control such specific behaviour of different tech
 For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](../../concept-design/overview).
 :::
 
-Now let's take a look on what exactly is an `AttributeDefinition` and how it can be used.
+Now let's take a look on what exactly is an `Attribute` and how it can be used.
 
 ## It is all about the `Attributes`
 
@@ -45,12 +47,12 @@ A typical example may be the `Connector` that implements `Authority Provider` in
 
 For example, in case of MS ADCS, you need to know at least the certificate template that should be used to issue the certificate. And this is the place where you can use the `BaseAttribute` to define the `Attribute` that will contain information about the certificate templates.
 
-## `Attribute Types`
+## Attribute Types
 
-Based on the usage, `Attributes` are classified into to 5 different types. Each type has its own purpose and usage. The types are following:
+Based on the usage and specific behaviour you want to provide, `Attribute` can be one of 5 the following defined types:
 
-| `Attribute` type                            | Short description                                                                                                                                                                                                                                                                                  |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Attribute` type                         | Short description                                                                                                                                                                                                                                                                                  |
+|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [`Data Attribute`](data-attributes)      | `Attributes` that are used by the connectors to gather the required information from the client. They are full fledged data carriers used by the `Connectors` for information exchange                                                                                                             |
 | [`Info Attributes`](info-attributes)     | `Info Attributes` are information carriers whose primary responsibility to carry information that will assist the client with additional data to be displayed to the user.                                                                                                                         |
 | [`Group Attributes`](group-attributes)   | `Group Attributes` are advanced type of attributes that carry a group of `Attributes` that are logically connected. They compose list of `Data Attributes` and `Info Attributes`. They are implemented as callback responses and are handy when the attributes are dependent on the value selected |
@@ -68,6 +70,30 @@ You can find specification of the `AttributeDefinition` in the [CZERTAINLY Inter
 | `description`        | Text description of the `Attribute` for better understanding of the `Attribute` purpose. This should contain descriptive explanation of the `Attribtue`.                                                                                                                                        | <span class="badge badge--danger">No</span>   |
 | `type`               | Type of the `Attribute`, various supported data types based on the [AttributeType](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/AttributeType.java). For example, `DATA`, `INFO`, `GROUP`, `CUSTOM` and "META". | <span class="badge badge--success">Yes</span> |
 | `content`            | Content of the `Attribute` defined based on its `type`. Each content type have a defined structure that can be processed as the JSON formatted string.                                                                                                                                          | <span class="badge badge--danger">No</span>   |
+
+```plantuml
+@startuml
+    abstract AbstractBaseAttribute
+    class BaseAttribute
+    class DataAttribute
+    class InfoAttribute
+    class GroupAttribute
+    class MetaAttribute
+    class CustomAttribute
+  
+    AbstractBaseAttribute <-- BaseAttribute : extends
+    BaseAttribute <-- DataAttribute : extends
+    BaseAttribute <-- InfoAttribute : extends
+    BaseAttribute <-- GroupAttribute : extends
+    BaseAttribute <-- MetaAttribute : extends
+    BaseAttribute <-- CustomAttribute : extends
+```
+
+<DocCardList/>
+
+:::warning
+below should be written in a separate section about Content
+:::
 
 ## Attribute Content
 
