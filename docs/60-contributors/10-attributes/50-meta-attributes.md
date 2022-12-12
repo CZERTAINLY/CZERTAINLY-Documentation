@@ -29,7 +29,7 @@ You can find specification of the `Metadata Attribute` in the [CZERTAINLY Interf
 
 ## `Metadata Attribute` structure
 
-In addition to the common `Attribute` properties defined [here](10-overview#attributedefinition), the `Metadata Attribute` has the following additional properties:
+In addition to the common `Attribute` properties defined [here](overview#attributedefinition), the `Metadata Attribute` has the following additional properties:
 
 | `Attribute` property | Short description                                                                                                                                                                                                                                                                                                       | Required                                      |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |

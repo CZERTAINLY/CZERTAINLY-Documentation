@@ -7,7 +7,7 @@ You can find specification of the `Data Attribute` in the [CZERTAINLY Interfaces
 
 ## `Data Attribute` structure
 
-In addition to the common `Attribute` properties defined [here](10-overview#attributedefinition), the `Data Attribute` has the following additional properties:
+In addition to the common `Attribute` properties defined [here](overview#attributedefinition), the `Data Attribute` has the following additional properties:
 
 | `Attribute` property | Short description                                                                                                                                                                                                                                                                                                       | Required                                      |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
