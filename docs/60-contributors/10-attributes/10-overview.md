@@ -2,7 +2,7 @@
 
 Although the CZERTAINLY platform is technology independent, each technology have its own specifics that the users should be able to use properly.
 
-CZERTAINLY is using `AttributeDefinition` objects to control such specific behaviour of different technologies, like certification authorities, credential providers, discovery of certificates, etc. So called `Attributes` are used in almost every `Connector` and developer must understand them in order to implement custom behaviour or extend the functionality of the platform.
+CZERTAINLY uses `Attribute` to control such specific behavior of different technologies, like certification authorities, credential providers, discovery of certificates, etc. So called `Attributes` are used in almost every `Connector` and developer must understand them in order to implement custom behavior or extend the functionality of the platform.
 
 :::info
 For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](../concept-design/overview).
