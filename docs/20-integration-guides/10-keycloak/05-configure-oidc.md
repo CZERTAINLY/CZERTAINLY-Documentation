@@ -5,7 +5,7 @@ Apply the following settings to enable OIDC and CORS.
 
 ## Configure OIDC Client
 
-To enabled OIDC client, set the `oidc.enabled` value to `true` and configure the following values:
+To enable OIDC client, set the `oidc.enabled` value to `true` and configure the following values:
 ```yaml
 apiGateway:
   # kong-oidc plugin: https://github.com/revomatico/kong-oidc
@@ -26,7 +26,7 @@ apiGateway:
 
 ## Configure CORS
 
-To enabled CORS, set the `cors.enabled` value to `true` and configure the following values:
+To enable CORS, set the `cors.enabled` value to `true` and configure the following values:
 ```yaml
 apiGateway:
   # kong cors plugin: https://docs.konghq.com/hub/kong-inc/cors
