@@ -1,6 +1,6 @@
 # Metadata Attributes
 
-`Metadata Attributes` contains the information provided by the `Connector` about the objects. They are created and managed by the `Connectors` and are sent to the core for storage and display purpose for the users. Unlike [`Custom Attributes`](60-custom-attributes) `Metadata Attributes` are not manageable by the users. Metadata in the platform uses `Metadata Attributes` to represent the data. There are two types:
+`Metadata Attributes` contains the information provided by the `Connector` about the objects. They are created and managed by the `Connectors` and are sent to the core for storage and display purpose for the users. Unlike [`Custom Attributes`](custom-attributes) `Metadata Attributes` are not manageable by the users. Metadata in the platform uses `Metadata Attributes` to represent the data. There are two types:
 
 - Global Metadata
 - Connector Metadata

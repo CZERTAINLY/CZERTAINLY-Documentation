@@ -5,7 +5,7 @@ Although the CZERTAINLY platform is technology independent, each technology have
 CZERTAINLY uses `Attribute` to control such specific behaviour of different technologies, like certification authorities, credential providers, discovery of certificates, etc. So called `Attributes` are used in almost every `Connector` and developer must understand them in order to implement custom behaviour or extend the functionality of the platform.
 
 :::info
-For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](../concept-design/overview).
+For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](../../concept-design/overview).
 :::
 
 Now let's take a look on what exactly is an `AttributeDefinition` and how it can be used.
@@ -55,7 +55,7 @@ Based on the usage, `Attributes` are classified into to 5 different types. Each 
 | [`Info Attributes`](info-attributes)     | `Info Attributes` are information carriers whose primary responsibility to carry information that will assist the client with additional data to be displayed to the user.                                                                                                                         |
 | [`Group Attributes`](group-attributes)   | `Group Attributes` are advanced type of attributes that carry a group of `Attributes` that are logically connected. They compose list of `Data Attributes` and `Info Attributes`. They are implemented as callback responses and are handy when the attributes are dependent on the value selected |
 | [`Meta Attributes`](meta-attributes)     | Attributes used by the connector to pass the extended information about the objects created. The metadata are stored in the core and sent to the connector when needed.                                                                                                                            |
-| [`Custom Attributes`](custom-attributes) | `Custom Attributes` are used defined attributes for storing additional information about the objects created in the platform. These are local to core and are not sent to the `connectors`.                                                                                                        |
+| [`Custom Attributes`](60-custom-attributes) | `Custom Attributes` are used defined attributes for storing additional information about the objects created in the platform. These are local to core and are not sent to the `connectors`.                                                                                                        |
 
 
 You can find specification of the `AttributeDefinition` in the [CZERTAINLY Interfaces repository](https://github.com/3KeyCompany/CZERTAINLY-Interfaces). Common `Attribute` properties are following:
