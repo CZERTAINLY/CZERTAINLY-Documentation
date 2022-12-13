@@ -43,6 +43,9 @@ Th following diagram represents the Properties model inherited from the `Abstrac
 
 ```plantuml
 @startuml
+    scale 3/4
+    left to right direction
+    
     class BaseAttributeProperties
     class DataAttributeProperties
     class InfoAttributeProperties
