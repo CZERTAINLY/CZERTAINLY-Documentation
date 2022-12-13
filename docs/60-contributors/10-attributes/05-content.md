@@ -1,46 +1,47 @@
 # Content
 
-This section of the document describes the content of the `Attributes` and their types. 
+`Attribute` supports various content defined by `contentType`.
 
-## `Attribute` Content Types
-
-All `AttributeContent` extends from [`BaseAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/BaseAttributeContent.java) which is abstracted from [`AttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/AttributeContent.java). `AttributeContent` is a generic type with the following properties:
-
-
-Properties of Attribute Content are following:
-
-| Property    | Short description                                                                                                                                                                                                                                                                                                          | Required                                      |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `reference` | Reference for the value. Meaningful, user readable string for the value                                                                                                                                                                                                                                                    | <span class="badge badge--success">Yes</span> |
-| `data`      | Actual value of the content. This property uses a generic type and is a typed class accepting the data from the classes extending [`BaseAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/BaseAttributeContent.java) | <span class="badge badge--success">Yes</span> |
-
-
-Based on the usage and the functionality, `AttributeContent` can be of any of the following types:
-
-:::info
-An `Attribute` can contain only one type of the content. Mixture of different type of `AttributeContent` is not supported.
+:::info Attribute types
+For more details about `Attribute` types and `contentType`, see [Attributes](attributes).
 :::
 
-| `AttributeContentType` | Short Description                                                                                                                                                                                                                                                                                                                                                                                     | Class                                                                                                                                                                                                |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `STRING`               | String value `content`                                                                                                                                                                                                                                                                                                                                                                                | [`StringAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/StringAttributeContent.java)         |
-| `INTEGER`              | Integer value `content`                                                                                                                                                                                                                                                                                                                                                                               | [`IntegerAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/IntegerAttributeContent.java)       |
-| `SECRET`               | `AttributeContent` for password or secrets, `data` field is defined by [`SecretAttributeContentData`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/data/SecretAttributeContentData.java). `SECRET` is handled by the platform in a secure way and its value will never be presented to `Client` once defined. | [`SecretAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/SecretAttributeContent.java)         |
-| `FILE`                 | `AttributeContent` for `Attributes` requiring files. `data` field is described by [`FileAttributeContentData`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/data/FileAttributeContentData.java)                                                                                                               | [`FileAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/FileAttributeContent.java)             |
-| `BOOLEAN`              | Boolean value `content`                                                                                                                                                                                                                                                                                                                                                                               | [`BooleanAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/BooleanAttributeContent.java)       |
-| `TEXT`                 | Text value `content`. Use this type when the input required is a long text.                                                                                                                                                                                                                                                                                                                           | [`TextAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/TextAttributeContent.java)             |
-| `FLOAT`                | Decimal value `content`                                                                                                                                                                                                                                                                                                                                                                               | [`FloatAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/FloatAttributeContent.java)           |
-| `DATE`                 | Date value `content`. `DATE` should be in the format `yyyy-MM-dd`.                                                                                                                                                                                                                                                                                                                                    | [`DateAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/DateAttributeContent.java)             |
-| `DATETIME`             | Date and time value `content`. `DATETIME` should be in the format `yyyy-MM-dd'T'HH:mm:ss.SSSXXX`, which is ISO-8601 extended offset date-time format.                                                                                                                                                                                                                                                 | [`DateTimeAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/DatetimeAttributeContent.java)     |
-| `TIME`                 | Time value `content`. `TIME` should be in the format `HH:mm:ss`.                                                                                                                                                                                                                                                                                                                                      | [`TimeAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/TimeAttributeContent.java)             |
-| `CREDENTIAL`           | `AttributeContent` for credentials. Use this type with the [callback](callbacks) when you need `Credential` stored in the platform. `CREDENTIAL` is a special purpose type that is handled by the platform for `Connectors` that needs to use the credential for authentication and authorization to technology, for example API Key, username/password, and any other `Credential`.                  | [`CredentialAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/CredentialAttributeContent.java) |
-| `OBJECT`               | `AttributeContent` for objects. Use this when you need to require any custom JSON value to be the content. `OBJECT` type provides a flexible way how to work with the custom objects within the `Attributes` and `Callbacks`.                                                                                                                                                                         | [`ObjectAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content/ObjectAttributeContent.java)         |
+## Content properties
 
-:::info
-Content are always List of `AttributeContent` objects. For more information about the content, see [Content](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/tree/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/content)
+Each content type must extends [`BaseAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/BaseAttributeContent.java) which is abstracted from [`AttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/AttributeContent.java).
+
+The content has the following properties defined and inherited from `BaseAttributeContent`:
+
+| Property    | Type           | Short description                                                                                                                                       | Required                                      |
+|-------------|----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
+| `reference` | `string`       | Reference that can be used for the content value. It is usefull especially when the `data` contains an object, or any other more complex data structure | <span class="badge badge--danger">No</span>   |
+| `data`      | `typed object` | The value of the content, depending on the `contentType`                                                                                                | <span class="badge badge--success">Yes</span> |
+
+## Supported content types
+
+Supported content types are defined in [`AttributeContentType`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/AttributeContentType.java).
+The following content types are available and supported:
+
+| `AttributeContentType` | Class                                                                                                                                                                                               |
+|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `STRING`               | [`StringAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/StringAttributeContent.java)         |
+| `INTEGER`              | [`IntegerAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/IntegerAttributeContent.java)       |
+| `SECRET`               | [`SecretAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/SecretAttributeContent.java)         |
+| `FILE`                 | [`FileAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/FileAttributeContent.java)             |
+| `BOOLEAN`              | [`BooleanAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/BooleanAttributeContent.java)       |
+| `TEXT`                 | [`TextAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/TextAttributeContent.java)             |
+| `FLOAT`                | [`FloatAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/FloatAttributeContent.java)           |
+| `DATE`                 | [`DateAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/DateAttributeContent.java)             |
+| `DATETIME`             | [`DateTimeAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/DatetimeAttributeContent.java)     |
+| `TIME`                 | [`TimeAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/TimeAttributeContent.java)             |
+| `CREDENTIAL`           | [`CredentialAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/CredentialAttributeContent.java) |
+| `OBJECT`               | [`ObjectAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/ObjectAttributeContent.java)         |
+
+:::caution Mulitple content types in one Attribute
+One `Attribute` can define only one `contenttype`. Multiple different content types for one `Attribute` is not supported.
 :::
 
-### Samples
+## Content type samples
 
 The table below shows the `AttributeContentType` and the sample for each type.
 
@@ -123,6 +124,8 @@ Associated `content` field
 }
 ```
 
+`SECRET` is handled by the platform in a secure way and its value will never be presented to client once defined.
+
 </td>
 </tr>
 
@@ -148,6 +151,8 @@ Associated `content` field
   ]
 }
 ```
+
+`FILE` type can be specifically handled based on the `mimeType`.
 
 </td>
 </tr>
@@ -203,6 +208,8 @@ Associated `content` field
 }
 ```
 
+`CREDENTIAL` is a special purpose type that is handled by the platform for `Connectors` that needs to use the credential for authentication and authorization to technology, for example API Key, username/password, and any other `Credential`.
+
 </td>
 </tr>
 
@@ -224,6 +231,8 @@ Associated `content` field
   ]
 }
 ```
+
+`DATE` should be in the format `yyyy-MM-dd`.
 
 </td>
 </tr>
@@ -271,6 +280,8 @@ Associated `content` field
 }
 ```
 
+`OBJECT` type provides a flexible way how to work with the custom objects within the `Attributes` and `Callbacks`.
+
 </td>
 </tr>
 
@@ -293,6 +304,7 @@ Associated `content` field
 }
 ```
 
+`TEXT` supports long string/text data to be processed.
 
 </td>
 </tr>
@@ -316,6 +328,8 @@ Associated `content` field
 }
 ```
 
+`TIME` should be in the format `HH:mm:ss`.
+
 </td>
 </tr>
 
@@ -338,7 +352,57 @@ Associated `content` field
 }
 ```
 
+`DATETIME` should be in the format `yyyy-MM-dd'T'HH:mm:ss.SSSXXX`, which is ISO-8601 extended offset date-time format.
+
 </td>
 </tr>
 
 </table>
+
+## Content model
+
+Th following diagram represents the content model inherited from the `AttributeContent`. Details can be found in the [CZERTAINLY Interfaces repository](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/tree/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content).
+
+```plantuml
+@startuml
+    scale 3/4
+    left to right direction
+
+    abstract AttributeContent
+    
+    class BaseAttributeContent
+    class BooleanAttributeContent
+    class CredentialAttributeContent
+    class DateAttributeContent
+    class DateTimeAttributeContent
+    class FileAttributeContent
+    class FloatAttributeContent
+    class IntegerAttributeContent
+    class ObjectAttributeContent
+    class SecretAttributeContent
+    class StringAttributeContent
+    class TextAttributeContent
+    class TimeAttributeContent
+    
+    class FileAttributeContentData
+    class SecretAttributeContentData
+    class ProtectionLevel
+  
+    AttributeContent <-right- BaseAttributeContent : extends
+    BaseAttributeContent <-- BooleanAttributeContent : extends
+    BaseAttributeContent <-- CredentialAttributeContent : extends
+    BaseAttributeContent <-- DateAttributeContent : extends
+    BaseAttributeContent <-- DateTimeAttributeContent : extends
+    BaseAttributeContent <-- FileAttributeContent : extends
+    BaseAttributeContent <-- FloatAttributeContent : extends
+    BaseAttributeContent <-- IntegerAttributeContent : extends
+    BaseAttributeContent <-- ObjectAttributeContent : extends
+    BaseAttributeContent <-- SecretAttributeContent : extends
+    BaseAttributeContent <-- StringAttributeContent : extends
+    BaseAttributeContent <-- TextAttributeContent : extends
+    BaseAttributeContent <-- TimeAttributeContent : extends
+    
+    FileAttributeContent <-- FileAttributeContentData
+    SecretAttributeContent <-- SecretAttributeContentData
+    SecretAttributeContentData <-- ProtectionLevel
+```

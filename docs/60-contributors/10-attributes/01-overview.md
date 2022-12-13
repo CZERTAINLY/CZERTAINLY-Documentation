@@ -55,22 +55,47 @@ Table below describes the properties of the `BaseAttribute`:
 | `type`               | Type of the `Attribute`, various supported data types based on the [AttributeType](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/AttributeType.java). For example, `DATA`, `INFO`, `GROUP`, `CUSTOM` and "META". | <span class="badge badge--success">Yes</span> |
 | `content`            | Content of the `Attribute` defined based on its `type`. Each content type have a defined structure that can be processed as the JSON formatted string. Content is a generic type and this typed class accepts data from the classes that are extending the `BaseAttribute`                      | <span class="badge badge--danger">No</span>   |
 
+## `Attribute` building blocks:
+
+Each implementation of `Attribute` type consists of the following building blocks:
+
+- `AttributeProperties` - properties defines the behaviour of the `Attribute`
+- `AttributeContent` - specific content of the `Attribute` that is defined based on the `content` type
+- `AttributeConstraint` - constraint that defines the validation of the `Attribute` content
+- `AttributeCallback` - callback that is used to get the `Attribute` content when it depends on other factors
+
+```plantuml
+package Attribute {
+    object AttributeProperties
+    object AttributeContent
+    object AttributeConstraint
+    object AttributeCallback
+}
+```
+
+The building blocks for each particular `Attribute` type are described in [Attributes](attributes) section.
 
 ## Attribute Types
 
 Based on the usage and specific behaviour you want to provide, `Attribute` can be one of 5 the following defined types:
 
 | `Attribute` type    | Short description                                                                                                                                                                                                                                                                                  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `Data Attribute`    | `Attributes` that are used by the connectors to gather the required information from the client. They are full fledged data carriers used by the `Connectors` for information exchange                                                                                                             |
 | `Info Attributes`   | `Info Attributes` are information carriers whose primary responsibility to carry information that will assist the client with additional data to be displayed to the user.                                                                                                                         |
 | `Group Attributes`  | `Group Attributes` are advanced type of attributes that carry a group of `Attributes` that are logically connected. They compose list of `Data Attributes` and `Info Attributes`. They are implemented as callback responses and are handy when the attributes are dependent on the value selected |
 | `Meta Attributes`   | Attributes used by the connector to pass the extended information about the objects created. The metadata are stored in the core and sent to the connector when needed.                                                                                                                            |
-| `Custom Attributes` | `Custom Attributes` are used defined attributes for storing additional information about the objects created in the platform. These are local to core and are not sent to the `connectors`.     
+| `Custom Attributes` | `Custom Attributes` are used defined attributes for storing additional information about the objects created in the platform. These are local to core and are not sent to the `connectors`.                                                                                                        |
 
+## `Attribute` model
+
+Th following diagram represents the `Attribute` model inherited from the `AbstractBaseAttribute`. Details can be found in the [CZERTAINLY Interfaces repository](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/tree/develop/src/main/java/com/czertainly/api/model/common/attribute/v2).
 
 ```plantuml
 @startuml
+    scale 3/4
+    left to right direction
+    
     abstract AbstractBaseAttribute
     class BaseAttribute
     class DataAttribute
@@ -79,12 +104,16 @@ Based on the usage and specific behaviour you want to provide, `Attribute` can b
     class MetaAttribute
     class CustomAttribute
   
-    AbstractBaseAttribute <-- BaseAttribute : extends
+    AbstractBaseAttribute <-right- BaseAttribute : extends
     BaseAttribute <-- DataAttribute : extends
     BaseAttribute <-- InfoAttribute : extends
     BaseAttribute <-- GroupAttribute : extends
     BaseAttribute <-- MetaAttribute : extends
     BaseAttribute <-- CustomAttribute : extends
 ```
+
+## Building blocks description and examples
+
+The following section describes in detail each building block of the `Attribute` and provides examples of the `Attributes`.
 
 <DocCardList/>
