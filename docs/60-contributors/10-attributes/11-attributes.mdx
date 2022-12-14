@@ -20,19 +20,19 @@ The following is a list of properties that can be used to define the behaviour o
 
 Based on the usage and specific behaviour you want to provide, `Attribute` can be one of the following defined types in [AttributeType](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/AttributeType.java):
 
-| `AttributeType` | Class                                                                                                                                                                  | Short description                                                                                                                                                                     |
-|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `DATA`          | [`DataAttribute`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/DataAttribute.java)      | Full fledged data carriers used by in the platform for information exchange                                                                                                           |
-| `INFO`          | [`InfoAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/InfoAttribute.java)     | Information carriers whose primary responsibility is to provide additional helper information. The content of this attribute is not sent back to the platform, it is just informative |
-| `GROUP`         | [`GroupAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/GroupAttribute.java)   | Advanced type of attribute that can group multiple attributes. Main use is when the attributes are dependent on the content selected from other attributes                            |
-| `META`          | [`MetaAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/MetaAttribute.java)     | Metadata representation that can be exchanged between the platform and connectors                                                                                                     |
-| `CUSTOM`        | [`CustomAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/CustomAttribute.java) | Used defined attributes for storing additional information about the objects supported in the platform                                                                                |
+| `AttributeType` | Class                                                                                                                                                                      | Short description                                                                                                                                                                     |
+|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `DATA`          | [`DataAttribute`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/DataAttribute.java)          | Full fledged data carriers used by in the platform for information exchange                                                                                                           |
+| `INFO`          | [`InfoAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/InfoAttribute.java)         | Information carriers whose primary responsibility is to provide additional helper information. The content of this attribute is not sent back to the platform, it is just informative |
+| `GROUP`         | [`GroupAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/GroupAttribute.java)       | Advanced type of attribute that can group multiple attributes. Main use is when the attributes are dependent on the content selected from other attributes                            |
+| `META`          | [`MetadataAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/MetadataAttribute.java) | Metadata representation that can be exchanged between the platform and connectors                                                                                                     |
+| `CUSTOM`        | [`CustomAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/CustomAttribute.java)     | Used defined attributes for storing additional information about the objects supported in the platform                                                                                |
 
 ## Attribute properties and types
 
 The following matrix shows which `Attribute` properties are supported for each `Attribute` type:
 
-| Property name / Attribute type | `DataAttribute`                            | `InfoAttributeP`                             | `GroupAttributes`                            | `MetaAttribute`                              | `CustomAttribute`                            |
+| Property name / Attribute type | `DataAttribute`                            | `InfoAttributeP`                             | `GroupAttributes`                            | `MetadataAttribute`                          | `CustomAttribute`                            |
 |--------------------------------|--------------------------------------------|----------------------------------------------|----------------------------------------------|----------------------------------------------|----------------------------------------------|
 | `contentType`                  | <span class="badge badge--success"></span> | <span class="badge badge--success"></span>   | <span class="badge badge--secondary"></span> | <span class="badge badge--success"></span>   | <span class="badge badge--success"></span>   |
 | `constraints`                  | <span class="badge badge--danger"></span>  | <span class="badge badge--secondary"></span> | <span class="badge badge--secondary"></span> | <span class="badge badge--secondary"></span> | <span class="badge badge--secondary"></span> |
@@ -257,13 +257,13 @@ Th following diagram represents the `Attribute` model inherited from the `Abstra
     class DataAttribute
     class InfoAttribute
     class GroupAttribute
-    class MetaAttribute
+    class MetadataAttribute
     class CustomAttribute
   
     AbstractBaseAttribute <-right- BaseAttribute : extends
     BaseAttribute <-- DataAttribute : extends
     BaseAttribute <-- InfoAttribute : extends
     BaseAttribute <-- GroupAttribute : extends
-    BaseAttribute <-- MetaAttribute : extends
+    BaseAttribute <-- MetadataAttribute : extends
     BaseAttribute <-- CustomAttribute : extends
 ```

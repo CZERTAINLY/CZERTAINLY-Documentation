@@ -17,24 +17,20 @@ Now let's take a look on what exactly is an `Attribute` and how it can be used.
 The concept works on the principle of exchanging and validation of `Attributes` between the `Client`, `Connector` and CZERTAINLY platform.
 Implementation of some specific `Connector` must be able to define and properly handle its specific `Attributes`. The definition is then exchanged with the `Client` and the platform validates it consistency and mediate the flow and logic between them:
 
-```
-Client                        CZERTAINLY                      Connector             Technology
-  |                               |                               |                     |
-  | list available Attributes     |                               |                     |
-  | ----------------------------> | check and validate request    |                     |
-  |                               | get Attributes for the Client |                     |
-  |                               | ----------------------------> | Get technology data |
-  |                               |                               | <-----------------> |
-  |                               |           AttributeDefinition |                     |  
-  |           validate Attributes | <---------------------------- |                     |
-  |           AttributeDefinition |                               |                     |
-  | <---------------------------- |                               |                     |
-  |                               |                               |                     |
-  | RequestAttribute with content |                               |                     |
-  | ----------------------------> | validate and merge Attributes |                     |
-  |                               | Request with the content      |                     |
-  |                               | ----------------------------> | Use the Attributes  |
-  |                               |                               | <-----------------> |
+```plantuml
+    @startuml
+        Client ->> CZERTAINLY: list available Attributes
+        CZERTAINLY ->> CZERTAINLY: check and validate request
+        CZERTAINLY ->> Connector: get Attributes for the Client
+        Connector <<->> Technology: get technology data
+        Connector ->> CZERTAINLY: Attributes definition
+        CZERTAINLY ->> CZERTAINLY: validate Attributes definition
+        CZERTAINLY ->> Client: Attributes definition
+        Client ->> CZERTAINLY: set Attributes
+        CZERTAINLY ->> CZERTAINLY: validate and merge Attributes
+        CZERTAINLY ->> Connector: request with the content of Attributes
+        Connector <<->> Technology: use Attributes and process request
+    @enduml
 ```
 
 Because the communication is controlled by the platform, it ensures the consistency and security of the `Attributes` that are exchanged between the `Client` and the `Connector`. and eventually applied in the target technology.
@@ -47,13 +43,13 @@ You can find specification of the `BaseAttribute` in the [CZERTAINLY Interfaces 
 
 Table below describes the properties of the `BaseAttribute`:
 
-| `Attribute` property | Short description                                                                                                                                                                                                                                                                               | Required                                      |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `uuid`               | UUID of the `Attribute`, ensures the uniqueness across `Connectors` in the platform. The combination of the `Connector` UUID and the `Attribute` UUID should be unique.                                                                                                                         | <span class="badge badge--success">Yes</span> |
-| `name`               | System name of the `Attribute` that is used for the processing.                                                                                                                                                                                                                                 | <span class="badge badge--success">Yes</span> |
-| `description`        | Text description of the `Attribute` for better understanding of the `Attribute` purpose. This should contain descriptive explanation of the `Attribtue`.                                                                                                                                        | <span class="badge badge--danger">No</span>   |
-| `type`               | Type of the `Attribute`, various supported data types based on the [AttributeType](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/develop/src/main/java/com/czertainly/api/model/common/attribute/v2/AttributeType.java). For example, `DATA`, `INFO`, `GROUP`, `CUSTOM` and "META". | <span class="badge badge--success">Yes</span> |
-| `content`            | Content of the `Attribute` defined based on its `type`. Each content type have a defined structure that can be processed as the JSON formatted string. Content is a generic type and this typed class accepts data from the classes that are extending the `BaseAttribute`                      | <span class="badge badge--danger">No</span>   |
+| Property      | Type                                          | Short description                                                                                                                                   | Required                                      |
+|---------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
+| `uuid`        | `string`                                      | UUID of the defined `Attribute`. The combination of the `Connector` UUID and the `Attribute` UUID must be unique                                    | <span class="badge badge--success">Yes</span> |
+| `name`        | `string`                                      | Name of the `Attribute`                                                                                                                             | <span class="badge badge--success">Yes</span> |
+| `description` | `string`                                      | Description of the `Attribute` for better understanding of the `Attribute` purpose. This should contain descriptive explanation of the `Attribtue`. | <span class="badge badge--danger">No</span>   |
+| `type`        | [`AttributeType`](attributes#attribute-types) | Type of the `Attribute`                                                                                                                             | <span class="badge badge--success">Yes</span> |
+| `content`     | [`AttributeContent`](content)                 | Content of the `Attribute` based on the [`AttributeContentType`](content#supported-content-types)                                                   | <span class="badge badge--danger">No</span>   |
 
 ## `Attribute` building blocks:
 

@@ -1,13 +1,21 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Examples
 
-This section of the document contains few examples for working with the `Attributes`.
+You can find here various examples of how to create and use attributes in different programming languages.
 
-## Example 1 - Simple Attribute Creation
+## Create `DataAttribute`
 
-This example shows how to create a simple `Attribute` with the `DataAttribute` type.
+This example shows how to create `DataAttribute` which is the attribute of type `DATA`.
+
+```mdx-code-block
+<Tabs>
+<TabItem value="java" label="Java">
+```
 
 ```java
-// Create a new DataAttribute
+// Create DataAttribute
 DataAttribute dataAttribute = new DataAttribute();
 dataAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120002");
 dataAttribute.setName("myAttribute");
@@ -15,7 +23,7 @@ dataAttribute.setContentType(AttributeContentType.STRING);
 dataAttribute.setType(AttributeType.DATA);
 dataAttribute.setDescription("This is my attribute");
 
-// Create Data Attribute Properties
+// Create DataAttributeProperties
 DataAttributeProperties dataAttributeProperties = new DataAttributeProperties();
 dataAttributeProperties.setRequired(true);
 dataAttributeProperties.setReadOnly(false);
@@ -25,16 +33,26 @@ dataAttributeProperties.setMultiSelect(false);
 dataAttributeProperties.setGroup("My Group");
 dataAttributeProperties.setList(false);
 
-// Set Data Attribute Properties to Data Attribute
+// Add DataAttributeProperties to DataAttribute
 dataAttribute.setProperties(dataAttributeProperties);
 ```
 
-## Example 2 - Attribute with Callback
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
 
-This example shows how to create an `Attribute` with the `DataAttribute` type and a `Callback`.
+## Create `DataAttribute` with `AttributeCallback`
+
+This example shows how to create `DataAttribute` with `AttributeCallback`.
+
+```mdx-code-block
+<Tabs>
+<TabItem value="java" label="Java">
+```
 
 ```java
-// Create a new DataAttribute
+// Create DataAttribute
 DataAttribute dataAttribute = new DataAttribute();
 dataAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120002");
 dataAttribute.setName("myAttribute");
@@ -42,7 +60,7 @@ dataAttribute.setType(AttributeType.DATA);
 dataAttribute.setContentType(AttributeContentType.STRING);
 dataAttribute.setDescription("This is my attribute");
 
-// Create Data Attribute Properties
+// Create DataAttributeProperties
 DataAttributeProperties dataAttributeProperties = new DataAttributeProperties();
 dataAttributeProperties.setRequired(true);
 dataAttributeProperties.setReadOnly(false);
@@ -52,10 +70,10 @@ dataAttributeProperties.setMultiSelect(false);
 dataAttributeProperties.setGroup("My Group");
 dataAttributeProperties.setList(false);
 
-// Set Data Attribute Properties to Data Attribute
+// Add DataAttributeProperties to DataAttribute
 dataAttribute.setProperties(dataAttributeProperties);
 
-// Create Attribute Callback
+// Create AttributeCallback
 AttributeCallback attributeCallback = new AttributeCallback();
 attributeCallback.setCallbackContext("/api/test");
 attributeCallback.setCallbackMethod("GET");
@@ -66,15 +84,26 @@ mappings.add(new AttributeCallbackMapping(
         "SoftKeyStore"));
 listCredentialCallback.setMappings(mappings);
 
-// Set Attribute Callback to Data Attribute
+// Add AttributeCallback to DataAttribute
 dataAttribute.setAttributeCallback(listCredentialCallback);
 ```
 
-## Example 3 - Attribute with Content
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
 
-This example shows how to create an `Attribute` with the `DataAttribute` type and a `Content` predefined.
+## Create `DataAttribute` with `STRING` content
+
+This example shows how to create `DataAttribute` with content of type `STRING`.
+
+```mdx-code-block
+<Tabs>
+<TabItem value="java" label="Java">
+```
 
 ```java
+// Cretae DataAttribute
 DataAttribute dataAttribute = new DataAttribute();
 dataAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120002");
 dataAttribute.setName("myAttribute");
@@ -82,7 +111,7 @@ dataAttribute.setType(AttributeType.DATA);
 dataAttribute.setContentType(AttributeContentType.STRING);
 dataAttribute.setDescription("This is my attribute");
 
-// Create Data Attribute Properties
+// Create DataAttributeProperties
 DataAttributeProperties dataAttributeProperties = new DataAttributeProperties();
 dataAttributeProperties.setRequired(true);
 dataAttributeProperties.setReadOnly(false);
@@ -92,25 +121,35 @@ dataAttributeProperties.setMultiSelect(false);
 dataAttributeProperties.setGroup("My Group");
 dataAttributeProperties.setList(true);
 
-// Set Data Attribute Properties to Data Attribute
+// Add DataAttributeProperties to DataAttribute
 dataAttribute.setProperties(dataAttributeProperties);
 
-// Create Attribute Content
+// Create StringAttributeContent
 List<StringAttributeContent> content = new ArrayList<>();
 content.add(new StringAttributeContent("sampleReference1", "sampleData1"));
 content.add(new StringAttributeContent("sampleReference2", "sampleData2"));
 content.add(new StringAttributeContent("sampleReference3", "sampleData3"));
 
-// Set Attribute Content to Data Attribute
+// Add StringAttributeContent to DataAttribute
 dataAttribute.setContent(content);
 ```
 
-## Example 4 - Attribute with Validation
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
 
-This example shows how to create an `Attribute` with the `DataAttribute` type and `Validation`.
+## Create `DataAttribute` with `REGEXP` constraint
+
+This example shows how to create `DataAttribute` with the `RegExpAttributeConstraint` for validation of the content.
+
+```mdx-code-block
+<Tabs>
+<TabItem value="java" label="Java">
+```
 
 ```java
-// Create a new DataAttribute
+// Create DataAttribute
 DataAttribute dataAttribute = new DataAttribute();
 dataAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120002");
 dataAttribute.setName("myAttribute");
@@ -118,7 +157,7 @@ dataAttribute.setType(AttributeType.DATA);
 dataAttribute.setContentType(AttributeContentType.STRING);
 dataAttribute.setDescription("This is my attribute");
 
-// Create Data Attribute Properties
+// Create DataAttributeProperties
 DataAttributeProperties dataAttributeProperties = new DataAttributeProperties();
 dataAttributeProperties.setRequired(true);
 dataAttributeProperties.setReadOnly(false);
@@ -128,26 +167,36 @@ dataAttributeProperties.setMultiSelect(false);
 dataAttributeProperties.setGroup("My Group");
 dataAttributeProperties.setList(false);
 
-// Set Data Attribute Properties to Data Attribute
+// Add DataAttributeProperties to DataAttribute
 dataAttribute.setProperties(dataAttributeProperties);
 
-// Create Attribute Validation
+// Create RegExpAttributeConstraint
 RegExpAttributeConstraint regExpAttributeConstraint = new RegExpAttributeConstraint();
 regExpAttributeConstraint.setDescription("This is a regular expression constraint");
 regExpAttributeConstraint.setErrorMessage("This is a sample error message");
 regExpAttributeConstraint.setType(AttributeConstraintType.REGEXP);
 regExpAttributeConstraint.setData("^[a-zA-Z0-9]*$");
 
-// Set Attribute Validation to Data Attribute
+// Add RegExpAttributeConstraint to DataAttribute
 dataAttribute.setConstraint(List.of(regExpAttributeConstraint));
 ```
 
-## Example 5 - Info Attribute Creation
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
 
-This example shows how to create an `Attribute` with the `InfoAttribute` type.
+## Create `InfoAttribute` with `TEXT` content
+
+This example shows how to create `InfoAttribute` which is attribute of type `INFO`.
+
+```mdx-code-block
+<Tabs>
+<TabItem value="java" label="Java">
+```
 
 ```java
-// Create a new InfoAttribute
+// Create InfoAttribute
 InfoAttribute infoAttribute = new InfoAttribute();
 infoAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120002");
 infoAttribute.setName("myAttribute");
@@ -155,31 +204,40 @@ infoAttribute.setType(AttributeType.INFO);
 infoAttribute.setContentType(AttributeContentType.STRING);
 infoAttribute.setDescription("This is my attribute");
 
-// Create Info Attribute Properties
+// Create InfoAttributeProperties
 InfoAttributeProperties infoAttributeProperties = new InfoAttributeProperties();
 infoAttributeProperties.setLabel("My Attribute");
 infoAttributeProperties.setGroup("My Group");
 infoAttributeProperties.setVisible(true);
 
-// Set Info Attribute Properties to Info Attribute
+// Add InfoAttributeProperties to InfoAttribute
 infoAttribute.setProperties(infoAttributeProperties);
 
-// Create Info Attribute Content
+// Create TextAttributeContent
 TextAttributeContent textAttributeContent = new TextAttributeContent();
 textAttributeContent.setReference("Sample Reference Data");
 textAttributeContent.setData("This is a sample text that has to be displayed in the user interface. This attribute data contains additional information that helps the user to understand the context of the request.");
 
-// Set Info Attribute Content to Info Attribute
+// Add TextAttributeContent to InfoAttribute
 infoAttribute.setContent(List.of(textAttributeContent));
 ```
 
-## Example 6 - Group Attribute Creation
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
 
-This example shows how to create an `Attribute` with the `GroupAttribute` type.
+## Create `GroupAttribute` with `INFO` and `DATA` attributes
+
+This example shows how to create `GroupAttribute` that is of type `GROUP` with `DataAttribute` and `InfoAtrribute`.
+
+```mdx-code-block
+<Tabs>
+<TabItem value="java" label="Java">
+```
 
 ```java
-//Data Attribute Creation
-
+// Cretae DataAttribute
 DataAttribute dataAttribute = new DataAttribute();
 dataAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120002");
 dataAttribute.setName("myAttribute");
@@ -187,7 +245,7 @@ dataAttribute.setType(AttributeType.DATA);
 dataAttribute.setContentType(AttributeContentType.STRING);
 dataAttribute.setDescription("This is my attribute");
 
-// Create Data Attribute Properties
+// Create DataAttributeProperties
 DataAttributeProperties dataAttributeProperties = new DataAttributeProperties();
 dataAttributeProperties.setRequired(true);
 dataAttributeProperties.setReadOnly(false);
@@ -197,11 +255,10 @@ dataAttributeProperties.setMultiSelect(false);
 dataAttributeProperties.setGroup("My Group");
 dataAttributeProperties.setList(false);
 
-// Set Data Attribute Properties to Data Attribute
+// Add DataAttributeProperties to DataAttribute
 dataAttribute.setProperties(dataAttributeProperties);
 
-
-//Info Attribute Creation
+// Create InfoAttribute
 InfoAttribute infoAttribute = new InfoAttribute();
 infoAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120003");
 infoAttribute.setName("myAttribute1");
@@ -209,25 +266,24 @@ infoAttribute.setType(AttributeType.INFO);
 infoAttribute.setContentType(AttributeContentType.STRING);
 infoAttribute.setDescription("This is my attribute 1");
 
-// Create Info Attribute Properties
+// Create InfoAttributeProperties
 InfoAttributeProperties infoAttributeProperties = new InfoAttributeProperties();
 infoAttributeProperties.setLabel("My Attribute");
 infoAttributeProperties.setGroup("My Group");
 infoAttributeProperties.setVisible(true);
 
-// Set Info Attribute Properties to Info Attribute
+// Add InfoAttributeProperties to InfoAttribute
 infoAttribute.setProperties(infoAttributeProperties);
 
-// Create Info Attribute Content
+// Create TextAttributeContent
 TextAttributeContent textAttributeContent = new TextAttributeContent();
 textAttributeContent.setReference("Sample Reference Data");
 textAttributeContent.setData("Reference data for info attribute");
 
-// Set Info Attribute Content to Info Attribute
+// Add TextAttributeContent to InfoAttribute
 infoAttribute.setContent(List.of(textAttributeContent));
 
-
-// Create a new GroupAttribute
+// Create GroupAttribute
 GroupAttribute groupAttribute = new GroupAttribute();
 groupAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120004");
 groupAttribute.setName("groupAttribute");
@@ -235,16 +291,26 @@ groupAttribute.setType(AttributeType.GROUP);
 groupAttribute.setContentType(AttributeContentType.STRING);
 groupAttribute.setDescription("Sample Group Attribute");
 
-// Set Attribute Content to Group Attribute
+// Add DataAttribute and InfoAttribute to GroupAttribute
 groupAttribute.setContent(List.of(dataAttribute, infoAttribute));
 ```
 
-## Example 7 - Metadata Attribute Creation
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
 
-This example shows how to create an `Attribute` with the `MetadataAttribute` type.
+## Create `MetadataAttribute` with `STRING` content
+
+This example shows how to create `MetadataAttribute` that is of type `META`.
+
+```mdx-code-block
+<Tabs>
+<TabItem value="java" label="Java">
+```
 
 ```java
-// Create a new MetadataAttribute
+// Create MetadataAttribute
 MetadataAttribute metadataAttribute = new MetadataAttribute();
 metadataAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120002");
 metadataAttribute.setName("discoverySource");
@@ -252,7 +318,7 @@ metadataAttribute.setType(AttributeType.METADATA);
 metadataAttribute.setContentType(AttributeContentType.STRING);
 metadataAttribute.setDescription("Metadata describing the source of the certificate discovered");
 
-// Create Metadata Attribute Properties
+// Create MetadataAttributeProperties
 MetadataAttributeProperties metadataAttributeProperties = new MetadataAttributeProperties();
 metadataAttributeProperties.setLabel("Discovery Source");
 metadataAttributeProperties.setGroup("Discovery");
@@ -260,23 +326,34 @@ metadataAttributeProperties.setVisible(true);
 //Setting the metadata as global metadata
 metadataAttributeProperties.setGlobal(true);
 
-// Set Metadata Attribute Properties to Metadata Attribute
+// Add MetadataAttributeProperties to MetadataAttribute
 metadataAttribute.setProperties(metadataAttributeProperties);
 
-// Create Metadata Attribute Content
+// Create StringAttributeContent
 StringAttributeContent stringAttributeContent = new StringAttributeContent();
 stringAttributeContent.setReference("google.com");
 stringAttributeContent.setData("google.com");
 
-// Set Metadata Attribute Content to Metadata Attribute
+// Add StringAttributeContent to MetadataAttribute
 metadataAttribute.setContent(List.of(stringAttributeContent));
 ```
 
-## Example 8 - Custom Attribute Creation
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
 
-This example shows how to create an `Attribute` with the `CustomAttribute` type.
+## Create `CustomAttribute
+
+This example shows how to create `CustomAttribute` of attribute type `CUSTOM`.
+
+```mdx-code-block
+<Tabs>
+<TabItem value="java" label="Java">
+```
 
 ```java
+// Create CustomAttribute
 CustomAttribute customAttribute = new CustomAttribute();
 customAttribute.setUuid("42323bd4-7ac6-11ed-a1eb-0242ac120002");
 customAttribute.setName("myAttribute");
@@ -284,7 +361,7 @@ customAttribute.setType(AttributeType.DATA);
 customAttribute.setContentType(AttributeContentType.STRING);
 customAttribute.setDescription("This is my attribute");
 
-// Create Data Attribute Properties
+// Create CustomAttributeProperties
 CustomAttributeProperties customAttributeProperties = new CustomAttributeProperties();
 customAttributeProperties.setRequired(true);
 customAttributeProperties.setReadOnly(false);
@@ -294,6 +371,11 @@ customAttributeProperties.setMultiSelect(false);
 customAttributeProperties.setGroup("My Group");
 customAttributeProperties.setList(false);
 
-// Set Data Attribute Properties to Data Attribute
+// Add CustomAttributeProperties to CustomAttribute
 customAttribute.setProperties(customAttributeProperties);
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
 ```
