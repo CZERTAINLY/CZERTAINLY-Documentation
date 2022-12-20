@@ -48,6 +48,8 @@ Every Key that is created is stored in the inventory of cryptographic keys. Inve
 The following diagram shows the relationship between Token, Token Profile, and Keys in the inventory.
 
 ```plantuml
+top to bottom direction
+
 map "Cryptography Provider" as cp {
 }
 
@@ -72,7 +74,7 @@ package "Token Profiles" as tps {
     }
 }
 
-package "Inventory of keys" {
+package "Inventory of Keys" {
     map "Key 1" as k1 {
     }
     map "Key 2" as k2 {
@@ -83,17 +85,17 @@ package "Inventory of keys" {
     }
 }
 
-cp --> t1
-cp --> t2
-cp --> t3
-tp1 <-> t1
-tp2 <--> t1
-tp3 <--> t3
-tp4 <--> t2
-k1 <--> tp1
-k2 <--> tp1
-k3 <--> tp2
-k4 <--> tp3
+cp -d-> t1
+cp -d-> t2
+cp -d-> t3
+tp1 <-u- t1
+tp2 <-u- t1
+tp3 <-u- t3
+tp4 <-u- t2
+k1 <-u- tp1
+k2 <-u- tp1
+k3 <-u- tp2
+k4 <-u- tp3
 ```
 
 ## Processes
@@ -210,71 +212,74 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     @enduml
 ```
 
+## `Key` management
 
-## `Certificate` Management
-Sections below represents the list of processes involved in managing the certificates.
+Following are supported process for key management and cryptographic operations.
 
-### Issue `Certificate`
+### Create `Key`
 
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations-API/operation/issueCertificate]]: Issue Certificate
-        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/validateIssueCertificateAttributes]]: Validate Attributes
+        Client -> Core [[core-key/#tag/Key-Management-API/operation/createKey]]: Create new Key
+        Core -> Core: Validate Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/validateCreateKeyAttributes]]: Validate Attributes
         Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/issueCertificate]]: Issue Certificate
-        Connector -> CA: Issue Certificate
-        CA --> Connector: Return Certificate
-        Connector --> Core: Return Certificate response
-        Core -> Core : Perform Certificate validation
-        Core -> Core : Store Certificate
-        Core --> Client: Return Certificate UUID
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/createKey]]: Create new Key
+        Connector -> Connector: Create new Key
+        note right of Connector: The key is created within specific cryptographic technology
+        Connector --> Core: Return Key data in response
+        Core -> Core : Perform Key data validation
+        Core -> Core : Store Key in the inventory
+        Core --> Client: Return Key UUID
     @enduml
 ```
 
-### Renew `Certificate`
+### Destroy `Key`
 
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations-API/operation/renewCertificate]]: Renew Certificate
-        Core -> Core: Get Attributes from parent Certificate
-        note right Core: Attributes for renewal are taken from parent Certificate
-        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/renewCertificate]]: Renew Certificate
-        Connector -> CA: Issue Certificate
-        CA --> Connector: Return Certificate
-        Connector --> Core: Return Certificate response
-        Core -> Core : Perform Certificate validation
-        Core -> Core : Store Certificate to the database
-        Core --> Client: Return Certificate UUID
+        Client -> Core [[core-key/#tag/Key-Management-API/operation/destroyKey]]: Destroy Key
+        Core -> Core: Get Key Attributes
+        note right Core: Attributes that are required for the Key destruction
+        Core -> Core: Validate Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/destroyKey]]: Destroy Key
+        Connector -> Connector: Destroy Key
+        note right of Connector: The key is destroyed within specific cryptographic technology
+        Connector --> Core: Return Key destruction result
+        Core -> Core : Update Key data in the inventory
+        note right of Core: The key has status Destroyed, optionally can be removed from the inventory
+        Core --> Client: Return Key destruction result
     @enduml
 ```
 
-### Revoke `Certificate`
+## Cryptographic operations
 
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations-API/operation/revokeCertificate]]: Revoke Certificate
-        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/validateRevokeCertificateAttributes]]: Validate Attributes
-        Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/revokeCertificate]]: Revoke Certificate
-        Connector -> CA: Revoke Certificate
-        CA --> Connector: Return Certificate revocation status
-        Connector --> Core: Return Certificate revocation response
-        Core -> Core : Set Certificate status as revoked
-        Core --> Client: Return revocation status
-    @enduml
-```
+The following processes are associated with the operations that are performed with cryptographic `Key`.
+
+### Encrypt data with `Key`
+
+
+### Decrypt data with `Key`
+
+
+### Sign data with `Key`
+
+
+### Verify data with `Key`
+
+
+### Generate random data
+
 
 ## Specification and example
 
-The Authority Provider v2 implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
-- [Authority Management](/api/connector-authority-provider-v2/#tag/Authority-Management-API)
-- [Certificate Management](/api/connector-authority-provider-v2/#tag/Certificate-Management-API)
+The Cryptography Provider implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
+- [Token Management](/api/connector-cryptography-provider/#tag/Token-Management-API)
+- [Key Management](/api/connector-cryptography-provider/#tag/Key-Management-API)
+- [Cryptographic Operations](/api/connector-cryptography-provider/#tag/Cryptographic-Operations-API)
 
-The OpenAPI specification of the Authority Provider v2 can be found here: [Connector API - Authority Provider v2](/api/connector-authority-provider-v2/).
-
+The OpenAPI specification of the Cryptography Provider can be found here: [Connector API - Cryptography Provider](/api/connector-cryptography-provider/).
