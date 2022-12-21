@@ -48,6 +48,7 @@ Every Key that is created is stored in the inventory of cryptographic keys. Inve
 The following diagram shows the relationship between Token, Token Profile, and Keys in the inventory.
 
 ```plantuml
+scale 3/4
 top to bottom direction
 
 map "Cryptography Provider" as cp {
@@ -109,6 +110,7 @@ The following processes are associated with the Cryptography Provider and manage
 ```plantuml
     @startuml
     autonumber
+    skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/createTokenInstance]]: Add Token instance
         Core->Core: Check existence of Connector and Token
@@ -116,7 +118,10 @@ The following processes are associated with the Cryptography Provider and manage
         Connector --> Core: Result of Attribute validation
         Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/createTokenInstance]]: Create Token instance
         Connector -> Connector: Validation of connection to cryptographic technology
-        note right of Connector: Connection to the device / module with the Attributes is validated
+        note over Connector
+        Connection to the device / module
+        with the Attributes is validated
+        end note
         Connector --> Core: Return Token instance response
         Core -> Core : Store Token instance reference
         Core --> Client: Return Token instance UUID
@@ -128,11 +133,16 @@ The following processes are associated with the Cryptography Provider and manage
 ```plantuml
     @startuml
     autonumber
+    skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/getTokenInstance]]: Details of Token instance
         Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/getTokenInstance]]: Get Token instance
         Connector --> Core: Return Token instance details
-        note right of Core: Details of the Token instance is processed and combined with Token instance reference from Core
+        note over Core
+        Details of the Token instance
+        is processed and combined with
+        Token instance reference from Core
+        end note
         Core -> Client: Return Token instance details
     @enduml
 ```
@@ -142,13 +152,17 @@ The following processes are associated with the Cryptography Provider and manage
 ```plantuml
     @startuml
     autonumber
+    skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/updateTokenInstance]]: Update Token instance
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
         Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/updateTokenInstance]]: Update Token instance
         Connector -> Connector: Validation of connection to cryptographic technology
-        note right of Connector: Connection to the device / module with the Attributes is validated
+        note over Connector
+        Connection to the device / module
+        with the Attributes is validated
+        end note
         Connector --> Core: Return Token instance response
         Core -> Core : Update Token instance reference in the database
         Core --> Client: Return Token instance UUID
@@ -162,6 +176,7 @@ When the `Token` is removed, it does not necessarily mean that it was removed fr
 ```plantuml
     @startuml
     autonumber
+    skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/removeTokenInstance]]: Remove Token instance
         Core -> Core : Check dependencies
@@ -176,6 +191,25 @@ When the `Token` is removed, it does not necessarily mean that it was removed fr
 
 Status of the `Token` can be regularly checked by the platform. See the [list of possible states](#token) of the `Token`.
 
+```plantuml
+    @startuml
+    autonumber
+    skinparam maxMessageSize 200
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/getTokenInstanceStatus]]: Get Token instance status
+        Core->Core: Check existence of the Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/getTokenInstanceStatus]]: Request Token instance status
+        Connector -> Connector: Check Token instance status
+        note over Connector
+        Get status of the Token instance
+        and optionally check components
+        end note
+        Connector --> Core: Return Token instance status
+        Core -> Core : Update Token instance status
+        Core --> Client: Return Token instance status
+    @enduml
+```
+
 ### Activate `Token` instance
 
 `Token` can be activated when is in the `CONNECTED` or `INACTIVE` state. Activation of the `Token` is required before any key management and cryptographic operations can be performed.
@@ -183,10 +217,11 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
 ```plantuml
     @startuml
     autonumber
+    skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/activateTokenInstance]]: Activate Token instance
         Core->Core: Check existence of the Token instance
-        Core -> Connector : Validate activation Attributes
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/validateTokenInstanceActivationAttributes]]: Validate activation Attributes
         Connector --> Core: Result of activation Attributes validation
         Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/activateTokenInstance]]: Activate Token instance
         Connector --> Core: Return Token instance activation result
@@ -200,6 +235,7 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
 ```plantuml
     @startuml
     autonumber
+    skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/deactivateTokenInstance]]: Deactivate Token instance
         Core->Core: Check existence of the Token instance
@@ -214,21 +250,25 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
 
 ## `Key` management
 
-Following are supported process for key management and cryptographic operations.
+Following are supported processes for key management operations.
 
 ### Create `Key`
 
 ```plantuml
     @startuml
     autonumber
+    skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-key/#tag/Key-Management-API/operation/createKey]]: Create new Key
         Core -> Core: Validate Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/validateCreateKeyAttributes]]: Validate Attributes
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/validateCreateKeyAttributes]]: Validate create Key Attributes
         Connector --> Core: Result of Attribute validation
         Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/createKey]]: Create new Key
         Connector -> Connector: Create new Key
-        note right of Connector: The key is created within specific cryptographic technology
+        note over Connector
+        The key is created within
+        specific cryptographic technology
+        end note
         Connector --> Core: Return Key data in response
         Core -> Core : Perform Key data validation
         Core -> Core : Store Key in the inventory
@@ -241,17 +281,24 @@ Following are supported process for key management and cryptographic operations.
 ```plantuml
     @startuml
     autonumber
+    skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core [[core-key/#tag/Key-Management-API/operation/destroyKey]]: Destroy Key
         Core -> Core: Get Key Attributes
-        note right Core: Attributes that are required for the Key destruction
+        note over Core: Attributes that are required for the Key destruction
         Core -> Core: Validate Token instance
         Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/destroyKey]]: Destroy Key
         Connector -> Connector: Destroy Key
-        note right of Connector: The key is destroyed within specific cryptographic technology
+        note over Connector
+        The key is destroyed within
+        specific cryptographic technology
+        end note
         Connector --> Core: Return Key destruction result
         Core -> Core : Update Key data in the inventory
-        note right of Core: The key has status Destroyed, optionally can be removed from the inventory
+        note over Core
+        The key has status Destroyed,
+        optionally can be removed from the inventory
+        end note
         Core --> Client: Return Key destruction result
     @enduml
 ```
@@ -262,18 +309,137 @@ The following processes are associated with the operations that are performed wi
 
 ### Encrypt data with `Key`
 
+```plantuml
+    @startuml
+    autonumber
+    skinparam maxMessageSize 200
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/encryptData]]: Encrypt data
+        Core -> Core: Get Key Attributes
+        note over Core
+        Attributes of selected Key
+        for encryption of data
+        end note
+        Core -> Core: Validate Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateCipherAttributes]]: Validate cipher Attributes
+        Connector --> Core: Result of Attribute validation
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/encryptData]]: Encrypt data with Key
+        Connector -> Connector: Apply encryption with the Key on data 
+        note over Connector
+        Encryption is performed within
+        specific cryptographic technology
+        end note
+        Connector --> Core: Return encrypted data
+        Core -> Core : Store encryption related data, if necessary
+        Core --> Client: Return encrypted data
+    @enduml
+```
 
 ### Decrypt data with `Key`
 
+```plantuml
+    @startuml
+    autonumber
+    skinparam maxMessageSize 200
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/decryptData]]: Decrypt data
+        Core -> Core: Get Key Attributes
+        note over Core
+        Attributes of selected Key
+        for decryption of data
+        end note
+        Core -> Core: Validate Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateCipherAttributes]]: Validate cipher Attributes
+        Connector --> Core: Result of Attribute validation
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/decryptData]]: Decrypt data with Key
+        Connector -> Connector: Apply decryption with the Key on data 
+        note over Connector
+        Decryption is performed within
+        specific cryptographic technology
+        end note
+        Connector --> Core: Return decrypted data
+        Core -> Core : Store decryption related data, if necessary
+        Core --> Client: Return decrypted data
+    @enduml
+```
 
 ### Sign data with `Key`
 
+```plantuml
+    @startuml
+    autonumber
+    skinparam maxMessageSize 200
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/signData]]: Sign data
+        Core -> Core: Get Key Attributes
+        note over Core
+        Attributes of selected Key
+        for signing operation
+        end note
+        Core -> Core: Validate Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateSignatureAttributes]]: Validate signature Attributes
+        Connector --> Core: Result of Attribute validation
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/signData]]: Sign data with Key
+        Connector -> Connector: Apply signing with the Key on data 
+        note over Connector
+        Signing is performed within
+        specific cryptographic technology
+        end note
+        Connector --> Core: Return signatures
+        Core -> Core : Store signature related data, if necessary
+        Core --> Client: Return signatures
+    @enduml
+```
 
 ### Verify data with `Key`
 
+```plantuml
+    @startuml
+    autonumber
+    skinparam maxMessageSize 200
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/verifyData]]: Verify data
+        Core -> Core: Get Key Attributes
+        note over Core
+        Attributes of selected Key
+        for verifying operation
+        end note
+        Core -> Core: Validate Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateSignatureAttributes]]: Validate signature Attributes
+        Connector --> Core: Result of Attribute validation
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/verifyData]]: Verify data with Key
+        Connector -> Connector: Apply verifying with the Key on data 
+        note over Connector
+        Verifying is performed within
+        specific cryptographic technology
+        end note
+        Connector --> Core: Return results of verification
+        Core -> Core : Store verification related data, if necessary
+        Core --> Client: Return verification results
+    @enduml
+```
 
 ### Generate random data
 
+```plantuml
+    @startuml
+    autonumber
+    skinparam maxMessageSize 200
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/randomData]]: Generate random data
+        Core -> Core: Validate Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateRandomAttributes]]: Validate random generator Attributes
+        Connector --> Core: Result of Attribute validation
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/randomData]]: Generate random data
+        Connector -> Connector: Get data using RNG method 
+        note over Connector
+        RNG is performed within
+        specific cryptographic technology
+        end note
+        Connector --> Core: Return random data
+        Core --> Client: Return random data
+    @enduml
+```
 
 ## Specification and example
 
