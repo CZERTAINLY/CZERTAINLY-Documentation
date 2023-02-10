@@ -112,11 +112,11 @@ The following processes are associated with the Cryptography Provider and manage
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/createTokenInstance]]: Add Token instance
+        Client -> Core [[core-cryptography/#tag/Token-Management/operation/createTokenInstance]]: Add Token instance
         Core->Core: Check existence of Connector and Token
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/createTokenInstance]]: Create Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/createTokenInstance]]: Create Token instance
         Connector -> Connector: Validation of connection to cryptographic technology
         note over Connector
         Connection to the device / module
@@ -135,8 +135,8 @@ The following processes are associated with the Cryptography Provider and manage
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/getTokenInstance]]: Details of Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/getTokenInstance]]: Get Token instance
+        Client -> Core [[core-cryptography/#tag/Token-Management/operation/getTokenInstance]]: Details of Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/getTokenInstance]]: Get Token instance
         Connector --> Core: Return Token instance details
         note over Core
         Details of the Token instance
@@ -154,10 +154,10 @@ The following processes are associated with the Cryptography Provider and manage
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/updateTokenInstance]]: Update Token instance
+        Client -> Core [[core-cryptography/#tag/Token-Management/operation/updateTokenInstance]]: Update Token instance
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/updateTokenInstance]]: Update Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/updateTokenInstance]]: Update Token instance
         Connector -> Connector: Validation of connection to cryptographic technology
         note over Connector
         Connection to the device / module
@@ -178,9 +178,9 @@ When the `Token` is removed, it does not necessarily mean that it was removed fr
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/removeTokenInstance]]: Remove Token instance
+        Client -> Core [[core-cryptography/#tag/Token-Management/operation/removeTokenInstance]]: Remove Token instance
         Core -> Core : Check dependencies
-        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/removeTokenInstance]]: Remove Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/removeTokenInstance]]: Remove Token instance
         Connector --> Core: Return Token instance removal result
         Core -> Core : Delete Token instance reference data
         Core --> Client: Return removal result
@@ -196,9 +196,9 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/getTokenInstanceStatus]]: Get Token instance status
+        Client -> Core [[core-cryptography/#tag/Token-Management/operation/getTokenInstanceStatus]]: Get Token instance status
         Core->Core: Check existence of the Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/getTokenInstanceStatus]]: Request Token instance status
+        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/getTokenInstanceStatus]]: Request Token instance status
         Connector -> Connector: Check Token instance status
         note over Connector
         Get status of the Token instance
@@ -219,11 +219,11 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/activateTokenInstance]]: Activate Token instance
+        Client -> Core [[core-cryptography/#tag/Token-Management/operation/activateTokenInstance]]: Activate Token instance
         Core->Core: Check existence of the Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/validateTokenInstanceActivationAttributes]]: Validate activation Attributes
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/validateTokenInstanceActivationAttributes]]: Validate activation Attributes
         Connector --> Core: Result of activation Attributes validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/activateTokenInstance]]: Activate Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/activateTokenInstance]]: Activate Token instance
         Connector --> Core: Return Token instance activation result
         Core -> Core : Update Token instance status
         Core --> Client: Return activation result
@@ -237,11 +237,11 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management-API/operation/deactivateTokenInstance]]: Deactivate Token instance
+        Client -> Core [[core-cryptography/#tag/Token-Management/operation/deactivateTokenInstance]]: Deactivate Token instance
         Core->Core: Check existence of the Token instance
         Core -> Connector : Validate deactivation Attributes
         Connector --> Core: Result of deactivation Attributes validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management-API/operation/deactivateTokenInstance]]: Deactivate Token instance
+        Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/deactivateTokenInstance]]: Deactivate Token instance
         Connector --> Core: Return Token instance deactivation result
         Core -> Core : Update Token instance status
         Core --> Client: Return deactivation result
@@ -259,11 +259,11 @@ Following are supported processes for key management operations.
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-key/#tag/Key-Management-API/operation/createKey]]: Create new Key
+        Client -> Core [[core-key/#tag/Key-Management/operation/createKey]]: Create new Key
         Core -> Core: Validate Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/validateCreateKeyAttributes]]: Validate create Key Attributes
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/validateCreateKeyAttributes]]: Validate create Key Attributes
         Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/createKey]]: Create new Key
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/createKey]]: Create new Key
         Connector -> Connector: Create new Key
         note over Connector
         The key is created within
@@ -283,11 +283,11 @@ Following are supported processes for key management operations.
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-key/#tag/Key-Management-API/operation/destroyKey]]: Destroy Key
+        Client -> Core [[core-key/#tag/Key-Management/operation/destroyKey]]: Destroy Key
         Core -> Core: Get Key Attributes
         note over Core: Attributes that are required for the Key destruction
         Core -> Core: Validate Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/destroyKey]]: Destroy Key
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/destroyKey]]: Destroy Key
         Connector -> Connector: Destroy Key
         note over Connector
         The key is destroyed within
@@ -314,16 +314,8 @@ The following processes are associated with the operations that are performed wi
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/encryptData]]: Encrypt data
-        Core -> Core: Get Key Attributes
-        note over Core
-        Attributes of selected Key
-        for encryption of data
-        end note
-        Core -> Core: Validate Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateCipherAttributes]]: Validate cipher Attributes
-        Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/encryptData]]: Encrypt data with Key
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations/operation/encryptData]]: Encrypt data
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/encryptData]]: Encrypt data with Key
         Connector -> Connector: Apply encryption with the Key on data 
         note over Connector
         Encryption is performed within
@@ -342,16 +334,8 @@ The following processes are associated with the operations that are performed wi
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/decryptData]]: Decrypt data
-        Core -> Core: Get Key Attributes
-        note over Core
-        Attributes of selected Key
-        for decryption of data
-        end note
-        Core -> Core: Validate Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateCipherAttributes]]: Validate cipher Attributes
-        Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/decryptData]]: Decrypt data with Key
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations/operation/decryptData]]: Decrypt data
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/decryptData]]: Decrypt data with Key
         Connector -> Connector: Apply decryption with the Key on data 
         note over Connector
         Decryption is performed within
@@ -370,16 +354,8 @@ The following processes are associated with the operations that are performed wi
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/signData]]: Sign data
-        Core -> Core: Get Key Attributes
-        note over Core
-        Attributes of selected Key
-        for signing operation
-        end note
-        Core -> Core: Validate Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateSignatureAttributes]]: Validate signature Attributes
-        Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/signData]]: Sign data with Key
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations/operation/signData]]: Sign data
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/signData]]: Sign data with Key
         Connector -> Connector: Apply signing with the Key on data 
         note over Connector
         Signing is performed within
@@ -398,16 +374,8 @@ The following processes are associated with the operations that are performed wi
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/verifyData]]: Verify data
-        Core -> Core: Get Key Attributes
-        note over Core
-        Attributes of selected Key
-        for verifying operation
-        end note
-        Core -> Core: Validate Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateSignatureAttributes]]: Validate signature Attributes
-        Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/verifyData]]: Verify data with Key
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations/operation/verifyData]]: Verify data
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/verifyData]]: Verify data with Key
         Connector -> Connector: Apply verifying with the Key on data 
         note over Connector
         Verifying is performed within
@@ -426,11 +394,11 @@ The following processes are associated with the operations that are performed wi
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations-API/operation/randomData]]: Generate random data
+        Client -> Core [[core-cryptographic-operations/#tag/Cryptographic-Operations/operation/randomData]]: Generate random data
         Core -> Core: Validate Token instance
-        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations-API/operation/validateRandomAttributes]]: Validate random generator Attributes
+        Core -> Connector [[connector-cryptography-provider/#tag/Cryptographic-Operations/operation/validateRandomAttributes]]: Validate random generator Attributes
         Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management-API/operation/randomData]]: Generate random data
+        Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/randomData]]: Generate random data
         Connector -> Connector: Get data using RNG method 
         note over Connector
         RNG is performed within
@@ -444,8 +412,8 @@ The following processes are associated with the operations that are performed wi
 ## Specification and example
 
 The Cryptography Provider implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
-- [Token Management](/api/connector-cryptography-provider/#tag/Token-Management-API)
-- [Key Management](/api/connector-cryptography-provider/#tag/Key-Management-API)
-- [Cryptographic Operations](/api/connector-cryptography-provider/#tag/Cryptographic-Operations-API)
+- [Token Management](/api/connector-cryptography-provider/#tag/Token-Management)
+- [Key Management](/api/connector-cryptography-provider/#tag/Key-Management)
+- [Cryptographic Operations](/api/connector-cryptography-provider/#tag/Cryptographic-Operations)
 
 The OpenAPI specification of the Cryptography Provider can be found here: [Connector API - Cryptography Provider](/api/connector-cryptography-provider/).
