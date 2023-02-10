@@ -19,6 +19,11 @@
   --ifm-badge-background-color: #1473b5;
 }
 
+.hero {
+  background-image: url("/static/img/czertainly-chain.png");
+  background-position: center;
+}
+
 .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.1);
   display: block;

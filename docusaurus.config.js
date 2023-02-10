@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'CZERTAINLY Documentation',
-  tagline: 'Medicine for your certificates!',
+  tagline: 'Security and trust assurance and automation in ever connected world',
   url: 'https://www.czertainly.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
