@@ -23,4 +23,4 @@ For more information, refer to [Authority Provider](../../connectors/description
 
 ### `RA Profile`
 
-`RA Profile` is created on top of the `Authority`. For more information, refer to [RA Profile](../ra-profile).
+`RA Profile` is created on top of the `Authority`. For more information, refer to [RA Profile](./ra-profile).

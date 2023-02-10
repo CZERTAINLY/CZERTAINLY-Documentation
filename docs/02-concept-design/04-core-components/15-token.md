@@ -20,4 +20,4 @@ For more information, refer to [Cryptography Provider](../../connectors/descript
 
 ### `Token Profile`
 
-`Token Profile` is created on top of the `Token`. For more information, refer to [Token Profile](../token-profile).
+`Token Profile` is created on top of the `Token`. For more information, refer to [Token Profile](./token-profile).
