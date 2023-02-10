@@ -36,6 +36,69 @@ const ConnectorList: ConnectorItem[] = [
         ),
     },
     {
+        title: 'Cryptosense Discovery Provider',
+        link: '',
+        description: (
+            <table className={styles.functionTable}>
+                <th>Function Group</th>
+                <th>Kind</th>
+                <tr>
+                    <td><span className="badge">Discovery Provider</span></td>
+                    <td><span className="badge">Cryptosense</span></td>
+                </tr>
+            </table>
+        ),
+    },
+    {
+        title: 'EJBCA Legacy Connector',
+        link: '',
+        description: (
+            <table className={styles.functionTable}>
+                <th>Function Group</th>
+                <th>Kind</th>
+                <tr>
+                    <td><span className="badge">Authority Provider</span></td>
+                    <td><span className="badge">LegacyEjbca</span></td>
+                </tr>
+            </table>
+        ),
+    },
+    {
+        title: 'EJBCA NG Connector',
+        link: 'ejbca-ng-connector/integration-guide',
+        description: (
+            <table className={styles.functionTable}>
+                <th>Function Group</th>
+                <th>Kind</th>
+                <tr>
+                    <td><span className="badge">Authority Provider</span></td>
+                    <td><span className="badge">EJBCA</span></td>
+                </tr>
+                <tr>
+                    <td><span className="badge">Discovery Provider</span></td>
+                    <td>
+                        <span className="badge">EJBCA</span><br/>
+                        <span className="badge">EJBCA_SCHEDULE</span>
+                    </td>
+                </tr>
+            </table>
+        ),
+    },
+    {
+        title: 'Keystore Entity Provider',
+        link: '',
+        description: (
+            <table className={styles.functionTable}>
+                <th>Function Group</th>
+                <th>Kind</th>
+                <tr>
+                    <td><span className="badge">Entity Provider</span></td>
+                    <td><span className="badge">Keystore</span></td>
+                </tr>
+            </table>
+        ),
+    },
+    {
         title: 'MS ADCS Connector',
         link: 'ms-adcs-connector/integration-guide',
         description: (
@@ -68,56 +131,21 @@ const ConnectorList: ConnectorItem[] = [
         ),
     },
     {
-        title: 'EJBCA NG Connector',
-        link: 'ejbca-ng-connector/integration-guide',
-        description: (
-            <table className={styles.functionTable}>
-                <th>Function Group</th>
-                <th>Kind</th>
-                <tr>
-                    <td><span className="badge">Authority Provider</span></td>
-                    <td><span className="badge">EJBCA</span></td>
-                </tr>
-                <tr>
-                    <td><span className="badge">Discovery Provider</span></td>
-                    <td>
-                        <span className="badge">EJBCA</span><br/>
-                        <span className="badge">EJBCA_SCHEDULE</span>
-                    </td>
-                </tr>
-            </table>
-        ),
-    },
-    {
-        title: 'Cryptosense Discovery Provider',
+        title: 'Software Cryptography Provider',
         link: '',
         description: (
             <table className={styles.functionTable}>
                 <th>Function Group</th>
                 <th>Kind</th>
                 <tr>
-                    <td><span className="badge">Discovery Provider</span></td>
-                    <td><span className="badge">Cryptosense</span></td>
+                    <td><span className="badge">Cryptography Provider</span></td>
+                    <td><span className="badge">SOFT</span></td>
                 </tr>
             </table>
         ),
     },
     {
-        title: 'EJBCA Legacy Connector',
-        link: '',
-        description: (
-            <table className={styles.functionTable}>
-                <th>Function Group</th>
-                <th>Kind</th>
-                <tr>
-                    <td><span className="badge">Authority Provider</span></td>
-                    <td><span className="badge">LegacyEjbca</span></td>
-                </tr>
-            </table>
-        ),
-    },
-    {
-        title: 'X509 Compliance Provider',
+        title: 'X.509 Compliance Provider',
         link: '',
         description: (
             <table className={styles.functionTable}>
@@ -125,25 +153,12 @@ const ConnectorList: ConnectorItem[] = [
                 <th>Kind</th>
                 <tr>
                     <td><span className="badge">Compliance Provider</span></td>
-                    <td><span className="badge">X509</span></td>
+                    <td><span className="badge">x509</span></td>
                 </tr>
             </table>
         ),
     },
-    {
-        title: 'Keystore Entity Provider',
-        link: '',
-        description: (
-            <table className={styles.functionTable}>
-                <th>Function Group</th>
-                <th>Kind</th>
-                <tr>
-                    <td><span className="badge">Entity Provider</span></td>
-                    <td><span className="badge">Keystore</span></td>
-                </tr>
-            </table>
-        ),
-    },
+
 ];
 
 function Feature({title, link, description}: ConnectorItem) {
