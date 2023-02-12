@@ -1,6 +1,6 @@
 # Certificate
 
-The `Certificate` holds the information about the certificate and its lifecycle. It represents the certificate in a human-readable format. `Certificate` holds the following information of any certificate,
+The `Certificate` holds the information about the certificate and its lifecycle. It represents the certificate in a human-readable format. `Certificate` holds the following information of any certificate:
 
 - Human understandable parsed certificate content
 - Base64 certificate content
