@@ -11,6 +11,7 @@ Operations on `Certificate` includes:
 - [Issuing](#issueCert)
 - [Revocation](#revokeCert)
 - [Renewal](#renewCert)
+- [Rekey](#rekeyCert)
 
 ### Issuing {#issueCert}
 
@@ -19,7 +20,9 @@ Any new `Certificate` can be issued through the `RA Profile`. Since `RA Profile`
 With defined `RA Profile`, the `Client` will need only the following data to request `Certificate`:
 
 - `RA Profile` Name
-- CSR (Certificate Signing Request)
+- based on key source
+  - *external* - CSR (Certificate Signing Request)
+  - *existing key* - token profile, its key and belonging request and signature attributes
 - `Attributes` for issuing, if needed by the `Connector` implementation
 
 Upon successful issuing of the `Certificate`, it will be parsed, validated, and stored in the `Certificate Inventory`.
@@ -34,8 +37,14 @@ Once the reason for the revocation is specified, the platform communicates with 
 
 ### Renewal {#renewCert}
 
-To renew `Certificate`, information currently available in the `Certificate Inventory` is used. Therefore, the `Client` need to provide only new certification signing request.
+To renew `Certificate`, information currently available in the `Certificate Inventory` is used. Therefore, the `Client` need to provide only new certification signing request or otherwise information about key belonging to certificate will be used.
 
 :::note  
 Only the `Certificate` that is bound to `RA Profile` can be renewed.
 :::
+
+### Rekey {#rekeyCert}
+
+This operation is used in case it is necessary to change key that was used for issuance of original certificate because of various reasons.
+
+Data that need to be provided are same as for issuing certificate with a condition that different key needs to be used.

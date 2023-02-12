@@ -12,7 +12,7 @@ The information held by the `Token` varies depending on the `Kind` of the undern
 | Name                    | Name of the `Token`                                                                     |
 | `Cryptography Provider` | Identification of `Connector` implementing the `Cryptography Provider` `Function Group` |
 | `Kind`                  | `Kind` of the technology implemented by the `Connector`                                 |
-| `Attributes`            | `Attributes` defined by `Connector`implementation and the specific `Kind`               |
+| `Attributes`            | `Attributes` defined by `Connector` implementation and the specific `Kind`              |
 
 ### `Cryptography Provider`
 
