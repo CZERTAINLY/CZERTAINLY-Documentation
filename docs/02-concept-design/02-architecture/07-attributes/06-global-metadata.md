@@ -21,3 +21,10 @@ The characteristics of `Global Metadata` are:
 - Any metadata from the connector can be made as `Global Metadata` by enabling the property `global` in the attribute property configuration.
 - Name of the `Global Metadata` should match the name of the attribute in the `Connector`.
 - If a `Global Metadata` is defined and not enabled in the connector, it will be stored as a connector metadata.
+
+---
+**NOTE**
+
+Global metadata are currently supported only in Core through API interface. 'Administrator' application does not support them yet.
+
+---
