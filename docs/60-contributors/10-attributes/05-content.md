@@ -30,6 +30,7 @@ The following content types are available and supported:
 | `FILE`                 | [`FileAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/FileAttributeContent.java)             | [`FileAttributeContentData`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/data/FileAttributeContentData.java)     |
 | `BOOLEAN`              | [`BooleanAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/BooleanAttributeContent.java)       | `boolean`                                                                                                                                                                                                |
 | `TEXT`                 | [`TextAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/TextAttributeContent.java)             | `string`                                                                                                                                                                                                 |
+| `CODEBLOCK`                 | [`TextAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/CodeBlockAttributeContent.java)             |[`CodeBlockAttributeContentData`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/data/CodeBlockAttributeContentData.java) |
 | `FLOAT`                | [`FloatAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/FloatAttributeContent.java)           | `float`                                                                                                                                                                                                  |
 | `DATE`                 | [`DateAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/DateAttributeContent.java)             | `date`                                                                                                                                                                                                   |
 | `DATETIME`             | [`DateTimeAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/DatetimeAttributeContent.java)     | `datetime`                                                                                                                                                                                               |
@@ -312,6 +313,33 @@ Associated `content` field
 <tr>
 <td>
 
+`CODEBLOCK`
+
+</td>
+<td>
+
+```json
+{
+  "content": [
+    {
+      "reference": "string",
+      "value": {
+          "language": "string",
+          "code": "Block of the code in Base64. Formatting of the code is specified by variable language"
+        }
+    }
+  ]
+}
+```
+
+`CODEBLOCK` supports scripts from various languages.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `TIME`
 
 </td>
@@ -383,6 +411,7 @@ The following diagram represents the content model inherited from the `Attribute
     class StringAttributeContent
     class TextAttributeContent
     class TimeAttributeContent
+    class CodeBlockAttributeContent
     
     class FileAttributeContentData
     class SecretAttributeContentData
@@ -401,8 +430,10 @@ The following diagram represents the content model inherited from the `Attribute
     BaseAttributeContent <-- StringAttributeContent : extends
     BaseAttributeContent <-- TextAttributeContent : extends
     BaseAttributeContent <-- TimeAttributeContent : extends
+    BaseAttributeContent <-- CodeBlockAttributeContent : extends
     
     FileAttributeContent <-- FileAttributeContentData
+    CodeBlockAttributeContent <-- CodeBlockAttributeContentData
     SecretAttributeContent <-- SecretAttributeContentData
     SecretAttributeContentData <-- ProtectionLevel
 ```
