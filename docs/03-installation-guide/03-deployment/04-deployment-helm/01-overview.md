@@ -3,7 +3,6 @@
 Helm chart simplifies the deployment of the platform using already pre-defined templates that are parsed as Kubernetes manifests and managed by Helm.
 
 ## Prerequisites
-
 - Kubernetes 1.19+
 - Helm 3.8.0+
 - PostgreSQL 11+
@@ -13,18 +12,14 @@ In case you want to enable Ingress you need to have installed Ingress Controller
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
-:::caution Ingres Controller
-Configuration of Ingress resources depends on the type and technology that is being used as Ingress Controller.
-:::
-
-If you are using internal CA for Ingress and/or Administrator certificate, you also need to have installed [cert-manager](https://cert-manager.io/docs/).
+If you are using internal CA for Ingress and Administrator certificate, you also need to have installed [cert-manager](https://cert-manager.io/docs/).
 
 > cert-manager is only required to use certificates issued by internally generated CA:
 > - `ingress.certificate.source=internal` for internally generated Ingress certificate
 > - `ingress.certificate.source=letsEncrypt` for Ingress Let’s Encrypt issued certificate
 > - `registerAdmin.source=generated` for internally generated certificate for first administrator
 
-## Using the Chart
+## Using this Chart
 
 ### Installation
 
@@ -45,9 +40,12 @@ Now edit the `czertainly-values.yaml` according to your desired stated, see [Con
 
 **Prepare list of trusted CA certificates**
 
-Create new file called `trusted-certificates.pem` and add to the file PEM certificates of all certification authorities that should be trusted by the platform. No worries, you can always change the list of trusted certificates in the future.
+Create new file called `trusted-certificates.pem` and add to the file PEM certificates of all certification authorities that should be trusted by the platform. No worries, you can always change the list of trusted certificates in the future. See the sample [trusted-certificates](../../samples/trusted-certificates.pem) file.
 
 The list of trusted certificates is need for the installation of the CZERTAINLY using Helm chart.
+
+> **Note**
+> Trusted certificates can be defined globally for the CZERTAINLY chart and all of its sub-charts, or it can be applied only for specific sub-chart, see [global parameters](#global-parameters). For global, set `global.trusted.certificates`, otherwise set `trusted.certificates`.
 
 **Install CZERTAINLY**
 
@@ -55,7 +53,7 @@ There are couple of options to install CZERTAINLY based on you TLS configuration
 
 For the basic installation, run:
 ```bash
-helm install --namespace czertainly -f czertainly-values.yaml --set-file trusted.certificates=trusted-certificates.pem czertainly-tlm oci://harbor.3key.company/czertainly-helm/czertainly
+helm install --namespace czertainly -f czertainly-values.yaml --set-file global.trusted.certificates=trusted-certificates.pem czertainly-tlm oci://harbor.3key.company/czertainly-helm/czertainly
 ```
 
 **Save your configuration**
@@ -69,7 +67,7 @@ Always make sure you save the `czertainly-values.yaml` and all `--set` and `--se
 
 For upgrading the CZERTAINLY installation, update your configuration and run:
 ```bash
-helm upgrade --namespace czertainly -f czertainly-values.yaml --set-file trusted.certificates=trusted-certificates.pem czertainly-tlm oci://harbor.3key.company/czertainly-helm/czertainly
+helm upgrade --namespace czertainly -f czertainly-values.yaml --set-file global.trusted.certificates=trusted-certificates.pem czertainly-tlm oci://harbor.3key.company/czertainly-helm/czertainly
 ```
 
 ### Uninstall
