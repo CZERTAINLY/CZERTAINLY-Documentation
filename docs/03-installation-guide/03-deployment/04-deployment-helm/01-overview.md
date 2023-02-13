@@ -40,7 +40,7 @@ Now edit the `czertainly-values.yaml` according to your desired stated, see [Con
 
 **Prepare list of trusted CA certificates**
 
-Create new file called `trusted-certificates.pem` and add to the file PEM certificates of all certification authorities that should be trusted by the platform. No worries, you can always change the list of trusted certificates in the future. See the sample [trusted-certificates](../../samples/trusted-certificates.pem) file.
+Create new file called `trusted-certificates.pem` and add to the file PEM certificates of all certification authorities that should be trusted by the platform. No worries, you can always change the list of trusted certificates in the future.
 
 The list of trusted certificates is need for the installation of the CZERTAINLY using Helm chart.
 
