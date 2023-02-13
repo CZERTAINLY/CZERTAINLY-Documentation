@@ -30,7 +30,7 @@ The following content types are available and supported:
 | `FILE`                 | [`FileAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/FileAttributeContent.java)             | [`FileAttributeContentData`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/data/FileAttributeContentData.java)     |
 | `BOOLEAN`              | [`BooleanAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/BooleanAttributeContent.java)       | `boolean`                                                                                                                                                                                                |
 | `TEXT`                 | [`TextAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/TextAttributeContent.java)             | `string`                                                                                                                                                                                                 |
-| `CODEBLOCK`                 | [`TextAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/CodeBlockAttributeContent.java)             |[`CodeBlockAttributeContentData`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/data/CodeBlockAttributeContentData.java) |
+| `CODEBLOCK`            | [`CodeBlockAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/CodeBlockAttributeContent.java)             |[`CodeBlockAttributeContentData`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/data/CodeBlockAttributeContentData.java) |
 | `FLOAT`                | [`FloatAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/FloatAttributeContent.java)           | `float`                                                                                                                                                                                                  |
 | `DATE`                 | [`DateAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/DateAttributeContent.java)             | `date`                                                                                                                                                                                                   |
 | `DATETIME`             | [`DateTimeAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/DatetimeAttributeContent.java)     | `datetime`                                                                                                                                                                                               |
@@ -332,7 +332,28 @@ Associated `content` field
 }
 ```
 
-`CODEBLOCK` supports scripts from various languages.
+`CODEBLOCK` supports scripts from various [languages](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/data/ProgrammingLanguageEnum.java). For example, to store simple addition method written in C#
+
+```csharp
+public void Add(string a, string b) {
+  return a + b;
+}
+```
+
+you would sent following content
+```json
+{
+  "content": [
+    {
+      "reference": "sample",
+      "value": {
+          "language": "csharp",
+          "code": "cHVibGljIHZvaWQgQWRkKHN0cmluZyBhLCBzdHJpbmcgYikgewogIHJldHVybiBhICsgYjsKfQ=="
+        }
+    }
+  ]
+}
+```
 
 </td>
 </tr>
