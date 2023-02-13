@@ -37,7 +37,7 @@ The Operator Web was merged with the Administrator Web in the version `2.2.0`.
 | MS ADCS Connector              | `1.3.0` | `harbor.3key.company/czertainly/czertainly-ms-adcs-connector`              |
 | EJBCA Legacy Connector         | `1.2.0` | `harbor.3key.company/czertainly/czertainly-ejbca-legacy-ca-connector`      |
 | Keystore Entity Provider       | `1.2.0` | `docker.io/3keycompany/czertainly-keystore-entity-provider`                |
-| X.509 Compliance Provider      | `1.1.0` | `docker.io/3keycompany/czertainly/czertainly-x509-compliance-provider`     |
+| X.509 Compliance Provider      | `1.1.0` | `docker.io/3keycompany/czertainly-x509-compliance-provider`                |
 | Software Cryptography Provider | `1.0.0` | `docker.io/3keycompany/czertainly-software-cryptography-provider`          |
 
 ## Private repository
