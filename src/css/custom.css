@@ -22,6 +22,7 @@
 .hero {
   background-image: url("/static/img/czertainly-chain.png");
   background-position: center;
+  background-size: cover;
 }
 
 .docusaurus-highlight-code-line {
