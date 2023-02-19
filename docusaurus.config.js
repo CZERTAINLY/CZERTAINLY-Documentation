@@ -26,7 +26,6 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [
-              [require('mdx-mermaid'), { theme: { light: 'neutral', dark: 'dark' } }],
               [require('./src/plugins/remarkSimplePlantumlPlugin'), { baseUrl: 'https://www.plantuml.com/plantuml/svg', type: "svg" }],
           ],
         },
