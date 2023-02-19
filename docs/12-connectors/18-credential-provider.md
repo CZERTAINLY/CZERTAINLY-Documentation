@@ -10,7 +10,7 @@ The Credential Provider defines specific configuration of the credentials that c
 
 ## Provider objects
 
-[`Credential`](../../concept-design/core-components/credential) objects are managed in the platform through the Credential Provider implementation.
+[`Credential`](../concept-design/core-components/credential) objects are managed in the platform through the Credential Provider implementation.
 
 ## Processes
 

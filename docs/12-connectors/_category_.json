@@ -1,3 +1,8 @@
 {
-  "label": "Connectors"
+  "position": 12,
+  "label": "Connectors",
+  "link": {
+    "type": "doc",
+    "id": "overview"
+  }
 }

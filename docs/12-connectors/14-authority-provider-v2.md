@@ -1,32 +1,23 @@
-# Authority Provider Legacy
-
-:::caution
-Authority Provider Legacy is deprecated and will be removed in future release.
-:::
+# Authority Provider v2
 
 ## Overview
 
-Authority Provider Legacy interface provides specific set of certificate management functions that support only API operations of the `EJBCA`.
-The interfaces of the Authority Provider Legacy contain:
-- Authority Management
-- Certificate Management
-- End Entity Management
-- Profiles Management
+Authority Provider v2 interface is used to manage operations with certificates issued by certification authority. The Authority Provider v2 acts as an interface between the `Core` and the certification authority providing the following management functions:
+1. Issue
+2. Renew
+3. Revoke 
 
 ## How it works
 
-Authority Provider Legacy provides the ability to communicate with the EJBCA certification authorities.
-:::caution
-The Authority Provider Legacy interface is designed to work only with the EJBCA. If you are looking to support different technology, consider [Authority Provider v2](14-authority-provider-v2.md) interface.
-:::
+Authority Provider v2 provides the ability to communicate with different types and technologies of certification authorities.
 
 ## Provider objects
 
-[`Authority`](../../concept-design/core-components/authority) objects are managed in the platform through the Authority Provider Legacy implementation.
+[`Authority`](../concept-design/core-components/authority) objects are managed in the platform through the Authority Provider v2 implementation.
 
 ## Processes
 
-The following processes are associated with the Authority Provider Legacy and management of the `Authority` objects.
+The following processes are associated with the Authority Provider v2 and management of the `Authority` objects.
 
 ## `Authority` Instance Management
 
@@ -99,6 +90,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```
 
 ## `Certificate` Management
+Sections below represents the list of processes involved in managing the certificates.
 
 ### Issue `Certificate`
 
@@ -106,12 +98,14 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations/operation/issueCertificate_1]]: Issue Certificate
-        note over Client,Core: Issue Certificate with required Attributes and RA Profile data
-        Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management/operation/issueCertificate]]: Issue Certificate
+        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/issueCertificate]]: Issue Certificate
+        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management/operation/validateIssueCertificateAttributes]]: Validate Attributes
+        Connector --> Core: Result of Attribute validation
+        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management/operation/issueCertificate]]: Issue Certificate
         Connector -> CA: Issue Certificate
         CA --> Connector: Return Certificate
         Connector --> Core: Return Certificate response
+        Core -> Core : Perform Certificate validation
         Core -> Core : Store Certificate
         Core --> Client: Return Certificate UUID
     @enduml
@@ -119,19 +113,35 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ### Renew `Certificate`
 
-:::caution
-Renewal of the certificate is not supported by the Authority Provider Legacy.
-:::
+```plantuml
+    @startuml
+    autonumber
+    skinparam topurl https://docs.czertainly.com/api/
+        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/renewCertificate]]: Renew Certificate
+        Core -> Core: Get Attributes from parent Certificate
+        note right Core: Attributes for renewal are taken from parent Certificate
+        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management/operation/renewCertificate]]: Renew Certificate
+        Connector -> CA: Issue Certificate
+        CA --> Connector: Return Certificate
+        Connector --> Core: Return Certificate response
+        Core -> Core : Perform Certificate validation
+        Core -> Core : Store Certificate to the database
+        Core --> Client: Return Certificate UUID
+    @enduml
+```
+
 ### Revoke `Certificate`
 
 ```plantuml
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations/operation/revokeCertificate_1]]: Revoke Certificate
-        Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management/operation/revokeCertificate]]: Revoke Certificate
+        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/revokeCertificate]]: Revoke Certificate
+        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management/operation/validateRevokeCertificateAttributes]]: Validate Attributes
+        Connector --> Core: Result of Attribute validation
+        Core -> Connector [[connector-authority-provider-v2/#tag/Certificate-Management/operation/revokeCertificate]]: Revoke Certificate
         Connector -> CA: Revoke Certificate
-        CA --> Connector: Return Certificate Revocation status
+        CA --> Connector: Return Certificate revocation status
         Connector --> Core: Return Certificate revocation response
         Core -> Core : Set Certificate status as revoked
         Core --> Client: Return revocation status
@@ -140,10 +150,9 @@ Renewal of the certificate is not supported by the Authority Provider Legacy.
 
 ## Specification and example
 
-The Authority Provider Legacy implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
-- [Authority Management](/api/connector-authority-provider-legacy/#tag/Authority-Management)
-- [Certificate Management](/api/connector-authority-provider-legacy/#tag/Certificate-Management)
-- [End Entity Profiles](/api/connector-authority-provider-legacy/#tag/End-Entity-Profiles)
-- [End Entity Management](/api/connector-authority-provider-legacy/#tag/End-Entity-Management)
+The Authority Provider v2 implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
+- [Authority Management](/api/connector-authority-provider-v2/#tag/Authority-Management)
+- [Certificate Management](/api/connector-authority-provider-v2/#tag/Certificate-Management)
 
-The OpenAPI specification of the Authority Provider Legacy can be found here: [Connector API - Authority Provider Legacy](/api/connector-authority-provider-legacy/).
+The OpenAPI specification of the Authority Provider v2 can be found here: [Connector API - Authority Provider v2](/api/connector-authority-provider-v2/).
+
