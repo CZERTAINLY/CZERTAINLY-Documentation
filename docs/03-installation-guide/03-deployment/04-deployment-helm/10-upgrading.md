@@ -1,7 +1,7 @@
 # Upgrading
 
 :::caution Before upgrading
-Before upgrading, make sure you have backed up your configuration, trusted certificates and data to be abe to restore the platform in case of any issues.
+Before upgrading, make sure you have backed up your configuration, trusted certificates and data to be able to restore the platform in case of any issues.
 
 Never downgrade the platform version, as it may cause data loss or other issues. Be sure that you are upgrading to higher version of the Helm chart.
 :::
