@@ -6,7 +6,7 @@ It is intended for the environments where no Kubernetes cluster is available or 
 ## Virtual appliance content
 
 Virtual Appliance consist of:
-* **[Deblian](https://www.debian.org/)** Linux operating system with amd64 architecture
+* **[Debian](https://www.debian.org/)** Linux operating system with amd64 architecture
 * **[RKE2](https://rke2.io)**, also known as RKE Government, which is Rancher's next-generation Kubernetes distribution
 * **[Helm](https://helm.sh/)** package manager for Kubernetes to install and upgrade CZERTAINLY Helm charts
 * **[PostgreSQL](https://www.postgresql.org/)** database server to persist platform data
