@@ -5,7 +5,7 @@ To make initial configuration of virtual appliance, you must log into virtual co
 * **password**: newgenerationtrustcare
 
 :::caution Change default credentials
-The default credentials for the virtual appliance should be changed by the user.
+The default credentials for the virtual appliance should be [changed](https://docs.czertainly.com/docs/installation-guide/deployment/deployment-appliance/operations/#change-user-password) by the user.
 :::
 
 The following steps need to be done to initialize the virtual appliance:
