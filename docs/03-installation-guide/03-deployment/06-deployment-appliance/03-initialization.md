@@ -4,10 +4,6 @@ To make initial configuration of virtual appliance, you must log into virtual co
 * **username**: czertainly
 * **password**: newgenerationtrustcare
 
-:::caution Change default credentials
-The default credentials for the virtual appliance should be [changed](https://docs.czertainly.com/docs/installation-guide/deployment/deployment-appliance/operations/#change-user-password) by the user.
-:::
-
 The following steps need to be done to initialize the virtual appliance:
 1. Change hostname and networking parameters (if needed)
 2. Update the system
@@ -18,6 +14,10 @@ The following steps need to be done to initialize the virtual appliance:
    3. update password for postgress database
    4. configure version and components of CZERTAINLY to install
 4. Install CZERTAINLY
+
+Most configuration and operational tasks can be done via text user interface:
+
+![CZERTAINLY TUI](../../../assets/CZERTAINLY-TUI.png)
 
 ## Change hostname and networking parameters
 
@@ -33,6 +33,15 @@ If you are going to production, ensure that you have the latest packages install
 ```bash
 sudo apt -y update && sudo apt -y upgrade
 ```
+
+## Obtain credentials to CZERTAINLY docker repository
+
+Some parts of CZERTAINLY are licensed and can't provided publicaly.
+
+:::caution Obtain access to private Docker repository
+HowTo???
+:::
+
 
 ## Prepare configuration values
 
@@ -109,3 +118,9 @@ After successful installation, administrator web interface is available on addre
 https://[hostName]/administrator/
 ```
 where `hostName` is the value configured in the previous step.
+
+## Postinstall 
+
+:::caution Change default credentials
+The default credentials for the virtual appliance should be [changed](https://docs.czertainly.com/docs/installation-guide/deployment/deployment-appliance/operations/#change-user-password) by the user.
+:::
