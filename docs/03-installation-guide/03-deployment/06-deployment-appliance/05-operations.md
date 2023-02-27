@@ -3,7 +3,7 @@
 The following document describes operations for the management of virtual appliance:
 - Virtual appliance management
 - User management
-- CZERTAINLY Manager
+- Advanced tasks
 
 ## Virtual appliance management
 
@@ -81,9 +81,11 @@ To remove admin privileges for user, execute the following command:
 sudo deluser john sudo
 ```
 
-## CZERTAINLY Manager
+## Advanced tasks
 
 ### Reset RKE2 node
+
+FIXME: czertainly-manager.sh executes `rke2 server --cluster-reset` do we needed this.
 
 Whenever the IP address or hostname is changed for the virtual appliance, the RKE2 node must be reset.
 To reset RKE2 node, execute the following command:
@@ -93,24 +95,6 @@ sudo -s czertainly-manager.sh resetnode
 
 When asked, choose to reset RKE2 node, enable and start RKE2 service.
 
-### Import TLS server certificate
+### Custom helm chart values
 
-When there is a change in the TLS configuration of the virtual appliance and new server certificate should be applied, the certificate must be imported.
-
-:::caution Certificate and private key
-Make sure that the certificate and corresponding private key generated during the TLS configuration of the virtual appliance match.
-:::
-
-The server certificate should be uploaded into the virtual appliance to the following location:
-```
-/home/czertainly/czertainly.crt
-```
-
-To import the server certificate, execute the following command:
-```bash
-sudo -s czertainly-manager.sh importcert
-```
-
-:::info Certificate secret
-`importcert` command creates Kubernetes TLS secret with name specified in the `ingress.tls.secretName` value.
-:::
+If you need provide custom helm chart values, put them into file `/home/czertacinly/czertainly-values.custom.yaml` and re-run instalation.
