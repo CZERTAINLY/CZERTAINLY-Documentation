@@ -11,8 +11,13 @@ The default credentials for the virtual appliance should be [changed](https://do
 The following steps need to be done to initialize the virtual appliance:
 1. Change hostname and networking parameters (if needed)
 2. Update the system
-3. Prepare configuration and prepare server certificate sign request
-4. Deploy CZERTAINLY
+3. Obtain credentials to CZERTAINLY docker repository
+3. Prepare configuration
+  1. prepare & upload certificate for CZERTAINLY HTTPS administrative interface
+  2. upload your trusted certificate lists
+  3. update password for postgress database
+  4. configure version and components of CZERTAINLY to install
+4. Install CZERTAINLY
 
 ## Change hostname and networking parameters
 
