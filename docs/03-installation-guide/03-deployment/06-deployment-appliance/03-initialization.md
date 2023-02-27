@@ -44,20 +44,27 @@ In CZERTAINLY TUI, from the main menu, select **Configure ingress TLS certificat
 
 ## Trusted certificate list
 
-Access to the web interface of CZERTAINLY is authenticated by a client certificate. For testing purposes, you can use preinstalled trusted CA list and provide [admin certificate](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/develop/dummy-certificates/private/admin.p12) with password ??-FIXME-??.
+Access to the web interface of CZERTAINLY is authenticated by a client certificate. For testing purposes, you can use preinstalled trusted CA list and provided [admin certificate](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/develop/dummy-certificates/private/admin.p12) with password ??-FIXME-??.
 
 In production, upload a list of your trusted certificates with scp to the appliance, and in CZERTAINLY TUI from the main menu, select **Configure custom trusted certificates** and provide the full path to the list.
 
+## Database
 
+CZERTAINLY stores all it's data in postgres database. The server will be installed for you, but you might want to set your own password for the database. To do so choose **Configure database** from the main menu.
 
 ## Obtain credentials to CZERTAINLY docker repository
 
-Some parts of CZERTAINLY are licensed and can't provided publicaly.
+Some parts of CZERTAINLY are licensed and can't be provided publicly. FIXME-list of licensed parts?
 
 :::caution Obtain access to private Docker repository
 HowTo???
 :::
 
+To enter obtained credentials, use option **Configure Docker repository access credentials** of the main menu. 
+
+## Configure CZERTAINLY
+
+Option **Configure CZERTAINLY** of the main menu allows you to select which parts of CZERTAINLY you want to install. By default, all parts are marked for installation. If you have not provided credentials for the docker private repository, the instalation of some parts will fail.
 
 ## Prepare configuration values
 
