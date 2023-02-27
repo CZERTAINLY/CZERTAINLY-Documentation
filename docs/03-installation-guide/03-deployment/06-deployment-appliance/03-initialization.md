@@ -13,28 +13,23 @@ The following steps need to be done to initialize the virtual appliance:
 2. Update the system
 3. Obtain credentials to CZERTAINLY docker repository
 3. Prepare configuration
-  1. prepare & upload certificate for CZERTAINLY HTTPS administrative interface
-  2. upload your trusted certificate lists
-  3. update password for postgress database
-  4. configure version and components of CZERTAINLY to install
+   1. prepare & upload certificate for CZERTAINLY HTTPS administrative interface
+   1. upload your trusted certificate lists
+   3. update password for postgress database
+   4. configure version and components of CZERTAINLY to install
 4. Install CZERTAINLY
 
 ## Change hostname and networking parameters
 
-By default, virtual appliance is configured to use dynamically assigned IP addresses from DHCP server with hostname `czertainly`, domain `local` and no proxy applied. To change the networking configuration, execute the following command:
-```bash
-sudo -s czertainly-manager.sh changenet
-```
+By default, virtual appliance is configured to use dynamically assigned IP addresses from DHCP server. If you need change network configuration, select from menu **Advanced options -> Enter system shell** and follow offical [Debian documentation](https://wiki.debian.org/NetworkConfiguration#Configuring_the_interface_manually)
 
-:::info Default networking configuration
-The default configuration may be useful for development and testing purposes. For production, it is recommended to adjust the setting and proxy configuration.
-:::
+Default hostname `czertainly` and domain `local` may be useful for development and testing purposes. You need just add name ''czertainly.local'' and VM IP into your [hosts file](https://www.howtogeek.com/27350/beginner-geek-how-to-edit-your-hosts-file/).
 
-**Reboot the virtual appliance when asked before doing any other changes.**
+In production you will need to set other name, to do so. Please select from main menu **Configure hostname**. Enter fully qualitifed name. After confirmation virtuall appliance will be rebooted.
 
 ## Update system and packages
 
-Ensure that you have the latest patches installed. Use `apt` to update list of Debian packages and upgrade:
+If you are going to production, ensure that you have the latest packages installed. Use `apt` to update list of Debian packages and upgrade. Select from menu **Advanced options -> Enter system shell** and type:
 ```bash
 sudo apt -y update && sudo apt -y upgrade
 ```
