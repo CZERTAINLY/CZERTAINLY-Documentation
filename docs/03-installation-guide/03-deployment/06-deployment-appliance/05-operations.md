@@ -9,34 +9,20 @@ The following document describes operations for the management of virtual applia
 
 ### Shut down
 
-To shut down virtual appliance, execute the following command:
-```bash
-sudo poweroff
-```
+To shut down the virtual appliance, select **Advanced options -> Shutdown system** or use the ACPI shutdown call of your virtualization platform.
 
 ### Restart
 
-To restart virtual appliance, execute the following command:
-```bash
-sudo reboot
-```
+To restart the virtual appliance, select **Advanced options -> Reboot system**. Do not use cold reboot function on your virtualization platform, as it could lead to filesystem corruption.
 
 ### Update system
 
 Updating of the virtual appliance system consists of updating and upgrading included packages:
 ```bash
-sudo apt update
-sudo apt upgrade
+sudo apt -y update && sudo apt -y upgrade
 ```
 
 ## User management
-
-### Change user password
-
-To change password of another user `john`, execute the following command:
-```bash
-sudo passwd john
-```
 
 ### Create new user
 
@@ -72,6 +58,13 @@ Is the information correct? [Y/n]
 To grant user admin privileges, execute the following command:
 ```bash
 sudo adduser john sudo
+```
+
+### Change user password
+
+To change password of another user `john`, execute the following command:
+```bash
+sudo passwd john
 ```
 
 ### Delete user
