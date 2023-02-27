@@ -22,7 +22,8 @@ Because of different availability and public/private access to containers, the v
 ## Download and import image
 
 To get the virtual appliance running in your environment for further  installation  and configuration, you must:
-1. Download virtual appliance image: [czertainly.ova](https://threekeycz-my.sharepoint.com/:f:/g/personal/jakub_moravek_3key_company/EtmV8Ww2_0ZHoYP7rZrXINgBq1ammuCsjpWlSTbgxbDH9g?e=uebBhd).
+1. Download virtual appliance [image](https://threekeycz-my.sharepoint.com/:f:/g/personal/jakub_moravek_3key_company/EtmV8Ww2_0ZHoYP7rZrXINgBq1ammuCsjpWlSTbgxbDH9g?e=).
+2. Optionaly verify SHA256 hash of the image.
 2. Import virtual appliance image to your virtual infrastructure.
 
 For testing purposes, you can use:
@@ -33,8 +34,4 @@ For testing purposes, you can use:
 
 :::caution Importing virtual appliance
 Import of virtual appliance is not covered by this documentation. Please refer to instructions of your virtualization SW vendor.
-:::
-
-:::success
-Access to pre-built CZERTAINLY virtual appliance is provided based on request.
 :::
