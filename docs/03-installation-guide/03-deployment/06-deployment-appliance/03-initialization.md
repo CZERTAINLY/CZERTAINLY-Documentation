@@ -84,4 +84,4 @@ The default credentials for the virtual appliance should be [changed](https://do
 
 Revide file `/home/czertainly/.ssh/authorized_keys` and delete any key you don't know.
 
-Postgres database is listening on the public interface. This is needed for Kubernetes to work. You might want to protect it with a firewall.
+Postgres database is listening on the public interface. This is needed for Kubernetes PODS to reach the database. You might want to protect it with a firewall.
