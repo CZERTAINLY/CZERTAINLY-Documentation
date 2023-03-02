@@ -31,10 +31,7 @@ If your network policy requres using HTTP proxy, configure it's parameters in th
 
 ## Update system and packages
 
-If you are going to production, ensure that you have the latest packages installed. Select from the main menu **Advanced options -> Enter system shell** and type:
-```bash
-sudo apt -y update && sudo apt -y upgrade
-```
+If you are going to production, ensure that you have the latest packages installed. Select from the main menu **Advanced options -> Update Operating System**.
 
 ## HTTPS certificate for CZERTAINLY interface
 
