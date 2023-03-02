@@ -17,10 +17,7 @@ To restart the virtual appliance, select **Advanced options -> Reboot system**. 
 
 ### Update system
 
-Updating of the virtual appliance system consists of updating and upgrading included packages:
-```bash
-sudo apt -y update && sudo apt -y upgrade
-```
+Updating of the virtual appliance system consists of updating and upgrading included packages, it can be easily done by selecting **Advanced options -> Update Operating System** from the menu.
 
 ## User management
 
