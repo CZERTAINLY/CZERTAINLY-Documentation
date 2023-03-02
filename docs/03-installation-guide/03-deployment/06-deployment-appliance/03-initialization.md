@@ -41,7 +41,7 @@ In CZERTAINLY TUI, from the main menu, select **Configure ingress TLS certificat
 
 ## Trusted certificate list
 
-Access to the web interface of CZERTAINLY is authenticated by a client certificate. For testing purposes, you can use preinstalled trusted CA list and provided [admin certificate](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/develop/dummy-certificates/private/admin.p12) with password ??-FIXME-??.
+Access to the web interface of CZERTAINLY is authenticated by a client certificate. For testing purposes, you can use preinstalled trusted CA list and provided [admin certificate](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/develop/dummy-certificates/private/admin.p12) with password `00000000`.
 
 In production, upload a list of your trusted certificates with scp to the appliance, and in CZERTAINLY TUI from the main menu, select **Configure custom trusted certificates** and provide the full path to the list.
 
