@@ -1,15 +1,15 @@
 # Group
 
-`Group` represents the logical grouping of certificates based on the common characteristics of certificates.
+`Group` represents the logical grouping of certificates and cryptographic keys based on the common characteristics.
 
 The `Group` may be based on:
 
-- Department that is responsible to manage certificates
-- Application that contains the same type of certificates
+- Department that is responsible to manage certificates or keys
+- Application that contains the same type of certificates and keys
 - Compliance requirements
 - Discovery sources
-- Certificate metadata
+- Certificate and keys metadata
 
 :::info
-Multiple `Groups` can be created for easy management and visibility of certificates.
+Multiple `Groups` can be created for easy management and visibility of certificates and keys.
 :::

@@ -10,11 +10,11 @@ The following is a list of current versions of the CZERTAINLY platform and conne
 
 ## Core
 
-| Service           | Version | Docker Image                               |
-|-------------------|---------|--------------------------------------------|
-| Core              | `2.5.2` | `3keycompany/czertainly-core`              |
-| Auth              | `1.0.0` | `3keycompany/czertainly-auth`              |
-| Auth OPA policies | `1.0.0` | `3keycompany/czertainly-auth-opa-policies` |
+| Service           | Version | Docker Image                                         |
+|-------------------|---------|------------------------------------------------------|
+| Core              | `2.6.0` | `docker.io/3keycompany/czertainly-core`              |
+| Auth              | `1.0.0` | `docker.io/3keycompany/czertainly-auth`              |
+| Auth OPA policies | `1.0.0` | `docker.io/3keycompany/czertainly-auth-opa-policies` |
 
 ## Front Ends
 
@@ -22,22 +22,23 @@ The following is a list of current versions of the CZERTAINLY platform and conne
 The Operator Web was merged with the Administrator Web in the version `2.2.0`.
 :::
 
-| Front End     | Version | Docker Image                                    |
-|---------------|---------|-------------------------------------------------|
-| Administrator | `2.4.0` | `3keycompany/czertainly-frontend-administrator` |
+| Front End     | Version | Docker Image                                              |
+|---------------|---------|-----------------------------------------------------------|
+| Administrator | `2.5.0` | `docker.io/3keycompany/czertainly-frontend-administrator` |
 
 ## Connectors
 
 | Connector                      | Version | Docker Image                                                               |
 |--------------------------------|---------|----------------------------------------------------------------------------|
-| Common Credential Provider     | `1.1.0` | `3keycompany/czertainly-common-credential-provider`                        |
-| EJBCA NG Connector             | `1.2.0` | `3keycompany/czertainly-ejbca-ng-connector`                                |
-| Network Discovery Provider     | `1.1.0` | `harbor.3key.company/czertainly/czertainly-ip-discovery-provider`          |
-| Cryptosense Discovery Provider | `1.1.0` | `harbor.3key.company/czertainly/czertainly-cryptosense-discovery-provider` |
-| MS ADCS Connector              | `1.2.0` | `harbor.3key.company/czertainly/czertainly-ms-adcs-connector`              |
-| EJBCA Legacy Connector         | `1.1.0` | `harbor.3key.company/czertainly/czertainly-ejbca-legacy-ca-connector`      |
-| Keystore Entity Provider       | `1.1.0` | `harbor.3key.company/czertainly/czertainly-keystore-entity-provider`       |
-| X509 Compliance Provider       | `1.0.0` | `harbor.3key.company/czertainly/czertainly-x509-compliance-provider`       |
+| Common Credential Provider     | `1.2.0` | `docker.io/3keycompany/czertainly-common-credential-provider`              |
+| EJBCA NG Connector             | `1.3.0` | `docker.io/3keycompany/czertainly-ejbca-ng-connector`                      |
+| Network Discovery Provider     | `1.2.0` | `docker.io/3keycompany/czertainly-ip-discovery-provider`                   |
+| Cryptosense Discovery Provider | `1.2.0` | `harbor.3key.company/czertainly/czertainly-cryptosense-discovery-provider` |
+| MS ADCS Connector              | `1.3.0` | `harbor.3key.company/czertainly/czertainly-ms-adcs-connector`              |
+| EJBCA Legacy Connector         | `1.2.0` | `harbor.3key.company/czertainly/czertainly-ejbca-legacy-ca-connector`      |
+| Keystore Entity Provider       | `1.2.0` | `docker.io/3keycompany/czertainly-keystore-entity-provider`                |
+| X.509 Compliance Provider      | `1.1.0` | `docker.io/3keycompany/czertainly-x509-compliance-provider`                |
+| Software Cryptography Provider | `1.0.0` | `docker.io/3keycompany/czertainly-software-cryptography-provider`          |
 
 ## Private repository
 

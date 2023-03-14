@@ -16,7 +16,7 @@ Entity Provider `Connector` provides access to the locations on the remote devic
 
 ## Provider objects
 
-[`Entity`](../../02-concept-design/04-core-components/09-entity.md) and [`Location`](../../02-concept-design/04-core-components/10-location.md) objects are managed in the platform through the Entity Provider implementation.
+[`Entity`](../02-concept-design/04-core-components/09-entity.md) and [`Location`](../02-concept-design/04-core-components/10-location.md) objects are managed in the platform through the Entity Provider implementation.
 `Entity` represents end user of the `Certificate` and it can have access to multiple `Locations`.
 
 The following diagram shows the relation (sample) between `Entity Provier`, `Entity`, `Location`, and `Certificate`:
@@ -77,12 +77,12 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/createEntityInstance]]: Add Entity instance
+        Client -> Core [[core-Entity/#tag/Entity-Management/operation/createEntityInstance]]: Add Entity instance
         note over Client,Core: Update Existing Entity with Attributes from the connector
         Core->Core: Check existence of Connector and Entity
-        Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
+        Core -> Connector [[core-Entity/#tag/Entity-Management/operation/validateLocationAttributes]]: Validate Attributes
         Connector --> Core: Result of attribute validation
-        Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/createEntityInstance]]: Add Entity instance
+        Core -> Connector [[core-Entity/#tag/Entity-Management/operation/createEntityInstance]]: Add Entity instance
         Connector --> Connector: Check Connection to the Entity
         Connector --> Connector: Resister Entity
         Connector --> Core: Entity Details
@@ -97,8 +97,8 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/getEntityInstance]]: Get Entity instance details
-        Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/getEntityInstance]]: Get Entity instance details
+        Client -> Core [[core-Entity/#tag/Entity-Management/operation/getEntityInstance]]: Get Entity instance details
+        Core -> Connector [[core-Entity/#tag/Entity-Management/operation/getEntityInstance]]: Get Entity instance details
         Connector --> Core: Entity details
         Core -> Client: Return Entity details
     @enduml
@@ -110,11 +110,11 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/editEntityInstance]]: Update Entity instance
+        Client -> Core [[core-Entity/#tag/Entity-Management/operation/editEntityInstance]]: Update Entity instance
         note over Client,Core: Update Existing Entity with Attributes from the connector
-        Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
+        Core -> Connector [[core-Entity/#tag/Entity-Management/operation/validateLocationAttributes]]: Validate Attributes
         Connector --> Core: Result of attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Entity-Management-API/operation/updateEntityInstance]]: Update Entity instance
+        Core -> Connector [[connector-entity-provider/#tag/Entity-Management/operation/updateEntityInstance]]: Update Entity instance
         Connector -> Connector: Check Connection to the Entity
         Connector -> Connector: Update Entity details and attributes
         Connector --> Core: Entity Details
@@ -130,9 +130,9 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-Entity/#tag/Entity-Management-API/operation/deleteEntityInstance]]: Remove Entity instance
+        Client -> Core [[core-Entity/#tag/Entity-Management/operation/deleteEntityInstance]]: Remove Entity instance
         Core -> Core: Check for dependent objects
-        Core -> Connector [[core-Entity/#tag/Entity-Management-API/operation/removeEntityInstance]]: Remove Entity instance
+        Core -> Connector [[core-Entity/#tag/Entity-Management/operation/removeEntityInstance]]: Remove Entity instance
         Connector --> Core: Entity Instance removed
         Connector -> Connector: Remove Entity Instance reference
         Core --> Client: Entity Instance removed
@@ -151,13 +151,13 @@ The following processes are associated with the Entity Provider and management o
     skinparam topurl https://docs.czertainly.com/api/
         Client -> Core: List Entities
         Core --> Client: List Entities
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/addLocation]]: Add Location
+        Client -> Core [[core-location/#tag/Location-Management/operation/addLocation]]: Add Location
         Core->Core: Check existence of Connector
         Core -> Core: Check existence of Entity
         Core -> Core: Check existence of Location
-        Core -> Connector [[connector-entity-provider/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
+        Core -> Connector [[connector-entity-provider/#tag/Entity-Management/operation/validateLocationAttributes]]: Validate Attributes
         Connector --> Core: Result of attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/getLocationDetail]]: Get Location Details
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/getLocationDetail]]: Get Location Details
         Connector --> Connector: Get Location details and Certificates
         Connector --> Core: Location details and Certificates
         Core -> Core: Create and store Location
@@ -172,7 +172,7 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/getLocation]]: Get Location Details
+        Client -> Core [[core-location/#tag/Location-Management/operation/getLocation]]: Get Location Details
         Core -> Core: Process location details
         Core --> Client: Location details
     @enduml
@@ -184,8 +184,8 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/editLocation]]: Edit Location
-        Core -> Connector [[connector-entity-provider/#tag/Entity-Management-API/operation/validateLocationAttributes]]: Validate Attributes
+        Client -> Core [[core-location/#tag/Location-Management/operation/editLocation]]: Edit Location
+        Core -> Connector [[connector-entity-provider/#tag/Entity-Management/operation/validateLocationAttributes]]: Validate Attributes
         Connector --> Core: Result of attribute validation
         Core -> Core: Update Location details
         Core --> Client: Location details
@@ -198,7 +198,7 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/deleteLocation]]: Remove Location
+        Client -> Core [[core-location/#tag/Location-Management/operation/deleteLocation]]: Remove Location
         Core -> Core: Check for dependent objects
         Core -> Core: Remove Location
         Core --> Client: Location details
@@ -212,8 +212,8 @@ The following processes are associated with the Entity Provider and management o
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
         alt enable/disable
-            Client -> Core [[core-location/#tag/Location-Management-API/operation/enableLocation]]: Enable Location
-            Client -> Core [[core-location/#tag/Location-Management-API/operation/disableLocation]]: Disable Location
+            Client -> Core [[core-location/#tag/Location-Management/operation/enableLocation]]: Enable Location
+            Client -> Core [[core-location/#tag/Location-Management/operation/disableLocation]]: Disable Location
             end
         Core --> Client: Location State Changed
     @enduml
@@ -225,19 +225,19 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/issueCertificate]]: Issue Certificate to Location
+        Client -> Core [[core-location/#tag/Location-Management/operation/issueCertificate]]: Issue Certificate to Location
         Core -> Core: Perform Pre Checks for Certificate Issuance
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validateGenerateCsrAttributes]]: Validate CSR Attributes
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/validateGenerateCsrAttributes]]: Validate CSR Attributes
         Connector --> Core: Result of CSR Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/generateCsrLocation]]: Generate CSR
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/generateCsrLocation]]: Generate CSR
         Connector -> Connector: Generate CSR with new Key Pair
         Connector --> Core: CSR Data
-        Core -> Authority [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/issueCertificate]]: Issue Certificate
+        Core -> Authority [[connector-authority-provider-v2/#tag/Certificate-Management/operation/issueCertificate]]: Issue Certificate
         Authority --> Core: Base64 Certificate
         Core -> Core: Store Certificate
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validatePushCertificateAttributes]]: Validate Push Certificate Attributes
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/validatePushCertificateAttributes]]: Validate Push Certificate Attributes
         Connector --> Core: Result of Push Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/pushCertificateToLocation]]: Push Certificate
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/pushCertificateToLocation]]: Push Certificate
         Connector --> Core: Certificate Pushed
         Core --> Client: Certificate Issued
     @enduml
@@ -250,19 +250,19 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/renewCertificateInLocation]]: Renew Certificate in Location
+        Client -> Core [[core-location/#tag/Location-Management/operation/renewCertificateInLocation]]: Renew Certificate in Location
         Core -> Core: Perform Pre Checks for Certificate Renewal
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validateGenerateCsrAttributes]]: Validate CSR Attributes
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/validateGenerateCsrAttributes]]: Validate CSR Attributes
         Connector --> Core: Result of CSR Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/generateCsrLocation]]: Generate CSR
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/generateCsrLocation]]: Generate CSR
         Connector -> Connector: Generate CSR with existing Key Pair
         Connector --> Core: CSR Data
-        Core -> Authority [[connector-authority-provider-v2/#tag/Certificate-Management-API/operation/renewCertificate]]: Renew Certificate
+        Core -> Authority [[connector-authority-provider-v2/#tag/Certificate-Management/operation/renewCertificate]]: Renew Certificate
         Authority --> Core: Base64 Certificate
         Core -> Core: Store Certificate
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validatePushCertificateAttributes]]: Validate Push Certificate Attributes
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/validatePushCertificateAttributes]]: Validate Push Certificate Attributes
         Connector --> Core: Result of Push Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/pushCertificateToLocation]]: Push Certificate
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/pushCertificateToLocation]]: Push Certificate
         Connector --> Core: Certificate Pushed
         Core --> Client: Certificate Renewed
     @enduml
@@ -275,10 +275,10 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/pushCertificate]]: Push Certificate to Location
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/validatePushCertificateAttributes]]: Validate Push Certificate Attributes
+        Client -> Core [[core-location/#tag/Location-Management/operation/pushCertificate]]: Push Certificate to Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/validatePushCertificateAttributes]]: Validate Push Certificate Attributes
         Connector --> Core: Result of Push Attribute validation
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/pushCertificateToLocation]]: Push Certificate
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/pushCertificateToLocation]]: Push Certificate
         Connector --> Core: Certificate Pushed
         Core --> Client: Certificate Pushed to Location
     @enduml
@@ -291,8 +291,8 @@ The following processes are associated with the Entity Provider and management o
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-location/#tag/Location-Management-API/operation/removeCertificate]]: Remove Certificate from Location
-        Core -> Connector [[connector-entity-provider/#tag/Location-Operations-API/operation/removeCertificateFromLocation]]: Remove Certificate
+        Client -> Core [[core-location/#tag/Location-Management/operation/removeCertificate]]: Remove Certificate from Location
+        Core -> Connector [[connector-entity-provider/#tag/Location-Operations/operation/removeCertificateFromLocation]]: Remove Certificate
         Connector --> Core: Result of Certificate deletion
         Core --> Client: Certificate deleted
     @enduml
@@ -301,7 +301,7 @@ The following processes are associated with the Entity Provider and management o
 ## Specification and example
 
 The Entity Provider implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
-- [Entity Management](/api/connector-entity-provider/#tag/Entity-Management-API)
-- [Location Operations](/api/connector-entity-provider/#tag/Location-Operations-API)
+- [Entity Management](/api/connector-entity-provider/#tag/Entity-Management)
+- [Location Operations](/api/connector-entity-provider/#tag/Location-Operations)
 
 The OpenAPI specification of the Entity Provider can be found here: [Connector API - Entity Provider](/api/connector-entity-provider/).

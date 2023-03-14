@@ -14,7 +14,7 @@ Compliance checking can be executed on `RA Profile` level (for all `Certificates
 
 ## Provider objects
 
-[`Compliance Profiles`](../../concept-design/core-components/compliance-profile) objects are managed in the platform through the Compliance Provider implementation.
+[`Compliance Profiles`](../concept-design/core-components/compliance-profile) objects are managed in the platform through the Compliance Provider implementation.
 Each `Compliance Profile` contains a list of available compliance rules and groups that can be applied for a compliance checking.
 Many different `Compliance Profiles` with differenty compliance requirements can be managed and applied on certificates.
 
@@ -28,12 +28,12 @@ The following processes are associated with the Compliance Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-connector/#tag/Connector-Management-API/operation/createConnector]]: Create a new Connector
-        Core -> Connector [[connector-compliance-provider/#tag/Info-API/operation/listSupportedFunctions]]: List supported functions of the connector
+        Client -> Core [[core-connector/#tag/Connector-Management/operation/createConnector]]: Create a new Connector
+        Core -> Connector [[connector-compliance-provider/#tag/Info/operation/listSupportedFunctions]]: List supported functions of the connector
         Connector --> Core: Function Group and Kind
-        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/getRules]]: Get list of rules
+        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules/operation/getRules]]: Get list of rules
         Connector --> Core: List Compliance Rules
-        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules-API/operation/getGroups]]: Get list of groups
+        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules/operation/getGroups]]: Get list of groups
         Connector --> Core: List Compliance Groups
         Core -> Core: Store Rules and Groups
         Core -> Client: Return Connector UUID
@@ -46,12 +46,12 @@ The following processes are associated with the Compliance Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-certificate/#tag/Certificate-Inventory-API/operation/checkCompliance]]: Initiate Certificate Compliance Check
+        Client -> Core [[core-certificate/#tag/Certificate-Inventory/operation/checkCompliance]]: Initiate Certificate Compliance Check
         Core --> Client: Return Async response
         Core -> Core: Get Compliance Profile of the Certificate
         Core -> Core: Frame requests to the Compliance Providers
         loop for each Compliance Provider
-            Core -> Connector [[connector-compliance-provider/#tag/Compliance-API/operation/checkCompliance]]: Check certificate compliance
+            Core -> Connector [[connector-compliance-provider/#tag/Compliance/operation/checkCompliance]]: Check certificate compliance
             Connector --> Connector: Evaluate each rule
             Connector --> Core: Return Compliance Check Result
         end
@@ -67,7 +67,7 @@ When a request is made to check the compliance of the `Certificate`, the `Core` 
 ## Specification and example
 
 The Compliance Provider implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
-- [Compliance Rules](/api/connector-compliance-provider/#tag/Compliance-Rules-API)
-- [Compliance](/api/connector-compliance-provider/#tag/Compliance-API)
+- [Compliance Rules](/api/connector-compliance-provider/#tag/Compliance-Rules)
+- [Compliance](/api/connector-compliance-provider/#tag/Compliance)
 
 The OpenAPI specification of the Compliance Provider can be found here: [Connector API - Compliance Provider](/api/connector-compliance-provider/).

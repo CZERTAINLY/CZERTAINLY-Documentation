@@ -4,11 +4,11 @@
 
 Each `Connector` has to implement the `Attributes` interface. This interface provides information about supported `Attributes` of the `Connector`. `Attributes` are specific to implementation and gives information about the data that can be exchanged and properly parsed by the `Connector`.
 
-Fo more information, refer to [Connector Architecture](../../../concept-design/architecture/connector).
+Fo more information, refer to [Connector Architecture](../../concept-design/architecture/connector).
 
 ## How it works
 
-The `Attributes` interface provides information about all supported mandatory or optional `Attributes` for the `Connector`. `Attributes` are necessary to manage `Connector` specific objects. For more information about how `Attributes` can be used and implemented, including details about `Attribute` types, refer to [Contribution guide - Attributes and Callbacks](../../../contributors/attributes).
+The `Attributes` interface provides information about all supported mandatory or optional `Attributes` for the `Connector`. `Attributes` are necessary to manage `Connector` specific objects. For more information about how `Attributes` can be used and implemented, including details about `Attribute` types, refer to [Contribution guide - Attributes and Callbacks](../../contributors/attributes/overview).
 
 Each `Connector` implements interface for listing available `Attributes` and their validation.
 
