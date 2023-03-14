@@ -14,7 +14,7 @@ The history of `Discovery` is maintained in the `Core` for further reference.
 
 ## Provider objects
 
-[`Discovery`](../../concept-design/modules/certificate-discovery) objects are managed in the platform through the Discovery Provider implementation.
+[`Discovery`](../concept-design/modules/certificate-discovery) objects are managed in the platform through the Discovery Provider implementation.
 Each `Discovery` provides an overview of the configuration and the discovery process, including discovered certificates.
 
 ## Processes
@@ -27,14 +27,14 @@ The following processes are associated with the Discovery Provider and managemen
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/createDiscovery]]: Create Discovery
+        Client -> Core [[core-discovery/#tag/Discovery-Management/operation/createDiscovery]]: Create Discovery
         note over Client: Create Discovery with specific Attributes from Connector
         Core->Core: Check existence of Connector
         Core -> Core: Check existence of Discovery  with same name
-        Core -> Connector [[connector-discovery-provider/#tag/Attributes-API/operation/validateAttributes]]: Validate Attributes
+        Core -> Connector [[connector-discovery-provider/#tag/Attributes/operation/validateAttributes]]: Validate Attributes
         Connector --> Core: Result of attribute validation
         |||
-        Core -> Connector [[connector-discovery-provider/#tag/Discovery-API/operation/discoverCertificate]]: Initiate certificate Discovery
+        Core -> Connector [[connector-discovery-provider/#tag/Discovery/operation/discoverCertificate]]: Initiate certificate Discovery
         Connector --> Core: Return discovery triggered async response
         Core --> Client: Return discovery UUID
         Connector -> Devices : Discover Certificates
@@ -42,7 +42,7 @@ The following processes are associated with the Discovery Provider and managemen
         Connector -> Connector: Store discovered certificates
         note over Core, Connector: Certificates retrieval phase
         loop till all certificates are retrieved
-            Core --> Connector [[connector-discovery-provider/#tag/Discovery-API/operation/getDiscovery]]: List of Certificates request
+            Core --> Connector [[connector-discovery-provider/#tag/Discovery/operation/getDiscovery]]: List of Certificates request
             Connector --> Core: Certificates with pagination details
         end
         Core -> Core: Store Certificates
@@ -56,7 +56,7 @@ The following processes are associated with the Discovery Provider and managemen
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/getDiscovery]]: Discovery Details
+        Client -> Core [[core-discovery/#tag/Discovery-Management/operation/getDiscovery]]: Discovery Details
         Core -> Core: Formulate Discovery details
         Core -> Client: Return Discovery details
     @enduml
@@ -69,8 +69,8 @@ The following processes are associated with the Discovery Provider and managemen
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-discovery/#tag/Discovery-Management-API/operation/deleteDiscovery]]: Remove Discovery
-        Core -> Connector [[connector-discovery-provider/#tag/Discovery-API/operation/deleteDiscovery]]: Delete Discovery
+        Client -> Core [[core-discovery/#tag/Discovery-Management/operation/deleteDiscovery]]: Remove Discovery
+        Core -> Connector [[connector-discovery-provider/#tag/Discovery/operation/deleteDiscovery]]: Delete Discovery
         Connector --> Core: Discovery removed
         Core -> Core : Remove Discovery
         Core --> Client: Discovery reference removed
@@ -80,6 +80,6 @@ The following processes are associated with the Discovery Provider and managemen
 ## Specification and example
 
 The Discovery Provider implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
-- [Discovery](/api/connector-discovery-provider/#tag/Discovery-API)
+- [Discovery](/api/connector-discovery-provider/#tag/Discovery)
 
 The OpenAPI specification of the Discovery Provider can be found here: [Connector API - Discovery Provider](/api/connector-discovery-provider/).

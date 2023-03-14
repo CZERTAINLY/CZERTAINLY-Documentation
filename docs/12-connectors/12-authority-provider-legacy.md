@@ -17,12 +17,12 @@ The interfaces of the Authority Provider Legacy contain:
 
 Authority Provider Legacy provides the ability to communicate with the EJBCA certification authorities.
 :::caution
-The Authority Provider Legacy interface is designed to work only with the EJBCA. If you are looking to support different technology, consider [Authority Provider v2](25-authority-provider-v2.md) interface.
+The Authority Provider Legacy interface is designed to work only with the EJBCA. If you are looking to support different technology, consider [Authority Provider v2](authority-provider-v2) interface.
 :::
 
 ## Provider objects
 
-[`Authority`](../../concept-design/core-components/authority) objects are managed in the platform through the Authority Provider Legacy implementation.
+[`Authority`](../concept-design/core-components/authority) objects are managed in the platform through the Authority Provider Legacy implementation.
 
 ## Processes
 
@@ -36,11 +36,11 @@ The following processes are associated with the Authority Provider Legacy and ma
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/createAuthorityInstance]]: Add Authority Instance
+        Client -> Core [[core-authority/#tag/Authority-Management/operation/createAuthorityInstance]]: Add Authority Instance
         Core->Core: Check existence of Connector and Authority
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/createAuthorityInstance]]: Create Authority instance
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management/operation/createAuthorityInstance]]: Create Authority instance
         Connector -> Connector: Validation of connection to CA
         note right of Connector: Connection to the CA with the attributes is validated
         Connector --> Core: Return Authority Instance response
@@ -55,8 +55,8 @@ The following processes are associated with the Authority Provider Legacy and ma
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/getAuthorityInstance]]: Details of an Authority instance
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/getAuthorityInstance]]: Get an Authority instance
+        Client -> Core [[core-authority/#tag/Authority-Management/operation/getAuthorityInstance]]: Details of an Authority instance
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management/operation/getAuthorityInstance]]: Get an Authority instance
         note right of Core: Details of the Authority instance is processed and combined with Authority Instance Reference from core
         Connector --> Core: Return Authority details
         Core -> Client: Return Authority details
@@ -69,10 +69,10 @@ The following processes are associated with the Authority Provider Legacy and ma
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/editAuthorityInstance]]: Update Authority instance
+        Client -> Core [[core-authority/#tag/Authority-Management/operation/editAuthorityInstance]]: Update Authority instance
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/updateAuthorityInstance]]: Update Authority instance
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management/operation/updateAuthorityInstance]]: Update Authority instance
         Connector -> Connector: Validation of connection to CA and update
         note right of Connector: Connection to the CA with the attributes is validated
         Connector --> Core: Return Authority Instance response
@@ -89,9 +89,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management-API/operation/deleteAuthorityInstance]]: Remove Authority instance
+        Client -> Core [[core-authority/#tag/Authority-Management/operation/deleteAuthorityInstance]]: Remove Authority instance
         Core -> Core : Check dependencies
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management-API/operation/removeAuthorityInstance]]: Remove Authority instance
+        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management/operation/removeAuthorityInstance]]: Remove Authority instance
         Connector --> Core: Return Authority Instance deletion response
         Core -> Core : Delete Authority Instance Reference
         Core --> Client: Return deletion status
@@ -106,9 +106,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations-API/operation/issueCertificate_1]]: Issue Certificate
+        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations/operation/issueCertificate_1]]: Issue Certificate
         note over Client,Core: Issue Certificate with required Attributes and RA Profile data
-        Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management-API/operation/issueCertificate]]: Issue Certificate
+        Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management/operation/issueCertificate]]: Issue Certificate
         Connector -> CA: Issue Certificate
         CA --> Connector: Return Certificate
         Connector --> Core: Return Certificate response
@@ -128,8 +128,8 @@ Renewal of the certificate is not supported by the Authority Provider Legacy.
     @startuml
     autonumber
     skinparam topurl https://docs.czertainly.com/api/
-        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations-API/operation/revokeCertificate_1]]: Revoke Certificate
-        Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management-API/operation/revokeCertificate]]: Revoke Certificate
+        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations/operation/revokeCertificate_1]]: Revoke Certificate
+        Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management/operation/revokeCertificate]]: Revoke Certificate
         Connector -> CA: Revoke Certificate
         CA --> Connector: Return Certificate Revocation status
         Connector --> Core: Return Certificate revocation response
@@ -141,9 +141,9 @@ Renewal of the certificate is not supported by the Authority Provider Legacy.
 ## Specification and example
 
 The Authority Provider Legacy implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
-- [Authority Management](/api/connector-authority-provider-legacy/#tag/Authority-Management-API)
-- [Certificate Management](/api/connector-authority-provider-legacy/#tag/Certificate-Management-API)
-- [End Entity Profiles](/api/connector-authority-provider-legacy/#tag/End-Entity-Profiles-API)
-- [End Entity Management](/api/connector-authority-provider-legacy/#tag/End-Entity-Management-API)
+- [Authority Management](/api/connector-authority-provider-legacy/#tag/Authority-Management)
+- [Certificate Management](/api/connector-authority-provider-legacy/#tag/Certificate-Management)
+- [End Entity Profiles](/api/connector-authority-provider-legacy/#tag/End-Entity-Profiles)
+- [End Entity Management](/api/connector-authority-provider-legacy/#tag/End-Entity-Management)
 
 The OpenAPI specification of the Authority Provider Legacy can be found here: [Connector API - Authority Provider Legacy](/api/connector-authority-provider-legacy/).

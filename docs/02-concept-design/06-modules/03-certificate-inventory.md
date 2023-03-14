@@ -7,13 +7,13 @@ It provides the functionality further described below.
 
 The platform offers the following list of operations from the Certificate Inventory:
 
-| Operation | Description                                                                                                                                                                          |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Issue new `Certificate`    | Issue new `Certificate` from selected `RA Profile`. |
-| Upload `Certificate`    | Upload an existing `Certificate`.                                                                          |
-| Download `Certificate` | Download `Certificate` in the selected format.                                                                                                                       |
-| Delete `Certificate`   | Removes the `Certificate` from inventory.            |
+| Operation               | Description                                         |
+|-------------------------|-----------------------------------------------------|
+| Issue new `Certificate` | Issue new `Certificate` from selected `RA Profile`. |
+| Upload `Certificate`    | Upload an existing `Certificate`.                   |
+| Download `Certificate`  | Download `Certificate` in the selected format.      |
+| Delete `Certificate`    | Removes the `Certificate` from inventory.           |
 
 ## Certificate details
 
-See [`Certificate`](../core-components/certificate) for more information
+See [`Certificate`](../core-components/certificate) for more information.

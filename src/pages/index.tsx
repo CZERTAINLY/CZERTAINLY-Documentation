@@ -13,7 +13,7 @@ function HomepageHeader() {
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <img
-          src={useBaseUrl("img/czertainly_color_H.svg")}
+          src={useBaseUrl("img/czertainly_white_H.svg")}
           className={styles.introImage}
         />
         <br />
@@ -28,14 +28,6 @@ function HomepageHeader() {
           >
             Get Started️
           </Link>
-        </div>
-        <br />
-        <br />
-        <div>
-          <img
-            src={useBaseUrl("img/undraw_doctors.svg")}
-            className={styles.introImage}
-          />
         </div>
       </div>
     </header>
