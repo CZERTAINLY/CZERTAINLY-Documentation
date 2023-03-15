@@ -19,11 +19,21 @@ Virtual appliance does not contain CZERTAINLY platform containers by default. Co
 Because of different availability and public/private access to containers, the virtual appliance by default does not contain pre-downloaded containers and images. All required and available containers and images are downloaded once the virtual appliance is configured with the repository and access credentials.
 :::
 
+## Virtual appliance requirements
+
+|      | optimum | minimum |
+|------|---------|---------|
+| CPU  | 8 cores | 4 cores |
+| RAM  | 16 GB   | 8 GB    |
+| disk | 50 GB   | 20 GB   |
+
+By 'minimum' requirements we mean resources needed for K8S and CZERTAINLY installation and for basic evaluation of it's features. For production use, please provide resources mentioned in 'optimum' column.
+
 ## Download and import image
 
 To get the virtual appliance running in your environment for further  installation  and configuration, you must:
 1. Download virtual appliance [image](https://threekeycz-my.sharepoint.com/personal/jan_tomasek_3key_company/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjan%5Ftomasek%5F3key%5Fcompany%2FDocuments%2Fczertainly%2Dpublic&FolderCTID=0x0120009B61621E1B162B47A17BA11A46F72526&view=0).
-2. Optionaly verify SHA256 hash of the image.
+2. Optionally verify SHA256 hash of the image.
 2. Import virtual appliance image to your virtual infrastructure.
 
 For testing purposes, you can use:
