@@ -1,4 +1,4 @@
-# Operations
+# Advanced Operations
 
 The following document describes operations for the management of virtual appliance:
 - Virtual appliance management
@@ -9,15 +9,21 @@ The following document describes operations for the management of virtual applia
 
 ### Shut down
 
-To shut down the virtual appliance, select **Advanced options -> Shutdown system** or use the ACPI shutdown call of your virtualization platform.
+To shut down the virtual appliance use ACPI shutdown call of your
+virtualization platform or select **Advanced options -> Shutdown
+system**.
 
 ### Restart
 
-To restart the virtual appliance, select **Advanced options -> Reboot system**. Do not use cold reboot function on your virtualization platform, as it could lead to filesystem corruption.
+To restart the virtual appliance, select **Advanced options -> Reboot
+system**. Do not use cold reboot function on your virtualization
+platform, as it could lead to file-system corruption.
 
 ### Update system
 
-Updating of the virtual appliance system consists of updating and upgrading included packages, it can be easily done by selecting **Advanced options -> Update Operating System** from the menu.
+Updating of the virtual appliance system consists of updating and
+upgrading included packages, it can be easily done by selecting
+**Advanced options -> Update Operating System** from the menu.
 
 ## User management
 
@@ -80,18 +86,32 @@ sudo deluser john sudo
 
 ## Advanced tasks
 
-### Reset RKE2 node
+### Remove CZERTAINLY
 
-FIXME: czertainly-manager.sh executes `rke2 server --cluster-reset` do we needed this.
+Removing CZERTAINLY from appliance mainly means deleting `czertainly`
+namespace from kubernetes. Purpose of this tasks is preparation step
+for CZERTAINLY re-installation.
 
-Whenever the IP address or hostname is changed for the virtual appliance, the RKE2 node must be reset.
-To reset RKE2 node, execute the following command:
-```bash
-sudo -s czertainly-manager.sh resetnode
-```
+This task preserves any configuration you have done and also all
+CZERTAINLY data which are stored in Postgres database.
 
-When asked, choose to reset RKE2 node, enable and start RKE2 service.
+To remove CZERTAINLY select **Advanced options -> Remove CZERTAINLY
+**, after confirmation please wait until task is done.
+
+### Remove RKE2 & CZERTAINLY
+
+Removing RKE2 (kubernetes) and CZERTAINLY might be useful when you
+change hostname or IP address of virtual appliance. This is preparation
+step for CZERTAINLY re-installation.
+
+This task preserves any configuration you have done and also all
+CZERTAINLY data which are stored in Postgres database.
+
+To remove CZERTAINLY select **Advanced options -> Remove RKE2 & CZERTAINLY
+**, after confirmation please wait until task is done.
 
 ### Custom helm chart values
 
-If you need provide custom helm chart values, put them into file `/home/czertacinly/czertainly-values.custom.yaml` and re-run instalation.
+If you need provide custom helm chart values, put them into file
+`/home/czertacinly/czertainly-values.custom.yaml` and re-run
+installation.
