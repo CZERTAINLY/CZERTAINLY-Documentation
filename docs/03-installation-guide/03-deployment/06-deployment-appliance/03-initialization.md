@@ -7,7 +7,7 @@ it using default credentials:
 * **password**: newgenerationtrustcare
 
 In case you want to use SSH, IP address is displayed on virtual
-console above login prompt. After sucessfull login menu based text
+console above login prompt. After successfully login menu based text
 interface is shown:
 
 ![CZERTAINLY TUI](../../../assets/CZERTAINLY-TUI.png)
@@ -21,13 +21,13 @@ appliance. Bold items are mandatory even for testing purposes.
 1. [Trusted certificate list](#trusted-certificate-list)
 1. [Configure database](#database)
 1. [Configure credentials to CZERTAINLY docker repository](#czertainly-docker-repository)
-1. [**Configure CZERTAINLY**](#configure-czeratinly)
+1. [**Configure CZERTAINLY**](#configure-czertainly)
 4. [**Install CZERTAINLY**](#install-czertainly)
 
 ## Change hostname and networking parameters
 
 By default, the virtual appliance is configured to use dynamically
-assigned IP addresse from a DHCP server. If you need to change network
+assigned IP address from a DHCP server. If you need to change network
 configuration, select from menu **Advanced options -> Enter system
 shell** and follow official [Debian
 documentation](https://wiki.debian.org/NetworkConfiguration#Configuring_the_interface_manually).
@@ -43,9 +43,9 @@ be rebooted**.
 
 If your network policy requires using HTTP proxy, configure it's
 parameters in the main menu, under option **Configure HTTP
-proxy**. You will be promted for `HTTP_PROXY`, `HTTPS_PROXY`, `FTP_PROXY`,
+proxy**. You will be prompted for `HTTP_PROXY`, `HTTPS_PROXY`, `FTP_PROXY`,
 `FTPS_PROXY` and `NOPROXY` settings. After confirmation changes will be
-imediately propagated to the system.
+immediately propagated to the system.
 
 ## Update system and packages
 
@@ -81,7 +81,7 @@ provide the full path to the list.
 
 ## Database
 
-CZERTAINLY stores all it's data in postgres database. The server will be installed for you, but you might want to set your own password for the database. To do so choose **Configure database** from the main menu.
+CZERTAINLY stores all it's data in posture's database. The server will be installed for you, but you might want to set your own password for the database. To do so choose **Configure database** from the main menu.
 
 ## Credentials for CZERTAINLY docker repository
 
@@ -103,18 +103,18 @@ install.
 
 List of available versions is
 [available](https://harbor.3key.company/harbor/projects/8/repositories/czertainly/artifacts-tab). Latest
-stable version is typicaly the best choice and it is preselected in
+stable version is typically the best choice and it is pre-selected in
 appliance.
 
 #### Components
 
 List of CZERTAINLY components to be installed. By default, all parts
 are marked for installation. If you have not provided credentials for
-the docker private repository, the instalation of:
+the docker private repository, the installation of:
   * Cryptosense Discovery Provider,
   * MS ADCS Connector
 
-**will fail**. For sucessfull installation uncheck them (remove 'X' character in small inputbox next to component name) or [configure credentials to CZERTAINLY docker repository](#czertainly-docker-repository).
+**will fail**. For successful installation uncheck them (remove 'X' character in small input box next to component name) or [configure credentials to CZERTAINLY docker repository](#czertainly-docker-repository).
 
 ## Install CZERTAINLY
 
@@ -124,14 +124,14 @@ Complete installation takes about 10 minutes on a decent system with fast intern
 
 After successful installation, administrator web interface is available on address:
 ```
-https://[hostName]/administrator/
+https://[hostname]/administrator/
 ```
-where `hostName` is the value configured in the previous step. If you didn't provided your own trusted CA list, you are going to need testing admin certificate. Please see section [trusted CA list](#trusted-certificate-list).
+where `hostname` is the value configured in the previous step. If you didn't provided your own trusted CA list, you are going to need testing admin certificate. Please see section [trusted CA list](#trusted-certificate-list).
 
-## Postinstall 
+## Post-install
 
 The default credentials for the virtual appliance should be [changed](https://docs.czertainly.com/docs/installation-guide/deployment/deployment-appliance/operations/#change-user-password) before production use.
 
-Revide file `/home/czertainly/.ssh/authorized_keys` and delete any key you don't know.
+Revise file `/home/czertainly/.ssh/authorized_keys` and delete any key you don't know.
 
 Postgres database is listening on the public interface. This is needed for Kubernetes PODS to reach the database. You might want to protect it with a firewall.
