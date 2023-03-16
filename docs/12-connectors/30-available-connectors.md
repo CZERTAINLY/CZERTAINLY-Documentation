@@ -1,6 +1,6 @@
 # Available Connectors
 
-`Connectors` can be developed by anyone. There may be number of `Connectors` driven by the community and also `Connecots` developed for some specific purpose and use case.
+`Connectors` can be developed by anyone. There may be number of `Connectors` driven by the community and also `Connectors` developed for some specific purpose and use case.
 
 Discover more information on [CZERTAINLY GitHub](https://github.com/3KeyCompany/CZERTAINLY) pages.
 
