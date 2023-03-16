@@ -95,7 +95,26 @@ To enter obtained credentials, use option **Configure Docker repository access c
 
 ## Configure CZERTAINLY
 
-Option **Configure CZERTAINLY** of the main menu allows you to select which parts of CZERTAINLY you want to install. By default, all parts are marked for installation. If you have not provided credentials for the docker private repository, the instalation of some parts will fail.
+Option **Configure CZERTAINLY** of the main menu opens dialog where you
+can choose version of CZERTAINLY and it's components you want to
+install.
+
+#### Version
+
+List of available versions is
+[available](https://harbor.3key.company/harbor/projects/8/repositories/czertainly/artifacts-tab). Latest
+stable version is typicaly the best choice and it is preselected in
+appliance.
+
+#### Components
+
+List of CZERTAINLY components to be installed. By default, all parts
+are marked for installation. If you have not provided credentials for
+the docker private repository, the instalation of:
+  * Cryptosense Discovery Provider,
+  * MS ADCS Connector
+
+**will fail**. For sucessfull installation uncheck them (remove 'X' character in small inputbox next to component name) or [configure credentials to CZERTAINLY docker repository](#czertainly-docker-repository).
 
 ## Install CZERTAINLY
 
@@ -107,7 +126,7 @@ After successful installation, administrator web interface is available on addre
 ```
 https://[hostName]/administrator/
 ```
-where `hostName` is the value configured in the previous step.
+where `hostName` is the value configured in the previous step. If you didn't provided your own trusted CA list, you are going to need testing admin certificate. Please see section [trusted CA list](#trusted-certificate-list).
 
 ## Postinstall 
 

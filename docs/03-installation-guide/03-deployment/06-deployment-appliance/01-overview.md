@@ -27,7 +27,7 @@ Because of different availability and public/private access to containers, the v
 | RAM  | 16 GB   | 8 GB    |
 | disk | 50 GB   | 20 GB   |
 
-By 'minimum' requirements we mean resources needed for K8S and CZERTAINLY installation and for basic evaluation of it's features. For production use, please provide resources mentioned in 'optimum' column.
+By *minimum* requirements we mean resources which needed for CZERTAINLY and kubernetes installation and for basic evaluation of it's features. For production use, please provide resources mentioned in 'optimum' column.
 
 ## Download and import image
 
