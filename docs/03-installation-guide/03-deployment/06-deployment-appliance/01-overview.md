@@ -32,7 +32,7 @@ By *minimum* requirements we mean resources which needed for CZERTAINLY and kube
 ## Download and import image
 
 To get the virtual appliance running in your environment for further  installation  and configuration, you must:
-1. Download virtual appliance [image](https://threekeycz-my.sharepoint.com/personal/jan_tomasek_3key_company/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjan%5Ftomasek%5F3key%5Fcompany%2FDocuments%2Fczertainly%2Dpublic&FolderCTID=0x0120009B61621E1B162B47A17BA11A46F72526&view=0).
+1. Download virtual appliance [image](https://threekeycz-my.sharepoint.com/:f:/g/personal/jan_tomasek_3key_company/EvTNcHQYa4BInbGsK-YSGHkBIx9V6DfAxnMKqrvWdEB8NA?e=ujoUdt).
 2. Optionally verify SHA256 hash of the image.
 2. Import virtual appliance image to your virtual infrastructure.
 
