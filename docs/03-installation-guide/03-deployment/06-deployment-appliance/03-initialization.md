@@ -12,7 +12,7 @@ interface is shown:
 
 ![CZERTAINLY TUI](../../../assets/CZERTAINLY-TUI.png)
 
-The following steps need to be done to initialize the virtual
+The following steps needs to be done to initialize the virtual
 appliance. Bold items are mandatory even for testing purposes.
 
 1. [Change hostname and networking parameters](#change-hostname-and-networking-parameters)
@@ -27,44 +27,32 @@ appliance. Bold items are mandatory even for testing purposes.
 ## Change hostname and networking parameters
 
 By default, the virtual appliance is configured to use dynamically
-assigned IP address from a DHCP server. If you need to change network
-configuration, select from menu **Advanced options -> Enter system
-shell** and follow official [Debian
-documentation](https://wiki.debian.org/NetworkConfiguration#Configuring_the_interface_manually).
+assigned IP address from a DHCP server.
 
 Default hostname `czertainly` and domain `local` may be useful for
 development and testing purposes. You need add name
 `czertainly.local` and VM IP into your [hosts
 file](https://www.howtogeek.com/27350/beginner-geek-how-to-edit-your-hosts-file/). In
 production, you will need to set a better hostname. To do so, select
-option **Configure hostname** from the main menu. Enter a fully
-qualified name, and after confirmation, the virtual **appliance will
-be rebooted**.
+**Main menu -> [Configure hostname](TUI/main-menu#configure-hostname)**.
 
-If your network policy requires using HTTP proxy, configure it's
-parameters in the main menu, under option **Configure HTTP
-proxy**. You will be prompted for `HTTP_PROXY`, `HTTPS_PROXY`, `FTP_PROXY`,
-`FTPS_PROXY` and `NOPROXY` settings. After confirmation changes will be
-immediately propagated to the system.
+If your network policy requires using HTTP proxy, you can configure it
+by selecting **Main menu -> [Configure HTTP
+proxy](TUI/main-menu#configure-http-proxy)**.
 
 ## Update system and packages
 
 It is always good to have actual version of czertainly-appliance-tools
 and Debian software. To update packages, select from the main menu
-**Advanced options -> Update Operating System**.
+**Advanced options -> Update Operating System**. S-TODO LINK
 
 ## TLS certificate for CZERTAINLY interface
 
 CZERTAINLY is controlled via a web interface. For testing purposes, a
 self-signed certificate is automatically generated. If you aim to put
 CZERTAINLY into production, you definitely want to upload a
-certificate from your internal CA. For this purpose, use `scp` to copy
-the certificate file, and the private key file to the appliance. Put
-them into the home directory of czertainly user (`/home/czertainly`).
-
-In CZERTAINLY TUI, from the main menu, select **Configure ingress TLS
-certificates**. Remember to provide full path to files with
-certificate and key.
+certificate from your internal CA. To do so, select **Main menu ->
+[Configure ingress TLS certificates](TUI/main-menu#configure-ingress-tls-certificates)**.
 
 ## Trusted certificate list
 
@@ -74,14 +62,14 @@ certificate.
 For testing purposes, you can use preinstalled trusted CA list and
 provided [admin
 certificate](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/develop/dummy-certificates/private/admin.p12)
-with password `00000000`. In production, upload a list of your trusted
-certificates with `scp` to the appliance, and in CZERTAINLY TUI from the
-main menu, select **Configure custom trusted certificates** and
-provide the full path to the list.
+with password `00000000`. In production you will need to replace this list, select **Main menu -> [Configure custom trusted certificates](TUI/main-menu#configure-custom-trusted-certificates)**.
 
 ## Database
 
-CZERTAINLY stores all it's data in posture's database. The server will be installed for you, but you might want to set your own password for the database. To do so choose **Configure database** from the main menu.
+CZERTAINLY stores all it's data in Postgres database. The server will
+be installed for you, but you might want to set your own password for
+the database. To do so choose **[Configure
+database](TUI/main-menu#configure-database)** from the **Main menu**.
 
 ## Credentials for CZERTAINLY docker repository
 
@@ -91,34 +79,19 @@ Some parts of CZERTAINLY are licensed and can't be provided publicly. Those part
 Ask [support](/docs/feedback-support/) for credentials to access private repository.
 :::
 
-To enter obtained credentials, use option **Configure Docker repository access credentials** of the main menu.
+To enter obtained credentials, use option **Main Menu -> [Configure Docker repository access credentials](TUI/main-menu#configure-docker-repository-access-credentials)**.
 
 ## Configure CZERTAINLY
 
-Option **Configure CZERTAINLY** of the main menu opens dialog where you
+Option **[Configure CZERTAINLY](TUI/main-menu#configure-czertainly)** of the main menu opens dialog where you
 can choose version of CZERTAINLY and it's components you want to
 install.
 
-#### Version
-
-List of available versions is
-[available](https://harbor.3key.company/harbor/projects/8/repositories/czertainly/artifacts-tab). Latest
-stable version is typically the best choice and it is pre-selected in
-appliance.
-
-#### Components
-
-List of CZERTAINLY components to be installed. By default, all parts
-are marked for installation. If you have not provided credentials for
-the docker private repository, the installation of:
-  * Cryptosense Discovery Provider,
-  * MS ADCS Connector
-
-**will fail**. For successful installation uncheck them (remove 'X' character in small input box next to component name) or [configure credentials to CZERTAINLY docker repository](#czertainly-docker-repository).
-
 ## Install CZERTAINLY
 
-When you select **Install CZERTAINLY** from the main menu. The installation will begin after confirmation.
+When you select **[Install
+CZERTAINLY](TUI/main-menu#install-czertainly)** from the main
+menu. The installation will begin after confirmation.
 
 Complete installation takes about 10 minutes on a decent system with fast internet access.
 
@@ -128,10 +101,3 @@ https://[hostname]/administrator/
 ```
 where `hostname` is the value configured in the previous step. If you didn't provided your own trusted CA list, you are going to need testing admin certificate. Please see section [trusted CA list](#trusted-certificate-list).
 
-## Post-install
-
-The default credentials for the virtual appliance should be [changed](https://docs.czertainly.com/docs/installation-guide/deployment/deployment-appliance/operations/#change-user-password) before production use.
-
-Revise file `/home/czertainly/.ssh/authorized_keys` and delete any key you don't know.
-
-Postgres database is listening on the public interface. This is needed for Kubernetes PODS to reach the database. You might want to protect it with a firewall.
