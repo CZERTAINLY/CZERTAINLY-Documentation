@@ -6,21 +6,21 @@ it using default credentials:
 * **username**: czertainly
 * **password**: newgenerationtrustcare
 
-In case you want to use SSH, IP address is displayed on virtual
-console above login prompt. After successfully login menu based text
-interface is shown:
-
-![CZERTAINLY TUI](../../../assets/CZERTAINLY-TUI.png)
+When you are successfully logged in, you will see the Text-based User Interface ([**TUI**](./TUI/intro)) for management of the virtual appliance.
 
 The following steps needs to be done to initialize the virtual
-appliance. Bold items are mandatory even for testing purposes.
+appliance.
+
+:::caution Mandatory steps
+Bold items are mandatory even for testing purposes.
+:::
 
 1. [Change hostname and networking parameters](#change-hostname-and-networking-parameters)
 1. [**Update the system**](#update-system-and-packages)
 1. [Setup TLS certificate](#tls-certificate-for-czertainly-interface)
 1. [Trusted certificate list](#trusted-certificate-list)
 1. [Configure database](#database)
-1. [Configure credentials to CZERTAINLY docker repository](#czertainly-docker-repository)
+1. [Configure credentials to CZERTAINLY docker repository](#credentials-for-czertainly-docker-repository)
 1. [**Configure CZERTAINLY**](#configure-czertainly)
 4. [**Install CZERTAINLY**](#install-czertainly)
 

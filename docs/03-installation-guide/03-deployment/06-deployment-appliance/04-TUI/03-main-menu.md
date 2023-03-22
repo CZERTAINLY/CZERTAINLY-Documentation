@@ -1,5 +1,11 @@
 # Main menu
 
+| Short name  | Main menu item                                | Description                                                                                                                                                                                                                                                               |
+|-------------|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **h**ostname | [Configure hostname](#configure-hostname)     | Option serves for changing hostname of the appliance. If change is needed please provide fully qualified name - the name with domain, like *czertainly.example.com*.                                                                                                      |
+| **n**etwork | [Configure HTTP proxy](#configure-http-proxy) | If your network policy requires using HTTP proxy you can configure it under this option. You will be prompted for `HTTP_PROXY`, `HTTPS_PROXY`, `FTP_PROXY`, `FTPS_PROXY` and `NOPROXY` settings. After confirmation changes will be immediately propagated to the system. |
+
+
 ## Configure hostname
 
 Option serves for changing hostname of the appliance. If change is

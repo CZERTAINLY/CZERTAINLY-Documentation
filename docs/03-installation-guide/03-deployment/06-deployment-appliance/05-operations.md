@@ -1,9 +1,9 @@
-# Advanced Operations
+# Operations
 
-The following document describes operations for the management of virtual appliance:
-- Virtual appliance management
-- User management
-- Advanced tasks
+The following document describes advanced operations for the management of virtual appliance:
+- [Virtual appliance management](#virtual-appliance-management)
+- [User management](#user-management)
+- [Advanced tasks](#advanced-tasks)
 
 ## Virtual appliance management
 
@@ -115,11 +115,3 @@ To remove CZERTAINLY select **Advanced options -> Remove RKE2 & CZERTAINLY
 If you need provide custom helm chart values, put them into file
 `/home/czertacinly/czertainly-values.custom.yaml` and re-run
 installation.
-
-## Post-install
-
-The default credentials for the virtual appliance should be [changed](https://docs.czertainly.com/docs/installation-guide/deployment/deployment-appliance/operations/#change-user-password) before production use.
-
-Revise file `/home/czertainly/.ssh/authorized_keys` and delete any key you don't know.
-
-Postgres database is listening on the public interface. This is needed for Kubernetes PODS to reach the database. You might want to protect it with a firewall.

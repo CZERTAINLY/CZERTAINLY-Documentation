@@ -1,3 +1,7 @@
 {
-  "label": "Deployment using Virtual Appliance"
+  "label": "Deployment using Virtual Appliance",
+  "link": {
+    "type": "doc",
+    "id": "overview"
+  }
 }
