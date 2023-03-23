@@ -1,4 +1,4 @@
-# Introduction
+# Text-based user interface
 
 CZERTAINLY appliance is using Text-based User Interface (TUI) to ease
 initialization and operations of the appliance.

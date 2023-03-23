@@ -1,10 +1,19 @@
 # Main menu
 
-| Short name  | Main menu item                                | Description                                                                                                                                                                                                                                                               |
-|-------------|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **h**ostname | [Configure hostname](#configure-hostname)     | Option serves for changing hostname of the appliance. If change is needed please provide fully qualified name - the name with domain, like *czertainly.example.com*.                                                                                                      |
-| **n**etwork | [Configure HTTP proxy](#configure-http-proxy) | If your network policy requires using HTTP proxy you can configure it under this option. You will be prompted for `HTTP_PROXY`, `HTTPS_PROXY`, `FTP_PROXY`, `FTPS_PROXY` and `NOPROXY` settings. After confirmation changes will be immediately propagated to the system. |
+Main menu allows to select and execute basic tasks on CZERTAINLY
+appliance, it offers following options.
 
+| Short&nbsp;name  | Main&nbsp;menu&nbsp;item                                | Description                                                                                                                                                                                                                                                               |
+|-------------|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **h**ostname | [Configure hostname](#configure-hostname)     | Option serves for changing hostname of the appliance, please use FQDN.                                                                    |
+| **n**etwork | [Configure HTTP proxy](#configure-http-proxy) | If your network policy requires using HTTP proxy you can configure it under this option. |
+| **i**ngressTLS | [Configure ingress TLS certificates](#configure-ingress-tls-certificates) | Custom HTTPS certificates for CZERTAINLY web interface can be configured here. |
+| **t**rustedCA | [Configure custom trusted certificates](#configure-custom-trusted-certificates) | Use this option to change default list of trusted certificates of CZERTAINLY. |
+| **p**ostrgres | [Configure database](#configure-database) | You can change default configuration of postgres database with this option. |
+| **c**zertainly | [Configure CZERTAINLY](#configure-czertainly) | Use this option to select version and components of CZERTAINLY to install. |
+| **s**tatus | [Show CZERTAINLY status](#show-czertainly-status) | This option will show status of CZERTAINLY and Kubernetes subsystem. |
+| **a**dvanced | Advanced options | Opens another menu with [advanced options](advanced-menu) of CZERTAINLY appliance. |
+| **e**xit |  Exit CZERTAINLY manager | Closes TUI and disconnects from CZERTAINLY appliance. |
 
 ## Configure hostname
 
@@ -12,8 +21,8 @@ Option serves for changing hostname of the appliance. If change is
 needed please provide fully qualified name - the name with domain,
 like *czertainly.example.com*.
 
-After entering new hostname, files `/etc/hosts` and `/etc/hostname`
-are overwriten with new values and the **appliance is rebooted** to
+After entering the new hostname, files `/etc/hosts` and `/etc/hostname`
+are overwritten with new values and the **appliance is rebooted** to
 propagate the new hostname.
 
 ## Configure HTTP proxy
@@ -70,8 +79,8 @@ Values you provided in this dialog are stored in file:
 
 ## Configure database
 
-You can change default parameters for Postgress database here. The
-password is field you definetly should change.
+You can change default parameters for Postgres database here. The
+password is field you definitely should change.
 
 Values you provided in this dialog are stored in file:
 `/etc/czertainly-ansible/vars/database.yml`.
@@ -114,15 +123,24 @@ Values you provided in this dialog are stored in file:
 
 ## Install CZERTAINLY
 
-This option executes CZERTAINLY instalation. During the process, output from Ansible is being displayed. In case something fails, content of `/var/log/ansible.log` will be usefull for [support](/docs/feedback-support/).
+This option executes CZERTAINLY installation. During the process, output from Ansible is being displayed. In case something fails, content of `/var/log/ansible.log` will be useful for [support](/docs/feedback-support/).
 
 ## Show CZERTAINLY status
 
-This option printout simple status informations about CZERTAINLY and
-underlying kurnetes cluster. S-TODO, pridat příklad.
+This option printout simple status information about CZERTAINLY and
+underlying Kubernetes cluster, for example:
 
-## Advanced options
+```
+kube-system	11 PODs OK
+ingress-nginx	1 PODs OK
+cert-manager	3 PODs OK
+czertainly	13 PODs OK
 
-Opens another menu with [advanced options](advanced-menu) of CZERTAINLY appliance.
 
-## Exit CZERTAINLY manager
+Everything is OK, administrative interface is available at:
+
+https://czertainly.local/administrator/
+
+
+press enter to return into menu
+```

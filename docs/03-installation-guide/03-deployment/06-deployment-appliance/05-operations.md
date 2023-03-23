@@ -86,32 +86,23 @@ sudo deluser john sudo
 
 ## Advanced tasks
 
-### Remove CZERTAINLY
+### Custom Helm chart values
 
-Removing CZERTAINLY from appliance mainly means deleting `czertainly`
-namespace from kubernetes. Purpose of this tasks is preparation step
-for CZERTAINLY re-installation.
+The installation/upgrade process of CZERTAINLY is using Helm. Default
+installation values are stored in file
+`/root/install/czertainly-values.yaml` this file get upgraded during
+installation/upgrade process any time when official values
+distributed with Helm charts get updated.
 
-This task preserves any configuration you have done and also all
-CZERTAINLY data which are stored in Postgres database.
+Custom values set through TUI are stored in files in
+`/etc/czertainly-ansible/vars/` directory and during the
+installation/upgrade process they are compiled into file
+`/root/install/czertainly-values.local.yaml`. This file get
+overwritten every time installation/upgrade process is executed.
 
-To remove CZERTAINLY select **Advanced options -> Remove CZERTAINLY
-**, after confirmation please wait until task is done.
+Do not modify previously mentioned files. If you need to provide
+custom Helm chart values, put them into file
+`/home/czertacinly/czertainly-values.custom.yaml`, the file doesn't
+exist by default in CZERTAINLY appliance, you need to create if from
+the scratch.
 
-### Remove RKE2 & CZERTAINLY
-
-Removing RKE2 (kubernetes) and CZERTAINLY might be useful when you
-change hostname or IP address of virtual appliance. This is preparation
-step for CZERTAINLY re-installation.
-
-This task preserves any configuration you have done and also all
-CZERTAINLY data which are stored in Postgres database.
-
-To remove CZERTAINLY select **Advanced options -> Remove RKE2 & CZERTAINLY
-**, after confirmation please wait until task is done.
-
-### Custom helm chart values
-
-If you need provide custom helm chart values, put them into file
-`/home/czertacinly/czertainly-values.custom.yaml` and re-run
-installation.

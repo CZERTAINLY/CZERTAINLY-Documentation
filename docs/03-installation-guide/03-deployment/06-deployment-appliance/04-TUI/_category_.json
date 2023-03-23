@@ -1,7 +1,7 @@
 {
-  "label": "Text-based User Interface",
-  "link": {
-    "type": "doc",
-    "id": "intro"
+    "position": 3,
+    "link": {
+	"type": "doc",
+	"id": "intro",
   }
 }

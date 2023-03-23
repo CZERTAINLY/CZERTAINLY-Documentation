@@ -44,7 +44,7 @@ proxy](TUI/main-menu#configure-http-proxy)**.
 
 It is always good to have actual version of czertainly-appliance-tools
 and Debian software. To update packages, select from the main menu
-**Advanced options -> Update Operating System**. S-TODO LINK
+**Advanced options -> Update Operating System**.
 
 ## TLS certificate for CZERTAINLY interface
 

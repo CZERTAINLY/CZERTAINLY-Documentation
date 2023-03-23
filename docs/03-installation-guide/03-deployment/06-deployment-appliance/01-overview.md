@@ -1,4 +1,4 @@
-# Overview
+# Deployment using Virtual Appliance
 
 CZERTAINLY virtual appliance is pre-built image of virtual operating system packed in Open Virtual Appliance (OVA) format for running CZERTAINLY platform.
 It is intended for the environments where no Kubernetes cluster is available or the Kubernetes cluster cannot be used for various reasons.
