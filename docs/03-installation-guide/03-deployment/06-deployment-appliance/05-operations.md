@@ -1,42 +1,25 @@
 # Operations
 
-The following document describes operations for the management of virtual appliance:
-- Virtual appliance management
-- User management
-- CZERTAINLY Manager
+The following document describes advanced operations for the management of virtual appliance:
+- [Virtual appliance management](#virtual-appliance-management)
+- [User management](#user-management)
+- [Advanced tasks](#advanced-tasks)
 
 ## Virtual appliance management
 
 ### Shut down
 
-To shut down virtual appliance, execute the following command:
-```bash
-sudo poweroff
-```
+To shut down the virtual appliance use ACPI shutdown call of your virtualization platform or select **Advanced options -> [Shutdown system](./TUI/advanced-menu#shutdown-system)**.
 
 ### Restart
 
-To restart virtual appliance, execute the following command:
-```bash
-sudo reboot
-```
+To restart the virtual appliance, select **Advanced options -> Reboot system**. Do not use cold reboot function on your virtualization platform, as it could lead to file-system corruption.
 
 ### Update system
 
-Updating of the virtual appliance system consists of updating and upgrading included packages:
-```bash
-sudo apt update
-sudo apt upgrade
-```
+Updating of the virtual appliance system consists of updating and upgrading included packages, it can be easily done by selecting **Advanced options -> Update Operating System** from the menu.
 
 ## User management
-
-### Change user password
-
-To change password of another user `john`, execute the following command:
-```bash
-sudo passwd john
-```
 
 ### Create new user
 
@@ -74,6 +57,13 @@ To grant user admin privileges, execute the following command:
 sudo adduser john sudo
 ```
 
+### Change user password
+
+To change password of another user `john`, execute the following command:
+```bash
+sudo passwd john
+```
+
 ### Delete user
 
 To delete user, execute the following command:
@@ -88,36 +78,14 @@ To remove admin privileges for user, execute the following command:
 sudo deluser john sudo
 ```
 
-## CZERTAINLY Manager
+## Advanced tasks
 
-### Reset RKE2 node
+### Custom Helm chart values
 
-Whenever the IP address or hostname is changed for the virtual appliance, the RKE2 node must be reset.
-To reset RKE2 node, execute the following command:
-```bash
-sudo -s czertainly-manager.sh resetnode
-```
+The installation/upgrade process of CZERTAINLY is managed by the [Helm](https://helm.sh/).
 
-When asked, choose to reset RKE2 node, enable and start RKE2 service.
+Default values are stored in file `/root/install/czertainly-values.yaml`. This file gets updated during installation/upgrade when there is newer version of CZERTAINLY chart.
 
-### Import TLS server certificate
+If you need to provide your own custom Helm chart values that are not available through the [TUI](./TUI/intro), you need to access the shell of the appliance, create file `/home/czertainly/czertainly-values.custom.yaml`, and put it there.
 
-When there is a change in the TLS configuration of the virtual appliance and new server certificate should be applied, the certificate must be imported.
-
-:::caution Certificate and private key
-Make sure that the certificate and corresponding private key generated during the TLS configuration of the virtual appliance match.
-:::
-
-The server certificate should be uploaded into the virtual appliance to the following location:
-```
-/home/czertainly/czertainly.crt
-```
-
-To import the server certificate, execute the following command:
-```bash
-sudo -s czertainly-manager.sh importcert
-```
-
-:::info Certificate secret
-`importcert` command creates Kubernetes TLS secret with name specified in the `ingress.tls.secretName` value.
-:::
+The custom values overwrite the default values during the installation/upgrade process.

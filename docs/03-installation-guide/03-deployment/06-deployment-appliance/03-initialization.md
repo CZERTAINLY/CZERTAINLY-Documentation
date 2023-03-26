@@ -1,111 +1,85 @@
 # Initialization
 
-To make initial configuration of virtual appliance, you must log into virtual console using SSH and default credentials:
+To make initial configuration of virtual appliance, you must log into it using default credentials:
+
 * **username**: czertainly
 * **password**: newgenerationtrustcare
 
-:::caution Change default credentials
-The default credentials for the virtual appliance should be changed by the user.
+When you are successfully logged in, you will see the Text-based User Interface ([**TUI**](./TUI/intro)) for management of the virtual appliance.
+
+The following steps needs to be done to initialize the virtual appliance.
+
+:::caution Mandatory steps
+Bold items are mandatory even for testing purposes.
 :::
 
-The following steps need to be done to initialize the virtual appliance:
-1. Change hostname and networking parameters (if needed)
-2. Update the system
-3. Prepare configuration and prepare server certificate sign request
-4. Deploy CZERTAINLY
+1. [Change hostname and networking parameters](#change-hostname-and-networking-parameters)
+1. [**Update the system**](#update-system-and-packages)
+1. [Setup TLS certificate](#tls-certificate-for-czertainly-interface)
+1. [Trusted certificate list](#trusted-certificates-list)
+1. [Configure database](#database)
+1. [Configure credentials to CZERTAINLY docker repository](#credentials-for-czertainly-docker-repository)
+1. [**Configure CZERTAINLY**](#configure-czertainly)
+4. [**Install CZERTAINLY**](#install-czertainly)
 
 ## Change hostname and networking parameters
 
-By default, virtual appliance is configured to use dynamically assigned IP addresses from DHCP server with hostname `czertainly`, domain `local` and no proxy applied. To change the networking configuration, execute the following command:
-```bash
-sudo -s czertainly-manager.sh changenet
-```
+By default, the virtual appliance is configured to use dynamically assigned IP address from a DHCP server.
 
-:::info Default networking configuration
-The default configuration may be useful for development and testing purposes. For production, it is recommended to adjust the setting and proxy configuration.
-:::
+Default hostname `czertainly` and domain `local` may be useful for development and testing purposes. You need add name `czertainly.local` and VM IP into your [hosts
+file](https://www.howtogeek.com/27350/beginner-geek-how-to-edit-your-hosts-file/). In production, you will need to set a hostname that will be configured in DNS. To do so, select **Main menu -> [Configure hostname](./TUI/main-menu#configure-hostname)**.
 
-**Reboot the virtual appliance when asked before doing any other changes.**
+If your network policy requires using HTTP proxy, you can configure it by selecting **Main menu -> [Configure HTTP proxy](./TUI/main-menu#configure-http-proxy)**.
 
 ## Update system and packages
 
-Ensure that you have the latest patches installed. Use `apt` to update list of Debian packages and upgrade:
-```bash
-sudo apt -y update && sudo apt -y upgrade
-```
+It is always good to have current version of `czertainly-appliance-tools` and Debian software. To update packages, select from the main menu **Advanced options -> Update Operating System**.
 
-## Prepare configuration values
+## TLS certificate for CZERTAINLY interface
 
-The configuration values are the values that are applied for the Helm chart installation and upgrade operations.
-For all available parameters, see [Helm chart configurable parameters](../deployment-helm/configurable-parameters).
+CZERTAINLY is controlled via a web interface. For testing purposes, a self-signed certificate is automatically generated. If you aim to put CZERTAINLY into production, you want to upload a certificate from your internal CA. To do so, select **Main menu -> [Configure ingress TLS certificates](./TUI/main-menu#configure-ingress-tls-certificates)**.
 
-There are few mandatory parameters that must be configured before installation. These are:
+## Trusted certificates list
 
-| Parameter              | Value                                                                                       |
-|------------------------|---------------------------------------------------------------------------------------------|
-| `global.database.host` | PostgreSQL server host IP address that should be set to IP address of the virtual appliance |
-| `hostName`             | Current hostname including domain name, for example `czertainly.local`                      |
-| `ingress.enabled`      | Set to `true` to enable authenticated access to platform from outside the virtual appliance |
+Access to the web interface of CZERTAINLY is authenticated by a client certificate by default.
 
-Optionally, configure proxy settings:
-
-| Parameter           | Value                               |
-|---------------------|-------------------------------------|
-| `global.httpProxy`  | `http` proxy                        |
-| `global.httpsProxy` | `https` proxy                       |
-| `global.noProxy`    | Resources that should not use proxy |
-
-Use your favorite editor to edit default values file:
-```bash
-nano /home/czertainly/czertainly-values-default.yaml
-```
-
-:::info CZERTAINLY Helm chart
-You can also find parameters to update in [Configurable parameters](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/tree/develop/charts/czertainly#configurable-parameters), part of [CZERTAINLY Helm Chart](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/tree/develop/charts/czertainly) git repository, that also contains [sample values file](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/develop/charts/czertainly/values.yaml).
+:::info Access control
+There are various options how to configure access control for the platform. See [Access control](../../../concept-design/architecture/access-control/overview) for more information.
 :::
 
-## Prepare TLS configuration
+For testing purposes, you can use preconfigured [Dummy CA certificate](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/master/dummy-certificates/certs/root-ca.cert.pem). In production system, you will need to replace this list with your own trusted CA certificates. To do this, select **Main menu -> [Configure custom trusted certificates](./TUI/main-menu#configure-custom-trusted-certificates)**.
 
-The server certificate needs to be issued and configured to access the platform. It should be issued by trusted certification authority. 
-Certificate signing request is prepared and should be submitted to CA. The certification authority is out of scope of this document.
+## Database
 
-To prepare the certificate signing request, edit the OpenSSL configuration:
-```bash
-nano /home/czertainly/openssl.cnf
-```
+CZERTAINLY persists all its data in Postgres database. The server will be installed for you, but you might want to set your own password for the database. To do so choose **[Configure database](./TUI/main-menu#configure-database)** from the **Main menu**.
 
-Generate the CSR using the following command:
-```bash
-sudo -s czertainly-manager.sh generatecsr
-```
+## Credentials for CZERTAINLY docker repository
 
-The CSR and the private key will be stored in the following locations:
-```
-/home/czertainly/czertainly.csr
-/home/czertainly/czertainly.key
-```
+Some parts of CZERTAINLY are private and can't be provided publicly. Those parts are [hosted in private Docker repository](/docs/current-versions/) `harbor.3key.company`.
 
-Once the server certificate is issued by the CA of your choice, it should be uploaded into the following location:
-```
-/home/czertainly/czertainly.crt
-```
-
-:::info Certificate installation
-The server certificate will be installed during the first deployment of the CZERTAINLY. Certificate can be changed later. For more information about how to change the certificate in already deployed platform, see [Import TLS server certificate](operations#import-tls-server-certificate).
+:::caution Obtain access to private Docker repository
+Ask [support](/docs/feedback-support/) for credentials to access private repository.
 :::
 
-## Deploy CZERTAINLY
+To enter obtained credentials, use option **Main Menu -> [Configure Docker repository access credentials](./TUI/main-menu#configure-docker-repository-access-credentials)**.
 
-Once the initial configuration is prepared, CZERTAINLY can be deployed:
-```bash
-sudo -s czertainly-manager.sh install 
-```
+## Configure CZERTAINLY
 
-During the installation process, all configured containers and images are downloaded.
-You will be asked to enter username and password for private container repository. Enter the credential when you need to access private containers.
+Option **[Configure CZERTAINLY](./TUI/main-menu#configure-czertainly)** of the main menu opens dialog where you can choose version of CZERTAINLY and it's components you want to install.
+
+## Install CZERTAINLY
+
+When you select **[Install CZERTAINLY](./TUI/main-menu#install-czertainly)** from the main menu. The installation will begin after confirmation.
+
+:::info Installation time
+Complete installation takes about 10 minutes on a decent system with good internet access. The most time consuming part is downloading of docker images that are deployed in the cluster.
+:::
 
 After successful installation, administrator web interface is available on address:
 ```
-https://[hostName]/administrator/
+https://[hostname]/administrator/
 ```
-where `hostName` is the value configured in the previous step.
+where `hostname` is the value configured in the previous step.
+
+The [Dummy administrator certificate](https://github.om/3KeyCompany/CZERTAINLY-Helm-Charts/blob/master/dummy-certificates/private/admin.p12) is available for quick testing purposes with password `00000000`.
+
