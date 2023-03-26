@@ -21,13 +21,17 @@ Because of different availability and public/private access to containers, the v
 
 ## Virtual appliance requirements
 
-|      | optimum | minimum |
-|------|---------|---------|
-| CPU  | 8 cores | 4 cores |
-| RAM  | 16 GB   | 8 GB    |
-| disk | 50 GB   | 20 GB   |
+| Resource | Optimum | Minimum |
+|----------|---------|---------|
+| CPU      | 8 cores | 4 cores |
+| RAM      | 16 GB   | 8 GB    |
+| disk     | 50 GB   | 20 GB   |
 
-By *minimum* requirements we mean resources which needed for CZERTAINLY and kubernetes installation and for basic evaluation of it's features. For production use, please provide resources mentioned in 'optimum' column.
+By *minimum* requirements we mean resources which needed for CZERTAINLY and kubernetes installation and for basic evaluation of its features.
+
+:::tip Resource management
+Resources can be scaled up or down based on the needs of the platform. The resources needed for the CZERTAINLY platform differs based on the number of managed objects, implemented use-cases, and required connectors. 
+:::
 
 ## Download and import image
 
@@ -39,7 +43,7 @@ To get the virtual appliance running in your environment for further  installati
 For testing purposes, you can use:
 - [Oracle VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 - [VMware Workstation Player](https://www.vmware.com/content/vmware/vmware-published-sites/us/products/workstation-player/workstation-player-evaluation.html.html)
-- [Paralels Desktop](https://www.parallels.com/)
+- [Parallels Desktop](https://www.parallels.com/)
 - or any other virtualization tools capable of importing virtual images in **OVA** format
 
 :::caution Importing virtual appliance

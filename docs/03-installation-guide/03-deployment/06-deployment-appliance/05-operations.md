@@ -9,21 +9,15 @@ The following document describes advanced operations for the management of virtu
 
 ### Shut down
 
-To shut down the virtual appliance use ACPI shutdown call of your
-virtualization platform or select **Advanced options -> [Shutdown
-system](TUI/advanced-menu#shutdown-system)**.
+To shut down the virtual appliance use ACPI shutdown call of your virtualization platform or select **Advanced options -> [Shutdown system](./TUI/advanced-menu#shutdown-system)**.
 
 ### Restart
 
-To restart the virtual appliance, select **Advanced options -> Reboot
-system**. Do not use cold reboot function on your virtualization
-platform, as it could lead to file-system corruption.
+To restart the virtual appliance, select **Advanced options -> Reboot system**. Do not use cold reboot function on your virtualization platform, as it could lead to file-system corruption.
 
 ### Update system
 
-Updating of the virtual appliance system consists of updating and
-upgrading included packages, it can be easily done by selecting
-**Advanced options -> Update Operating System** from the menu.
+Updating of the virtual appliance system consists of updating and upgrading included packages, it can be easily done by selecting **Advanced options -> Update Operating System** from the menu.
 
 ## User management
 
@@ -88,21 +82,10 @@ sudo deluser john sudo
 
 ### Custom Helm chart values
 
-The installation/upgrade process of CZERTAINLY is using Helm. Default
-installation values are stored in file
-`/root/install/czertainly-values.yaml` this file get upgraded during
-installation/upgrade process any time when official values
-distributed with Helm charts get updated.
+The installation/upgrade process of CZERTAINLY is managed by the [Helm](https://helm.sh/).
 
-Custom values set through TUI are stored in files in
-`/etc/czertainly-ansible/vars/` directory and during the
-installation/upgrade process they are compiled into file
-`/root/install/czertainly-values.local.yaml`. This file get
-overwritten every time installation/upgrade process is executed.
+Default values are stored in file `/root/install/czertainly-values.yaml`. This file gets updated during installation/upgrade when there is newer version of CZERTAINLY chart.
 
-Do not modify previously mentioned files. If you need to provide
-custom Helm chart values, put them into file
-`/home/czertacinly/czertainly-values.custom.yaml`, the file doesn't
-exist by default in CZERTAINLY appliance, you need to create if from
-the scratch.
+If you need to provide your own custom Helm chart values that are not available through the [TUI](./TUI/intro), you need to access the shell of the appliance, create file `/home/czertainly/czertainly-values.custom.yaml`, and put it there.
 
+The custom values overwrite the default values during the installation/upgrade process.
