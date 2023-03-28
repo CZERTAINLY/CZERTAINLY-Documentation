@@ -4,7 +4,8 @@ The `Certificate` holds the information about the certificate and its lifecycle.
 
 - Human understandable parsed certificate content
 - Base64 certificate content
-- Certificate validation Status
+- Certificate validation status
+- Certificate compliance status
 - Metadata including discovery information
 
 In addition to the above details, the following are mapped to the `Certificate` for the ease of management,
