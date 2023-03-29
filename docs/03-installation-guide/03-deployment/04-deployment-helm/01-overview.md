@@ -45,7 +45,7 @@ Create new file called `trusted-certificates.pem` and add to the file PEM certif
 The list of trusted certificates is need for the installation of the CZERTAINLY using Helm chart.
 
 > **Note**
-> Trusted certificates can be defined globally for the CZERTAINLY chart and all of its sub-charts, or it can be applied only for specific sub-chart, see [global parameters](#global-parameters). For global, set `global.trusted.certificates`, otherwise set `trusted.certificates`.
+> Trusted certificates can be defined globally for the CZERTAINLY chart and all of its sub-charts, or it can be applied only for specific sub-chart, see [global parameters](./configurable-parameters#global-parameters). For global, set `global.trusted.certificates`, otherwise set `trusted.certificates`.
 
 **Install CZERTAINLY**
 

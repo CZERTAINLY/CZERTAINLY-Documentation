@@ -14,6 +14,41 @@ The following contains important information and instructions about upgrading He
 
 Upgrading Helm chart is done by running the `helm upgrade` command. The command upgrades the platform to the specified version. The command can be used to upgrade the platform to the same version with changed parameters.
 
+## To 2.7.0
+
+### Hardening of the deployment
+
+The deployment was hardened to be more secure and stable. The following changes were made for every container:
+- running as non-root user
+- running with read-only root filesystem
+- specified default `securityContext`
+- added configuration and default values for `livenessProbe`, `readinessProbe` and `startupProbe`
+- added configuration for resource limits and requests
+
+### Optional services
+
+New optional services were added to the umbrella chart:
+- Keycloak internal service
+- Utils service
+
+Keycloak internal service is disabled by default and can be enabled by setting the following values:
+```yaml
+global:
+  keycloak:
+    enabled: true
+    # client secret must be set if keycloak is enabled
+    clientSecret: ""
+```
+
+Utils service is disabled by default and can be enabled by setting the following values:
+
+```yaml
+utilsService:
+  enabled: false
+```
+
+See the [CZERTAINLY Helm chart 2.7.0 release note](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/releases/tag/2.7.0) for more information.
+
 ## To 2.6.0
 
 ### ACME endpoint and trusted IPs
