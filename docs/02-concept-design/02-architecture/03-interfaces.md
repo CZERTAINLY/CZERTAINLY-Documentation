@@ -6,7 +6,7 @@ These interfaces must be generally applied when extending the platform, in case 
 
 The platform consists of the following interfaces:
 
-- Client Web Interfaces (Administrator and Operator)
+- Client Web Interfaces
 - Client REST API
 - Connector Interfaces
 - Core Interfaces
@@ -15,12 +15,12 @@ To know more about the list of APIs refer to [Interfaces Repository](https://git
 
 ## `Client` Web Interfaces
 
-`Client` web interfaces are graphical representation for the user. There are the following `Client` web interfaces:
+`Client` web interfaces are graphical representation for the user in form of web applications. Currently, there are the following `Client` web interfaces:
 
 | Interface     | Description                                                                                                                                                                                                                                                                                |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Administrator` | Management of the platform. This interface includes administrative components and administrative operations.                                                                                   |
-| `Operator`      | Provides certificate and cryptographic key related operations. |
+| `Administrator` | Management of the platform and all resources and their operations. This interface also includes administrative components and administrative operations.                                                                                   |
+| `Operator`      | (Deprecated) Provides certificate and cryptographic key related operations. |
 
 ## `Client` REST API
 
