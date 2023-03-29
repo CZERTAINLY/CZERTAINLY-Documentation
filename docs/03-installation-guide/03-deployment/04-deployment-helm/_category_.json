@@ -1,3 +1,7 @@
 {
-  "label": "Deployment using Helm"
+  "label": "Deployment using Helm",
+  "link": {
+    "type": "doc",
+    "id": "overview"
+  }
 }
