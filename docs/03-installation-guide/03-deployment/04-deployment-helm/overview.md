@@ -9,7 +9,7 @@ Helm chart simplifies the deployment of the platform using already pre-defined t
 
 In case you want to enable Ingress you need to have installed Ingress Controller, for example:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
 If you are using internal CA for Ingress and Administrator certificate, you also need to have installed [cert-manager](https://cert-manager.io/docs/).
@@ -36,7 +36,7 @@ Copy the default `values.yaml` from the CZERTAINLY Helm chart and modify the val
 ```bash
 helm show values oci://harbor.3key.company/czertainly-helm/czertainly > czertainly-values.yaml
 ```
-Now edit the `czertainly-values.yaml` according to your desired stated, see [Configurable parameters](#configurable-parameters) for more information.
+Now edit the `czertainly-values.yaml` according to your desired stated, see [Configurable parameters](./configurable-parameters.md) for more information.
 
 **Prepare list of trusted CA certificates**
 
@@ -45,11 +45,11 @@ Create new file called `trusted-certificates.pem` and add to the file PEM certif
 The list of trusted certificates is need for the installation of the CZERTAINLY using Helm chart.
 
 > **Note**
-> Trusted certificates can be defined globally for the CZERTAINLY chart and all of its sub-charts, or it can be applied only for specific sub-chart, see [global parameters](./configurable-parameters#global-parameters). For global, set `global.trusted.certificates`, otherwise set `trusted.certificates`.
+> Trusted certificates can be defined globally for the CZERTAINLY chart and all of its sub-charts, or it can be applied only for specific sub-chart, see [global parameters](./configurable-parameters.md#global-parameters). For global, set `global.trusted.certificates`, otherwise set `trusted.certificates`.
 
 **Install CZERTAINLY**
 
-There are couple of options to install CZERTAINLY based on you TLS configuration and administrator certificate handling. See the [Configurable parameters](#configurable-parameters) for more information.
+There are couple of options to install CZERTAINLY based on you TLS configuration and administrator certificate handling. See the [Configurable parameters](./configurable-parameters.md) for more information.
 
 For the basic installation, run:
 ```bash
@@ -76,13 +76,6 @@ You can use the `helm uninstall` command to uninstall the CZERTAINLY:
 ```bash
 helm uninstall --namespace czertainly czertainly-tlm
 ```
-
-## Configurable parameters
-
-You can find current values in the `values.yaml`.
-You can also Specify each parameter using the `--set` or `--set-file` argument to `helm install`.
-
-For more information about all configurable parameters, see [CZERTAINLY-Helm-Chart](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/develop/charts/czertainly/README.md).
 
 :::info Helm chart
 See [CZERTAINLY-Helm-Charts](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts) for description of all charts and sub-charts that are available for the platform.
