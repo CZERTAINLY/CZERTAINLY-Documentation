@@ -16,3 +16,4 @@ The following protocols are implemented:
 | Protocol | Description |
 | --- | --- |
 | [ACME](acme/overview) (Automatic Certificate Management Environment) | ACME protocol as defined by [RFC 8555 - Automatic Certificate Management Environment (ACME)](https://datatracker.ietf.org/doc/html/rfc8555). <br/> Protocol for automated requesting, validating, and issuing of certificates. Implementation supports issuing of certificates to not only web servers, but also clients, IoT devices, and many more.|
+| [SCEP](scep/overview) (Simple Certificate Enrollment Protocol) | SCEP protocol as defined by [RFC 8894 - Simple Certificate Enrolment Protocol](https://datatracker.ietf.org/doc/html/rfc8894). <br/> Protocol for automated requesting, validating, issuing and renewal of certificates.|
