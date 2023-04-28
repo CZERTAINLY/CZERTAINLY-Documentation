@@ -66,7 +66,7 @@ curl -X POST \
     "issueCertificateAttributes": [],
   }' \
   https://[domain]:[port]/api/v1/authorities/61c7d882-9336-4c9e-b380-8d2fd83f7c26/raProfiles/d1a95ebc-4d73-11ed-bdc3-0242ac120002/scep/activate/b6be5014-b8f8-4b4f-b96d-a54c38f54b48
-  #https://[domain]:[port]v1/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/acme/activate/{acmeProfileUuid}
+  #https://[domain]:[port]v1/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/scep/activate/{scepProfileUuid}
 ```
 
 When succeed, we will receive in the response SCEP server directory endpoint to use:

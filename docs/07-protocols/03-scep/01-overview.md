@@ -1,6 +1,6 @@
 # Overview
 
-The platform implements the SCEP (Simple Certificate Enrolment Protocol) protocol to automate the process of certificate management. it offers simple integration with SCEP server with the help of SCEP objects that are easy to configure and to manage.
+The platform implements the SCEP (Simple Certificate Enrolment Protocol) protocol to automate the process of certificate management. It offers simple integration with SCEP server with the help of SCEP objects that are easy to configure and to manage.
 
 Implementation of SCEP provides a flexibility for the clients and administrators to choose between running SCEP endpoint that are bound to [RA Profile](../../concept-design/core-components/ra-profile).
 

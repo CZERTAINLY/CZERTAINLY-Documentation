@@ -12,7 +12,7 @@
 | **Require Manual Approval**                                | Manual Approval is required before issuing the certificate                                   | `false` | <span class="badge badge--danger">No</span>   |
 | **Include CA Certificate**                              | Include CA Certificate in the SCEP Response                                               | `false`                 | <span class="badge badge--danger">No</span>   |
 | **Include CA Certificate Chain**                                 | Include CA Certificate chain in the SCEP response                                    | `false`                 | <span class="badge badge--danger">No</span>   |
-| **CA Certificate**                                       | Certificate to be used as SCEP CA Certificate                                                                       | `None`           | <span class="badge badge--danger">Yes</span>   |
+| **CA Certificate**                                       | Certificate to be used as SCEP CA Certificate                                                                       | `None`           | <span class="badge badge--success">Yes</span>   |
 | **RA Profile**                                     | `RA Profile` that will be set as default for this `SCEP Profile`                | `None`               | <span class="badge badge--danger">No</span>   |
 | **Intune Tenant**                                     | Microsoft Intune Tenant to be used for CSR Validation             | `None`               | <span class="badge badge--danger">No</span>   |
 | **Intune Application ID**                                 | ID of the Microsoft Intune Application                | `None`               | <span class="badge badge--danger">No</span>   |

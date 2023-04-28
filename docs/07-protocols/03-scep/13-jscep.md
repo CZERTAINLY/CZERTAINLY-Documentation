@@ -12,7 +12,7 @@ Before configuring `JSCEP` with CZERTAINLY, you need to have the following:
 - Access to HTTP or DNS resources, that will be used to validate ACME challenges
 - ACME protocol enabled according to the [Enable SCEP](enable-scep)
 
-To download and know more about `JSCEP`, follow the [installation guide](https://github.com/jscep/jscep).
+To download and know more about `JSCEP`, follow the [JSCEP Repository](https://github.com/jscep/jscep).
 
 ## JSCEP Configuration
 

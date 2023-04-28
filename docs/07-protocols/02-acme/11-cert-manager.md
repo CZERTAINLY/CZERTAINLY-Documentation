@@ -31,7 +31,7 @@ metadata:
   #namespace: default
 spec:
   acme:
-    server: https://[domain]:[port]/api/acme/raProfile/czertainly/directory
+    server: https://[domain]:[port]/api/v1/protocols/acme/raProfile/czertainly/directory
     # Email address used for ACME registration
     email: www@example.com
     # Name of a secret used to store the ACME account private key
@@ -59,7 +59,7 @@ You should see the status of the `ClusterIssuer` indicating `ACMEAccountRegister
 Status:
   Acme:
     Last Registered Email:  www@example.com
-    Uri:                    https://[domain]:[port]/api/acme/cm/acct/KUAkYavhiMI
+    Uri:                    https://[domain]:[port]/api/v1/protocols/acme/cm/acct/KUAkYavhiMI
   Conditions:
     Last Transition Time:  2022-01-29T16:25:45Z
     Message:               The ACME account was registered with the ACME server

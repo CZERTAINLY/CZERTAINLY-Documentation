@@ -1,6 +1,6 @@
 # Overview
 
-The platform implements the ACME (Automatic Certificate Management Environment) protocol to automate the process of certificate management. it offers simple integration with ACME server with the help of ACME objects that are easy to configure and to manage.
+The platform implements the ACME (Automatic Certificate Management Environment) protocol to automate the process of certificate management. It offers simple integration with ACME server with the help of ACME objects that are easy to configure and to manage.
 
 Implementation of ACME provides a flexibility for the clients and administrators to choose between running ACME endpoint that are bound to [RA Profile](../../concept-design/core-components/ra-profile).
 
