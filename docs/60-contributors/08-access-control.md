@@ -1,6 +1,6 @@
 # Access control
 
-Authorization is an integral part of CZERTAINLY platform. Each authenticated user and permissions are represented by internal authorization token which is evaluated using [Open Policy Agent](https://www.openpolicyagent.org/) (OPA) and pre-defined policies. For more information, refer to [Access Control](/docs/concept-design/architecture/access-control/overview).
+Authorization is an integral part of CZERTAINLY platform. Each authenticated user and permissions are represented by internal authorization token which is evaluated using [Open Policy Agent](https://www.openpolicyagent.org/) (OPA) and pre-defined policies. For more information, refer to [Access Control](/docs/certificate-key/concept-design/architecture/access-control/overview).
 
 For more information about the definition of authorization policies, refer to [CZERTAINLY Auth OPA Policies](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies) repository. Individual permissions are set for roles existing in `Auth` service which then can be assigned to users.
 

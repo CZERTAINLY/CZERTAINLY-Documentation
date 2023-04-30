@@ -112,3 +112,9 @@ html[data-theme='dark'] .discord-icon::before {
 .navbar-sidebar .discord-icon::after {
   content: 'Discord';
 }
+
+.img-center {
+  display: flex;
+  justify-content: center;
+  width: 100%,
+}

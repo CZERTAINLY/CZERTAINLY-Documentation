@@ -7,7 +7,7 @@ Although the CZERTAINLY platform is technology independent, each technology have
 CZERTAINLY uses `Attribute` to control such specific behaviour of different technologies, like certification authorities, credential providers, discovery of certificates, etc. So called `Attributes` are used in almost every `Connector` and developer must understand them in order to implement custom behaviour or extend the functionality of the platform.
 
 :::info
-For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](../../concept-design/overview).
+For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](../../certificate-key/concept-design/overview).
 :::
 
 Now let's take a look on what exactly is an `Attribute` and how it can be used.
@@ -43,13 +43,13 @@ You can find specification of the `BaseAttribute` in the [CZERTAINLY Interfaces 
 
 Table below describes the properties of the `BaseAttribute`:
 
-| Property      | Type                                          | Short description                                                                                                                                   | Required                                      |
-|---------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
-| `uuid`        | `string`                                      | UUID of the defined `Attribute`. The combination of the `Connector` UUID and the `Attribute` UUID must be unique                                    | <span class="badge badge--success">Yes</span> |
-| `name`        | `string`                                      | Name of the `Attribute`                                                                                                                             | <span class="badge badge--success">Yes</span> |
-| `description` | `string`                                      | Description of the `Attribute` for better understanding of the `Attribute` purpose. This should contain descriptive explanation of the `Attribtue`. | <span class="badge badge--danger">No</span>   |
-| `type`        | [`AttributeType`](attributes#attribute-types) | Type of the `Attribute`                                                                                                                             | <span class="badge badge--success">Yes</span> |
-| `content`     | [`AttributeContent`](content)                 | Content of the `Attribute` based on the [`AttributeContentType`](content#supported-content-types)                                                   | <span class="badge badge--danger">No</span>   |
+| Property      | Type                                            | Short description                                                                                                                                   | Required                                      |
+|---------------|-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
+| `uuid`        | `string`                                        | UUID of the defined `Attribute`. The combination of the `Connector` UUID and the `Attribute` UUID must be unique                                    | <span class="badge badge--success">Yes</span> |
+| `name`        | `string`                                        | Name of the `Attribute`                                                                                                                             | <span class="badge badge--success">Yes</span> |
+| `description` | `string`                                        | Description of the `Attribute` for better understanding of the `Attribute` purpose. This should contain descriptive explanation of the `Attribtue`. | <span class="badge badge--danger">No</span>   |
+| `type`        | [`AttributeType`](./attributes#attribute-types) | Type of the `Attribute`                                                                                                                             | <span class="badge badge--success">Yes</span> |
+| `content`     | [`AttributeContent`](./content)                 | Content of the `Attribute` based on the [`AttributeContentType`](./content#supported-content-types)                                                 | <span class="badge badge--danger">No</span>   |
 
 ## `Attribute` building blocks:
 
@@ -69,7 +69,7 @@ package Attribute {
 }
 ```
 
-The building blocks for each particular `Attribute` type are described in [Attributes](attributes) section.
+The building blocks for each particular `Attribute` type are described in [Attributes](./attributes) section.
 
 ## Building blocks description and examples
 
