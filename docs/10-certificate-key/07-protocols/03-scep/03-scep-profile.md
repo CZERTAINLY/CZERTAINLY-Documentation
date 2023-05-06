@@ -27,8 +27,7 @@ The certificate to be used for the `SCEP Profile` should meet the following crit
 3. The key pair should have appropriate key set enabled (for encryption and signing)
 
 :::caution Microsoft Intune certificate requirements
-[//]: # (TODO)
-For Microsoft Intune validation, there may be additional requirements for the certificate. See the [Intune Integration Guide](#) for more information.
+For Microsoft Intune validation, there may be additional requirements for the certificate. See the [Intune Integration Guide](../../integration-guides/intune/overview) for more information.
 :::
 
 ## Attributes for certificate management

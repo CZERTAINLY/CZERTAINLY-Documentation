@@ -56,8 +56,7 @@ Encryption of the message data, according to the [RFC 8894, section 3.1](https:/
 
 ## Microsoft Intune support
 
-[//]: # (TODO)
-The SCEP protocol implementation supports the Microsoft Intune request validation. For more information, see [Intune Integration Guide](#).
+The SCEP protocol implementation supports the Microsoft Intune request validation. For more information, see [Intune Integration Guide](../../integration-guides/intune/overview).
 
 ## Platform SCEP server management
 
