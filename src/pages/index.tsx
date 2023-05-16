@@ -6,6 +6,8 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import styles from "./index.module.css";
 import HomepageFeatures from "../components/HomepageFeatures";
 import useBaseUrl from "@docusaurus/useBaseUrl";
+import PlatformModules from "@site/src/components/PlatformModules";
+import WhatIsCZERTAINLY from "@site/src/components/WhatIsCZERTAINLY";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -39,11 +41,12 @@ export default function Home(): JSX.Element {
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
-      description="Medicine for your certificates!/>"
+      description="Security and trust assurance and automation in ever connected world!/>"
     >
       <HomepageHeader />
-      <main>
-        <HomepageFeatures />
+      <main className={styles.main}>
+        <WhatIsCZERTAINLY />
+        <PlatformModules />
       </main>
     </Layout>
   );

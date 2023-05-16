@@ -4,6 +4,8 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
+const apiVersion = '2.7.1';
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'CZERTAINLY Documentation',
@@ -19,6 +21,20 @@ const config = {
   // plugins: [
   //     './src/plugins/test'
   // ],
+  plugins: [
+    [
+      "docusaurus-plugin-remote-content",
+      {
+        // options here
+        name: "czertainly-helm-docs", // used by CLI, must be path safe
+        noRuntimeDownloads: true, // disable runtime downloads, use only CLI to download (docusaurus download-remote-czertainly-helm-docs)
+        performCleanup: false, // do not remove downloaded files on build
+        sourceBaseUrl: "https://raw.githubusercontent.com/3KeyCompany/CZERTAINLY-Helm-Charts/"+apiVersion+"/charts/czertainly/docs/", // the base url for the markdown (gets prepended to all of the documents when fetching)
+        outDir: "docs/10-certificate-key/03-installation-guide/04-deployment/04-deployment-helm", // the base directory to output to.
+        documents: ["configurable-parameters.md", "overview.md", "troubleshooting.md", "upgrading.md"], // the file names to download
+      },
+    ],
+  ],
   presets: [
     [
       '@docusaurus/preset-classic',
@@ -40,145 +56,145 @@ const config = {
         specs: [
           {
             id: 'core-acme',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-acme.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-acme.yaml',
             route: '/api/core-acme/',
           },
           {
             id: 'core-auth',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-auth.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-auth.yaml',
             route: '/api/core-auth/',
           },
           {
             id: 'core-authority',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-authority.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-authority.yaml',
             route: '/api/core-authority/',
           },
           {
             id: 'core-certificate',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-certificate.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-certificate.yaml',
             route: '/api/core-certificate/',
           },
           {
             id: 'core-client-operations',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-client-operations.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-client-operations.yaml',
             route: '/api/core-client-operations/',
           },
           {
             id: 'core-compliance-profile',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-compliance-profile.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-compliance-profile.yaml',
             route: '/api/core-compliance-profile/',
           },
           {
             id: 'core-connector',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-connector.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-connector.yaml',
             route: '/api/core-connector/',
           },
           {
             id: 'core-credential',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-credential.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-credential.yaml',
             route: '/api/core-credential/',
           },
           {
             id: 'core-cryptographic-operations',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-cryptographic-operations.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-cryptographic-operations.yaml',
             route: '/api/core-cryptographic-operations/',
           },
           {
             id: 'core-custom-attributes',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-attribute.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-attribute.yaml',
             route: '/api/core-custom-attributes/',
           },
           {
             id: 'core-discovery',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-discovery.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-discovery.yaml',
             route: '/api/core-discovery/',
           },
           {
             id: 'core-entity',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-entity.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-entity.yaml',
             route: '/api/core-entity/',
           },
           {
             id: 'core-group',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-group.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-group.yaml',
             route: '/api/core-group/',
           },
           {
             id: 'core-key',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-cryptographic-key.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-cryptographic-key.yaml',
             route: '/api/core-key/',
           },
           {
             id: 'core-local',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-local.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-local.yaml',
             route: '/api/core-local/',
           },
           {
             id: 'core-location',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-location.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-location.yaml',
             route: '/api/core-location/',
           },
           {
             id: 'core-ra-profile',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-ra-profile.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-ra-profile.yaml',
             route: '/api/core-ra-profile/',
           },
           {
             id: 'core-other',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-other.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-other.yaml',
             route: '/api/core-other/',
           },
           {
             id: 'core-token',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-token.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-token.yaml',
             route: '/api/core-token/',
           },
           {
             id: 'core-token-profile',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-core-token-profile.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-token-profile.yaml',
             route: '/api/core-token-profile/',
           },
 
 
           {
             id: 'connector-authority-provider-legacy',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-connector-authority-provider-legacy.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-connector-authority-provider-legacy.yaml',
             route: '/api/connector-authority-provider-legacy/',
           },
           {
             id: 'connector-authority-provider-v2',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-connector-authority-provider-v2.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-connector-authority-provider-v2.yaml',
             route: '/api/connector-authority-provider-v2/',
           },
           {
             id: 'connector-compliance-provider',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-connector-compliance-provider.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-connector-compliance-provider.yaml',
             route: '/api/connector-compliance-provider/',
           },
           {
             id: 'connector-credential-provider',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-connector-credential-provider.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-connector-credential-provider.yaml',
             route: '/api/connector-credential-provider/',
           },
           {
             id: 'connector-cryptography-provider',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-connector-cryptography-provider.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-connector-cryptography-provider.yaml',
             route: '/api/connector-cryptography-provider/',
           },
           {
             id: 'connector-discovery-provider',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-connector-discovery-provider.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-connector-discovery-provider.yaml',
             route: '/api/connector-discovery-provider/',
           },
           {
             id: 'connector-entity-provider',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-connector-entity-provider.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-connector-entity-provider.yaml',
             route: '/api/connector-entity-provider/',
           },
 
           {
             id: 'protocol-acme',
-            spec: 'https://api.czertainly.com/1.6.0/doc-openapi-protocol-acme.yaml',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-protocol-acme.yaml',
             route: '/api/protocol-acme/',
           },
         ],
