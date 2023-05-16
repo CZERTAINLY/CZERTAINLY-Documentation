@@ -81,5 +81,5 @@ https://[hostname]/administrator/
 ```
 where `hostname` is the value configured in the previous step.
 
-The [Dummy administrator certificate](https://github.om/3KeyCompany/CZERTAINLY-Helm-Charts/blob/master/dummy-certificates/private/admin.p12) is available for quick testing purposes with password `00000000`.
+The [Dummy administrator certificate](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/blob/master/dummy-certificates/private/admin.p12) is available for quick testing purposes with password `00000000`.
 
