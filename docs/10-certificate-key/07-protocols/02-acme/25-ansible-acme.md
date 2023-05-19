@@ -1,11 +1,6 @@
 # Ansible ACME
 
-[Ansible](https://docs.ansible.com/) is a suite of tools to enable
-the automatization of software configuration. It can be used in
-conjunction with an ACME server running on the CZERTAINLY platform to
-automate certificate issuing, especially in situations where a target
-platform of a new certificate isn't capable of direct communication with
-an ACME server, and [Certbot](certbot) isn't the right choice.
+[Ansible](https://docs.ansible.com/) is a suite of tools to enable the automatization of software configuration. It can be used in conjunction with an ACME server running on the CZERTAINLY platform to automate certificate issuing, especially in situations where a target platform of a new certificate isn't capable of direct communication with an ACME server, and [Certbot](certbot) isn't the right choice.
 
 ## Prerequisites
 
