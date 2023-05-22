@@ -22,7 +22,7 @@ To get a certificate with ACME protocol, you need to do several tasks typically:
 
 ### Ansible playbook preparation
 
-To demonstrate all steps, we will create a playbook file `playbook-czertainly-acme-demo.yml`. The playbook uses modules [`community.crypto.acme_account`](https://docs.ansible.com/ansible/latest/collections/community/crypto/acme_account_module.html) and [`community.crypto.acme_certificate`](https://docs.ansible.com/ansible/latest/collections/community/crypto/acme_certificate_module.html) for interaction with the ACME server. Modules [`community.crypto.openssl_privatekey`](https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_privatekey_module.html) and [`community.crypto.openssl_csr`](https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_csr_module.html) for private key and certificate signing request creation. And optionally, it uses [`community.general.nsupdate`](https://docs.ansible.com/ansible/latest/collections/community/general/nsupdate_module.html) for updating DNS. Even though the Ansible community manages those modules, they are part of the standard Ansible package on Debian Bullseye Linux.
+To demonstrate all steps, we will create a playbook file [`playbook-czertainly-acme-demo.yml`](https://github.com/semik/ansible-acme-demo/blob/main/playbook-czertainly-acme-demo.yml). The playbook uses modules [`community.crypto.acme_account`](https://docs.ansible.com/ansible/latest/collections/community/crypto/acme_account_module.html) and [`community.crypto.acme_certificate`](https://docs.ansible.com/ansible/latest/collections/community/crypto/acme_certificate_module.html) for interaction with the ACME server. Modules [`community.crypto.openssl_privatekey`](https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_privatekey_module.html) and [`community.crypto.openssl_csr`](https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_csr_module.html) for private key and certificate signing request creation. And optionally, it uses [`community.general.nsupdate`](https://docs.ansible.com/ansible/latest/collections/community/general/nsupdate_module.html) for updating DNS. Even though the Ansible community manages those modules, they are part of the standard Ansible package on Debian Bullseye Linux.
 
 At the beginning of the playbook file, we define some default values. The example playbook assumes that it is running on an HTTP server and that user running it has write permissions to `/var/www/html` directory. All working files and resulting certificate is stored in the `tmp` directory, which must be created before executing the playbook.
 
@@ -49,7 +49,7 @@ At the beginning of the playbook file, we define some default values. The exampl
 
 ### Register ACME account
 
-First we need to create private RSA key which is associated with later registered account. The key can by used for revoking issued certificate even when private key of certificate isn't available.
+First, we need to create a private RSA key which is associated with a later registered account. The key can be used for revoking the issued certificate even when the private key of the certificate isn't available.
 
 ```yaml
     - name: Generate private key for ACME account
@@ -74,8 +74,7 @@ First we need to create private RSA key which is associated with later registere
 
 ### Generate private key and prepare CSR
 
-Creation of private key and CSR can be completely removed, depends on
-your need. For further steps you need just CSR.
+The creation of a private key and CSR can be removed entirely, depending on your need. For further steps, you need just CSR.
 
 ```yaml
     - name: Generate private key for server
@@ -95,7 +94,7 @@ your need. For further steps you need just CSR.
 
 ### Request verification challenge
 
-During request of verification challenge we submit CSR to ACME server. Argument `dest` can be pointing to non existent file. But if it points to existing certificate the ACME client (Ansible) will look at its validity and if it is below default value 10 days it will require reissuing, this can be modified by arguments `remaining_days` and `force`. The second one requests a new certificate every time playbook is executed.
+During the request of verification challenge, we submit CSR to the ACME server. The argument `dest` can be pointing to a non-existent file. But if it points to an existing certificate, the ACME client (Ansible) will look at its validity, and if it is below the default value 10 days, it will require reissuing. This can be modified by arguments `remaining_days` and `force`. The second argument, `force`, requests a new certificate every time the playbook is executed.
 
 ```yaml
     - name: Create a challenge
@@ -116,7 +115,7 @@ During request of verification challenge we submit CSR to ACME server. Argument 
       ansible.builtin.debug: var=acme_challenge
 ```
 
-Example challenge data in for CSR with two names `semik.3key.test` and `www.semik.3key.test`:
+Example challenge data for CSR with two names, `semik.3key.test` and `www.semik.3key.test`:
 
 ```json
   "challenge_data": {
@@ -148,7 +147,7 @@ Example challenge data in for CSR with two names `semik.3key.test` and `www.semi
 
 ### Publishing verification challenge
 
-In case you decided to use `http-01` verification method you need just put them into `/var/www/html/.well-known/acme-challenge/` directory:
+In case you decide to use `http-01` verification method, you need just put issued challenge into `/var/www/html/.well-known/acme-challenge/` directory:
 
 ```yaml
     - name: Copy http-01 challenge data
@@ -162,7 +161,7 @@ In case you decided to use `http-01` verification method you need just put them 
 
 Please note a loop using `with_dict` to iterate over all possible hostnames.
 
-In case you decided to use `dns-01` verification method. You need access to DNS server responsible for respective domain. Put credentials into file `vars/czertainly.private` in format:
+In case you decide to use `dns-01` verification method. You need access to the DNS server responsible for the respective domain. Put access credentials into file `vars/czertainly.private` in the format:
 
 ```yaml
 server: 123.123.123.123
@@ -171,7 +170,7 @@ key_name: "name"
 key_secret: "base64 data of secret"
 ```
 
-The file  `vars/czertainly.private` get loaded at very beginning of the playbook. Following Ansible code is responsible for publishing DNS challenge:
+The file  `vars/czertainly.private` gets loaded at the playbook's beginning. The Following Ansible code is responsible for publishing the DNS challenge:
 
 ```yaml
       community.general.nsupdate:
@@ -188,11 +187,11 @@ The file  `vars/czertainly.private` get loaded at very beginning of the playbook
       when: acme_method == 'dns-01'
 ```
 
-Please, note dot `.` after `record` (DNS name) - it is required for Bind9, your DNS server may vary.
+Please, note dot `.` after `record` (DNS name) - it is required for Bind9. Your DNS server may vary.
 
 ### Request validation
 
-After you published verification data, you request validation.
+After you publish verification data, you request validation
 
 ```yaml
     - name: Let the challenge be validated and retrieve the cert and intermediate certificate
@@ -212,7 +211,7 @@ After you published verification data, you request validation.
       async: 120
 ```
 
-This call is blocking and can be lengthy, so it is good practice to set timeout. With `async: 120` Ansible will wait max 2 minutes.
+This call is blocking and can be lengthy, so it is good practice to set a timeout. With `async: 120`, Ansible will wait for 2 minutes, and if no certificate is issued within that time limit, it will fail with an error.
 
 ### Delete validation challenges
 
@@ -243,8 +242,4 @@ After finishing is good to remove challenges.
 
 ### Issued certificate
 
-Issued certificate is placed into file `"tmp/{{ acme_domain }}}.crt"`
-placing it on right location is specific and different for different
-target software so I left out scope of this guide.
-
-
+The issued certificate is placed into file `"tmp/{{ acme_domain }}.crt"`. Placing it in the right location is specific and different for different target software, so we left it out of the scope of this guide.
