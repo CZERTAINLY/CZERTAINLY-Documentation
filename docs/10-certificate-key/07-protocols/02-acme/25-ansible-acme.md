@@ -1,39 +1,58 @@
-# Ansible ACME
+# Ansible acme module
 
-[Ansible](https://docs.ansible.com/) is a suite of tools to enable the automatization of software configuration. It can be used in conjunction with an ACME server running on the CZERTAINLY platform to automate certificate issuing, especially in situations where a target platform of a new certificate isn't capable of direct communication with an ACME server, and [Certbot](certbot) isn't the right choice.
+[Ansible](https://www.ansible.com/) is a suite of tools to enable the automatization of software configuration. It can be used in conjunction with an ACME server running on the CZERTAINLY platform to automate certificate management, especially in situations where a target entity isn't capable of certificate management operations and direct communication with an ACME server through available ACME client implementations.
+
+CZERTAINLY platform supports ACME implementation according to the [RFC 8555](https://datatracker.ietf.org/doc/html/rfc8555). This guide shows, how you can use Ansible `acme` module to manage certificates using ACME protocol and certificate management services controlled by the platform.
+
+For more information about Ansible, refer to the [Ansible documentation](https://docs.ansible.com/).
+
+:::info
+This guide assumes you have at least basic knowledge about Ansible. If you are new to Ansible, we recommend you to start with the [Getting started with Ansible](https://docs.ansible.com/ansible/latest/getting_started/index.html).
+:::
 
 ## Prerequisites
 
 To use Ansible with CZERTAINLY, you need to have the following:
-- some previous experience with Ansible (version 2.10 is fine),
-- configured at least one `RA Profile` certificate service in CZERTAINLY,
-- access to HTTP or DNS resources that will be used to validate ACME challenges,
-- ACME protocol enabled according to the [Enable ACME](enable-acme).
+- Ansible installed
+- Configured at least one `RA Profile` certificate service in CZERTAINLY
+- Access to HTTP or DNS resources that will be used to validate ACME challenges
+- ACME protocol enabled according to the [Enable ACME](enable-acme)
+
+To install Ansible, follow the [installation instructions](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
 
 ## Steps
 
-To get a certificate with ACME protocol, you need to do several tasks typically:
-- register an account on the ACME server,
-- prepare CSR for your new certificate,
-- request challenge on the ACME server,
-- transport challenge data to HTTP or DNS server,
-- request validation on the ACME server,
-- install the new certificate.
+To get a certificate with ACME protocol, you need to do several tasks typically using Ansible:
+- register an account on the ACME server
+- prepare CSR to issue new certificate
+- request challenge on the ACME server
+- transport challenge data to HTTP or DNS server
+- request validation of the challenge on the ACME server
+- install the new certificate
 
 ### Ansible playbook preparation
 
-To demonstrate all steps, we will create a playbook file [`playbook-czertainly-acme-demo.yml`](https://github.com/semik/ansible-acme-demo/blob/main/playbook-czertainly-acme-demo.yml). The playbook uses modules [`community.crypto.acme_account`](https://docs.ansible.com/ansible/latest/collections/community/crypto/acme_account_module.html) and [`community.crypto.acme_certificate`](https://docs.ansible.com/ansible/latest/collections/community/crypto/acme_certificate_module.html) for interaction with the ACME server. Modules [`community.crypto.openssl_privatekey`](https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_privatekey_module.html) and [`community.crypto.openssl_csr`](https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_csr_module.html) for private key and certificate signing request creation. And optionally, it uses [`community.general.nsupdate`](https://docs.ansible.com/ansible/latest/collections/community/general/nsupdate_module.html) for updating DNS. Even though the Ansible community manages those modules, they are part of the standard Ansible package on Debian Bullseye Linux.
+To demonstrate all steps, we will create a playbook file [`playbook-czertainly-acme-demo.yml`](https://github.com/semik/ansible-acme-demo/blob/main/playbook-czertainly-acme-demo.yml).
 
-At the beginning of the playbook file, we define some default values. The example playbook assumes that it is running on an HTTP server and that user running it has write permissions to `/var/www/html` directory. All working files and resulting certificate is stored in the `tmp` directory, which must be created before executing the playbook.
+The playbook uses the following modules:
+- [`community.crypto.acme_account`](https://docs.ansible.com/ansible/latest/collections/community/crypto/acme_account_module.html) for registration ACME account
+- [`community.crypto.acme_certificate`](https://docs.ansible.com/ansible/latest/collections/community/crypto/acme_certificate_module.html) for certificate management operations on ACME server
+- [`community.crypto.openssl_privatekey`](https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_privatekey_module.html) to generate unique key pair
+- [`community.crypto.openssl_csr`](https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_csr_module.html) to sign certificate signing request
+- [`community.general.nsupdate`](https://docs.ansible.com/ansible/latest/collections/community/general/nsupdate_module.html) to distribute ACME challenge to DNS server
+ 
+Even though Ansible community manages those modules, they are part of the standard Ansible packages.
+
+At the beginning of the playbook file, we define default values that are used across tasks. The example playbook assumes that it is running on an HTTP server and that user running it has write permissions to `/var/www/html` directory. All working files and resulting certificate is stored in the `tmp` directory, which must be created before executing the playbook.
 
 ```yaml
-- name: Let's encrypt Ansible ACME example
+- name: CZERTAINLY Ansible ACME example
   hosts: localhost
 
   tasks:
     - name: Set vars
       ansible.builtin.set_fact:
-        acme_directory: "https://[domain]:[port]/api/v1/protocols/acme/ACME_WebServers/directory"
+        acme_directory: "https://[domain]:[port]/api/v1/protocols/acme/czertainly/directory"
         acme_version: 2
         acme_register_account: true
         acme_web_dir: "/var/www/html"
@@ -49,7 +68,7 @@ At the beginning of the playbook file, we define some default values. The exampl
 
 ### Register ACME account
 
-First, we need to create a private RSA key which is associated with a later registered account. The key can be used for revoking the issued certificate even when the private key of the certificate isn't available.
+First, we will create private RSA key pair which will be associated with later registered account. The key can be used for revoking the issued certificate even when the private key of the certificate isn't available.
 
 ```yaml
     - name: Generate private key for ACME account
@@ -74,7 +93,11 @@ First, we need to create a private RSA key which is associated with a later regi
 
 ### Generate private key and prepare CSR
 
-The creation of a private key and CSR can be removed entirely, depending on your need. For further steps, you need just CSR.
+The step to generate key pair and certificate signing request is optional. You can also you externally generated and signed certificate signing request.
+
+:::note Account vs certificate key pair 
+Note that this key pair is not associated with the ACME account key pair.
+:::
 
 ```yaml
     - name: Generate private key for server
@@ -94,7 +117,7 @@ The creation of a private key and CSR can be removed entirely, depending on your
 
 ### Request verification challenge
 
-During the request of verification challenge, we submit CSR to the ACME server. The argument `dest` can be pointing to a non-existent file. But if it points to an existing certificate, the ACME client (Ansible) will look at its validity, and if it is below the default value 10 days, it will require reissuing. This can be modified by arguments `remaining_days` and `force`. The second argument, `force`, requests a new certificate every time the playbook is executed.
+Now, we need to submit the certificate signing request to ACME server and register validation challenge.. The argument `dest` can be pointing to a non-existent file. But if it points to an existing certificate, the Ansible will check if it is below the default value 10 days and request renewal instead of new certificate (default behaviour). This can be modified by arguments `remaining_days` and `force`. The second argument, `force` requests new certificate every time the playbook is executed, instead of checking for renewal.
 
 ```yaml
     - name: Create a challenge
@@ -115,13 +138,13 @@ During the request of verification challenge, we submit CSR to the ACME server. 
       ansible.builtin.debug: var=acme_challenge
 ```
 
-Example challenge data for CSR with two names, `semik.3key.test` and `www.semik.3key.test`:
+The following is an example of challenge data generated by CZERTAINLY for submitted CSR containing with two domain name identifiers `demo.czertainly.test` and `www.czertainly.test`:
 
 ```json
   "challenge_data": {
-     "semik.3key.test": {
+     "demo.czertainly.test": {
         "dns-01": {
-           "record": "_acme-challenge.semik.3key.test",
+           "record": "_acme-challenge.demo.czertainly.test",
            "resource": "_acme-challenge",
            "resource_value": "A1RnPLUigrrhd32tDtnF3yH_mgmuDLIfxKvBVrWefs4"
         },
@@ -130,9 +153,9 @@ Example challenge data for CSR with two names, `semik.3key.test` and `www.semik.
            "resource_value": "wXKY9aI5ChnUFGgUzG-dUDe85-Grq4Ub1MGZ2cYVtL4.YS1M_PeBjPbe78-TEhNKOWuckVy7xf04IG0HpKijyPw"
         },
      },
-     "www.semik.3key.test": {
+     "www.czertainly.test": {
         "dns-01": {
-           "record": "_acme-challenge.www.semik.3key.test",
+           "record": "_acme-challenge.www.czertainly.test",
            "resource": "_acme-challenge",
            "resource_value": "_UuzUAyxd1tFA3qx8k94HLmbLwV1Hsoqgef3YxhkWss"
         },
@@ -144,10 +167,9 @@ Example challenge data for CSR with two names, `semik.3key.test` and `www.semik.
   }
 ```
 
-
 ### Publishing verification challenge
 
-In case you decide to use `http-01` verification method, you need just put issued challenge into `/var/www/html/.well-known/acme-challenge/` directory:
+In case you decide to use `http-01` challenge validation method, you need to publish generated challenge in `/var/www/html/.well-known/acme-challenge/` directory of the web server:
 
 ```yaml
     - name: Copy http-01 challenge data
@@ -159,9 +181,11 @@ In case you decide to use `http-01` verification method, you need just put issue
       when: acme_method == 'http-01'
 ```
 
-Please note a loop using `with_dict` to iterate over all possible hostnames.
+:::note Multiple identifiers
+Note a loop using `with_dict` to iterate over all identifiers.
+:::
 
-In case you decide to use `dns-01` verification method. You need access to the DNS server responsible for the respective domain. Put access credentials into file `vars/czertainly.private` in the format:
+In case you decide to use `dns-01` challenge validation method, you need to publish TXT record to the DNS server responsible for the respective domain. Typically, access is granted based on the secret key that needs to be configured to sign request to write DNS records. Put your DNS credentials into file `vars/czertainly.private` with the following content:
 
 ```yaml
 server: 123.123.123.123
@@ -170,7 +194,7 @@ key_name: "name"
 key_secret: "base64 data of secret"
 ```
 
-The file  `vars/czertainly.private` gets loaded at the playbook's beginning. The Following Ansible code is responsible for publishing the DNS challenge:
+The file `vars/czertainly.private` gets loaded every time the playbook is executed. The following Ansible task is responsible for publishing the challenge to desired DNS resolver:
 
 ```yaml
       community.general.nsupdate:
@@ -187,14 +211,16 @@ The file  `vars/czertainly.private` gets loaded at the playbook's beginning. The
       when: acme_method == 'dns-01'
 ```
 
-Please, note dot `.` after `record` (DNS name) - it is required for Bind9. Your DNS server may vary.
+:::note DNS dot notation
+Note dot `.` after `record` (DNS name) - it is required for some DNS server implementations, for example Bind9.
+:::
 
 ### Request validation
 
-After you publish verification data, you request validation
+Once the challenges are successfully published, Ansible can request CZERTAINLY to validate them:
 
 ```yaml
-    - name: Let the challenge be validated and retrieve the cert and intermediate certificate
+    - name: Let the challenge(s) be validated and retrieve the cert and intermediate certificate
       community.crypto.acme_certificate:
         account_key_src: "tmp/acme_account_key"
         csr: "tmp/{{ acme_domain }}.csr"
@@ -211,11 +237,11 @@ After you publish verification data, you request validation
       async: 120
 ```
 
-This call is blocking and can be lengthy, so it is good practice to set a timeout. With `async: 120`, Ansible will wait for 2 minutes, and if no certificate is issued within that time limit, it will fail with an error.
+This tasks is blocking and can take be time-consuming depending on how many challenges and how often are validated. Therefore, it is a good practice to set timeout for this task. With `async: 120`, Ansible will wait for 2 minutes for challenge validation, and if it is not done even after this timeout, it will fail with an error.
 
 ### Delete validation challenges
 
-After finishing is good to remove challenges.
+After successful challenge validation and obtaining issued certificate, we are going to do the cleanup:
 
 ```yaml
     - name: Clean http-01 challenge data from drive
@@ -242,4 +268,4 @@ After finishing is good to remove challenges.
 
 ### Issued certificate
 
-The issued certificate is placed into file `"tmp/{{ acme_domain }}.crt"`. Placing it in the right location is specific and different for different target software, so we left it out of the scope of this guide.
+The issued certificate is placed into file `"tmp/{{ acme_domain }}.crt"`. Placing it in the right location is specific and different for various end entities. This is out of the scope of this guide.
