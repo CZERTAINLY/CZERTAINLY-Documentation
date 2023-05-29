@@ -41,6 +41,8 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          editUrl: ({versionDocsDirPath, docPath}) =>
+              `https://github.com/3KeyCompany/CZERTAINLY-Documentation/edit/documentation/${versionDocsDirPath}/${docPath}`,
           remarkPlugins: [
               [require('./src/plugins/remarkSimplePlantumlPlugin'), { baseUrl: 'https://www.plantuml.com/plantuml/svg', type: "svg" }],
           ],
