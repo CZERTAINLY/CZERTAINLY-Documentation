@@ -58,6 +58,11 @@ Encryption of the message data, according to the [RFC 8894, section 3.1](https:/
 
 The SCEP protocol implementation supports the Microsoft Intune request validation. For more information, see [Intune Integration Guide](../../integration-guides/intune/overview).
 
+### Certificate revocation
+
+The certificates that are published by Intune to be revoked are checked on each Intune enabled `SCEP Profile` every hour.
+Revocation request is submitted to associated `RA Profile` to revoke certificate and result is published back to Intune.
+
 ## Platform SCEP server management
 
 In order to start with the SCEP protocol, the platform must be configured and act as the SCEP server.

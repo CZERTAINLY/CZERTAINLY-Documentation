@@ -8,7 +8,6 @@
 | **Description**                  | Description of the `SCEP Profile`                                              |                                                       | <span class="badge badge--danger">No</span>   |
 | **Challenge Password**           | Challenge Password to authorize certificate request                            |                                                       | <span class="badge badge--danger">No</span>   |
 | **Renewal Threshold**            | Number of days before the certificate expiration date to allow renewal request | `Half-time of the validity period of the Certificate` | <span class="badge badge--danger">No</span>   |
-| **Require Manual Approval**      | Enable manual approval of the certificate request                              | `false`                                               | <span class="badge badge--danger">No</span>   |
 | **Include CA Certificate**       | Include certificate of the issuer in the certificate response                  | `false`                                               | <span class="badge badge--danger">No</span>   |
 | **Include CA Certificate Chain** | Include complete chain in the certificate response                             | `false`                                               | <span class="badge badge--danger">No</span>   |
 | **Enable Intune**                | Enable Microsoft Intune integration for certificate request validation         | `false`                                               | <span class="badge badge--danger">No</span>   |
