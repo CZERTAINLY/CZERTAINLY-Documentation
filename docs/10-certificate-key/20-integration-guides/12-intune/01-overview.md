@@ -16,12 +16,12 @@ This integration guide assumes at least basic knowledge about the Intune and doe
 
 In order to use CZERTAINLY as a SCEP service for Intune, you need to follow these steps:
 
-| #   | Step                                                  | Description                                                                                                            |
-|-----|-------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
-| 1   | [Authorize CZERTAINLY](#create-device-profile)        | Setup integration and authorization between Intune and CZERTAINLY by creating an application in Azure Active Directory |
-| 2   | [Configure Intune SCEP Profile](#create-scep-profile) | Create SCEP profile with enabled Intune request validation support                                                     |
-| 3   | [Create Intune Profiles](#assign-device-profile)      | Create Intune configuration profiles holding the trusted CA certificates and SCEP configuration                        |
-| 4   | [Enroll Device](#assign-device-profile)               | Enroll device with Intune                                                                                              |
+| # | Step                                                     | Description                                                                                                            |
+|---|----------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| 1 | [Authorize CZERTAINLY](./authorize-czertainly)           | Setup integration and authorization between Intune and CZERTAINLY by creating an application in Azure Active Directory |
+| 2 | [Configure Intune SCEP Profile](./configure-scep-intune) | Create `SCEP Profile` with enabled Intune request validation support                                                   |
+| 3 | [Create Intune Profiles](./create-intune-profiles)       | Create Intune configuration profiles holding the trusted CA certificates and SCEP configuration                        |
+| 4 | [Enroll Device](./enroll-device)                         | Enroll device with Intune                                                                                              |
 
 :::tip Evaluate Microsoft Intune
 [Evaluate Microsoft Intune](https://learn.microsoft.com/en-us/mem/intune/fundamentals/try-intune-overview) provides a good starting point to understand the proper configuration of the Intune.
