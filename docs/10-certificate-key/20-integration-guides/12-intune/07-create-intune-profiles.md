@@ -25,7 +25,7 @@ For devices to use SCEP certificate profile, they must trust your Trusted Root C
 
 Following [Create a SCEP certificate profile](https://learn.microsoft.com/en-us/mem/intune/protect/certificates-profile-scep#create-a-scep-certificate-profile), create SCEP certificate profile with the following configuration specific to CZERTAINLY SCEP service:
 - **Root Certificate** - select trusted certificate profile representing issuing CA certificate
-- **SCEP Server URLs** - specify URL found in detail page of `SCEP Profile` without `pkclient.exe`
+- **SCEP Server URLs** - specify URL found in detail page of `SCEP Profile` without `pkiclient.exe`
 
 :::tip SCEP Server URLs
 See [SCEP Profile vs RA Profile SCEP API](../../protocols/scep/overview#scep-profile-vs-ra-profile-scep-api) for more information on how to configure SCEP server URL. For example, it can be:
