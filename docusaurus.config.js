@@ -4,7 +4,7 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
-const apiVersion = '2.7.1';
+const apiVersion = '2.8.0';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -137,14 +137,19 @@ const config = {
             route: '/api/core-location/',
           },
           {
+            id: 'core-other',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-other.yaml',
+            route: '/api/core-other/',
+          },
+          {
             id: 'core-ra-profile',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-ra-profile.yaml',
             route: '/api/core-ra-profile/',
           },
           {
-            id: 'core-other',
-            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-other.yaml',
-            route: '/api/core-other/',
+            id: 'core-scep',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-scep.yaml',
+            route: '/api/core-scep/',
           },
           {
             id: 'core-token',
@@ -198,6 +203,11 @@ const config = {
             id: 'protocol-acme',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-protocol-acme.yaml',
             route: '/api/protocol-acme/',
+          },
+          {
+            id: 'protocol-scep',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-protocol-scep.yaml',
+            route: '/api/protocol-scep/',
           },
         ],
         theme: {
@@ -312,12 +322,16 @@ const config = {
                 to: '/api/core-location/',
               },
               {
+                label: 'Other',
+                to: '/api/core-other/',
+              },
+              {
                 label: 'RA Profile',
                 to: '/api/core-ra-profile/',
               },
               {
-                label: 'Other',
-                to: '/api/core-other/',
+                label: 'SCEP',
+                to: '/api/core-scep/',
               },
               {
                 label: 'Token',
@@ -370,6 +384,10 @@ const config = {
               {
                 label: 'ACME',
                 to: '/api/protocol-acme/',
+              },
+              {
+                label: 'SCEP',
+                to: '/api/protocol-scep/',
               },
             ],
           },
