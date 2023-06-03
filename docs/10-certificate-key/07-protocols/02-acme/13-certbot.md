@@ -25,7 +25,7 @@ Once the `Apache` server is ready, you can use the following command to request 
 ```bash
 certbot -n --apache ** \
   -d www.example.com \
-  --server https://[domain]:[port]/api/acme/raProfile/czertainly/directory
+  --server https://[domain]:[port]/api/v1/protocols/acme/raProfile/czertainly/directory
 ```
 
 In the example above, we are asking the ACME server represented by CZERTAINLY platform to issue SSL/TLS certificate for the domain `www.example.com`. Once the certificate is successfully downloaded, `Certbot` will automatically assign it to the `Apache` configuration.
@@ -64,7 +64,7 @@ certbot certonly -n \
   -d www.example.com \
   --dns-rfc2136 \
   --dns-rfc2136-credentials dns.ini \
-  --server https://[domain]:[port]/api/acme/raProfile/czertainly/directory
+  --server https://[domain]:[port]/api/v1/protocols/acme/raProfile/czertainly/directory
 ```
 
 The issued certificate is also included in the certificate inventory of the platform. From now on, the `Certbot` will renew the certificate automatically.
@@ -76,7 +76,7 @@ Certificate can be revoked using the `Certbot`. To revoke certificate, run the f
 ```bash
 certbot revoke \
   --cert-name www.example.com  \
-  --server https://[domain]:[port]/api/acme/raProfile/czertainly/directory
+  --server https://[domain]:[port]/api/v1/protocols/acme/raProfile/czertainly/directory
 ```
 
 You can check the certificate status also in the certificate inventory of the platform, after it was successfully revoked.
