@@ -26,6 +26,8 @@ If your network policy requires using HTTP proxy you can configure it under this
 
 Files `/etc/profile.d/proxy.sh`, `/etc/apt/apt.conf.d/80proxy`, `/etc/default/rke2-server` and `/etc/default/rke2-agent` are modified by this action.
 
+When you change these settings, you have to close the actual terminal session and open a new one to reload environment variables from file `/etc/profile.d/proxy.sh`.
+
 Values you provided in this dialog are stored on the file system in: `/etc/czertainly-ansible/vars/proxy.yml`.
 
 ## Configure ingress TLS certificates
