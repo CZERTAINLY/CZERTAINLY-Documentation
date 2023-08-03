@@ -26,9 +26,13 @@ If your network policy requires using HTTP proxy you can configure it under this
 
 Files `/etc/profile.d/proxy.sh`, `/etc/apt/apt.conf.d/80proxy`, `/etc/default/rke2-server` and `/etc/default/rke2-agent` are modified by this action.
 
-When you change these settings, you have to close the actual terminal session and open a new one to reload environment variables from file `/etc/profile.d/proxy.sh`.
-
 Values you provided in this dialog are stored on the file system in: `/etc/czertainly-ansible/vars/proxy.yml`.
+
+:::caution
+In case you are setting HTTP Proxy parameters before the first run of the installation. You need to close the actual terminal session and open a new one to reload environment variables from file `/etc/profile.d/proxy.sh`.
+
+In case you need to change the HTTP Proxy parameters of an existing installation, you need first reboot the Appliance and, after that, execute the function "Install CZERTAINLY" from the main menu to get changes correctly propagated into the system, RKE2 and all CZERTAINLY PODs.
+:::
 
 ## Configure ingress TLS certificates
 
