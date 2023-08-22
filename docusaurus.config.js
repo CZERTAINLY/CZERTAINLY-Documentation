@@ -4,7 +4,7 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
-const apiVersion = '2.8.1';
+const apiVersion = 'develop';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -44,6 +44,19 @@ const config = {
           editUrl: ({versionDocsDirPath, docPath}) =>
               `https://github.com/3KeyCompany/CZERTAINLY-Documentation/edit/documentation/${versionDocsDirPath}/${docPath}`,
           remarkPlugins: [
+              [require('./src/plugins/remarkFindReplacePlugin'), {
+                // List your find and replace values. Both values must be strings.
+                // This is required.
+                replacements: {
+                  API_BASE_URL: 'http://localhost:3000/api/',
+                },
+
+                // By default, find values are prefixed to reduce the chances of
+                // conflicting with real content. You can change the prefix here.
+                // Set to `false` to disable the prefix.
+                prefix: '%',
+
+              }],
               [require('./src/plugins/remarkSimplePlantumlPlugin'), { baseUrl: 'https://www.plantuml.com/plantuml/svg', type: "svg" }],
           ],
         },
@@ -137,6 +150,11 @@ const config = {
             route: '/api/core-location/',
           },
           {
+            id: 'core-notification',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-notification.yaml',
+            route: '/api/core-notification/',
+          },
+          {
             id: 'core-other',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-other.yaml',
             route: '/api/core-other/',
@@ -197,6 +215,11 @@ const config = {
             id: 'connector-entity-provider',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-connector-entity-provider.yaml',
             route: '/api/connector-entity-provider/',
+          },
+          {
+            id: 'connector-notification-provider',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-connector-notification-provider.yaml',
+            route: '/api/connector-notification-provider/',
           },
 
           {
@@ -322,6 +345,10 @@ const config = {
                 to: '/api/core-location/',
               },
               {
+                label: 'Notification',
+                to: '/api/core-notification/',
+              },
+              {
                 label: 'Other',
                 to: '/api/core-other/',
               },
@@ -374,6 +401,10 @@ const config = {
               {
                 label: 'Entity Provider',
                 to: '/api/connector-entity-provider/',
+              },
+              {
+                label: 'Notification Provider',
+                to: '/api/connector-notification-provider/',
               },
             ],
           },
