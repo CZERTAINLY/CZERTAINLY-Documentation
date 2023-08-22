@@ -28,6 +28,12 @@ Files `/etc/profile.d/proxy.sh`, `/etc/apt/apt.conf.d/80proxy`, `/etc/default/rk
 
 Values you provided in this dialog are stored on the file system in: `/etc/czertainly-ansible/vars/proxy.yml`.
 
+:::caution
+In case you are setting HTTP Proxy parameters before the first run of the installation. You need to close the actual terminal session and open a new one to reload environment variables from file `/etc/profile.d/proxy.sh`.
+
+In case you need to change the HTTP Proxy parameters of an existing installation, you need first reboot the Appliance and, after that, execute the function "Install CZERTAINLY" from the main menu to get changes correctly propagated into the system, RKE2 and all CZERTAINLY PODs.
+:::
+
 ## Configure ingress TLS certificates
 
 This option provides interface for setting your own certificates for CZERTAINLY web interface. After selecting it, TUI will open dialog with two input fields. First for filename containing certificate and the second one for private key.
