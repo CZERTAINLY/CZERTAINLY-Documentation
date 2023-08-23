@@ -9,7 +9,7 @@ The `Approval Profile` stands as a fundamental cornerstone within the platform, 
 | Name           | The distinctive label assigned to the `Approval Profile`                                                                                       |
 | UUID           | The universally unique identifier uniquely representing the `Approval Profile`                                                                 |
 | Description    | A concise yet informative explanation detailing the purpose and characteristics of the `Approval Profile`                                      |
-| Expiry          | A time-based parameter expressed in hours, denoting the duration before an approval request automatically expires in the absence of any action |
+| Expiry         | A time-based parameter expressed in hours, denoting the duration before an approval request automatically expires in the absence of any action |
 | Approval Steps | A list of sequential approval steps that collectively define the progression of the approval process                                           |
 
 ## Approval steps
