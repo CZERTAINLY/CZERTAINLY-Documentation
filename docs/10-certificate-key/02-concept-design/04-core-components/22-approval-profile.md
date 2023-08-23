@@ -9,7 +9,7 @@ The `Approval Profile` stands as a fundamental cornerstone within the platform, 
 | Name           | The distinctive label assigned to the `Approval Profile`                                                                                       |
 | UUID           | The universally unique identifier uniquely representing the `Approval Profile`                                                                 |
 | Description    | A concise yet informative explanation detailing the purpose and characteristics of the `Approval Profile`                                      |
-| Epiry          | A time-based parameter expressed in hours, denoting the duration before an approval request automatically expires in the absence of any action |
+| Expiry          | A time-based parameter expressed in hours, denoting the duration before an approval request automatically expires in the absence of any action |
 | Approval Steps | A list of sequential approval steps that collectively define the progression of the approval process                                           |
 
 ## Approval steps
@@ -28,4 +28,4 @@ An intrinsic attribute of the `Approval Profile` is its dynamic versioning syste
 
 Authenticated users benefit from the capability to view a comprehensive list of approval requests assigned to them, including the associated statuses. This feature enhances transparency and accountability within the approval workflow.
 
-By meticulously comprehending the nuances of the `Approval Profile` and its interconnected components, users are empowered to efficiently navigate and leverage approval processes for optimal authorization workflows.
+By comprehending the nuances of the `Approval Profile` and its interconnected components, users are empowered to efficiently navigate and leverage approval processes for optimal authorization workflows.
