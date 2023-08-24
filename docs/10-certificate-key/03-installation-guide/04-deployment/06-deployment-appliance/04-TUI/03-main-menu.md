@@ -9,6 +9,7 @@ Main menu allows to select and execute basic tasks on CZERTAINLY appliance, it o
 | **i**ngressTLS  | [Configure ingress TLS certificates](#configure-ingress-tls-certificates)       | Custom HTTPS certificates for CZERTAINLY web interface can be configured here.           |
 | **t**rustedCA   | [Configure custom trusted certificates](#configure-custom-trusted-certificates) | Use this option to change default list of trusted certificates of CZERTAINLY.            |
 | **p**ostrgres   | [Configure database](#configure-database)                                       | You can change default configuration of postgres database with this option.              |
+| **d**ockerRepo  | [Configure Docker repository access credentials](#configure-docker-repository-access-credentials) | Configure credentials for Licensed parts of CZERTAINLY here.           |
 | **c**zertainly  | [Configure CZERTAINLY](#configure-czertainly)                                   | Use this option to select version and components of CZERTAINLY to install.               |
 | **s**tatus      | [Show CZERTAINLY status](#show-czertainly-status)                               | This option will show status of CZERTAINLY and Kubernetes subsystem.                     |
 | **a**dvanced    | [Advanced options](./advanced-menu)                                             | Opens another menu with advanced options of CZERTAINLY appliance.                        |
@@ -97,10 +98,9 @@ This option executes CZERTAINLY installation. During the process, output from in
 This option printout simple status information about CZERTAINLY and underlying Kubernetes cluster, for example:
 
 ```
-kube-system	11 PODs OK
-ingress-nginx	1 PODs OK
-cert-manager	3 PODs OK
-czertainly	13 PODs OK
+kube-system     11 PODs OK
+cert-manager	 3 PODs OK
+czertainly      13 PODs OK
 
 
 Everything is OK, administrative interface is available at:
