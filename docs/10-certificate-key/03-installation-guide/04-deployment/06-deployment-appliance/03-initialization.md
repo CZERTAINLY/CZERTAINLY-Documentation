@@ -5,7 +5,7 @@ To make initial configuration of virtual appliance, you must log into it using d
 * **username**: czertainly
 * **password**: newgenerationtrustcare
 
-When you are successfully logged in, you will see the Text-based User Interface ([**TUI**](./TUI/intro)) for management of the virtual appliance.
+To log in, you can use the console of the virtual machine. Or you can use SSH, which offers higher user comfort like scrolling and easy copy & paste. When you are successfully logged in, you will see the Text-based User Interface ([**TUI**](./TUI/intro)) for managing the virtual appliance.
 
 The following steps needs to be done to initialize the virtual appliance.
 
