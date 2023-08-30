@@ -59,7 +59,7 @@ JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(reques
 // create self-signed certificate
 PrivateKey requesterPrivKey = requesterKeyPair.getPrivate(); // from generated key pair
 JcaContentSignerBuilder certSignerBuilder = new JcaContentSignerBuilder(sigAlg); // from above
-ContentSigner certSigner = signerBuilder.build(requesterPrivKey);
+ContentSigner certSigner = certSignerBuilder.build(requesterPrivKey);
 X509CertificateHolder certHolder = certBuilder.build(certSigner);
 
 // get the certificate from the certificate holder
