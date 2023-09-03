@@ -88,4 +88,4 @@ Internal services can use Persistence Volume Claims to store the data. The PVC i
 
 The following sub-charts requires persistence:
 
-- [Messaging RabbitMQ](../../messaging-rabbitmq)
+- Messaging RabbitMQ
