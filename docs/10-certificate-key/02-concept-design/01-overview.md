@@ -25,6 +25,8 @@ The architecture of the platform is based on the following parts:
 | **[Interfaces](architecture/interfaces)**                  | Interfaces provided and used by the platform.                                                                   |
 | **[Connector](architecture/connector)**                    | Technology implementations that interact with the `Core` to perform the designated operation on the technology. |
 | **[Access Control](architecture/access-control/overview)** | Roles and permissions in the platform.                                                                          |
+| **[A^2 Engine](./architecture/attributes/overview)**       | A^2 Engine is a component that provides the ability to define and manage attributes.                            |
+| **[Notifications](./architecture/notifications)**          | Internal and External notifications.                                                                            |
 
 See the [Architecture Overview](architecture/overview) for more details about the architecture of the platform.
 
@@ -44,6 +46,7 @@ The platform consists of the following components:
 | **[Token](core-components/token)**                           | Token instance representing access to specific cryptographic device or technology.                                              |
 | **[Key](core-components/key)**                               | Cryptographic key object that can be managed and contains relevant information about its lifecycle.                             |
 | **[Token Profile](core-components/token-profile)**           | Token Profile abstracts the configuration of cryptographic service for the Clients to request cryptographic operations.         |
+| **[Notification](./core-components/notification)**           | Notification instance representing access to specific notification technology.                                                  |
 
 ### Modules
 

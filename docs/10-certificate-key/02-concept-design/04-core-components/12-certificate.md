@@ -15,6 +15,48 @@ In addition to the above details, the following are mapped to the `Certificate` 
 - `Entity`
 - `Group` it belongs to
 
+## Certificate status
+
+Certificate status represents state of certificate lifecycle and change of its status depends on certificate operations (e.g. issue, revoke, etc.) or events (e.g. expired, invalid, etc.) in platform.
+When certificate is requested, it starts in status `New` and needs to be issued to use it or perform client operations with it.  
+
+The following statuses are supported:
+
+| Status      | Description                                                                       |
+|-------------|-----------------------------------------------------------------------------------|
+| `New`       | The `Certificate` is created (requested) and ready to be issued                   |
+| `Rejected`  | The `Certificate` issue approval request was rejected.                            |
+| `Valid`     | The `Certificate` is valid according to validation described [below](#validation) |
+| `Invalid `  | The `Certificate` is valid according to validation described [below](#validation) |
+| `Revoked`   | The `Certificate` is revoked                                                      |
+| `Expiring`  | The `Certificate` is marked as expiring when its expiry is in less than 30 days   |
+| `Expired`   | The `Certificate` is expired                                                      |
+
+The `Certificate` status transition diagram is as follows:
+
+```plantuml
+@startuml
+hide empty description
+
+[*] --> New
+New --> Rejected
+New --> Valid
+New --> Invalid
+Valid --> Invalid
+Valid --> Revoked
+Valid --> Expiring
+Invalid --> Valid
+Invalid --> Revoked
+Invalid --> Expired
+Expiring --> Revoked
+Expiring --> Expired
+Expired --> [*]
+Rejected --> [*]
+Revoked --> [*]
+
+@enduml
+```
+
 ## Validation
 
 ### Validation steps

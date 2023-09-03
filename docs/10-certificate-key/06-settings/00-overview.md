@@ -8,3 +8,4 @@ Settings allows to configure subset of the platform setting during the runtime. 
 - [Platform](./platform)
 - [Custom Attributes](./custom-attributes)
 - [Global Metadata](./global-metadata)
+- [Notifications](./notifications)
