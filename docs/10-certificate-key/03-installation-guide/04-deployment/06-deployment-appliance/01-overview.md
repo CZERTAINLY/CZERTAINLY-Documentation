@@ -30,7 +30,7 @@ Because of different availability and public/private access to containers, the v
 By *minimum* requirements we mean resources which needed for CZERTAINLY and kubernetes installation and for basic evaluation of its features.
 
 :::tip Resource management
-Resources can be scaled up or down based on the needs of the platform. The resources needed for the CZERTAINLY platform differs based on the number of managed objects, implemented use-cases, and required connectors. 
+Resources can be scaled up or down based on the needs of the platform. The resources needed for the CZERTAINLY platform differs based on the number of managed objects, implemented use-cases, and required connectors.
 :::
 
 ## Download and import image
