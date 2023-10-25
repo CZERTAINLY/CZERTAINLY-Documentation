@@ -67,6 +67,10 @@ To enter obtained credentials, use option **Main Menu -> [Configure Docker repos
 
 Option **[Configure CZERTAINLY](./TUI/main-menu#configure-czertainly)** of the main menu opens dialog where you can choose version of CZERTAINLY and it's components you want to install.
 
+:::info Note
+If you are not planning to use email notifications, disable *email Provider*. It is by default enabled and when not configured properly, installation will hang.
+:::
+
 ## Install CZERTAINLY
 
 When you select **[Install CZERTAINLY](./TUI/main-menu#install-czertainly)** from the main menu. The installation will begin after confirmation.
