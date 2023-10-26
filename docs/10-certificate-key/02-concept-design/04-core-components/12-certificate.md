@@ -22,17 +22,17 @@ Certificate status represents stage of certificate lifecycle and transition to d
 
 Certificate can be in following states:
 
-| Status             | Description                                                              |
-|--------------------|--------------------------------------------------------------------------|
-| `Requested`        | The `Certificate` is created (requested) and ready to be issued.         |
-| `Pending Approval` | The `Certificate` action is waiting to be approved.                      |
-| `Pending Issue`    | The `Certificate` action is waiting to be issued at authority.           |
-| `Pending Revoke`   | The `Certificate` action is waiting to be revoked at authority.          |
-| `Rejected`         | The `Certificate` issue approval request was rejected.                   |
-| `Failed`           | The `Certificate` request issuance failed.                               |
-| `Issued`           | The `Certificate` is issued and active.                                  |
-| `Revoked`          | The `Certificate` is revoked.                                            |
-| `Archived`         | The `Certificate` is archived and not displayed in inventory by default. |
+| Status                                     | Description                                                              | Transition                                                                                                                                                                         |
+|--------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Requested`                                | The `Certificate` is created (requested) and ready to be issued.         | Initial state in case user requests certificate.                                                                                                                                   |
+| `Pending Approval`                         | The `Certificate` action is waiting to be approved.                      | When certificate action needs to be approved.                                                                                                                                      |
+| `Pending Issue` (***Not yet supported***)  | The `Certificate` action is waiting to be issued at authority.           | When certificate is requested to be issued by authority (already approved) and waiting to be approve issuance on authority side.                                                   |
+| `Pending Revoke` (***Not yet supported***) | The `Certificate` action is waiting to be revoked at authority.          | When certificate is requested to be revoked by authority (already approved) and waiting to be approve revocation on authority side.                                                |
+| `Rejected`                                 | The `Certificate` issuance approval request was rejected.                | When approval for certificate issue action was rejected or expired.                                                                                                                |
+| `Failed`                                   | The `Certificate` request issuance failed.                               | When certificate fails to be issued by authority caused by error or invalid request.                                                                                               |
+| `Issued`                                   | The `Certificate` is issued.                                             | Initial state in case certificate is uploaded or discovered.<br />When certificate is successfully issued.<br/> When certificate revocation failed state returns back to `Issued`. |
+| `Revoked`                                  | The `Certificate` is revoked.                                            | When certificate is successfully revoked.                                                                                                                                          |
+| `Archived` (***Not yet supported***)       | The `Certificate` is archived and not displayed in inventory by default. | When certificate is marked by user or scheduled job as archived.                                                                                                                   |
 
 Certificate state transition diagram is as follows:
 
@@ -74,17 +74,18 @@ hide empty description
  or events (e.g. expired, invalid, etc.) in platform.
 When certificate is requested, it starts in status `New` and needs to be issued to use it or perform client operations with it.  
 
-The following statuses are supported:
+The following validation statuses are supported:
 
-| Status      | Description                                                                       |
-|-------------|-----------------------------------------------------------------------------------|
-| `New`       | The `Certificate` is created (requested) and ready to be issued                   |
-| `Rejected`  | The `Certificate` issue approval request was rejected.                            |
-| `Valid`     | The `Certificate` is valid according to validation described [below](#validation) |
-| `Invalid `  | The `Certificate` is valid according to validation described [below](#validation) |
-| `Revoked`   | The `Certificate` is revoked                                                      |
-| `Expiring`  | The `Certificate` is marked as expiring when its expiry is in less than 30 days   |
-| `Expired`   | The `Certificate` is expired                                                      |
+| Status       | Description                                                                          |
+|--------------|--------------------------------------------------------------------------------------|
+| `NotChecked` | The `Certificate` validation was not run yet.                                        |
+| `Failed`     | The `Certificate` validation process failed.                                         |
+| `Inactive`   | The `Certificate` is not yet active (before its validation period starts).           |
+| `Valid`      | The `Certificate` is valid according to validation described [below](#validation).   |
+| `Invalid`    | The `Certificate` is invalid according to validation described [below](#validation). |
+| `Revoked`    | The `Certificate` is revoked.                                                        |
+| `Expiring`   | The `Certificate` is marked as expiring when its expiry is in less than 30 days.     |
+| `Expired`    | The `Certificate` is expired.                                                        |
 
 The `Certificate` status transition diagram is as follows:
 
@@ -92,20 +93,36 @@ The `Certificate` status transition diagram is as follows:
 @startuml
 hide empty description
 
-[*] --> New
-New --> Rejected
-New --> Valid
-New --> Invalid
+[*] --> NotChecked
+NotChecked --> Failed
+NotChecked --> Inactive
+NotChecked --> Valid
+NotChecked --> Invalid
+NotChecked --> Expiring
+NotChecked --> Expired
+NotChecked --> Revoked
+Failed --> Inactive
+Failed --> Valid
+Failed --> Invalid
+Failed --> Expiring
+Failed --> Expired
+Failed --> Revoked
+Inactive --> Valid
+Inactive --> Revoked
 Valid --> Invalid
 Valid --> Revoked
 Valid --> Expiring
 Invalid --> Valid
 Invalid --> Revoked
 Invalid --> Expired
+Revoked --> Invalid
+Revoked --> Expired
+Expiring --> Invalid
 Expiring --> Revoked
 Expiring --> Expired
+Failed --> [*]
 Expired --> [*]
-Rejected --> [*]
+Invalid --> [*]
 Revoked --> [*]
 
 @enduml
@@ -181,7 +198,7 @@ The following validation checks are performed for `Certificate`:
 |---|------------------------|--------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1 | Certificate chain      | Check the completeness of chain (certificate validation path) and validity of issuer certificate | <span class="badge badge--success">SUCCESS</span> if chain is complete.<br/><span class="badge badge--danger">FAILED</span> if certificate in validation path is missing or issuer certificate is invalid or revoked.                                                                                                                                                                                                                               |
 | 2 | Signature verification | Check the signature of `Certificate` using public key of the issuer certificate.                 | <span class="badge badge--secondary">NOT CHECKED</span> if issuer is missing.<br/><span class="badge badge--success">SUCCESS</span> if signature verified.<br/><span class="badge badge--danger">FAILED</span> if verification fails.                                                                                                                                                                                                               |
-| 3 | Certificate validity   | Check certificate validity based on `notBefore` and `notAfter` dates of the certificate.         | <span class="badge badge--secondary">INVALID</span> in case  `notBefore` >= current date.<br/><span class="badge badge--danger">EXPIRED</span> in case `notAfter` <= current date.<br/><span class="badge badge--warning">EXPIRING</span> in case the `notAfter` is less than 30 days from current date.<br/><span class="badge badge--success">SUCCESS</span> if `notBefore` < current date.                                                       |
+| 3 | Certificate validity   | Check certificate validity based on `notBefore` and `notAfter` dates of the certificate.         | <span class="badge badge--secondary">INACTIVE</span> in case `notBefore` >= current date.<br/><span class="badge badge--danger">EXPIRED</span> in case `notAfter` <= current date.<br/><span class="badge badge--warning">EXPIRING</span> in case the `notAfter` is less than 30 days from current date.<br/><span class="badge badge--success">SUCCESS</span> if `notBefore` < current date.                                                       |
 | 4 | OCSP check             | Check status using OCSP URL available in the certificate extension `AuthorityInformationAccess`. | <span class="badge badge--secondary">NOT CHECKED</span> if issuer is missing.<br/><span class="badge badge--warning">WARNING</span> if OCSP URL is not available or failed to check status.<br/><span class="badge badge--success">SUCCESS</span> if OCSP returns `good`.<br/><span class="badge badge--danger">REVOKED</span> if the OCSP return `revoked`.                                                                                        |
 | 5 | CRL check              | Check status using CRL USL available in the certificate attribute `CRLDistributionPoints`.       | <span class="badge badge--secondary">NOT CHECKED</span> if issuer is missing.<br/><span class="badge badge--warning">WARNING</span> if CRL URL is not available or failed to check status.<br/><span class="badge badge--success">SUCCESS</span> in case CRL is available, valid, and the certificate is not on the list.<br/><span class="badge badge--danger">REVOKED</span> in case CRL is available, valid, and the certificate is on the list. |
 | 6 | Basic Constraints      | Check the basic constraints if extension is present.                                             | <span class="badge badge--danger">FAILED</span> if certificate is version 3, not end certificate and does not have CA flag set.<br/><span class="badge badge--warning">WARNING</span> if cannot check if certificate is CA or path length is greater than its issuer.<br/><span class="badge badge--success">SUCCESS</span> otherwise.                                                                                                              |
@@ -203,7 +220,7 @@ start
 
 if (chain check SUCCESS?) then (yes)
   if (signature check SUCCESS?) then (yes)
-    if (validity check INVALID or EXPIRED?) then (yes)
+    if (validity check INACTIVE or EXPIRED?) then (yes)
       if (OCSP or CRL check REVOKED?) then (yes)
         if (validity check EXPIRING?) then (yes)
           :**Expiring**;
@@ -214,7 +231,7 @@ if (chain check SUCCESS?) then (yes)
         :**Revoked**;
       endif
     else (no)
-      :**Invalid** or **Expired**;
+      :**Inactive** or **Expired**;
     endif
   else (no)
     :**Invalid**;
