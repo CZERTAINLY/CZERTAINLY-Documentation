@@ -4,6 +4,7 @@ The `Certificate` holds the information about the certificate and its lifecycle.
 
 - Human understandable parsed certificate content
 - Base64 certificate content
+- Certificate state
 - Certificate validation status
 - Certificate compliance status
 - Metadata including discovery information
@@ -15,9 +16,62 @@ In addition to the above details, the following are mapped to the `Certificate` 
 - `Entity`
 - `Group` it belongs to
 
-## Certificate status
+## Certificate state
 
-Certificate status represents state of certificate lifecycle and change of its status depends on certificate operations (e.g. issue, revoke, etc.) or events (e.g. expired, invalid, etc.) in platform.
+Certificate status represents stage of certificate lifecycle and transition to different state depends on certificate operations (e.g. issue, revoke, etc.) and/or events (approval expired, certificate revoked externally).
+
+Certificate can be in following states:
+
+| Status             | Description                                                              |
+|--------------------|--------------------------------------------------------------------------|
+| `Requested`        | The `Certificate` is created (requested) and ready to be issued.         |
+| `Pending Approval` | The `Certificate` action is waiting to be approved.                      |
+| `Pending Issue`    | The `Certificate` action is waiting to be issued at authority.           |
+| `Pending Revoke`   | The `Certificate` action is waiting to be revoked at authority.          |
+| `Rejected`         | The `Certificate` issue approval request was rejected.                   |
+| `Failed`           | The `Certificate` request issuance failed.                               |
+| `Issued`           | The `Certificate` is issued and active.                                  |
+| `Revoked`          | The `Certificate` is revoked.                                            |
+| `Archived`         | The `Certificate` is archived and not displayed in inventory by default. |
+
+Certificate state transition diagram is as follows:
+
+```plantuml
+@startuml
+hide empty description
+
+  [*] --> Requested
+  [*] --> Issued
+  Requested --> Failed
+  Requested --> PendingApproval
+  Requested --> PendingIssue
+  Requested --> Issued
+  PendingApproval --> Rejected
+  PendingApproval --> PendingIssue
+  PendingApproval --> PendingRevoke
+  PendingApproval --> Issued
+  PendingApproval --> Revoked
+  PendingIssue --> Failed
+  PendingIssue --> Issued
+  PendingRevoke --> Revoked
+  PendingRevoke --> Issued
+  Issued --> PendingApproval
+  Issued --> PendingRevoke
+  Issued --> Revoked
+  Issued --> Archived
+  Revoked --> Archived
+  Rejected --> [*]
+  Failed --> [*]
+  Issued --> [*]
+  Revoked --> [*]
+  Archived --> [*]
+
+@enduml
+```
+
+## Certificate validation status
+
+ or events (e.g. expired, invalid, etc.) in platform.
 When certificate is requested, it starts in status `New` and needs to be issued to use it or perform client operations with it.  
 
 The following statuses are supported:
