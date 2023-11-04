@@ -6,6 +6,7 @@ Advanced menu is used for advanced operations with CZERTAINLY Appliance. You can
 |-----------------|------------------------------------------------------|----------------------------------------------------------------------------------------------|
 | **u**pdate      | Update Operating System                              | This option updates CZERTAINLY Appliance by `apt update && apt upgrade` command.             |
 | **r**emoveC     | [Remove CZERTAINLY](#remove-czertainly)              | This option removes CZERTAINLY Appliance by deleting namespace `czertainly` from Kubernetes. |
+| **i**nstallC    | [Install only CZERTAINLY](#install-only-czertainly)  | This option (re)install only CZERTAINLY, this can quite speedup proces of reinstalation.     |
 | **r**emove      | [Remove RKE2 & CZERTAINLY](#remove-rke2--czertainly) | This option removes RKE2 (Kubernetes) and CZERTAINLY Appliance.                              |
 | **s**hell       | [Enter system shell](#enter-system-shell)            | You can enter system shell as `czertainly` user.                                             |
 | **r**eboot      | Reboot system                                        | This option reboots CZERTAINLY Appliance by `shutdown -r now` command.                       |
@@ -17,6 +18,10 @@ Advanced menu is used for advanced operations with CZERTAINLY Appliance. You can
 Removing CZERTAINLY from appliance mainly means deleting `czertainly` namespace from Kubernetes. Purpose of this tasks is preparation step for CZERTAINLY re-installation.
 
 This task preserves anything that was configured, including CZERTAINLY data which is stored in Postgres database.
+
+## Install only CZERTAINLY
+
+This tasks only re/install CZERTAINLY software. It is complementary to previous task and reduce reinstallation time comparing to full installation when status of RKE2 is verified. But you have to have operational RKE2 to sucesffuly finish this task.
 
 ## Remove RKE2 & CZERTAINLY
 
