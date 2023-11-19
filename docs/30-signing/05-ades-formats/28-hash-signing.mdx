@@ -1,3 +1,5 @@
+import React from 'react';
+
 # Hash Signing
 
 Hash signing is the option for the client to pre-compute hash of the data that should be signed instead of providing the complete data. This approach may be useful to improve the overall speed of the signature processing as the server does not have to perform all steps with the signature formatting. Or it can be used when the data that should be signed are sensitive and the client does not want to share its content for the signature.

@@ -1,5 +1,5 @@
-const visit = require("unist-util-visit");
-const escapeStringRegexp = require('escape-string-regexp')
+import escapeStringRegexp from 'escape-string-regexp';
+import visit from 'unist-util-visit';
 
 const DEFAULT_OPTIONS = {
     prefix: "%"
@@ -14,7 +14,7 @@ const DEFAULT_OPTIONS = {
  *
  * @param {Object} pluginOptions Remark plugin options.
  */
-function remarkFindReplacePlugin(pluginOptions) {
+const remarkFindReplacePlugin = (pluginOptions) => {
     const options = { ...DEFAULT_OPTIONS, ...pluginOptions };
 
     // Attaches prefix to the start of the string.
@@ -36,8 +36,8 @@ function remarkFindReplacePlugin(pluginOptions) {
 
     const replacer = (_match, name) => options.replacements[stripPrefix(name)]
 
-    return function transformer(syntaxTree) {
-        visit(syntaxTree, ['text', 'html', 'code', 'inlineCode', 'link'], node => {
+    const transformer = async (syntaxTree) => {
+        visit(syntaxTree, ['text', 'html', 'code', 'inlineCode', 'link'], (node) => {
             if (node.type === 'link') {
                 // For links, the text value is replaced by text node, so we change the
                 // URL value.
@@ -47,8 +47,8 @@ function remarkFindReplacePlugin(pluginOptions) {
                 node.value = node.value.replace(regexp, replacer)
             }
         });
-        return syntaxTree;
+        return transformer;
     };
 }
 
-module.exports = remarkFindReplacePlugin;
+export default remarkFindReplacePlugin;

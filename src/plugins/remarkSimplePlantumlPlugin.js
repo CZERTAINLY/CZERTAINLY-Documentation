@@ -1,5 +1,5 @@
-const visit = require("unist-util-visit");
-const plantumlEncoder = require("plantuml-encoder");
+import plantumlEncoder from 'plantuml-encoder';
+import visit from 'unist-util-visit';
 
 const DEFAULT_OPTIONS = {
     baseUrl: "https://www.plantuml.com/plantuml/png",
@@ -16,11 +16,11 @@ const DEFAULT_OPTIONS = {
  *
  * @param {Object} pluginOptions Remark plugin options.
  */
-function remarkSimplePlantumlPlugin(pluginOptions) {
+const remarkSimplePlantumlPlugin = (pluginOptions) => {
     const options = { ...DEFAULT_OPTIONS, ...pluginOptions };
 
-    return function transformer(syntaxTree) {
-        visit(syntaxTree, "code", node => {
+    const transformer = (syntaxTree) => {
+        visit(syntaxTree, ["code"], (node) => {
             let { lang, value, meta } = node;
             if (!lang || !value || lang !== "plantuml") return;
 
@@ -37,8 +37,8 @@ function remarkSimplePlantumlPlugin(pluginOptions) {
             node.alt = meta;
             node.meta = undefined;
         });
-        return syntaxTree;
+        return transformer;
     };
 }
 
-module.exports = remarkSimplePlantumlPlugin;
+export default remarkSimplePlantumlPlugin;

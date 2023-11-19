@@ -23,7 +23,7 @@ To create new OIDC client, follow steps described in [Creating an OpenID Connect
 - Client ID: **CZERTAINLY**
 - Name: **CZERTAINLY**
 - Client suthentication: **On**
-- Root URL: **https://<CZERTAINLY_DOMAIN>**, where `<CZERTAINLY_DOMAIN>` is the domain of your CZERTAINLY instance. This serves as an access point to your deployment
+- Root URL: **https://\<CZERTAINLY_DOMAIN>**, where `<CZERTAINLY_DOMAIN>` is the domain of your CZERTAINLY instance. This serves as an access point to your deployment
 - Valid redirect URIs: list of valid redirect URIs, for example `https://<CZERTAINLY_DOMAIN>*`
 - Valid post logout redirect URIs: list of valid post logout redirect URIs, for example `https://<CZERTAINLY_DOMAIN>/administrator/`
 - Web origins: list of valid web origins, for example `https://<CZERTAINLY_DOMAIN>`
