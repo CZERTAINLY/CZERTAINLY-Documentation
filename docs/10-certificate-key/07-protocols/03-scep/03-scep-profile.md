@@ -25,7 +25,7 @@ The certificate to be used for the `SCEP Profile` should meet the following crit
 2. The key algorithm should be one of the supported `RSA` or `ECDSA`
 3. The key pair should have appropriate key set enabled (for encryption and signing)
 
-:::caution Microsoft Intune certificate requirements
+:::warning[Microsoft Intune certificate requirements]
 For Microsoft Intune validation, there may be additional requirements for the certificate. See the [Intune Integration Guide](../../integration-guides/intune/overview) for more information.
 :::
 
@@ -33,7 +33,7 @@ For Microsoft Intune validation, there may be additional requirements for the ce
 
 If a default `RA Profile` is selected then `Attributes` to issue and revoke certificates must be configured, if needed.
 
-:::caution Certificate operations
+:::warning[Certificate operations]
 Certificate management `Attributes` for `SCEP Profile` are used during issuing process of the certificate and cannot be changed by the SCEP client.
 :::
 

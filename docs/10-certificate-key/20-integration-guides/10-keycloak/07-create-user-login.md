@@ -27,11 +27,11 @@ This will map the `groups` attribute to the `roles` attribute in the JSON ID of 
 }
 ```
 
-:::info JSON ID
+:::info[JSON ID]
 JSON ID will be forwarder by the API gateway to CZERTAINLY. The JSON ID contains the payload from the Userinfo Endpoint of the Keycloak OpenID Connect provider. For more information, see [JSON ID](../../concept-design/architecture/access-control/identification#json-id) in the access control section.
 :::
 
-:::info Automatic registration of user and roles
+:::info[Automatic registration of user and roles]
 By default the users and roles that do not exists are rejected. However, in some cases, it is desirable to automatically register the user and roles. This is required for example when single sign-on (SSO) and user federation is allowed. The behavior of the user and roles registration is controlled by the values `createUnknownUsers` and `createUnknownRoles` in the `Auth` service. If you want to enable automatic registration of users and roles, set the following values when installing or upgrading Helm chart:
 ```yaml
 authService:

@@ -8,7 +8,7 @@ The legacy NTP implementation using local NTP commands was replaced with the bui
 `NTP_SERVERS` environment variable is no longer used.
 No changes to the configuration of Time Monitor are needed.
 
-:::caution
+:::warning
 Make sure that your Time Monitor configuration works properly after the upgrade to this version . Test the configuration before you put it into production. Make necessary changes to the configuration if needed. Refer to the [TimeMonitor Configuration](https://doc.primekey.com/signserver/signserver-reference/signserver-timemonitor-application/signserver-timemonitor-overview/timemonitor-configuration) documentation for more information.
 :::
 

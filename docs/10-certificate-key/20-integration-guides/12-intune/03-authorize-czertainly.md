@@ -7,7 +7,7 @@ Follow Microsoft guide to [Authorize communication between CA and Intune](https:
 2. Create an application client secret
 3. Manage application API permissions
 
-:::info Credentials
+:::info[Credentials]
 After this step, you should have new registered application with required permissions. Ensure that you have the following information recorded to [Configure Intune SCEP Profile](./configure-scep-intune):
 - Application (client) ID
 - Directory (tenant) ID

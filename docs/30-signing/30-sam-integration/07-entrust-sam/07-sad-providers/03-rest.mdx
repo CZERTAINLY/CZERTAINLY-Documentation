@@ -1,3 +1,5 @@
+import {Fragment} from "react";
+
 # REST SAD Provider
 
 The implementation class of the REST SAD Provider is:
@@ -81,7 +83,7 @@ export const data = [
 ];
 
 export const GenTable = ({data}) => (
-    <React.Fragment>
+    <Fragment>
         {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -91,7 +93,7 @@ export const GenTable = ({data}) => (
                     <td>{dat.mandatory}</td>
                 </tr>)
         })}
-    </React.Fragment>
+    </Fragment>
 );
 
 <table>
@@ -426,7 +428,7 @@ The supported values for `SAD_PROVIDER_TRUSTSTORE_FORMAT` are defined as:
 
 ## OpenAPI Definition
 
-:::caution
+:::warning
 `v2` implementation of the OpenAPI definition is mandatory to use batch signing. See [Batch Signing](../../../ades-formats/batch-signing) for more information.
 :::
 

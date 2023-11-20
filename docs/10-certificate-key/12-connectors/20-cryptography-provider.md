@@ -4,7 +4,7 @@
 
 Cryptography Provider has capability of cryptographic token management and cryptographic key operations that is connected with specific technology like hardware security module, security vault, etc. Cryptographic keys that are created and used in the context of Cryptography Provider are managed by the implementation of Connector and can be used in the platform to execute cryptographic operation with the key.
 
-:::note Entity Provider key management
+:::note[Entity Provider key management]
 The Entity Provider Connectors are also capable of key management operations that allow to create private key and sign CSR. These capabilities are available only for the entities managed by the Entity Provider Connector. The Crypto Provider brings key management capabilities for the entire platform.
 :::
 

@@ -51,7 +51,7 @@ This will generate the `test.key` RSA 2048 bit private key file and `test.csr` c
 
 ## Get CA certificate
 
-:::caution Validation of CA certificate
+:::warning[Validation of CA certificate]
 The CA certificate fingerprint should be always validated! It should match the fingerprint of the CA certificate configured in the `SCEP Profile`.
 :::
 

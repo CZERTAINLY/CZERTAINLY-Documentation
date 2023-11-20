@@ -18,6 +18,6 @@ Certificate to be used as SCEP CA certificate (for decryption and signing) must 
 - having either EKU **Server Authentication** or **Certificate Request Agent** (1.3.6.1.4.1.311.20.2.1)
 - KU set to **Digital Signature** and **Key Encipherment**
 
-:::warning Improper configuration
+:::warning[Improper configuration]
 Improper configuration of the SCEP CA certificate may result in the failure of the Intune SCEP request.
 :::

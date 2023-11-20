@@ -60,7 +60,7 @@ In this example there are permissions defined for two resources:
 - `certificates`.
   For `certificates` resource all actions are allowed and for `raProfiles` detail and list action on any RA Profile except RA Profile named *NG-RA-Profile1* where detail action is denied.
 
-:::info OPA evaluation input
+:::info[OPA evaluation input]
 You can see [`input.json`](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies/blob/master/samples/input.json) for a complete input sample for OPA evaluation.
 :::
 
@@ -78,7 +78,7 @@ Resource and action names are codes for enums defined in `Core` service.
 To specify parent resource/action is optional and its usage depends on the context, if method requires authorization for more resources. Typically, you can use evaluation of permissions together with parent resource when input of your method are two resources that are hierarchically related (e.g., concept of principal and dependent entities in DB).
 But in case access to other resource is in separate corresponding service method, permissions for that resource can be evaluated separately in its own context (service).
 
-:::info Parent resource
+:::info[Parent resource]
 Even the name parent resource suggests some dependency between resources specified, you can use parent resource / action pair to evaluate any resource pair without any relation.
 :::
 
@@ -167,7 +167,7 @@ public List<RaProfileDto> listRaProfiles(Optional<Boolean> enabled) {
 }
 ```
 
-:::caution Object `uuid` and `name` property
+:::warning[Object `uuid` and `name` property]
 Entity and DTO that is returned from listing endpoint which is representing resource that has object access level has to contain `name` property. That way any object can be properly labeled also with human readable name instead of its UUID. Without `name` property, objects will be identified only through its UUID.
 :::
 

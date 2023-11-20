@@ -1,3 +1,5 @@
+import {Fragment} from "react";
+
 # Batch Signing
 
 Batch signing allows to sign multiple data in one batch (one signing request). Multiple data can be specified in the signing request and multiple signed data will be provided in response.
@@ -87,7 +89,7 @@ export const data = [
 ];
 
 export const GenTable = ({data}) => (
-    <React.Fragment>
+    <Fragment>
         {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -97,7 +99,7 @@ export const GenTable = ({data}) => (
                     <td>{dat.mandatory}</td>
                 </tr>)
         })}
-    </React.Fragment>
+    </Fragment>
 );
 
 <table>
@@ -110,7 +112,7 @@ export const GenTable = ({data}) => (
     </tbody>
 </table>
 
-:::caution
+:::warning
 When you configure both `BATCHSIGNING=true` and `ALLOW_BATCHSIGNING_OVERRIDE=true`, the `BATCHSIGNING` takes precedence and all requests will be considered as batch requests for batch signing. If you want to keep the decision on the client, use only `ALLOW_BATCHSIGNING_OVERRIDE=true`.
 :::
 
@@ -137,7 +139,7 @@ export const requestdata = [
 ];
 
 export const GenMetaTable = ({data}) => (
-    <React.Fragment>
+    <Fragment>
         {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -146,7 +148,7 @@ export const GenMetaTable = ({data}) => (
                     <td>{dat.mandatory}</td>
                 </tr>)
         })}
-    </React.Fragment>
+    </Fragment>
 );
 
 <table>
@@ -158,7 +160,7 @@ export const GenMetaTable = ({data}) => (
     </tbody>
 </table>
 
-:::info Hash and Batch
+:::info[Hash and Batch]
 Hash signing and batch signing can be combined. See [Hash signing support](#hash-signing-support) for more information.
 :::
 

@@ -93,7 +93,7 @@ Depends on what you would like to achieve:
 `SCEP Profile` can be used with multiple `RA Profiles`.
 :::
 
-:::caution
+:::warning
 The platform performs various validations on the backend including the following:
 - Availability of the `SCEP Profile` or `RA Profile`
 - Status of the `SCEP Profile` or `RA Profile`

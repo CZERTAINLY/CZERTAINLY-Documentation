@@ -105,11 +105,11 @@ Exception is a Root CA certificate, as it is self-signed, there is no trusted wa
 The same validation rules applies for each certificate up to the Root CA certificate.
 The overall result of validation is the result of validation from the bottom to top.
 
-:::info Certificate chain
+:::info[Certificate chain]
 When a certificate chain is not available for a `Certificate`, the platform tries to download the certificate chain from the Authority Information Access (AIA) extension. If found, the chain is downloaded until the root is available and the validation will be performed. if the complete certificate chain is not available, the validation is performed only using available certificates.
 :::
 
-:::info Self-signed Certificate
+:::info[Self-signed Certificate]
 For self-signed certificates, OCSP, CRL checks will not be performed.
 :::
 

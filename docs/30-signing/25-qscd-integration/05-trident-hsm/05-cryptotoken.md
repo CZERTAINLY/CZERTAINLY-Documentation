@@ -6,7 +6,7 @@ The following rules must be applied for a proper configuration of the PKCS#11 Cr
 - `SLOTLABELTYPE = SLOT_NUMBER`
 - `SLOTLABELVALUE` must be the same number as the number of configured `slot1...n` property in the `mpcm-pkcs11.conf` (there may be multiple slots configured, the number is used to connect with one particular slot)
 
-:::caution
+:::warning
 When the Trident HSM slot is empty or does not have a proper configuration of `DEFAULTKEY` property, the configured PKCS#11 Crypto Token will be considered as `Offline - Crypto Token is disconnected`. Nevertheless, the private key can be generated on the Crypto Token and assigned as `DEFAULTKEY`. After that, the PKCS#11 Crypto Token will have `Online` status.
 :::
 

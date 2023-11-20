@@ -25,7 +25,7 @@ By default `ACME Profiles` will be created without any default `RA Profile`, if 
 
 If a default `RA Profile` is selected then `Attributes` to issue certificates and revoke certificates must be configured, if needed.
 
-:::caution
+:::warning
 Certificate management `Attributes` for `ACME Profile` are used during finalize of the ACME Orders or ACME revocation requests and cannot be changed by the ACME client.
 :::
 

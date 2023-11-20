@@ -1,44 +1,49 @@
-import plantumlEncoder from 'plantuml-encoder';
-import visit from 'unist-util-visit';
+import plantumlEncoder from "plantuml-encoder";
 
 const DEFAULT_OPTIONS = {
     baseUrl: "https://www.plantuml.com/plantuml/png",
     type: "image"
 };
 
-/**
- * Plugin for remark-js
- *
- * See details about plugin API:
- * https://github.com/unifiedjs/unified#plugin
- *
- * You can specify the endpoint of PlantUML with the option 'baseUrl'
- *
- * @param {Object} pluginOptions Remark plugin options.
- */
-const remarkSimplePlantumlPlugin = (pluginOptions) => {
+const plugin = (pluginOptions) => {
     const options = { ...DEFAULT_OPTIONS, ...pluginOptions };
 
-    const transformer = (syntaxTree) => {
-        visit(syntaxTree, ["code"], (node) => {
-            let { lang, value, meta } = node;
-            if (!lang || !value || lang !== "plantuml") return;
+    return async (ast) => {
+        const {visit} = await import('unist-util-visit');
+        visit(ast, 'code', (node) => {
+            if (node.type === 'code') {
+                let {lang, value, meta} = node;
+                if (!lang || !value || lang !== "plantuml") return;
 
-            let url = `${options.baseUrl.replace(/\/$/, "")}/${plantumlEncoder.encode(value)}`;
+                let url = `${options.baseUrl.replace(/\/$/, "")}/${plantumlEncoder.encode(value)}`;
 
-            if (options.type === "image") {
-                node.type = "image";
-                node.url = url;
-            } else if (options.type === "svg") {
-                node.type = "paragraph";
-                node.children = [{ value: `<object type="image/svg+xml" data="${url}" />`, type: "html" }];
+                if (options.type === "image") {
+                    node.type = "image";
+                    node.url = url;
+                    node.alt = meta;
+                } else if (options.type === "svg") {
+                    //node.type = "paragraph";
+                    //node.children = [{value: `<object type="image/svg+xml" data="${url}" />`, type: "html"}];
+                    node.type = "mdxJsxFlowElement";
+                    node.name = "object";
+                    node.attributes = [
+                        {
+                            type: "mdxJsxAttribute",
+                            name: "type",
+                            value: "image/svg+xml"
+                        },
+                        {
+                            type: "mdxJsxAttribute",
+                            name: "data",
+                            value: url
+                        }
+                    ]
+                    node.value = undefined;
+                }
+                node.meta = undefined;
             }
-
-            node.alt = meta;
-            node.meta = undefined;
         });
-        return transformer;
     };
-}
+};
 
-export default remarkSimplePlantumlPlugin;
+export default plugin;

@@ -19,7 +19,7 @@ Using the CMTS mode enforces the following constraints and facilities:
 - `generatekey` and `mkaclx` utilities support generating EN 419 221-5 assigned keys
 - `nfkmverify` supports the verification of EN 419 221-5 assigned keys
 
-:::caution
+:::warning
 In order to meet the requirements of the 419 221-5 Protection Profile the nShield must be operated in accordance
 with the nShield Solo XC Common Criteria Evaluated Configuration Guide.
 :::

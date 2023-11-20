@@ -2,7 +2,7 @@
 
 CryptoServer CP5 uses a standard [PKCS#11 Crypto Token](https://doc.primekey.com/signserver/signserver-reference/signserver-components/cryptotokens/pkcs11cryptotoken) for the integration with the SignServer.
 
-:::caution
+:::warning
 Due to initialization and authorization of the private keys functions, private key cannot be managed through the PKCS#11 Crypto Token. The PKCS#11 Crypto Token should always be configured as a last step with existing certificate and private key authorized for signing/sealing operations.
 :::
 

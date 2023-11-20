@@ -1,3 +1,5 @@
+import {Fragment} from "react";
+
 # Trident SAM Crypto Token Properties
 
 `TridentSAMCryptoToken` implements the Trident SAM and requires access to Trident QSCD.
@@ -131,7 +133,7 @@ export const data = [
 ];
 
 export const GenTable = ({data}) => (
-    <React.Fragment>
+    <Fragment>
         {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -141,7 +143,7 @@ export const GenTable = ({data}) => (
                     <td>{dat.mandatory}</td>
                 </tr>)
         })}
-    </React.Fragment>
+    </Fragment>
 );
 
 <table>

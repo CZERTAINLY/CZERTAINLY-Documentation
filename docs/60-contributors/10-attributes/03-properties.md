@@ -33,7 +33,7 @@ Not every property is mandatory and applicable for every `Attribute` type. The f
 - <span class="badge badge--danger"></span> - the property is optional
 - <span class="badge badge--secondary"></span> - the property is not applicable
 
-:::info Attribute types
+:::info[Attribute types]
 For more details about `Attribute` types, see [Attributes](attributes).
 :::
 
