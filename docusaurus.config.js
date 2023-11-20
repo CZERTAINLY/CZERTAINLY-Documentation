@@ -1,13 +1,10 @@
-// @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
-
 const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 
 const apiVersion = '2.9.0';
 
-import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin';
-import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin.js';
+import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin.mjs';
+import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin.mjs';
 
 
 /** @type {import('@docusaurus/types').Config} */
@@ -21,6 +18,14 @@ const config = {
   favicon: 'img/czertainly_sign_color.svg',
   organizationName: '3KeyCompany', // Usually your GitHub org/user name.
   projectName: 'CZERTAINLY-Documentation', // Usually your repo name.
+
+  markdown: {
+    mdx1Compat: {
+      comments: false,
+      admonitions: false,
+      headingIds: false,
+    },
+  },
 
   // plugins: [
   //     './src/plugins/test'
@@ -65,10 +70,10 @@ const config = {
             [
               remarkSimplePlantumlPlugin,
               {
-                  baseUrl: "https://www.plantuml.com/plantuml/png",
-                  type: "image"
+                  baseUrl: "https://www.plantuml.com/plantuml/svg",
+                  type: "svg"
               }
-            ]
+            ],
           ],
         },
         theme: {
