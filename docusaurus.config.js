@@ -59,7 +59,7 @@ const config = {
               // List your find and replace values. Both values must be strings.
               // This is required.
               replacements: {
-                API_BASE_URL: 'http://localhost:3000/api/',
+                API_BASE_URL: 'https://docs.czertainly.com/api/',
               },
               // By default, find values are prefixed to reduce the chances of
               // conflicting with real content. You can change the prefix here.
