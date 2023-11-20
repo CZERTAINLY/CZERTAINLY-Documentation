@@ -1,3 +1,4 @@
+// @ts-check
 import plantumlEncoder from "plantuml-encoder";
 
 const DEFAULT_OPTIONS = {
