@@ -4,7 +4,7 @@ nShield XC CC is a hardware security module, developed by [Entrust](https://www.
 
 ## Using the nShield XC CC as QSCD
 
-:::caution
+:::warning
 Assumption is that you already have a nShield XC CC up and running. The following steps applies to how to integrate existing nShield XC CC as a QSCD with the SignServer.
 :::
 

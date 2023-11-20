@@ -15,7 +15,7 @@ Virtual Appliance consist of:
 
 Virtual appliance does not contain CZERTAINLY platform containers by default. Containers are downloaded and deployed after the configuration of the virtual appliance is applied.
 
-:::info CZERTAINLY container access
+:::info[CZERTAINLY container access]
 Because of different availability and public/private access to containers, the virtual appliance by default does not contain pre-downloaded containers and images. All required and available containers and images are downloaded once the virtual appliance is configured with the repository and access credentials.
 :::
 
@@ -29,7 +29,7 @@ Because of different availability and public/private access to containers, the v
 
 By *minimum* requirements we mean resources which needed for CZERTAINLY and kubernetes installation and for basic evaluation of its features.
 
-:::tip Resource management
+:::tip[Resource management]
 Resources can be scaled up or down based on the needs of the platform. The resources needed for the CZERTAINLY platform differs based on the number of managed objects, implemented use-cases, and required connectors.
 :::
 
@@ -46,6 +46,6 @@ For testing purposes, you can use:
 - [Parallels Desktop](https://www.parallels.com/)
 - or any other virtualization tools capable of importing virtual images in **OVA** format
 
-:::caution Importing virtual appliance
+:::warning[Importing virtual appliance]
 Import of virtual appliance is not covered by this documentation. Please refer to instructions of your virtualization SW vendor.
 :::

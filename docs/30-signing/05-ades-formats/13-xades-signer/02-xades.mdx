@@ -1,3 +1,5 @@
+import {Fragment} from "react";
+
 # XAdES Signer Properties
 
 :::info
@@ -268,7 +270,7 @@ export const data = [
 ];
 
 export const GenTable = ({data}) => (
-  <React.Fragment>
+  <Fragment>
     {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -278,7 +280,7 @@ export const GenTable = ({data}) => (
                   <td>{dat.mandatory}</td>
                 </tr>)
          })}
-  </React.Fragment>
+  </Fragment>
 );
 
 <table>

@@ -33,7 +33,7 @@ For this guide, we will use `http-01` challenge validation, but the `dns-01` can
 With these parameters, we are directly connecting to the already configured `RA Profile` with name `czertainly` that has ACME enabled. 
 For more information follow [win-acme settings](https://www.win-acme.com/reference/settings#acme).
 
-:::note `win-acme` Plugin support
+:::note[`win-acme` Plugin support]
 `win-acme` supports various sources plugins for binding (`IIS`, `Exchange` etc.) and validation plugins to prove the identity (HTTP, WebDAV, DNS etc.). For details how to use them, please visit: [win-acme source plugins](https://www.win-acme.com/reference/plugins/source/) and [win-acme validation plugins](https://www.win-acme.com/reference/plugins/validation/).
 :::
 
@@ -50,7 +50,7 @@ Once each pre-requisite and configuration are set up, you can run `win-acme` exe
 - When finalizing the selection of the certificate name `win-acme` will automatically use `http-01` challenge. In this step `win-acme` will try to bind port 80 of the server and publish the challenge received from the ACME server; this challenge will be posted on the port 80 of your server
 - Upon successfully challenge validation, `win-acme` will create the HTTPS bindings in the `IIS` automatically
 
-:::caution
+:::warning
 Make sure that the web server is reachable on the specified port number with the domain name you selected for the certificate from CZERTAINLY platform to validate the challenge. If the server is not accessible for the CZERTAINLY, it will not be able to validate the challenge and the process will fail.
 :::
 
@@ -88,7 +88,7 @@ wacs.exe `
   --setuptaskscheduler
 ```
 
-:::danger Compatibility issues in older versions of Windows server
+:::danger[Compatibility issues in older versions of Windows server]
 `win-acme` might have issues running properly on older versions of Windows Server (2012 and older) due to compatibility with TLS 1.2 cipher suite. If you are struggling to establish the connection with the ACME server, try to consult your SSL and TLS settings with administrators of your system.
 :::
 

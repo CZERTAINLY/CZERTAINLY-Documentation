@@ -1,6 +1,6 @@
 # Create Realm and Client
 
-:::caution Keycloak version
+:::warning Keycloak version
 Based on your Keycloak version, steps to create realm and OIDC client may differ. Refer to the Keycloak documentation specific for your Keycloak version.
 :::
 
@@ -23,12 +23,12 @@ To create new OIDC client, follow steps described in [Creating an OpenID Connect
 - Client ID: **CZERTAINLY**
 - Name: **CZERTAINLY**
 - Client suthentication: **On**
-- Root URL: **https://<CZERTAINLY_DOMAIN>**, where `<CZERTAINLY_DOMAIN>` is the domain of your CZERTAINLY instance. This serves as an access point to your deployment
+- Root URL: **https://\<CZERTAINLY_DOMAIN>**, where `<CZERTAINLY_DOMAIN>` is the domain of your CZERTAINLY instance. This serves as an access point to your deployment
 - Valid redirect URIs: list of valid redirect URIs, for example `https://<CZERTAINLY_DOMAIN>*`
 - Valid post logout redirect URIs: list of valid post logout redirect URIs, for example `https://<CZERTAINLY_DOMAIN>/administrator/`
 - Web origins: list of valid web origins, for example `https://<CZERTAINLY_DOMAIN>`
 
-:::caution URIs and origins
+:::warning[URIs and origins]
 Valid URIs and web origins should be properly configured to avoid any security related issues, for example Cross-origin resource sharing (CORS) issues.
 :::
 

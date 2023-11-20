@@ -1,3 +1,5 @@
+import {Fragment} from "react";
+
 # Entrust SAM Crypto Token Properties
 
 `EntrustSAMCryptoToken` implements the Entrust SAM and requires access to the Entrust SAM interface and nShield HSM.
@@ -147,7 +149,7 @@ export const data = [
 ];
 
 export const GenTable = ({data}) => (
-    <React.Fragment>
+    <Fragment>
         {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -157,7 +159,7 @@ export const GenTable = ({data}) => (
                     <td>{dat.mandatory}</td>
                 </tr>)
         })}
-    </React.Fragment>
+    </Fragment>
 );
 
 <table>

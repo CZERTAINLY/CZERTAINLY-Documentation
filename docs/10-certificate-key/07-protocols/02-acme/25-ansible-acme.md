@@ -95,7 +95,7 @@ First, we will create private RSA key pair which will be associated with later r
 
 The step to generate key pair and certificate signing request is optional. You can also you externally generated and signed certificate signing request.
 
-:::note Account vs certificate key pair 
+:::note[Account vs certificate key pair] 
 Note that this key pair is not associated with the ACME account key pair.
 :::
 
@@ -181,7 +181,7 @@ In case you decide to use `http-01` challenge validation method, you need to pub
       when: acme_method == 'http-01'
 ```
 
-:::note Multiple identifiers
+:::note[Multiple identifiers]
 Note a loop using `with_dict` to iterate over all identifiers.
 :::
 
@@ -211,7 +211,7 @@ The file `vars/czertainly.private` gets loaded every time the playbook is execut
       when: acme_method == 'dns-01'
 ```
 
-:::note DNS dot notation
+:::note[DNS dot notation]
 Note dot `.` after `record` (DNS name) - it is required for some DNS server implementations, for example Bind9.
 :::
 

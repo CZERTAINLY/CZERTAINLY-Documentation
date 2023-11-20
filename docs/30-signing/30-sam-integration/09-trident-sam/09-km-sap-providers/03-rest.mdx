@@ -1,3 +1,5 @@
+import {Fragment} from "react";
+
 # REST Key Management SAP Provider
 
 The implementation class of the REST Key Management SAP Provider is:
@@ -59,7 +61,7 @@ export const data = [
 ];
 
 export const GenTable = ({data}) => (
-    <React.Fragment>
+    <Fragment>
         {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -69,7 +71,7 @@ export const GenTable = ({data}) => (
                     <td>{dat.mandatory}</td>
                 </tr>)
         })}
-    </React.Fragment>
+    </Fragment>
 );
 
 <table>

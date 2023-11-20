@@ -2,7 +2,7 @@
 
 `Attribute` supports various content defined by `contentType`.
 
-:::info Attribute types
+:::info[Attribute types]
 For more details about `Attribute` types and `contentType`, see [Attributes](attributes).
 :::
 
@@ -38,7 +38,7 @@ The following content types are available and supported:
 | `CREDENTIAL`           | [`CredentialAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/CredentialAttributeContent.java) | [`CredentialDto`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/core/credential/CredentialDto.java)                                            |
 | `OBJECT`               | [`ObjectAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/ObjectAttributeContent.java)         | `object`                                                                                                                                                                                                 |
 
-:::caution Mulitple content types in one Attribute
+:::warning[Mulitple content types in one Attribute]
 One `Attribute` can define only one `contenttype`. Multiple different content types for one `Attribute` is not supported.
 :::
 

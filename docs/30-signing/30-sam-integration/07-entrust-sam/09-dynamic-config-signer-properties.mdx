@@ -1,3 +1,5 @@
+import {Fragment} from "react";
+
 # Dynamic Configuration Signer
 
 The Dynamic Configuration Signer is a special implementation of the Signer that can be used to sign and apply dynamic configuration for the Entrust SAM.
@@ -134,7 +136,7 @@ export const data = [
 ];
 
 export const GenTable = ({data}) => (
-  <React.Fragment>
+  <Fragment>
     {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -144,7 +146,7 @@ export const GenTable = ({data}) => (
                   <td>{dat.mandatory}</td>
                 </tr>)
          })}
-  </React.Fragment>
+  </Fragment>
 );
 
 <table>
@@ -168,6 +170,6 @@ If you would like to apply the configuration on the Entrust SAM once it is succe
 ENTRUST_SAM_SYNC=true
 ```
 
-:::caution
+:::warning
 **Sign and apply** mode requires `ENTRUST_SAM_SERVER` to be specified.
 :::

@@ -1,6 +1,6 @@
 # Authority Provider Legacy
 
-:::caution
+:::warning
 Authority Provider Legacy is deprecated and will be removed in future release.
 :::
 
@@ -16,7 +16,7 @@ The interfaces of the Authority Provider Legacy contain:
 ## How it works
 
 Authority Provider Legacy provides the ability to communicate with the EJBCA certification authorities.
-:::caution
+:::warning
 The Authority Provider Legacy interface is designed to work only with the EJBCA. If you are looking to support different technology, consider [Authority Provider v2](authority-provider-v2) interface.
 :::
 
@@ -119,7 +119,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 
 ### Renew `Certificate`
 
-:::caution
+:::warning
 Renewal of the certificate is not supported by the Authority Provider Legacy.
 :::
 ### Revoke `Certificate`

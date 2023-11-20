@@ -1,3 +1,5 @@
+import {Fragment} from "react";
+
 # Basic Properties
 
 The following properties are common for all AdES Signers. Each AdES Signer may have additional specific set of properties that are described in the subsequent sections.
@@ -173,7 +175,7 @@ export const data = [
 
 
 export const GenTable = ({data}) => (
-  <React.Fragment>
+  <Fragment>
     {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -183,7 +185,7 @@ export const GenTable = ({data}) => (
                   <td>{dat.mandatory}</td>
                 </tr>)
          })}
-  </React.Fragment>
+  </Fragment>
 );
 
 <table>
