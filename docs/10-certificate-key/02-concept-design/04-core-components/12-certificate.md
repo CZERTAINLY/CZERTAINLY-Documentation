@@ -4,6 +4,7 @@ The `Certificate` holds the information about the certificate and its lifecycle.
 
 - Human understandable parsed certificate content
 - Base64 certificate content
+- Certificate state
 - Certificate validation status
 - Certificate compliance status
 - Metadata including discovery information
@@ -15,22 +16,80 @@ In addition to the above details, the following are mapped to the `Certificate` 
 - `Entity`
 - `Group` it belongs to
 
-## Certificate status
+## Certificate state
 
-Certificate status represents state of certificate lifecycle and change of its status depends on certificate operations (e.g. issue, revoke, etc.) or events (e.g. expired, invalid, etc.) in platform.
-When certificate is requested, it starts in status `New` and needs to be issued to use it or perform client operations with it.  
+Certificate status represents stage of certificate lifecycle and transition to different state depends on certificate operations (e.g. issue, revoke, etc.) and/or events (approval expired, certificate revoked externally).
 
-The following statuses are supported:
+Certificate can be in following states:
 
-| Status      | Description                                                                       |
-|-------------|-----------------------------------------------------------------------------------|
-| `New`       | The `Certificate` is created (requested) and ready to be issued                   |
-| `Rejected`  | The `Certificate` issue approval request was rejected.                            |
-| `Valid`     | The `Certificate` is valid according to validation described [below](#validation) |
-| `Invalid `  | The `Certificate` is valid according to validation described [below](#validation) |
-| `Revoked`   | The `Certificate` is revoked                                                      |
-| `Expiring`  | The `Certificate` is marked as expiring when its expiry is in less than 30 days   |
-| `Expired`   | The `Certificate` is expired                                                      |
+| Status                                     | Description                                                              | Transition                                                                                                                                                                         |
+|--------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Requested`                                | The `Certificate` is created (requested) and ready to be issued.         | Initial state in case user requests certificate.                                                                                                                                   |
+| `Pending Approval`                         | The `Certificate` action is waiting to be approved.                      | When certificate action needs to be approved.                                                                                                                                      |
+| `Pending Issue` (***Not yet supported***)  | The `Certificate` action is waiting to be issued at authority.           | When certificate is requested to be issued by authority (already approved) and waiting to be approve issuance on authority side.                                                   |
+| `Pending Revoke` (***Not yet supported***) | The `Certificate` action is waiting to be revoked at authority.          | When certificate is requested to be revoked by authority (already approved) and waiting to be approve revocation on authority side.                                                |
+| `Rejected`                                 | The `Certificate` issuance approval request was rejected.                | When approval for certificate issue action was rejected or expired.                                                                                                                |
+| `Failed`                                   | The `Certificate` request issuance failed.                               | When certificate fails to be issued by authority caused by error or invalid request.                                                                                               |
+| `Issued`                                   | The `Certificate` is issued.                                             | Initial state in case certificate is uploaded or discovered.<br />When certificate is successfully issued.<br/> When certificate revocation failed state returns back to `Issued`. |
+| `Revoked`                                  | The `Certificate` is revoked.                                            | When certificate is successfully revoked.                                                                                                                                          |
+| `Archived` (***Not yet supported***)       | The `Certificate` is archived and not displayed in inventory by default. | When certificate is marked by user or scheduled job as archived.                                                                                                                   |
+
+Certificate state transition diagram is as follows:
+
+```plantuml
+@startuml
+hide empty description
+
+state "Pending Approval" as PendingApproval
+state "Pending Issue" as PendingIssue
+state "Pending Revoke" as PendingRevoke
+
+  [*] --> Requested
+  [*] --> Issued
+  Requested --> Failed
+  Requested --> PendingApproval
+  Requested --> PendingIssue
+  Requested --> Issued
+  PendingApproval --> Rejected
+  PendingApproval --> PendingIssue
+  PendingApproval --> PendingRevoke
+  PendingApproval --> Issued
+  PendingApproval --> Revoked
+  PendingIssue --> Failed
+  PendingIssue --> Issued
+  PendingRevoke --> Revoked
+  PendingRevoke --> Issued
+  Issued --> PendingApproval
+  Issued --> PendingRevoke
+  Issued --> Revoked
+  Issued --> Archived
+  Revoked --> Archived
+  Rejected --> [*]
+  Failed --> [*]
+  Issued --> [*]
+  Revoked --> [*]
+  Archived --> [*]
+
+@enduml
+```
+
+## Certificate validation status
+
+or events (e.g. expired, invalid, etc.) in platform.
+When certificate is requested, it starts in status `New` and needs to be issued to use it or perform client operations with it.
+
+The following validation statuses are supported:
+
+| Status       | Description                                                                          |
+|--------------|--------------------------------------------------------------------------------------|
+| `NotChecked` | The `Certificate` validation was not run yet.                                        |
+| `Failed`     | The `Certificate` validation process failed.                                         |
+| `Inactive`   | The `Certificate` is not yet active (before its validation period starts).           |
+| `Valid`      | The `Certificate` is valid according to validation described [below](#validation).   |
+| `Invalid`    | The `Certificate` is invalid according to validation described [below](#validation). |
+| `Revoked`    | The `Certificate` is revoked.                                                        |
+| `Expiring`   | The `Certificate` is marked as expiring when its expiry is in less than 30 days.     |
+| `Expired`    | The `Certificate` is expired.                                                        |
 
 The `Certificate` status transition diagram is as follows:
 
@@ -38,20 +97,38 @@ The `Certificate` status transition diagram is as follows:
 @startuml
 hide empty description
 
-[*] --> New
-New --> Rejected
-New --> Valid
-New --> Invalid
+state "Not Checked" as NotChecked
+
+[*] --> NotChecked
+NotChecked --> Failed
+NotChecked --> Inactive
+NotChecked --> Valid
+NotChecked --> Invalid
+NotChecked --> Expiring
+NotChecked --> Expired
+NotChecked --> Revoked
+Failed --> Inactive
+Failed --> Valid
+Failed --> Invalid
+Failed --> Expiring
+Failed --> Expired
+Failed --> Revoked
+Inactive --> Valid
+Inactive --> Revoked
 Valid --> Invalid
 Valid --> Revoked
 Valid --> Expiring
 Invalid --> Valid
 Invalid --> Revoked
 Invalid --> Expired
+Revoked --> Invalid
+Revoked --> Expired
+Expiring --> Invalid
 Expiring --> Revoked
 Expiring --> Expired
+Failed --> [*]
 Expired --> [*]
-Rejected --> [*]
+Invalid --> [*]
 Revoked --> [*]
 
 @enduml
@@ -59,59 +136,120 @@ Revoked --> [*]
 
 ## Validation
 
-### Validation steps
+Certificate validation is a complex process that ensures the security and trustworthiness of digital certificates in various applications, including secure web browsing, email encryption, and digital signatures.
+It plays a crucial role in establishing secure and authenticated communication over the internet.
 
-- Validation Step 1: Construct the Chain and Validate Signatures
-Up to trusted certificates in the truststore.
-The whole chain must be valid, otherwise the certificate is considered to be invalid.
+In `CZERTAINLY` platform, certificate validation is periodically checked by system scheduled job to keep up-to-date certificate status.
+To achieve that, crucial part of validation algorithm is to update and construct certificate chain (path). Currently, only `X.509` certificates are supported.
+Therefore, following description of certificate validation is valid for `X.509` certificate type.
 
-- Validation Step 2: Check Validity Dates, Policy and Key Usage
-Check the `notBefore` and `notAfter` dates (in the whole chain).
+### Certificate chain
 
-- Validation Step 3: Consult Revocation Authorities
-If OCSP is available, then do the OCSP check.
-Otherwise, fallback to CRL check.
-If no revocation information source is available, show the status of certificate with the information that the revocation was not checked, was not available, or related reason.
+Certificate chain is constructed by following algorithm:
+1. Add certificates to chain by recursively following the issuer certificate reference stored in DB.
+2. If last certificate is self-signed certificate (presumed root CA), return certificate chain with indication that chain is complete.
+3. Search for issuer certificate in inventory by issuer subject DN. If more candidates are present, take first where verification of certificate signature with its public key is successful.
+4. If no candidate in inventory found, check if Authority Information Access (AIA) extension is available and try to download certificate from URL from AIA extension
+5. Construct certificate chain further by repeating step 3 and 4 until no more certificates are available from both sources
+6. Return available certificate chain with indication that chain is complete when last certificate is self-signed
 
-### Validation types
+```plantuml
+@startuml
 
-Each `Certificate` is validated against various attributes and validation sources and its validation status is provided.
+start
 
-The following validation are performed for `Certificate`:
+:construct chain from DB;
+while (last cert is not self-signed?)
+ :search issuer in inventory;
+ if (found?) then (no)
+  :download from AIA extension;
+  if (downloaded?) then (no)
+   :isComplete = false;
+   break
+  endif
+ endif
+endwhile (isComplete = true)
 
-| #   | Validation            | Description                                                                    | Status                                                                                                                                                                                                                                                                                                                                                                             |
-| --- | --------------- | ------------------------------------------------------------------------------ |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1   | Signature validation | Check the signature of `Certificate` using public key of the issuer certificate. | <span class="badge badge--success">VALID</span> if verification success.<br/><span class="badge badge--danger">INVALID</span> if verification fails.                                                                                                                                                                                                                               |
-| 2   | `notBefore` validation | Check for `notBefore` attribute of the certificate.                       | <span class="badge badge--secondary">INACTIVE</span> in case the `notBefore` >= current date.<br/><span class="badge badge--success">VALID</span> if `notBefore` < current date.                                                                                                                                                                                                   |
-| 3   | `notAfter` validation | Check for `notAfter` attribute of the certificate.                        | <span class="badge badge--warning">EXPIRED</span> in case the `notAfter` \<= current date.<br/><span class="badge badge--success">VALID</span> if `notAfter` > current date.                                                                                                                                                                                                       |
-| 4   | OCSP check      | Check status using OCSP URL available in the certificate extension `AuthorityInformationAccess`.                      | <span class="badge badge--success">VALID</span> if OCSP returns `good`.<br/><span class="badge badge--secondary">UNKNOWN</span> if the OCSP response is `unknown`.<br/><span class="badge badge--danger">REVOKED</span> if the OCSP return `revoked`.<br/><span class="badge badge--secondary">NOOCSP</span> in case there is no OCSP responder available for revocation checking. |
-| 5   | CRL check       | Check status using CRL USL available in the certificate attribute `CRLDistributionPoints`.                    | <span class="badge badge--success">VALID</span> in case CRL is available, valid, and the certificate is not on the list.<br/><span class="badge badge--danger">REVOKED</span> in case CRL is available, valid, and the certificate is on the list.<br/><span class="badge badge--secondary">NOCRL</span> in case there is no CRL available for revocation checking.                |
+:return chain with isComplete flag;
 
-The above is true for a single `Certificate`, but all certificates in the certificate chain are validated the same way.
+stop
+
+@enduml
+```
 
 ### Validation algorithm
 
-To get the overall validation result, the following algorithm is applied:
+Construct the certificate chain and validate certificates from root CA to subject certificate as following based on [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280#section-6):
 
-- If the `Certificate` signature validation outputs <span class="badge badge--danger">INVALID</span> then return <span class="badge badge--danger">INVALID</span>.
-- Else if the validity time of the Certificate is <span class="badge badge--secondary">INACTIVE</span> or <span class="badge badge--warning">EXPIRED</span> then return this status.
-- Else check OCSP and CRL status.
-- If <span class="badge badge--secondary">NOOCSP</span> and <span class="badge badge--secondary">NOCRL</span> return <span class="badge badge--success">VALID</span>
+1. **Check the completeness of chain**
+2. **Verify signature of certificate** using issuer public key - [Section 6.1.3 (a)(1)](https://datatracker.ietf.org/doc/html/rfc5280#section-6.1.3)
+3. **Check certificate validity** by comparing `notBefore` and `notAfter` dates with current date - [Section 6.1.3 (a)(2)](https://datatracker.ietf.org/doc/html/rfc5280#section-6.1.3)
+4. **Consult Revocation Authorities** - [Section 6.1.3 (a)(3)](https://datatracker.ietf.org/doc/html/rfc5280#section-6.1.3)
+   - if OCSP is available, then do the OCSP check
+   - if CRL information is available, then do the CRL check
+   - if no revocation information source is available, show warning that the revocation was not checked, was not available, or related reason.
+5. **Check if certificate issuer DN equals to issuer subject DN** - [Section 6.1.3 (a)(4)](https://datatracker.ietf.org/doc/html/rfc5280#section-6.1.3)
+6. **Check basic constraints**
+   - if certificate is version 3 and not end certificate, check if basic constraint extension is present and CA flag is set to true - [Section 6.1.4 (k)](https://datatracker.ietf.org/doc/html/rfc5280#section-6.1.4)
+   - if certificate is CA, check path length greater than zero and less than its issuer - [Section 6.1.4 (l)](https://datatracker.ietf.org/doc/html/rfc5280#section-6.1.4)
+7. **Check key usage** of CA certificate [Section 6.1.4 (n)](https://datatracker.ietf.org/doc/html/rfc5280#section-6.1.4)
 
-### Certificate Path Validation rules
+### Validation check types
 
-All the certificates in the certificate path must be validated.
-Exception is a Root CA certificate, as it is self-signed, there is no trusted way how to validate it, it must be explicitly trusted.
-The same validation rules applies for each certificate up to the Root CA certificate.
-The overall result of validation is the result of validation from the bottom to top.
+Certificate validation algorithm consists of different validation check types. `Certificate` is validated by different criteria to provide partial validation result.
 
-:::info[Certificate chain]
-When a certificate chain is not available for a `Certificate`, the platform tries to download the certificate chain from the Authority Information Access (AIA) extension. If found, the chain is downloaded until the root is available and the validation will be performed. if the complete certificate chain is not available, the validation is performed only using available certificates.
-:::
+The following validation checks are performed for `Certificate`:
 
-:::info[Self-signed Certificate]
-For self-signed certificates, OCSP, CRL checks will not be performed.
-:::
+| # | Validation check       | Description                                                                                      | Result                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|---|------------------------|--------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1 | Certificate chain      | Check the completeness of chain (certificate validation path) and validity of issuer certificate | <span class="badge badge--success">SUCCESS</span> if chain is complete.<br/><span class="badge badge--danger">FAILED</span> if certificate in validation path is missing or issuer certificate is invalid or revoked.                                                                                                                                                                                                                               |
+| 2 | Signature verification | Check the signature of `Certificate` using public key of the issuer certificate.                 | <span class="badge badge--secondary">NOT CHECKED</span> if issuer is missing.<br/><span class="badge badge--success">SUCCESS</span> if signature verified.<br/><span class="badge badge--danger">FAILED</span> if verification fails.                                                                                                                                                                                                               |
+| 3 | Certificate validity   | Check certificate validity based on `notBefore` and `notAfter` dates of the certificate.         | <span class="badge badge--secondary">INACTIVE</span> in case `notBefore` >= current date.<br/><span class="badge badge--danger">EXPIRED</span> in case `notAfter` \<= current date.<br/><span class="badge badge--warning">EXPIRING</span> in case the `notAfter` is less than 30 days from current date.<br/><span class="badge badge--success">SUCCESS</span> if `notBefore` < current date.                                                      |
+| 4 | OCSP check             | Check status using OCSP URL available in the certificate extension `AuthorityInformationAccess`. | <span class="badge badge--secondary">NOT CHECKED</span> if issuer is missing.<br/><span class="badge badge--warning">WARNING</span> if OCSP URL is not available or failed to check status.<br/><span class="badge badge--success">SUCCESS</span> if OCSP returns `good`.<br/><span class="badge badge--danger">REVOKED</span> if the OCSP return `revoked`.                                                                                        |
+| 5 | CRL check              | Check status using CRL USL available in the certificate attribute `CRLDistributionPoints`.       | <span class="badge badge--secondary">NOT CHECKED</span> if issuer is missing.<br/><span class="badge badge--warning">WARNING</span> if CRL URL is not available or failed to check status.<br/><span class="badge badge--success">SUCCESS</span> in case CRL is available, valid, and the certificate is not on the list.<br/><span class="badge badge--danger">REVOKED</span> in case CRL is available, valid, and the certificate is on the list. |
+| 6 | Basic Constraints      | Check the basic constraints if extension is present.                                             | <span class="badge badge--danger">FAILED</span> if certificate is version 3, not end certificate and does not have CA flag set.<br/><span class="badge badge--warning">WARNING</span> if cannot check if certificate is CA or path length is greater than its issuer.<br/><span class="badge badge--success">SUCCESS</span> otherwise.                                                                                                              |
+| 7 | Certificate Key Usage  | Check if certificate key can be used to verify signatures. Applicable for CA certificates.       | <span class="badge badge--secondary">NOT CHECKED</span> if certificate is not CA.<br/><span class="badge badge--success">SUCCESS</span> if certificate has `keyCertSign` bit set in key usage extension.<br/><span class="badge badge--danger">FAILED</span> otherwise.                                                                                                                                                                             |
+
+The above is true for a single `Certificate`, but all certificates in the certificate chain are validated the same way.
+
+### Validation result evaluation
+
+After certificate is checked with individual validation check types, check results are then used as input for calculating result certificate validation status.
+Certificate validation checks results and result validation status are then stored and saved.
+
+Calculation of result status is as follows:
+
+```plantuml
+@startuml
+
+start
+
+if (chain check SUCCESS?) then (yes)
+  if (signature check SUCCESS?) then (yes)
+    if (validity check INACTIVE or EXPIRED?) then (yes)
+      if (OCSP or CRL check REVOKED?) then (yes)
+        if (validity check EXPIRING?) then (yes)
+          :**Expiring**;
+        else (no)
+          :**Valid**;
+        endif
+      else (no)
+        :**Revoked**;
+      endif
+    else (no)
+      :**Inactive** or **Expired**;
+    endif
+  else (no)
+    :**Invalid**;
+  endif
+else (no)
+ :**Invalid**;
+endif
+
+stop
+
+@enduml
+```
 
 ## Attributes
 
