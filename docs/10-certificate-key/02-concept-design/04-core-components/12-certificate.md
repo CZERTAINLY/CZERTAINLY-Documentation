@@ -75,8 +75,7 @@ state "Pending Revoke" as PendingRevoke
 
 ## Certificate validation status
 
-or events (e.g. expired, invalid, etc.) in platform.
-When certificate is requested, it starts in status `New` and needs to be issued to use it or perform client operations with it.
+Certificate validation status represents the result of the certificate validation process in time. It is periodically checked by system scheduled job to keep up-to-date certificate validation status. The validation status is calculated based on the validation result of the certificate and its chain.
 
 The following validation statuses are supported:
 
