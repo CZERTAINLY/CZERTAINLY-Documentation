@@ -2,7 +2,7 @@
 
 nShield XC CC uses a standard [PKCS#11 Crypto Token](https://doc.primekey.com/signserver/signserver-reference/signserver-components/cryptotokens/pkcs11cryptotoken) for the integration with the SignServer.
 
-:::caution
+:::warning
 Private keys can be managed through the PKCS#11 Crypto Token, however, such private keys would not be generated and used as assigned private keys, but general private keys (see [CMTS Security World](./cmts)). The PKCS#11 Crypto Token should always be configured as a last step with existing certificate and assigned private key authorized for signing/sealing operations.
 :::
 

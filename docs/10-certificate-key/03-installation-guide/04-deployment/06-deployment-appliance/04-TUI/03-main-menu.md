@@ -8,9 +8,11 @@ Main menu allows to select and execute basic tasks on CZERTAINLY appliance, it o
 | **n**etwork     | [Configure HTTP proxy](#configure-http-proxy)                                   | If your network policy requires using HTTP proxy you can configure it under this option. |
 | **i**ngressTLS  | [Configure ingress TLS certificates](#configure-ingress-tls-certificates)       | Custom HTTPS certificates for CZERTAINLY web interface can be configured here.           |
 | **t**rustedCA   | [Configure custom trusted certificates](#configure-custom-trusted-certificates) | Use this option to change default list of trusted certificates of CZERTAINLY.            |
-| **p**ostrgres   | [Configure database](#configure-database)                                       | You can change default configuration of postgres database with this option.              |
+| **p**ostgres    | [Configure database](#configure-database)                                       | You can change default configuration of postgres database with this option.              |
 | **d**ockerRepo  | [Configure Docker repository access credentials](#configure-docker-repository-access-credentials) | Configure credentials for Licensed parts of CZERTAINLY here.           |
+| **m**ail        | [Configure email server parameters](#configure-email-server-parameters)         | Parameters of email server are needed for sending notifications.                         |
 | **c**zertainly  | [Configure CZERTAINLY](#configure-czertainly)                                   | Use this option to select version and components of CZERTAINLY to install.               |
+| **i**nstall     | [Install CZERTAINLY](#install-czertainly)                                       | Execute CZERTAINLY installation.                                                         |
 | **s**tatus      | [Show CZERTAINLY status](#show-czertainly-status)                               | This option will show status of CZERTAINLY and Kubernetes subsystem.                     |
 | **a**dvanced    | [Advanced options](./advanced-menu)                                             | Opens another menu with advanced options of CZERTAINLY appliance.                        |
 | **e**xit        | Exit CZERTAINLY manager                                                         | Closes TUI and disconnects from CZERTAINLY appliance.                                    |
@@ -29,7 +31,7 @@ Files `/etc/profile.d/proxy.sh`, `/etc/apt/apt.conf.d/80proxy`, `/etc/default/rk
 
 Values you provided in this dialog are stored on the file system in: `/etc/czertainly-ansible/vars/proxy.yml`.
 
-:::caution
+:::warning
 In case you are setting HTTP Proxy parameters before the first run of the installation. You need to close the actual terminal session and open a new one to reload environment variables from file `/etc/profile.d/proxy.sh`.
 
 In case you need to change the HTTP Proxy parameters of an existing installation, you need first reboot the Appliance and, after that, execute the function "Install CZERTAINLY" from the main menu to get changes correctly propagated into the system, RKE2 and all CZERTAINLY PODs.
@@ -67,6 +69,8 @@ Values you provided in this dialog are stored on the file system in: `/etc/czert
 
 You can change default parameters for Postgres database here. The password is field you definitely should change.
 
+By default CZERTAINLY uses Debian repository where is always only one version of PostgreSQL available, we recomend leaving repostiory settings on value `debian`. In special cases setting it to `official` allows you to choose more than single version. For more details see [official PostgreSQL wiki](https://wiki.postgresql.org/wiki/Apt).
+
 Values you provided in this dialog are stored on the file system in: `/etc/czertainly-ansible/vars/database.yml`.
 
 ## Configure Docker repository access credentials
@@ -74,6 +78,10 @@ Values you provided in this dialog are stored on the file system in: `/etc/czert
 Licensed parts of CZERTAINLY are hosted on private Docker repository named `harbor.3key.company`, use this dialog to provide your *username* and *password* you have received from [support](/docs/feedback-support/).
 
 Values you provided in this dialog are stored on the file system in: `/etc/czertainly-ansible/vars/docker.yml`.
+
+## Configure email server parameters
+
+You have to provide parameters of email server. Depending on your company policy hostname of a mail server and a port number might be sufficient. Dialog also offers you chance to configure username, password and TLS usage for authentication to email server if needed.
 
 ## Configure CZERTAINLY
 

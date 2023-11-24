@@ -7,7 +7,7 @@
 - Defined in the `Core` and used in the `Connector`.
 - Promote existing `Connector` metadata to `Global Metadata`.
 
-:::caution
+:::warning
 When a metadata from the connector is set as `global`, it should be defined in the `Core`. If not, then the value of the metadata will not be stored in the `Core`.
 :::
 

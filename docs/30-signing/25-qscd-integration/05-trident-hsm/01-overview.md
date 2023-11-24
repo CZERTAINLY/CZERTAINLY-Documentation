@@ -10,7 +10,7 @@ The signing or decrypting functions are executed on all or, depending on how the
 
 ## Using the Trident HSM as QSCD
 
-:::caution
+:::warning
 Assumption is that you already have a Trident HSM up and running. The following steps applies to how to integrate existing Trident HSM as a QSCD with the SignServer.
 :::
 

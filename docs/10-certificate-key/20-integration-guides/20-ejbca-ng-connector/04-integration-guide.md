@@ -94,7 +94,7 @@ You can follow these steps to enable required protocols:
 - Click on **Enable** button for the **Web Service** protocol
 - Click on **Enable** button for the **REST Certificate Management V2** protocol
 
-:::caution EJBCA certificate discovery
+:::warning[EJBCA certificate discovery]
 The **REST Certificate Management V2** protocol is available from EJBCA version **7.8.1**. The certificate discovery would not be available for the lower versions of the EJBCA.
 :::
 

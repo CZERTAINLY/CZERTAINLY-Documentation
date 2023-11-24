@@ -4,7 +4,7 @@ This integration guide describes how to integrate platform with [Keycloak](https
 
 CZERTAINLY access control decouples the identification, authentication, and authorization process. It provides flexible configuration of [Externalized Authentication](../../concept-design/architecture/access-control/externalized-authentication).
 
-:::info Access Control
+:::info[Access Control]
 To get more information about the identification, authentication, and authorization process, refer to [Access Control](../../concept-design/architecture/access-control/overview).
 :::
 
@@ -14,7 +14,7 @@ Keycloak is an open source identity and access management solution. It provides 
 
 Enterprise grade authentication can be achieved by integrating Keycloak with CZERTAINLY.
 
-:::caution Keycloak installation
+:::warning[Keycloak installation]
 This integration guide assumes that you have already installed and configured Keycloak. For more information, refer to [Keycloak documentation](https://www.keycloak.org/documentation.html).
 :::
 

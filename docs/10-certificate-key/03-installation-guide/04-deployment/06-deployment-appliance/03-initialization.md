@@ -9,7 +9,7 @@ To log in, you can use the console of the virtual machine. Or you can use SSH, w
 
 The following steps needs to be done to initialize the virtual appliance.
 
-:::caution Mandatory steps
+:::warning[Mandatory steps]
 Bold items are mandatory even for testing purposes.
 :::
 
@@ -43,7 +43,7 @@ CZERTAINLY is controlled via a web interface. For testing purposes, a self-signe
 
 Access to the web interface of CZERTAINLY is authenticated by a client certificate by default.
 
-:::info Access control
+:::info[Access control]
 There are various options how to configure access control for the platform. See [Access control](../../../concept-design/architecture/access-control/overview) for more information.
 :::
 
@@ -57,7 +57,7 @@ CZERTAINLY persists all its data in Postgres database. The server will be instal
 
 Some parts of CZERTAINLY are private and can't be provided publicly. Those parts are [hosted in private Docker repository](../../../current-versions/) `harbor.3key.company`.
 
-:::caution Obtain access to private Docker repository
+:::warning[Obtain access to private Docker repository]
 Ask [support](../../../../feedback-support/) for credentials to access private repository.
 :::
 
@@ -67,11 +67,15 @@ To enter obtained credentials, use option **Main Menu -> [Configure Docker repos
 
 Option **[Configure CZERTAINLY](./TUI/main-menu#configure-czertainly)** of the main menu opens dialog where you can choose version of CZERTAINLY and it's components you want to install.
 
+:::info[Note]
+If you are not planning to use email notifications, disable *email Provider*. It is by default enabled and when not configured properly, installation will hang.
+:::
+
 ## Install CZERTAINLY
 
 When you select **[Install CZERTAINLY](./TUI/main-menu#install-czertainly)** from the main menu. The installation will begin after confirmation.
 
-:::info Installation time
+:::info[Installation time]
 Complete installation takes about 10 minutes on a decent system with good internet access. The most time consuming part is downloading of docker images that are deployed in the cluster.
 :::
 

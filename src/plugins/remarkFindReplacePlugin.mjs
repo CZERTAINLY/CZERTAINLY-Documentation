@@ -1,20 +1,11 @@
-const visit = require("unist-util-visit");
-const escapeStringRegexp = require('escape-string-regexp')
+// @ts-check
+import escapeStringRegexp from 'escape-string-regexp';
 
 const DEFAULT_OPTIONS = {
     prefix: "%"
 };
 
-/**
- * Plugin for remark-js to find and replace variables in markdown files
- * Inspired by https://github.com/angeloashmore/gatsby-remark-find-replace/blob/master/src/index.js
- *
- * You can specify the prefix for variables with the option 'prefix'
- * Replacement values are specified in the 'replacements' option
- *
- * @param {Object} pluginOptions Remark plugin options.
- */
-function remarkFindReplacePlugin(pluginOptions) {
+const plugin = (pluginOptions) => {
     const options = { ...DEFAULT_OPTIONS, ...pluginOptions };
 
     // Attaches prefix to the start of the string.
@@ -36,8 +27,9 @@ function remarkFindReplacePlugin(pluginOptions) {
 
     const replacer = (_match, name) => options.replacements[stripPrefix(name)]
 
-    return function transformer(syntaxTree) {
-        visit(syntaxTree, ['text', 'html', 'code', 'inlineCode', 'link'], node => {
+    return async (ast) => {
+        const {visit} = await import('unist-util-visit');
+        visit(ast, ['text', 'html', 'code', 'inlineCode', 'link'], (node) => {
             if (node.type === 'link') {
                 // For links, the text value is replaced by text node, so we change the
                 // URL value.
@@ -47,8 +39,7 @@ function remarkFindReplacePlugin(pluginOptions) {
                 node.value = node.value.replace(regexp, replacer)
             }
         });
-        return syntaxTree;
     };
-}
+};
 
-module.exports = remarkFindReplacePlugin;
+export default plugin;

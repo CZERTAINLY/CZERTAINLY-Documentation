@@ -8,7 +8,7 @@ As a part of a Time Stamping System, the CryptoServer CP5 may be used as the cry
 
 ## Using the CryptoServer CP5 as QSCD
 
-:::caution
+:::warning
 Assumption is that you already have a CryptoServer CP5 up and running. The following steps applies to how to integrate existing CryptoServer CP5 as a QSCD with the SignServer.
 
 Current implementation does not support the management of keys of the CryptoServer CP5 through the standard interfaces. Private keys must be generated, initialized, and authorized before they are with the Crypto Tokens and Signers. This documentation explains required steps to do so. 

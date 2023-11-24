@@ -71,8 +71,8 @@ hide empty description
 
 ## Certificate validation status
 
- or events (e.g. expired, invalid, etc.) in platform.
-When certificate is requested, it starts in status `New` and needs to be issued to use it or perform client operations with it.  
+or events (e.g. expired, invalid, etc.) in platform.
+When certificate is requested, it starts in status `New` and needs to be issued to use it or perform client operations with it.
 
 The following validation statuses are supported:
 
@@ -135,14 +135,14 @@ It plays a crucial role in establishing secure and authenticated communication o
 
 In `CZERTAINLY` platform, certificate validation is periodically checked by system scheduled job to keep up-to-date certificate status.
 To achieve that, crucial part of validation algorithm is to update and construct certificate chain (path). Currently, only `X.509` certificates are supported.
-Therefore, following description of certificate validation is valid for `X.509` certificate type. 
+Therefore, following description of certificate validation is valid for `X.509` certificate type.
 
 ### Certificate chain
 
 Certificate chain is constructed by following algorithm:
 1. Add certificates to chain by recursively following the issuer certificate reference stored in DB.
-2. If last certificate is self-signed certificate (presumed root CA), return certificate chain with indication that chain is complete. 
-3. Search for issuer certificate in inventory by issuer subject DN. If more candidates are present, take first where verification of certificate signature with its public key is successful. 
+2. If last certificate is self-signed certificate (presumed root CA), return certificate chain with indication that chain is complete.
+3. Search for issuer certificate in inventory by issuer subject DN. If more candidates are present, take first where verification of certificate signature with its public key is successful.
 4. If no candidate in inventory found, check if Authority Information Access (AIA) extension is available and try to download certificate from URL from AIA extension
 5. Construct certificate chain further by repeating step 3 and 4 until no more certificates are available from both sources
 6. Return available certificate chain with indication that chain is complete when last certificate is self-signed
@@ -208,7 +208,7 @@ The above is true for a single `Certificate`, but all certificates in the certif
 
 ### Validation result evaluation
 
-After certificate is checked with individual validation check types, check results are then used as input for calculating result certificate validation status. 
+After certificate is checked with individual validation check types, check results are then used as input for calculating result certificate validation status.
 Certificate validation checks results and result validation status are then stored and saved.
 
 Calculation of result status is as follows:

@@ -27,6 +27,6 @@ Use the following URL with the client certificate authentication (first administ
 
 After successfully logging in, you can start administering and using the platform.
 
-:::info Changing administrator web base URL context
+:::info[Changing administrator web base URL context]
 You can change the base URL of the administrator web interface. By default, the `/administrator` is used.
 :::

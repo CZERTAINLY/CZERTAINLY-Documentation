@@ -44,7 +44,7 @@ This process consists of generating, assigning, and certifying the SAM key that 
 
 When the SAM key is generated, it must be certified. This consists of providing the proof of possession in the form of the CSR to certification authority. How is the certificate requested and issued depends on the implementation of CA Connector identified by `CA_CONNECTOR_IMPLEMENTATION_CLASS` property of the `EntrustSAMOneTimeCryptoWorker`.
 
-:::caution
+:::warning
 Out-of-the-box implementation of the EJBCA connector using Web Services can be used with the SAM crypto worker. The implementation class for this CA connector is `CA_CONNECTOR_IMPLEMENTATION_CLASS=com.czertainly.signserver.module.sam.onetime.caconnector.EjbcaWSSAMCAConnector`. It is expected that this implementation will be moved to generic package in the future release. The configuration properties are same as in case [EJBCA WS CA Connector](https://doc.primekey.com/signserver/signserver-operations/setting-up-one-time-keys#SettingupOnetimeKeys-EJBCAWSCAConnector)
 :::
 

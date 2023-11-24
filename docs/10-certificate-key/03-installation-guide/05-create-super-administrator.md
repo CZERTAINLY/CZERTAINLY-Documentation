@@ -51,6 +51,6 @@ In this example, the Administrator with the following attributes will be registe
 
 You can use `Local API` multiple times, also in case you are locked out from the application.
 
-:::caution
+:::warning
 Use the `Local API` carefully, manage access to `localhost` of the system to avoid registration of unwanted Administrators.
 :::

@@ -41,7 +41,7 @@ Depends on what you would like to achieve:
 `ACME Profile` can be used with multiple `RA Profiles`.
 :::
 
-:::caution
+:::warning
 The platform performs various validations on the end point including the following:
 - Availability of the `ACME Profile` or `RA Profile`
 - Status of the `ACME Profile` or `RA Profile`

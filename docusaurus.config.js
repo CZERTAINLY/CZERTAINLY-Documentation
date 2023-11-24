@@ -1,10 +1,11 @@
-// @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
-
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require('prism-react-renderer').themes.github;
+const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 
 const apiVersion = '2.9.0';
+
+import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin.mjs';
+import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin.mjs';
+
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -17,6 +18,14 @@ const config = {
   favicon: 'img/czertainly_sign_color.svg',
   organizationName: '3KeyCompany', // Usually your GitHub org/user name.
   projectName: 'CZERTAINLY-Documentation', // Usually your repo name.
+
+  markdown: {
+    mdx1Compat: {
+      comments: false,
+      admonitions: false,
+      headingIds: false,
+    },
+  },
 
   // plugins: [
   //     './src/plugins/test'
@@ -44,20 +53,27 @@ const config = {
           editUrl: ({versionDocsDirPath, docPath}) =>
               `https://github.com/3KeyCompany/CZERTAINLY-Documentation/edit/documentation/${versionDocsDirPath}/${docPath}`,
           remarkPlugins: [
-              [require('./src/plugins/remarkFindReplacePlugin'), {
-                // List your find and replace values. Both values must be strings.
-                // This is required.
-                replacements: {
-                  API_BASE_URL: 'http://localhost:3000/api/',
-                },
-
-                // By default, find values are prefixed to reduce the chances of
-                // conflicting with real content. You can change the prefix here.
-                // Set to `false` to disable the prefix.
-                prefix: '%',
-
-              }],
-              [require('./src/plugins/remarkSimplePlantumlPlugin'), { baseUrl: 'https://www.plantuml.com/plantuml/svg', type: "svg" }],
+            [
+              remarkFindReplacePlugin,
+              {
+              // List your find and replace values. Both values must be strings.
+              // This is required.
+              replacements: {
+                API_BASE_URL: 'https://docs.czertainly.com/api/',
+              },
+              // By default, find values are prefixed to reduce the chances of
+              // conflicting with real content. You can change the prefix here.
+              // Set to `false` to disable the prefix.
+              prefix: '%'
+              },
+            ],
+            [
+              remarkSimplePlantumlPlugin,
+              {
+                  baseUrl: "https://www.plantuml.com/plantuml/svg",
+                  type: "svg"
+              }
+            ],
           ],
         },
         theme: {
@@ -506,4 +522,4 @@ const config = {
     }),
 };
 
-module.exports = config;
+export default config;

@@ -1,3 +1,5 @@
+import {Fragment} from "react";
+
 # OneTime Crypto Worker
 
 `EntrustSAMOneTimeCryptoWorker` authenticates to the Entrust SAM using the certificate and key pair provided by any implementation of the Crypto Token. The `Signer` referencing the `EntrustSAMOneTimeCryptoWorker` will be able to sign documents or data using the following process:
@@ -15,7 +17,7 @@ The implementation class of the `EntrustSAMOneTimeCryptoWorker` is:
 IMPLEMENTATION_CLASS=com.czertainly.signserver.module.sam.onetime.entrust.EntrustSAMOneTimeCryptoWorker
 ```
 
-:::caution
+:::warning
 This implementation requires the SignServer Enterprise Edition version 5.5.0 and higher to access the crypto instances from other `Workers`.
 :::
 
@@ -187,7 +189,7 @@ export const data = [
 ];
 
 export const GenTable = ({data}) => (
-    <React.Fragment>
+    <Fragment>
         {data.map((dat, i) =>{
             return(
                 <tr key={i}>
@@ -197,7 +199,7 @@ export const GenTable = ({data}) => (
                     <td>{dat.mandatory}</td>
                 </tr>)
         })}
-    </React.Fragment>
+    </Fragment>
 );
 
 <table>

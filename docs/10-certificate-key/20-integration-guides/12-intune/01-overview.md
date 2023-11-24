@@ -10,7 +10,7 @@ CZERTAINLY supports SCEP, you can use Intune SCEP certificate profiles (a type o
 
 Microsoft Intune is a cloud-based endpoint management solution. It manages user access and simplifies app and device management across your many devices, including mobile devices, desktop computers, and virtual endpoints using Zero Trust principles.
 
-:::caution Intune installation
+:::warning[Intune installation]
 This integration guide assumes at least basic knowledge about the Intune and does not provide guidance on how to install Intune. It focuses on the steps necessary to do to make the integration working with CZERTAINLY SCEP service. For more information about the Intune installation, refer to Intune documentation.
 :::
 
@@ -23,6 +23,6 @@ In order to use CZERTAINLY as a SCEP service for Intune, you need to follow thes
 | 3 | [Create Intune Profiles](./create-intune-profiles)       | Create Intune configuration profiles holding the trusted CA certificates and SCEP configuration                        |
 | 4 | [Enroll Device](./enroll-device)                         | Enroll device with Intune                                                                                              |
 
-:::tip Evaluate Microsoft Intune
+:::tip[Evaluate Microsoft Intune]
 [Evaluate Microsoft Intune](https://learn.microsoft.com/en-us/mem/intune/fundamentals/try-intune-overview) provides a good starting point to understand the proper configuration of the Intune.
 :::

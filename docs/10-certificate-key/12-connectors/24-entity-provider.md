@@ -1,6 +1,6 @@
 # Entity Provider
 
-:::info Using Entity Provider
+:::info[Using Entity Provider]
 Entity Provider helps to integrate any technology (open and proprietary) that is not able, not capable, or you do not want to, use standard interface and protocols for management and automation of the certificate and cryptographic keys lifecycle.
 :::
 
