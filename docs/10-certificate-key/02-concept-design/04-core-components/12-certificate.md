@@ -40,6 +40,10 @@ Certificate state transition diagram is as follows:
 @startuml
 hide empty description
 
+state "Pending Approval" as PendingApproval
+state "Pending Issue" as PendingIssue
+state "Pending Revoke" as PendingRevoke
+
   [*] --> Requested
   [*] --> Issued
   Requested --> Failed
@@ -92,6 +96,8 @@ The `Certificate` status transition diagram is as follows:
 ```plantuml
 @startuml
 hide empty description
+
+state "Not Checked" as NotChecked
 
 [*] --> NotChecked
 NotChecked --> Failed
