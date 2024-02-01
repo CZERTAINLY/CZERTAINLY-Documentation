@@ -1,17 +1,55 @@
-# Firewall and Trusted Hosts Configuration
+# Firewall Configuration
 
-To connect to the machine that has WinRM enabled, the firewall needs to allow inbound connections from the connector on TCP/IP port 5985.
-To test the correct setup of WinRM, the machine can be accessed over WinRM from any Windows Machine with PowerShell using the following command:
+The following firewall rules need to be configured on the machine for remoting to work properly:
+
+| Protocol | Port   | Description      |
+|----------|--------|------------------|
+| TCP      | `5985` | WinRM            |
+| TCP      | `5986` | WinRM with HTTPS |
+| TCP      | `22`   | SSH              |
+
+## Testing firewall configuration
+
+### WinRM
+
+To check the firewall configuration for WinRM, run the following command from an elevated PowerShell console:
 ```powershell
-Enter-PSSession “Machine IP or Name” -Credential “User Name”
+# Confirm the Firewall rule is configured. It should be created automatically by setup. Run the following to verify
+# WinRM over HTTP
+if (!(Get-NetFirewallRule -Name "Windows Remote Management (HTTP-In)" -ErrorAction SilentlyContinue | Select-Object Name, Enabled)) {
+    Write-Output "Firewall Rule 'Windows Remote Management (HTTP-In)' does not exist, creating it..."
+    New-NetFirewallRule -Name 'Windows Remote Management (HTTP-In)' -DisplayName 'Windows Remote Management (HTTP-In)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 5985
+} else {
+    Write-Output "Firewall rule 'Windows Remote Management (HTTP-In)' has been created and exists."
+}
+
+# Test that the port is open
+Test-NetConnection -ComputerName "Machine IP or Name" -Port 5985
+
+# WinRM over HTTPS
+if (!(Get-NetFirewallRule -Name "Windows Remote Management (HTTPS-In)" -ErrorAction SilentlyContinue | Select-Object Name, Enabled)) {
+    Write-Output "Firewall Rule 'Windows Remote Management (HTTPS-In)' does not exist, creating it..."
+    New-NetFirewallRule -Name 'Windows Remote Management (HTTPS-In)' -DisplayName 'Windows Remote Management (HTTPS-In)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 5986
+} else {
+    Write-Output "Firewall rule 'Windows Remote Management (HTTPS-In)' has been created and exists."
+}
+
+# Test that the port is open
+Test-NetConnection -ComputerName "Machine IP or Name" -Port 5986
 ```
 
-Be aware, that by default WinRM client configuration only allows Kerberos authentication to not known hosts (not in domain). To add your server to the trusted hosts on the client Windows machine run the following command:
-```powershell
-Set-Item WSMan:localhost\client\trustedhosts -value “Machine IP or Name”
-```
+### SSH
 
-:::info[Linux client]
-The PowerShell remoting is also supported on Linux. You can install PowerShell on Linux by following the [official documentation](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-linux?view=powershell-7.4).
-Configuration of the PowerShell remoting on Linux might differ based on the distribution. The CredSSP authentication is not supported on Linux PowerShell.
-:::
+Check that the SSH port is open by running the following command from an elevated PowerShell console:
+```powershell
+# Confirm the Firewall rule is configured. It should be created automatically by setup. Run the following to verify
+if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue | Select-Object Name, Enabled)) {
+    Write-Output "Firewall Rule 'OpenSSH-Server-In-TCP' does not exist, creating it..."
+    New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP' -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+} else {
+    Write-Output "Firewall rule 'OpenSSH-Server-In-TCP' has been created and exists."
+}
+
+# Test that the port is open
+Test-NetConnection -ComputerName "Machine IP or Name" -Port 22
+```

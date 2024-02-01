@@ -16,7 +16,7 @@ You can use as example the following guide:
 [Install a New Windows Server 2012 Active Directory Forest (Level 200) | Microsoft Docs](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/deploy/install-a-new-windows-server-2012-active-directory-forest--level-200-)
 :::
 
-## Active Directory Certificate Services Presence
+## Active Directory Certificate Services presence
 
 Depending on your environment, install the Active Directory Certificate Services Server Role according to the instructions from Microsoft. Omit the step if you already have Microsoft Certification Authority Running.
 
@@ -42,14 +42,14 @@ PowerShell remoting can be facilitated using the following protocols:
 
 The following steps should be done to successfully integrate ADCS with CZERTAINLY:
 
-| #     | Reference                                                        | Short description                            |
-|-------|------------------------------------------------------------------|----------------------------------------------|
-| **1** | [Install PSPKI Module](./install-pspki)                          | Prepare PowerShell PKI Module                |
-| **2** | [Configure WinRM](./winrm-configuration)                         | Configure Windows Remote Management protocol |
-| **3** | [Configure SSH](./ssh-configuration)                             | Configure Secure Shell protocol              |
-| **4** | [Configure Firewall and Trusted Hosts](./firewall-configuration) | Configure inbound connections and delegation |
-| **5** | [Create User](./create-user)                                     | Create user to access ADCS                   |
-| **6** | [Test Integraton](./test-integration)                            | Test integration and access to ADCS          |
+| #     | Reference                                          | Short description                            |
+|-------|----------------------------------------------------|----------------------------------------------|
+| **1** | [Install PSPKI Module](./install-pspki)            | Prepare PowerShell PKI Module                |
+| **2** | [WinRM Configuration](./winrm-configuration)       | Configure Windows Remote Management protocol |
+| **3** | [SSH Configuration](./ssh-configuration)           | Configure Secure Shell protocol              |
+| **4** | [Firewall Configuration](./firewall-configuration) | Configure inbound connections and delegation |
+| **5** | [Create User](./create-user)                       | Create user to access ADCS                   |
+| **6** | [Testing Integraton](./test-integration)           | Test integration and access to ADCS          |
 
 ## Troubleshooting
 
