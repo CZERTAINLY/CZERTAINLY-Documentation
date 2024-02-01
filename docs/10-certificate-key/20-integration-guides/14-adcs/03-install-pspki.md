@@ -7,7 +7,7 @@ Although it is and optional component, majority of providers and connectors are 
 To install the PSPKI module, first make sure you are using the newest version of PowerShell from Microsoft. At least version 5 is required.
 
 :::info[PSPKI module requirements]
-The PSPKI module requires Windows PowerShell 3.0 or higher and .NET Framework 4.7.2 or higher. Check the [official project page]((https://github.com/PKISolutions/PSPKI)) for more information.
+The PSPKI module requires Windows PowerShell 3.0 or higher and .NET Framework 4.7.2 or higher. Check the [official project page](https://github.com/PKISolutions/PSPKI) for more information.
 :::
 
 ## Installation steps
