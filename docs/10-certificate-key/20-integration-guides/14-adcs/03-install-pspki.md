@@ -2,7 +2,7 @@
 
 The [**PSPKI module for PowerShell**](https://github.com/PKISolutions/PSPKI) is intended to simplify various PKI and Active Directory Certificate Services management tasks by using automation with Windows PowerShell. The module provides features and capabilities for managing and configuring Certification Authorities.
 
-Although it is and optional component, majority of providers and connectors are using it to provide better user experience and more features.
+Although it is an optional component, majority of providers and connectors are using it to provide better user experience and more features.
 
 To install the PSPKI module, first make sure you are using the newest version of PowerShell from Microsoft. At least version 5 is required.
 
