@@ -24,6 +24,12 @@ Enterprise ADCS is using multiple stores for its configuration, therefore for su
 
 ## WinRM encryption
 
+By default, WinRM will fail to work when running over an unencrypted channel. Using WinRM with TLS is the recommended option as it works with all authentication options, but requires a certificate to be created and used on the WinRM listener.
+
+The certificate can be created using the `New-SelfSignedCertificate` cmdlet, or by using the `certreq` command to create a certificate request and then submitting it to a Certificate Authority (CA). If in a domain environment, ADCS can create a certificate for the host that is issued by the domain itself.
+
+If using HTTPS is not an option, then WinRM can be used with encrypted payload when the authentication option is `NTLM`, `Kerberos` or `CredSSP`. The message-level encryption is not used when running over HTTPS because the encryption uses the more secure TLS protocol instead.
+
 ## WinRM configuration
 
 To configure Windows Remote Management (WinRM), run the following command from an elevated PowerShell console:
