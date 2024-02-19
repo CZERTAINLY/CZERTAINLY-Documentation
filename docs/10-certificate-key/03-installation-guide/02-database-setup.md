@@ -21,14 +21,10 @@ CREATE DATABASE czertainlydb ENCODING 'UTF8' LC_COLLATE='en_US.UTF-8' LC_CTYPE='
 GRANT ALL PRIVILEGES ON DATABASE czertainlydb to czertainlyuser;
 ```
 
-- Create the tables using the schema file located in the `db` directory
-```bash
-psql -h localhost -U czertainlyuser -d czertainlydb < ./core/01_tables.sql
+- If you are going to use Keycloak, create schema for it
+```sql
+\c czertainlydb;
+CREATE SCHEMA keycloak;
+ALTER SCHEMA keycloak OWNER TO czertainlyuser;
 ```
-
-- Load initial data required by the platform using the file located in the `db` directory
-```bash
-psql -h localhost -U czertainlyuser -d czertainlydb < ./core/02_data.sql
-```
-
-Once the tables and data are created, you can deploy the platform and start using it.
+Once the database is prepared, you can deploy the platform and start using it.
