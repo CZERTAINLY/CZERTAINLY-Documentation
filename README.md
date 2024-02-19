@@ -1,6 +1,6 @@
 # CZERTAINLY Documentation
 
-> This repository is part of the commercial open source project CZERTAINLY. You can find more information about the project at [CZERTAINLY](https://github.com/3KeyCompany/CZERTAINLY) repository, including the contribution guide.
+> This repository is part of the open source project CZERTAINLY. You can find more information about the project at [CZERTAINLY](https://github.com/3KeyCompany/CZERTAINLY) repository, including the contribution guide.
 
 CZERTAINLY documentation is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
