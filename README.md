@@ -13,6 +13,14 @@ To learn how to work with Docusaurus, refer to the [Docusaurus documentation](ht
 
 ## How to work with the documentation
 
+- Install [`npm`](https://github.com/nodesource/distributions) from offical site.
+- Install [`yarn`](https://yarnpkg.com/getting-started/install) from offical site.
 - Use `yarn install` for installation of the documentation modules and dependencies.
-- Use `yarn start` for starting a local development server and opens up a browser window.
+- Use `yarn start` to start a local development server providing a rendered version of your local copy of the documentation. It will be typically available on http://localhost:3000/ and browser window should automatically open up for you.
 - Use `yarn build` for building the documentation. This command generates static content into the `build` directory.
+
+### Notes for running on a Debian Linux
+
+The versions of `npm` and `yarn` (provided as `yarnpkg`) are obsoleted in Debian 10. It is possible to download `npm` packaged as a Debian package from the official site listed above.
+
+`yarn` is not officially provided as a Debian package. The [official installation](https://yarnpkg.com/getting-started/install) process requires root privileges. It is possible to install it locally using `npm install yarn` into the current directory, for example, if you exec install in your home, it will create `node_modules` directory with all its components. Later it can be used as `~/mode_modules/.bin/yarn start` to execute local development server showing a rendered version of the documentation.
