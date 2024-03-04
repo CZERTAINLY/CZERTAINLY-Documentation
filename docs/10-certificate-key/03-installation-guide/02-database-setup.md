@@ -54,8 +54,8 @@ Each microservice is using a connection pool to manage the database connections.
 
 Not that the number of connections is not the same as the number of active sessions. The number of active sessions is limited by the number of threads in the service and the number of requests that are processed in parallel. The number of connections is the number of connections that are open to the database at the same time. The number of connections is typically higher than the number of active sessions.
 
-If you experience problems with the database connections, it is recommended to increase the number of maximum connections for the PostgreSQL database. The default number of connections is 100. You can increase the number of connections in the `postgresql.conf` file by setting the `max_connections` parameter.
+If you experience problems with the database connections, it is recommended to increase the number of maximum connections for the PostgreSQL database. The default number of connections is 100. If you are going to deploy all available platform components it is suggested to increase number connections to 250. You can do so by increasing the number of connections in the `postgresql.conf` file by setting the `max_connections` parameter.
 
 :::info
-When you experience issue like `remaining connection slots are reserved for non-replication superuser connections` it is a sign that the number of connections is too low. 
+When you experience issue like `remaining connection slots are reserved for non-replication superuser connections` it is a sign that the number of connections is too low.
 :::
