@@ -35,13 +35,6 @@ Create the tables using the schema file located in the `db` directory:
 psql -h localhost -U czertainlyuser -d czertainlydb < db/migration/*.sql
 ```
 
-If you decide to deploy [Keycloak](../20-integration-guides/10-keycloak/01-overview.md) as an authentication backend. You need to create schema for it. Keycloak is a Open Source Identity and Access Management and it's developement is independent on CZERTAINLY, so it doesn't provide database schema definictions in way CZERTAINLY does. To create needed schema you can use following commands:
-```sql
-\c czertainlydb;
-CREATE SCHEMA keycloak;
-ALTER SCHEMA keycloak OWNER TO czertainlyuser;
-```
-
 Once the tables and data are created, you can deploy the platform and start using it.
 
 :::info
