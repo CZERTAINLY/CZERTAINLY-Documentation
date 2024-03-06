@@ -1,6 +1,6 @@
 # Create Realm and Client
 
-:::warning Keycloak version
+:::warning[Keycloak version]
 Based on your Keycloak version, steps to create realm and OIDC client may differ. Refer to the Keycloak documentation specific for your Keycloak version.
 :::
 
