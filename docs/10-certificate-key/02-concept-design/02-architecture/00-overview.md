@@ -5,9 +5,7 @@ Each component and each part of the platform is a microservice. Using that appro
 
 ## Architecture diagram
 
-![Czertainly ingredients](../../../assets/platform-ingredients.png)
-
-The above diagram explains briefly the architecture of the platform. The platform provides client interfaces to communicate with the `Core`.
+The platform provides client interfaces to communicate with the `Core`.
 
 The `Core` is the brain of the platform and is responsible for application logic and communication with authorized `Connector`. `Connector` is the implementation of the technology. `Connector` implements the logic which is specific to the technology and provides a consistent results for the `Core`.
 
