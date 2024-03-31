@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@akebifiky/remark-simple-plantuml": "^1.0.2",
-    "@docusaurus/core": "^3.0.0",
-    "@docusaurus/preset-classic": "^3.0.0",
+    "@docusaurus/core": "3.2.0",
+    "@docusaurus/preset-classic": "3.2.0",
     "@fortawesome/fontawesome-free": "^6.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.0.0",
     "@fortawesome/free-solid-svg-icons": "^6.0.0",
