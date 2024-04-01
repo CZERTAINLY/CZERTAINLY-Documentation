@@ -2,6 +2,7 @@ const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 
 const apiVersion = '2.11.0';
+const chartVersion = '2.11.0-1';
 
 import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin.mjs';
 import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin.mjs';
@@ -38,7 +39,7 @@ const config = {
         name: "czertainly-helm-docs", // used by CLI, must be path safe
         noRuntimeDownloads: true, // disable runtime downloads, use only CLI to download (docusaurus download-remote-czertainly-helm-docs)
         performCleanup: false, // do not remove downloaded files on build
-        sourceBaseUrl: "https://raw.githubusercontent.com/3KeyCompany/CZERTAINLY-Helm-Charts/"+apiVersion+"/charts/czertainly/docs/", // the base url for the markdown (gets prepended to all of the documents when fetching)
+        sourceBaseUrl: "https://raw.githubusercontent.com/3KeyCompany/CZERTAINLY-Helm-Charts/"+chartVersion+"/charts/czertainly/docs/", // the base url for the markdown (gets prepended to all of the documents when fetching)
         outDir: "docs/10-certificate-key/03-installation-guide/04-deployment/04-deployment-helm", // the base directory to output to.
         documents: ["configurable-parameters.md", "overview.md", "troubleshooting.md", "upgrading.md"], // the file names to download
       },

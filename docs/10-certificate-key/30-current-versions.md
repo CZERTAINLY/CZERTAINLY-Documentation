@@ -36,7 +36,8 @@ The Operator Web was merged with the Administrator Web in the version `2.2.0`.
 | Network Discovery Provider     | `1.4.0` | `docker.io/3keycompany/czertainly-ip-discovery-provider`                   |
 | Cryptosense Discovery Provider | `1.4.0` | `harbor.3key.company/czertainly/czertainly-cryptosense-discovery-provider` |
 | MS ADCS Connector              | `1.6.0` | `harbor.3key.company/czertainly/czertainly-ms-adcs-connector`              |
-| PyADCS Connector               | `1.0.0` | `harbor.3key.company/czertainly/czertainly-pyadcs-connector`               |
+| PyADCS Connector               | `1.0.1` | `harbor.3key.company/czertainly/czertainly-pyadcs-connector`               |
+| HashiCorp Vault Connector      | `1.0.0` | `docker.io/3keycompany/czertainly-hashicorp-vault-connector`               |
 | EJBCA Legacy Connector         | `1.4.0` | `harbor.3key.company/czertainly/czertainly-ejbca-legacy-ca-connector`      |
 | Keystore Entity Provider       | `1.4.1` | `docker.io/3keycompany/czertainly-keystore-entity-provider`                |
 | X.509 Compliance Provider      | `1.3.0` | `docker.io/3keycompany/czertainly-x509-compliance-provider`                |
@@ -45,10 +46,10 @@ The Operator Web was merged with the Administrator Web in the version `2.2.0`.
 
 ## Other
 
-| Service           | Version | Docker Image                                              |
-|-------------------|---------|-----------------------------------------------------------|
-| Keycloak Internal | `1.0.0` | `docker.io/3keycompany/czertainly-keycloak-optimized`     |
-| Utils Service     | `1.0.0` | `harbor.3key.company/czertainly/czertainly-utils-service` |
+| Service           | Version    | Docker Image                                              |
+|-------------------|------------|-----------------------------------------------------------|
+| Keycloak Internal | `24.0.2-0` | `docker.io/3keycompany/czertainly-keycloak-optimized`     |
+| Utils Service     | `1.0.0`    | `harbor.3key.company/czertainly/czertainly-utils-service` |
 
 ## Private repository
 
