@@ -25,7 +25,7 @@ The CZERTAINLY Signing adds the following parts:
     </tr>
     <tr>
         <td><b>AdES Signature Formats</b></td>
-        <td>Configure PAdES, XAdES, CAdES, JAdES or ASiC signature formats and sign documents and data compliant to eIDAS regulation. Integration with DSS framework provides support for all relevant format levels and use cases.</td>
+        <td>Configure PAdES (including External CMS), XAdES, CAdES, JAdES or ASiC signature formats and sign documents and data compliant to eIDAS regulation. Integration with DSS framework provides support for all relevant format levels and use cases.</td>
     </tr>
     <tr>
         <td><b>AdES Signature Validation</b></td>
