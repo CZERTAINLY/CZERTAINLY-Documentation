@@ -28,3 +28,28 @@ Also, [B-level propeties](../common-properties/blevel-properties) are not applic
 Properties for collecting of validation material from trusted sources and TSA properties must be set for the augmentation.
 
 The data that needs to be provide for validation of detached signatures should be included as a Base64 encoded original data in the `DETACHED_CONTENTS` metadata when requesting for the augmentation.
+
+### Detached contents in batch augmentation
+
+When augmenting detached signatures in batch, the original data should be provided in the `detachedContens` field. The original data should be Base64 encoded and the field should be included in the request for each signature that is being augmented.
+
+An example of the batch augmentation request with detached contents is following:
+
+```json
+{
+  "signatureRequests": [
+    {
+      "data": "base64signature1",
+      "customIdentifier": "signature 1",
+      "detachedContents": "base64detachedContents1"
+    },
+    {
+      "data": "base64signature2",
+      "customIdentifier": "signature 2",
+      "detachedContents": "base64detachedContents2"
+    }
+  ]
+}
+```
+
+The output of the batch augmentation will be the same as the output for batch signing, with the augmented signatures. See [Batch signing request format](../batch-signing#batch-signing-response-format) for more information.
