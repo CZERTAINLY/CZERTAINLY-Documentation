@@ -11,7 +11,7 @@ See the [Common Properties](../common-properties/basic-properties) for configura
 The implementation class of the External CMS Signer is:
 
 ```
-com.czertainly.signserver.module.pades.signer.cms.ExternalCMSSSigner
+com.czertainly.signserver.module.pades.signer.cms.ExternalCMSSigner
 ```
 
 It contains the integration with the DSS framework and extends the Worker interface of the SignServer. If you want to use the External CMS Signer, you must specify this property. The External CMS Signer will check the basic configuration properties of `SIGNATURE_LEVEL` that can be one of the following values: `PADES_BASELINE_B` or `PADES_BASELINE_T`.

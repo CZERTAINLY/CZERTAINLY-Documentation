@@ -179,6 +179,27 @@ export const data = [
                     <span className="badge badge--success">YES</span>
                 </>
             )
+    },
+    {
+        property: "REQUIRES_TRANSACTION",
+        description:
+            (
+                <>
+                    If the key generation requires a database transaction. If set to true, the service will run in a transaction.
+                </>
+            ),
+        default:
+            (
+                <>
+                    <span className="badge badge--secondary">false</span>
+                </>
+            ),
+        mandatory:
+            (
+                <>
+                    <span className="badge badge--danger">NO</span>
+                </>
+            )
     }
 ];
 

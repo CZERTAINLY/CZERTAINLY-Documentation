@@ -36,6 +36,9 @@ WORKERGENID1.KEYGEN_ALGORITHM=RSA
 # specification of the generated key attributes
 WORKERGENID1.KEYGEN_SPECIFICATION=4096
 
+# requires transaction for the service
+WORKERGENID1.REQUIRES_TRANSACTION=true
+
 WORKERGENID1.ACTIVE=true
 WORKERGENID1.SINGLETON=true
 ```
