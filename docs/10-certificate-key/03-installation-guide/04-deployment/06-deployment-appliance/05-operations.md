@@ -9,7 +9,7 @@ The following document describes advanced operations for the management of virtu
 
 ### Shut down
 
-To shut down the virtual appliance use ACPI shutdown call of your virtualization platform or select **Advanced options -> [Shutdown system](./TUI/advanced-menu#shutdown-system)**.
+To shut down the virtual appliance use ACPI shutdown call of your virtualization platform or select **Advanced options -> Shutdown system**.
 
 ### Restart
 

@@ -175,20 +175,9 @@ The Signer is responsible for the formatting of the signature. Based on your nee
 ```
 CRYPTOTOKEN=EntrustSAMOneTimeCryptoTokenWithEJBCA
 AUTHTYPE=org.signserver.server.UsernameAuthorizer
-PROCESSINTRANSACTION=true
 ALIASSELECTOR=org.signserver.server.aliasselectors.AuthorizedUsernameAliasSelector
 ACCEPT_ALL_USERNAMES=true
-PROCESSINTRANSACTION=true
 ```
-
-Because the onetime signing process must run in transaction to secure correct behaviour of the SAM key lifecycle, the Signer must configure the following property:
-```
-PROCESSINTRANSACTION=true
-```
-
-:::warning
-The onetime signing operation using the Entrust SAM fails without providing the `PROCESSINTRANSACTION=true` in the metadata of the signing request. This metadata is used to properly handle the state of the SAM key in the database of the SignServer during the transaction.
-:::
 
 The following is a sample configuration of PAdES Signer:
 
@@ -196,7 +185,6 @@ The following is a sample configuration of PAdES Signer:
 CRYPTOTOKEN=EntrustSAMOneTimeCryptoTokenWithEJBCA
 AUTHTYPE=org.signserver.server.UsernameAuthorizer
 IMPLEMENTATION_CLASS=com.czertainly.signserver.module.pades.signer.PAdESSigner
-PROCESSINTRANSACTION=true
 ALIASSELECTOR=org.signserver.server.aliasselectors.AuthorizedUsernameAliasSelector
 ACCEPT_ALL_USERNAMES=true
 SIGNATURE_LEVEL=PAdES-BASELINE-B
