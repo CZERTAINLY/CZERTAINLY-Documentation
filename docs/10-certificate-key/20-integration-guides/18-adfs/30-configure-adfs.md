@@ -70,6 +70,9 @@ $relyingPartyName = "CZERTAINLY"
 $accessControlPolicyName = "Permit everyone"
 $relyingPartyTrust = Add-AdfsRelyingPartyTrust -MetadataUrl $metadataUrl -Name $relyingPartyName -AccessControlPolicyName $accessControlPolicy
 
+# Get the group SID
+$groupSid = (Get-ADGroup -Filter {Name -eq "Administrators"}).SID.Value
+
 # Configure claim issuance policy
 $issuancerules = New-AdfsClaimRuleSet -ClaimRule @'
 
@@ -85,7 +88,7 @@ c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccou
  
 @RuleTemplate = "EmitGroupClaims"
 @RuleName = "Group membership: admin"
-c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid", Value == "S-1-5-21-3820024857-2695711099-450958038-2101", Issuer == "AD AUTHORITY"]
+c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid", Value == "$groupSid", Issuer == "AD AUTHORITY"]
  => issue(Type = "http://schemas.xmlsoap.org/claims/Group", Value = "admin", Issuer = c.Issuer, OriginalIssuer = c.OriginalIssuer, ValueType = c.ValueType);
  
 '@
