@@ -106,24 +106,28 @@ $relyingPartyTrust = Add-AdfsRelyingPartyTrust -MetadataUrl $metadataUrl -Name $
 $groupSid = (Get-ADGroup -Filter {Name -eq "Administrators"}).SID.Value
 
 # Configure claim issuance policy
-$issuancerules = New-AdfsClaimRuleSet -ClaimRule @'
+$stringClaimRule = @'
 
 @RuleTemplate = "MapClaims"
 @RuleName = "Name ID"
 c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname"]
  => issue(Type = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", Issuer = c.Issuer, OriginalIssuer = c.OriginalIssuer, Value = c.Value, ValueType = c.ValueType, Properties["http://schemas.xmlsoap.org/ws/2005/05/identity/claimproperties/format"] = "urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName");
- 
+
 @RuleTemplate = "LdapClaims"
 @RuleName = "User attributes"
 c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname", Issuer == "AD AUTHORITY"]
  => issue(store = "Active Directory", types = ("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"), query = ";mail,givenName,sn;{0}", param = c.Value);
- 
+
 @RuleTemplate = "EmitGroupClaims"
 @RuleName = "Group membership: admin"
 c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid", Value == "$groupSid", Issuer == "AD AUTHORITY"]
  => issue(Type = "http://schemas.xmlsoap.org/claims/Group", Value = "admin", Issuer = c.Issuer, OriginalIssuer = c.OriginalIssuer, ValueType = c.ValueType);
- 
+
 '@
+
+$stringClaimRule = $stringClaimRule.Replace('$groupSid', $groupSid)
+
+$issuancerules = New-AdfsClaimRuleSet -ClaimRule $stringClaimRule
 
 # Get relying party trust
 $relyingparty = Get-ADFSRelyingPartyTrust -Name $relyingPartyName
