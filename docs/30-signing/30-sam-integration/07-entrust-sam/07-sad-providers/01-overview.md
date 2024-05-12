@@ -8,6 +8,7 @@ The following implementations are available:
 
 - [REST SAD Provider](./rest)
 - [Metadata SAD Provider](./metadata)
+- [Internal SAD Provider](./internal)
 
 ## SAD Metadata
 
