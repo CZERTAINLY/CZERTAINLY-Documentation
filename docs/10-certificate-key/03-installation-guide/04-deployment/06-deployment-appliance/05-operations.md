@@ -96,11 +96,35 @@ The custom values overwrite the default values during the installation/upgrade p
 Before any upgrade process make sure you have recent snapshot first!
 :::
 
-#### OS Upgrades
+#### OS packages upgrades
 
 CZERTAINLY Virtual Appliance is based on Debian GNU/Linux. To upgrade it [enter system shell](./TUI/advanced-menu#enter-system-shell), and execute command `sudo apt update && sudo apt upgrade`. This command also upgrades `czertainly-appliance-tools` package, this package provides [TUI](./TUI/intro), it is necessary to close the open shell connection and login back to start using the new version of the TUI.
 
-The new major version of the Debian system is released every 2 years and has [LTS support](https://wiki.debian.org/LTS) lasting typically 5 years in total. The System is designed to support upgrades between major versions by `apt dist-upgrade`, however, we recommend to rather use a new version of CZERTAINLY Virtual Appliance.
+The above command first updates information about package versions and the second upgrades them. This way is safe from major upgrades and should be done periodically.
+
+#### OS upgrades
+
+The upgrade of the OS can cause downtime and can introduce dependency problems with the CZERTAINLY platform. Always check our site first before trying to do the OS upgrade.
+
+The new major version of the Debian system is released every 2 years and has [LTS support](https://wiki.debian.org/LTS) lasting typically 5 years in total. It is perfectly safe to operate the CZERTAINLY platform on an older version of the Debian OS until the end of its LTS support.
+
+The Debian Operating System is designed to support upgrades between major versions by `apt dist-upgrade`, however, we recommend to rather use a new version of CZERTAINLY Virtual Appliance.
+
+The following table shows which versions of Virtual Appliance are based on which version of Debian OS.
+
+| Appliance version | Debian version |
+|-------------------|----------------|
+| upto 2.10 | Bullseye (11) |
+| from 2.11 | Bookworm (12) |
+
+
+In case you decide to upgrade your Virtual appliance based on Debian Bullseye, you need to resolve the PostgreSQL version issue. Bullseye is using version 13 and Bookworm version 15. The suggested way how to proceed is to:
+ * [backup](#backup) database,
+ * delete the Postgres 13 version and purge database files from the drive,
+ * install the Postgres 15,
+ * [restore](#restore) database,
+ * re-run CZERTAINLY installation from the main menu.
+
 
 #### CZERTAINLY upgrade
 
