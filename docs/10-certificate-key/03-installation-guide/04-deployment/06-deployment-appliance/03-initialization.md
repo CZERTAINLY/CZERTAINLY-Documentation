@@ -15,12 +15,13 @@ Bold items are mandatory even for testing purposes.
 
 1. [Change hostname and networking parameters](#change-hostname-and-networking-parameters)
 1. [**Update the system**](#update-system-and-packages)
-1. [Setup TLS certificate](#tls-certificate-for-czertainly-interface)
-1. [Trusted certificate list](#trusted-certificates-list)
-1. [Configure database](#database)
-1. [Configure credentials to CZERTAINLY docker repository](#credentials-for-czertainly-docker-repository)
-1. [**Configure CZERTAINLY**](#configure-czertainly)
-4. [**Install CZERTAINLY**](#install-czertainly)
+2. [Install hypervisor tools](#install-hypervisor-tools)
+3. [Setup TLS certificate](#tls-certificate-for-czertainly-interface)
+4. [Trusted certificate list](#trusted-certificates-list)
+5. [Configure database](#database)
+6. [Configure credentials to CZERTAINLY docker repository](#credentials-for-czertainly-docker-repository)
+7. [**Configure CZERTAINLY**](#configure-czertainly)
+8. [**Install CZERTAINLY**](#install-czertainly)
 
 ## Change hostname and networking parameters
 
@@ -34,6 +35,16 @@ If your network policy requires using HTTP proxy, you can configure it by select
 ## Update system and packages
 
 It is always good to have current version of `czertainly-appliance-tools` and Debian software. To update packages, select from the main menu **Advanced options -> Update Operating System**.
+
+## Install hypervisor tools
+
+Depending on your hypervisor you might want to install its specific tools.
+
+For VMware, it is good to install [open-vm-tools](https://packages.debian.org/bookworm/open-vm-tools). select from the main menu **Advanced options -> Enter system shell** and type `sudo apt install open-vm-tools.
+
+For Virtualbox, you do not have to install anything [virtualbox-guest-module](https://packages.debian.org/bookworm/virtualbox-guest-modules) that is already part of the running kernel image.
+
+For other hypervisors, please consult their documentation.
 
 ## TLS certificate for CZERTAINLY interface
 
