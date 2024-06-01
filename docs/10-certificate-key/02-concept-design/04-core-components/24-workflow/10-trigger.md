@@ -28,7 +28,7 @@ We would like to illustrate the concept of triggers with a few examples:
 
 **Trigger to set certificate owner on newly discovered certificates having a specific common name:**
 
-- **Trigger Name:** Set owner for all certificates with CN containing "example.com" to "John Doe"
+- **Trigger Name:** Set owner for all certificates with CN containing example.com to John Doe
 - **Description:** This trigger sets the owner of all certificates with a common name containing "example.com" to "John Doe"
 - **Type:** Event
 - **Event Resource:** Discovery

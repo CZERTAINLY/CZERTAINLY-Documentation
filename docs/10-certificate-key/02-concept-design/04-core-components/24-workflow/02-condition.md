@@ -21,7 +21,7 @@ We would like to illustrate the concept of conditions with a few examples:
 
 **Matching conditions based on the certificate common name and public key algorithm:**
 
-- **Condition Name:** Certificate CN contains "example.com"
+- **Condition Name:** Certificate CN contains example.com
 - **Description:** This condition checks if the common name of a certificate contains the string "example.com"
 - **Condition Type:** Check Field
 - **Resource:** Certificate

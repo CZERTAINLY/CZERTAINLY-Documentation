@@ -21,7 +21,7 @@ We would like to illustrate the concept of executions with a few examples:
 
 **Update certificate owner:**
 
-- **Execution Name:** Update owner to "John Doe"
+- **Execution Name:** Update owner to John Doe
 - **Description:** This execution updates the owner of a certificate to "John Doe"
 - **Execution Type:** Set Field
 - **Resource:** Certificate
@@ -29,7 +29,7 @@ We would like to illustrate the concept of executions with a few examples:
 
 **Update custom attribute value:**
 
-- **Execution Name:** Update custom attribute "Category" to "To check"
+- **Execution Name:** Update custom attribute Category to To check
 - **Description:** This execution updates the value of a custom attribute "Category" to "To check"
 - **Execution Type:** Set Field
 - **Resource:** Certificate

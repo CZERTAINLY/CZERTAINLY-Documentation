@@ -23,7 +23,7 @@ We would like to illustrate the concept of rules with a few examples:
 
 **Rule for example.com:**
 
-- **Rule Name:** Certificates with CN containing "example.com" and Public Key Algorithm is RSA
+- **Rule Name:** Certificates with CN containing example.com and Public Key Algorithm is RSA
 - **Description:** This rule triggers an action for certificates with a common name containing "example.com" and a public key algorithm of RSA
 - **Resource:** Certificate
 - **Conditions:** `Certificate CN contains "example.com"`, `Certificate Public Key Algorithm is RSA`
