@@ -39,7 +39,7 @@ The following content types are available and supported:
 | `OBJECT`               | [`ObjectAttributeContent`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/content/ObjectAttributeContent.java)         | `object`                                                                                                                                                                                                 |
 
 :::warning[Mulitple content types in one Attribute]
-One `Attribute` can define only one `contenttype`. Multiple different content types for one `Attribute` is not supported.
+One `Attribute` can define only one `contentType`. Multiple different content types for one `Attribute` is not supported.
 :::
 
 ## Content type samples

@@ -40,3 +40,10 @@ Metadata attribute can be marked as `global` to make it available between variou
 :::info
 For more information about the concept behind the `Connector`, `Attributes`, `Callbacks`, etc, see the [CZERTAINLY platform overview](../../../concept-design/overview).
 :::
+
+## Attributes management
+Since functionality in CZERTAINLY is heavily based on attributes and its data, attribute engine also provides layer for management of attributes and their content. Attribute engine is responsible for
+- registration, validation and management of attributes definitions
+- validation of attribute content for individual objects (user input)
+- retrieving object attributes based on type and/or operation
+- handling and providing attribute definitions for group attributes callback attributes

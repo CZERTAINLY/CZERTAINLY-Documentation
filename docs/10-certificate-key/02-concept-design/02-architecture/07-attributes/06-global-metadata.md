@@ -7,10 +7,6 @@
 - Defined in the `Core` and used in the `Connector`.
 - Promote existing `Connector` metadata to `Global Metadata`.
 
-:::warning
-When a metadata from the connector is set as `global`, it should be defined in the `Core`. If not, then the value of the metadata will not be stored in the `Core`.
-:::
-
 ### Characteristics
 
 The characteristics of `Global Metadata` are:
@@ -18,6 +14,7 @@ The characteristics of `Global Metadata` are:
 - `Global Metadata` is not available for the user to create or update.
 - Any metadata from the connector can be made as `Global Metadata` by enabling the property `global` in the attribute property configuration.
 - Name of the `Global Metadata` should match the name of the attribute in the `Connector`.
+- If a `Global Metadata` is not defined but enabled in the connector, its definition will be stored as a global metadata.
 - If a `Global Metadata` is defined and not enabled in the connector, it will be stored as a connector metadata.
 
 :::info
