@@ -6,17 +6,17 @@ Triggers are linking components that connect rules and actions, ensuring that th
 
 ## Trigger attributes
 
-| Attribute          | Description                                          |
-|--------------------|------------------------------------------------------|
-| **Trigger Name**   | A unique name for the trigger.                       |
-| **Description**    | A brief explanation of the trigger's purpose.        |
-| **Type**           | The type of trigger.                                 |
-| **Event Resource** | The object or entity that contains events.           |
-| **Event**          | The specific event that initiates the trigger.       |
-| **Ignore Trigger** | A flag to indicate if the trigger should be ignored. |
-| **Resource**       | The object or entity to which the trigger applies.   |
-| **Rules**          | The rules associated with the trigger.               |
-| **Actions**        | The actions triggered by the trigger.                |
+| Attribute          | Description                                                                |
+|--------------------|----------------------------------------------------------------------------|
+| **Trigger Name**   | A unique name for the trigger.                                             |
+| **Description**    | A brief explanation of the trigger's purpose.                              |
+| **Type**           | The type of trigger.                                                       |
+| **Event Resource** | The object or entity that contains events.                                 |
+| **Event**          | The specific event that initiates the trigger.                             |
+| **Ignore Trigger** | A flag to indicate if the trigger should ignore processing matched object. |
+| **Resource**       | The object or entity to which the trigger applies.                         |
+| **Rules**          | The rules associated with the trigger.                                     |
+| **Actions**        | The actions triggered by the trigger.                                      |
 
 ## Trigger types
 
