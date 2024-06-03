@@ -14,6 +14,8 @@ The following `Connectors` are officially available:
 | EJBCA NG Connector             | <span class="badge">Authority Provider</span>    | <span class="badge">EJBCA</span>                                                                           |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">EJBCA</span> <span class="badge">EJBCA_SCHEDULE</span>                                 |
 | Email Notification Provider    | <span class="badge">Notification Provider</span> | <span class="badge">EMAIL</span>                                                                           |
+| HashiCorp Vault Connector      | <span class="badge">Authority Provider</span>    | <span class="badge">HVault</span>                                                                          |
+|                                | <span class="badge">Discovery Provider</span>    | <span class="badge">HVault</span>                                                                          |
 | Keystore Entity Provider       | <span class="badge">Entity Provider</span>       | <span class="badge">Keystore</span>                                                                        |
 | MS ADCS Connector              | <span class="badge">Authority Provider</span>    | <span class="badge">ADCS</span>                                                                            |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">ADCS</span>                                                                            |
