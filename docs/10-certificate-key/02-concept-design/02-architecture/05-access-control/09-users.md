@@ -15,6 +15,7 @@ The following system users are defined:
 | Name   | Short description                      |
 |--------|----------------------------------------|
 | `acme` | System user for ACME client operations |
+| `scep` | System user for SCEP client operations |
 
 ## Anonymous user
 
