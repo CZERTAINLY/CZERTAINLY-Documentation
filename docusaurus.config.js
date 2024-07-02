@@ -1,7 +1,7 @@
 const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 
-const apiVersion = '2.12.0';
+const apiVersion = 'develop';
 const chartVersion = '2.12.0';
 
 import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin.mjs';
@@ -110,6 +110,11 @@ const config = {
             id: 'core-client-operations',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-client-operations.yaml',
             route: '/api/core-client-operations/',
+          },
+          {
+            id: 'core-cmp',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-cmp.yaml',
+            route: '/api/core-cmp/',
           },
           {
             id: 'core-compliance-profile',
@@ -243,6 +248,11 @@ const config = {
             id: 'protocol-acme',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-protocol-acme.yaml',
             route: '/api/protocol-acme/',
+          },
+          {
+            id: 'protocol-cmp',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-protocol-cmp.yaml',
+            route: '/api/protocol-cmp/',
           },
           {
             id: 'protocol-scep',
