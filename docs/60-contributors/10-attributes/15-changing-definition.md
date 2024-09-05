@@ -1,42 +1,47 @@
-# Changing attribute definition
-Since attributes play integral role in exchanging parameters and values needed for various operations, it is crucial to keep its definition anc content consistency. This holds true especially for `Data` and `Metadata` attributes which definition is defined in connectors and not managed by `Core`.
+# Attribute Definition Management
 
-## Attributes unique, permanent and changeable properties
-When `Core` requests for attributes needed to perform some operation, retrieved attribute definitions are validated and then stored in `Core` DB for filtering purposes. Each attribute is uniquely identified by combination of following properties:
+Attributes play a crucial role in exchanging parameters and values for various operations. Maintaining consistency in their definition and content is essential, particularly for `Data` and `Metadata` attributes. These definitions are specified within connectors and are not managed by `Core`.
+
+## Unique, Permanent, and Changeable Properties of Attributes
+
+When `Core` requests attributes for a particular operation, the attribute definitions are retrieved, validated, and stored in the `Core` database for filtering purposes. Each attribute is uniquely identified by a combination of the following properties:
+
 - `UUID`
 - `Name`
 - `Connector UUID` (not applicable for global metadata)
 
-When attribute is not found, definition is stored. For already existing definitions in `Core`, there is check if permanent property `contentType` is not changed. In case there is mismatch, exception is thrown because `Core` cannot process and handle incoming content data due to incompatibility with already existing content for that attribute.
+If an attribute is not found, its definition is stored. For existing definitions, `Core` checks whether the permanent property `contentType` has been altered. If there is a mismatch, an exception is thrown since `Core` cannot process incoming data that is incompatible with the already existing attribute content.
 
-Otherwise, definition is updated based on definition coming from connector. it means that its serialized definition is updated together with following `Core` managed changeable properties are up and its changeable managed properties:
+For other changes, the definition is updated based on the connector's input. This includes updating the serialized definition and the following changeable properties managed by `Core`:
+
 - `Label`
 - `Required` (not applicable for metadata)
 - `ReadOnly` (not applicable for metadata)
 
-This validation and updating mechanism keeps attribute definitions and their content consistent. This is necessary to keep operations needing attributes working correctly and be able to filter objects based on its content according to `contentType`.
+This validation and updating mechanism ensures that attribute definitions and their content remain consistent. It is essential to maintain this consistency for proper operation and to enable filtering of objects based on their content type.
 
 ## FAQ
 
-This FAQ section serves as reference and information source for occasions when attribute definition that is used in some operation needs to be updated. 
+This FAQ section serves as a reference for situations where the attribute definition used in an operation needs to be updated.
 
-### What if I need to change Attribute UUID and/or name?
-UUID and name are unique attribute properties. If they are changed, attribute will be by `Core` considered as new attribute for that operation and content will be retained linked to original definition. That could cause issue in some operations like renew certificate where metadata are sent as part of request. Content will be sent by `Core` but with UUID / name of original attribute definition and it depends on connector and change if content could be properly linked to new definition.
+### What if I need to change the Attribute UUID and/or Name?
 
-### What if I need to change Attribute Name and what is the impact on existing data in platform?
-As mentioned above, attribute name is unique property and when changed it leads to loose link of existing content. In some cases, it is possible to retrieve content with new definitions from connector (e.g. certificate `identify` operation of `authority` provider interface and location `sync` operation of `entity` provider interface).
+UUID and name are unique properties of an attribute. If either is changed, `Core` will treat the attribute as a new one for the given operation, while the content will remain linked to the original definition. This may cause issues in some operations, such as renewing a certificate, where metadata is sent as part of the request. `Core` will send the content with the UUID or name of the original attribute definition, and whether it can be properly linked to the new definition depends on the connector and the changes made.
 
-Currently, there is no attribute migration setting and only option is to sync (identify) / recreate object.
+Changing UUID and/or Name will cause the link to the existing content to be lost. In some cases, it is possible to retrieve the content with the new definitions from the connector (e.g., the `identify` operation of the `authority` provider interface or the `sync` operation of the `entity` provider interface).
 
-### What about other properties?
-In case, if there is need to change `contentType` property, it is necessary to update definition with new UUID and name. That way there will be no collision in structure with existing content.
-For other properties, `Core` will handle update of that properties in its stored definition automatically.
+Currently, there is no attribute migration feature available. The only option is to sync (identify) or recreate the object. 
 
-When label is updated, user can see change immediately in API responses and in UI in corresponding form or attribute viewers.
+### What about Other Properties?
 
-When property `Required` is changed to `True`, keep in mind that operation for already existing object can fail because content for that attribute was not previously required
+If there is a need to change the `contentType` property, you must update the definition with a new UUID and name to avoid conflicts with the existing content.
 
-When property `ReadOnly` is changed to `True`, keep in mind that operation for already existing object can fail because existing content could be different from that specified in definition and thus breaking validation rule of read-only attribute.
+For other properties, `Core` will automatically update them in the stored definition. For example:
 
-### What is the best practice for Attribute definition?
-When specifying attribute definition, it is important to generate unique set of UUID and name. Good practice is to keep in mind that name itself should be descriptive enough, and in case attributes represents very generic input (e.g. name, URL, type), use some prefix specifying it more accurately by its purpose. That way we can prevent potential collision or necessity to rename attribute when adding other ones with similar purpose. 
+- When the `Label` is updated, the change will be visible immediately in API responses and in the UI on corresponding forms or attribute viewers.
+- If the `Required` property is changed to `True`, be aware that operations on already existing objects may fail if the content for that attribute was not previously required.
+- If the `ReadOnly` property is changed to `True`, operations may fail because the existing content may differ from what is specified in the definition, thus violating the read-only validation rule.
+
+### What is the Best Practice for Attribute Definition?
+
+When specifying an attribute definition, it is important to generate a unique combination of UUID and name. A good practice is to ensure the name is descriptive enough, and if the attribute represents a generic input (e.g., name, URL, type), use a prefix to specify its purpose more accurately. This helps avoid potential collisions or the need to rename attributes when adding new ones with similar purposes.
