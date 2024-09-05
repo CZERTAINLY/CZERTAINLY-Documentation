@@ -18,7 +18,9 @@ For other changes, the definition is updated based on the connector's input. Thi
 - `Required` (not applicable for metadata)
 - `ReadOnly` (not applicable for metadata)
 
-This validation and updating mechanism ensures that attribute definitions and their content remain consistent. It is essential to maintain this consistency for proper operation and to enable filtering of objects based on their content type.
+In regard to other properties, they can be changed as needed. The only thing worth mentioning is that change does not affect in any way already existing content which can become invalid by some changes.
+
+Described validation and updating mechanism ensures that attribute definitions and their content remain consistent. It is essential to maintain this consistency for proper operation and to enable filtering of objects based on their content type.
 
 ## FAQ
 
@@ -45,3 +47,7 @@ For other properties, `Core` will automatically update them in the stored defini
 ### What is the Best Practice for Attribute Definition?
 
 When specifying an attribute definition, it is important to generate a unique combination of UUID and name. A good practice is to ensure the name is descriptive enough, and if the attribute represents a generic input (e.g., name, URL, type), use a prefix to specify its purpose more accurately. This helps avoid potential collisions or the need to rename attributes when adding new ones with similar purposes.
+
+### Can I delete unused Data or Metadata attribute definition from `Core`?
+
+Currently, there is no way how to manually delete stored definitions except custom attributes. Plan for the future is to include automatic cleanup of unused definitions without linked content for objects automatically.  
