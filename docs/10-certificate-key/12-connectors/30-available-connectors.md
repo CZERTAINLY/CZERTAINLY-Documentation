@@ -10,6 +10,7 @@ The following `Connectors` are officially available:
 |--------------------------------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------|
 | Common Credential Provider     | <span class="badge">Credential Provider</span>   | <span class="badge">Basic</span> <span class="badge">SoftKeyStore</span> <span class="badge">ApiKey</span> |
 | Cryptosense Discovery Provider | <span class="badge">Discovery Provider</span>    | <span class="badge">Cryptosense</span>                                                                     |
+| CT Logs Discovery Provider     | <span class="badge">Discovery Provider</span>    | <span class="badge">CTLogs-SSLMate</span>                                                                  |
 | EJBCA Legacy Connector         | <span class="badge">Authority Provider</span>    | <span class="badge">LegacyEjbca</span>                                                                     |
 | EJBCA NG Connector             | <span class="badge">Authority Provider</span>    | <span class="badge">EJBCA</span>                                                                           |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">EJBCA</span> <span class="badge">EJBCA_SCHEDULE</span>                                 |
