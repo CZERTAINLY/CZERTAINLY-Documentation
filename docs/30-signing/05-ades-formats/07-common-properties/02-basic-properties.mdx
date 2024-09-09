@@ -24,6 +24,12 @@ export const data = [
                 <>
                     <span class="badge badge--success">YES</span>
                 </>
+            ),
+        metadata:
+            (
+                <>
+                    <span class="badge badge--danger">NO</span>
+                </>
             )
     },
     {
@@ -50,6 +56,12 @@ export const data = [
                 <>
                     <span class="badge badge--danger">NO</span>
                 </>
+            ),
+        metadata:
+            (
+                <>
+
+                </>
             )
     },
     {
@@ -74,6 +86,12 @@ export const data = [
                         <li><b>BASELINE-LT</b></li>
                         <li><b>BASELINE-LTA</b></li>
                     </ul>
+                </>
+            ),
+        metadata:
+            (
+                <>
+                    <span class="badge badge--danger">NO</span>
                 </>
             )
     },
@@ -100,6 +118,12 @@ export const data = [
                         <li><b>BASELINE-LTA</b></li>
                     </ul>
                 </>
+            ),
+        metadata:
+            (
+                <>
+                    <span class="badge badge--danger">NO</span>
+                </>
             )
     },
     {
@@ -121,6 +145,12 @@ export const data = [
                 <>
                     <span class="badge badge--danger">NO</span>
                 </>
+            ),
+        metadata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
+                </>
             )
     },
     {
@@ -139,6 +169,12 @@ export const data = [
                 </>
             ),
         mandatory:
+            (
+                <>
+                    <span class="badge badge--danger">NO</span>
+                </>
+            ),
+        metadata:
             (
                 <>
                     <span class="badge badge--danger">NO</span>
@@ -169,8 +205,43 @@ export const data = [
                 <>
                     <span class="badge badge--danger">NO</span>
                 </>
+            ),
+        metadata:
+            (
+                <>
+
+                </>
             )
-    }
+    },
+    {
+        property: "METADATA_PROPERTY_OVERRIDE_ALLOWED",
+        description:
+            (
+                <>
+                    Contains list of comma-separated properties that are allowed to be overridden using metadata.
+                    The name of the property should match the name of the property in the configuration.
+                    For the properties that can be overridden, see the specific AdES Signer documentation.
+                </>
+            ),
+        default:
+            (
+                <>
+                    <span class="badge badge--secondary">NONE</span>
+                </>
+            ),
+        mandatory:
+            (
+                <>
+                    <span class="badge badge--danger">NO</span>
+                </>
+            ),
+        metadata:
+            (
+                <>
+                    <span class="badge badge--danger">NO</span>
+                </>
+            )
+    },
 ];
 
 
@@ -183,6 +254,7 @@ export const GenTable = ({data}) => (
                   <td>{dat.description}</td>
                   <td>{dat.default}</td>
                   <td>{dat.mandatory}</td>
+                  <td>{dat.metadata}</td>
                 </tr>)
          })}
   </Fragment>
@@ -193,6 +265,7 @@ export const GenTable = ({data}) => (
     <th>Description</th>
     <th>Default Value</th>
     <th>Mandatory</th>
+    <th>Metadata Support</th>
   <tbody>
     <GenTable data={data}/>
   </tbody>

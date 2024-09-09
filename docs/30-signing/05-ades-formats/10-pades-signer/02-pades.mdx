@@ -34,6 +34,12 @@ export const data = [
                 <>
                     <span class="badge badge--danger">NO</span>
                 </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
+                </>
             )
     },
     {
@@ -54,6 +60,12 @@ export const data = [
             (
                 <>
                     <span class="badge badge--danger">NO</span>
+                </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
                 </>
             )
     },
@@ -76,6 +88,12 @@ export const data = [
                 <>
                     <span class="badge badge--danger">NO</span>
                 </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
+                </>
             )
     },
     {
@@ -96,6 +114,12 @@ export const data = [
             (
                 <>
                     <span class="badge badge--danger">NO</span>
+                </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
                 </>
             )
     },
@@ -118,6 +142,12 @@ export const data = [
                 <>
                     <span class="badge badge--danger">NO</span>
                 </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
+                </>
             )
     },
     {
@@ -138,6 +168,12 @@ export const data = [
             (
                 <>
                     <span class="badge badge--danger">NO</span>
+                </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
                 </>
             )
     },
@@ -160,6 +196,12 @@ export const data = [
                 <>
                     <span class="badge badge--danger">NO</span>
                 </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
+                </>
             )
     }
 ];
@@ -181,6 +223,12 @@ export const visible = [
                 </>
             ),
         mandatory:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
+                </>
+            ),
+        metdata:
             (
                 <>
                     <span class="badge badge--success">YES</span>
@@ -212,6 +260,12 @@ export const visible = [
                 <>
                     <span class="badge badge--success">YES</span>
                 </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
+                </>
             )
     },
     {
@@ -232,6 +286,12 @@ export const visible = [
             (
                 <>
                     <span class="badge badge--danger">NO</span>
+                </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
                 </>
             )
     },
@@ -254,6 +314,12 @@ export const visible = [
                 <>
                     <span class="badge badge--danger">NO</span>
                 </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
+                </>
             )
     },
     {
@@ -274,6 +340,12 @@ export const visible = [
             (
                 <>
                     <span class="badge badge--danger">NO</span>
+                </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
                 </>
             )
     },
@@ -296,6 +368,12 @@ export const visible = [
                 <>
                     <span class="badge badge--danger">NO</span>
                 </>
+            ),
+        metdata:
+            (
+                <>
+                    <span class="badge badge--success">YES</span>
+                </>
             )
     }
 ];
@@ -309,6 +387,7 @@ export const GenTable = ({data}) => (
                   <td>{dat.description}</td>
                   <td>{dat.default}</td>
                   <td>{dat.mandatory}</td>
+                  <td>{dat.metdata}</td>
                 </tr>)
          })}
   </Fragment>
@@ -319,6 +398,7 @@ export const GenTable = ({data}) => (
     <th>Description</th>
     <th>Default Value</th>
     <th>Mandatory</th>
+    <th>Metadata Support</th>
   <tbody>
     <GenTable data={data}/>
   </tbody>
@@ -331,6 +411,7 @@ export const GenTable = ({data}) => (
     <th>Description</th>
     <th>Default Value</th>
     <th>Mandatory</th>
+    <th>Metadata Support</th>
     <tbody>
     <GenTable data={visible}/>
     </tbody>
