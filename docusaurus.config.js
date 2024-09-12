@@ -1,7 +1,8 @@
 const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 
-const apiVersion = '2.11.0';
+const apiVersion = '2.13.0';
+const chartVersion = '2.13.0';
 
 import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin.mjs';
 import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin.mjs';
@@ -38,7 +39,7 @@ const config = {
         name: "czertainly-helm-docs", // used by CLI, must be path safe
         noRuntimeDownloads: true, // disable runtime downloads, use only CLI to download (docusaurus download-remote-czertainly-helm-docs)
         performCleanup: false, // do not remove downloaded files on build
-        sourceBaseUrl: "https://raw.githubusercontent.com/3KeyCompany/CZERTAINLY-Helm-Charts/"+apiVersion+"/charts/czertainly/docs/", // the base url for the markdown (gets prepended to all of the documents when fetching)
+        sourceBaseUrl: "https://raw.githubusercontent.com/3KeyCompany/CZERTAINLY-Helm-Charts/"+chartVersion+"/charts/czertainly/docs/", // the base url for the markdown (gets prepended to all of the documents when fetching)
         outDir: "docs/10-certificate-key/03-installation-guide/04-deployment/04-deployment-helm", // the base directory to output to.
         documents: ["configurable-parameters.md", "overview.md", "troubleshooting.md", "upgrading.md"], // the file names to download
       },
@@ -109,6 +110,11 @@ const config = {
             id: 'core-client-operations',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-client-operations.yaml',
             route: '/api/core-client-operations/',
+          },
+          {
+            id: 'core-cmp',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-cmp.yaml',
+            route: '/api/core-cmp/',
           },
           {
             id: 'core-compliance-profile',
@@ -242,6 +248,11 @@ const config = {
             id: 'protocol-acme',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-protocol-acme.yaml',
             route: '/api/protocol-acme/',
+          },
+          {
+            id: 'protocol-cmp',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-protocol-cmp.yaml',
+            route: '/api/protocol-cmp/',
           },
           {
             id: 'protocol-scep',
@@ -508,7 +519,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ['powershell','java','hcl'],
+        additionalLanguages: ['powershell','java','hcl','scala'],
       },
       algolia: {
         // The application ID provided by Algolia

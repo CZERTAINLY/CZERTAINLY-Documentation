@@ -5,6 +5,7 @@ Each component and each part of the platform is a microservice. Using that appro
 
 ## Architecture diagram
 
+
 ![Czertainly ingredients](../../../assets/platform-ingredients.png)
 
 The above diagram explains briefly the architecture of the platform. The platform provides client interfaces to communicate with the `Core`.
@@ -17,9 +18,9 @@ Each `Interface` in the platform is designed to be a REST API with OpenAPI speci
 
 The step below illustrates the process flow of processing request by the platform:
 
-| Step # | Description                                                                                                                                                                                                                                                                                        |
-| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1      | `Client` triggers a request to the `Core`.                                                                                                                                                                                               |
-| 2      | `Core` receives the request and applies the logic to process the request. If needed, the `Core` communicates with the appropriate `Connector` for further technology specific processing.                                                                                                                                                                                                     |
-| 3      | `Connector` process the request and translates the response to a format `Core` can understand.                                                                                                            |
-| 4      | Once the `Core` gets the data from the `Connector`, it performs some designated operations based on the implemented logic. Once these operations are completed the `Core` returns the response to the `Client`.                                          |
+| Step # | Description                                                                                                                                                                                                     |
+|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1      | `Client` triggers a request to the `Core`.                                                                                                                                                                      |
+| 2      | `Core` receives the request and applies the logic to process the request. If needed, the `Core` communicates with the appropriate `Connector` for further technology specific processing.                       |
+| 3      | `Connector` process the request and translates the response to a format `Core` can understand.                                                                                                                  |
+| 4      | Once the `Core` gets the data from the `Connector`, it performs some designated operations based on the implemented logic. Once these operations are completed the `Core` returns the response to the `Client`. |

@@ -3,16 +3,17 @@
 Properties defines the behaviour of the `Attribute`.
 The following is a complete list of supported and available properties:
 
-| Property name | Type      | Short description                                                                                                                       |
-|---------------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| `label`       | `string`  | Friendly name of the the `Attribute`                                                                                                    |
-| `required`    | `boolean` | Boolean determining if the `Attribute` content is required. If true, the `Attribute` must provide its content in the `content` property |
-| `readOnly`    | `boolean` | Boolean determining if the `Attribute` `content` is read only and cannot be changed                                                     |
-| `visible`     | `boolean` | Boolean determining if the `Attribute` is visible or used as a helper only                                                              |
-| `list`        | `boolean` | Boolean determining if the `Attribute` contains list of values in its `content`                                                         |
-| `multiSelect` | `boolean` | Boolean determining if the `Attribute` can have multiple values in the `content`                                                        |
-| `group`       | `string`  | Name of the group `Attribute` belong to. It can be used for logical grouping of multiple `Attributes`                                   |
-| `global`      | `boolean` | Boolean determining if the `Attribute` is global. Global mean that two `Attributes` with the same definition cannot exist               |
+| Property name | Type      | Short description                                                                                                                                |
+|---------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `label`       | `string`  | Friendly name of the the `Attribute`                                                                                                             |
+| `required`    | `boolean` | Boolean determining if the `Attribute` content is required. If true, the `Attribute` must provide its content in the `content` property          |
+| `readOnly`    | `boolean` | Boolean determining if the `Attribute` `content` is read only and cannot be changed                                                              |
+| `visible`     | `boolean` | Boolean determining if the `Attribute` is visible or used as a helper only                                                                       |
+| `list`        | `boolean` | Boolean determining if the `Attribute` contains list of values in its `content`                                                                  |
+| `multiSelect` | `boolean` | Boolean determining if the `Attribute` can have multiple values in the `content`                                                                 |
+| `group`       | `string`  | Name of the group `Attribute` belong to. It can be used for logical grouping of multiple `Attributes`                                            |
+| `global`      | `boolean` | Boolean determining if the `Attribute` is global. Global mean that two `Attributes` with the same definition cannot exist                        |
+| `overwrite`   | `boolean` | Boolean determining if updating the `Attribute` content for object overwrite (replace) existing content or appends it which is default behaviour |
 
 ## Properties and Attribute types
 
@@ -28,6 +29,7 @@ Not every property is mandatory and applicable for every `Attribute` type. The f
 | `list`                         | <span class="badge badge--secondary"></span> | <span class="badge badge--success"></span>          | <span class="badge badge--secondary"></span> | <span class="badge badge--success"></span>   | <span class="badge badge--secondary"></span> |
 | `multiSelect`                  | <span class="badge badge--secondary"></span> | <span class="badge badge--success"></span>          | <span class="badge badge--secondary"></span> | <span class="badge badge--success"></span>   | <span class="badge badge--secondary"></span> |
 | `global`                       | <span class="badge badge--secondary"></span> | <span class="badge badge--secondary"></span>        | <span class="badge badge--secondary"></span> | <span class="badge badge--secondary"></span> | <span class="badge badge--danger"></span>    |
+| `overwrite`                    | <span class="badge badge--secondary"></span> | <span class="badge badge--secondary"></span>        | <span class="badge badge--secondary"></span> | <span class="badge badge--secondary"></span> | <span class="badge badge--danger"></span>    |
 
 - <span class="badge badge--success" size="s"></span> - the property is required
 - <span class="badge badge--danger"></span> - the property is optional

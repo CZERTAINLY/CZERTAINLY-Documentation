@@ -10,10 +10,13 @@ The following `Connectors` are officially available:
 |--------------------------------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------|
 | Common Credential Provider     | <span class="badge">Credential Provider</span>   | <span class="badge">Basic</span> <span class="badge">SoftKeyStore</span> <span class="badge">ApiKey</span> |
 | Cryptosense Discovery Provider | <span class="badge">Discovery Provider</span>    | <span class="badge">Cryptosense</span>                                                                     |
+| CT Logs Discovery Provider     | <span class="badge">Discovery Provider</span>    | <span class="badge">CTLogs-SSLMate</span>                                                                  |
 | EJBCA Legacy Connector         | <span class="badge">Authority Provider</span>    | <span class="badge">LegacyEjbca</span>                                                                     |
 | EJBCA NG Connector             | <span class="badge">Authority Provider</span>    | <span class="badge">EJBCA</span>                                                                           |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">EJBCA</span> <span class="badge">EJBCA_SCHEDULE</span>                                 |
 | Email Notification Provider    | <span class="badge">Notification Provider</span> | <span class="badge">EMAIL</span>                                                                           |
+| HashiCorp Vault Connector      | <span class="badge">Authority Provider</span>    | <span class="badge">HVault</span>                                                                          |
+|                                | <span class="badge">Discovery Provider</span>    | <span class="badge">HVault</span>                                                                          |
 | Keystore Entity Provider       | <span class="badge">Entity Provider</span>       | <span class="badge">Keystore</span>                                                                        |
 | MS ADCS Connector              | <span class="badge">Authority Provider</span>    | <span class="badge">ADCS</span>                                                                            |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">ADCS</span>                                                                            |

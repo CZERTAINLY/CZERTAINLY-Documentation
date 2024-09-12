@@ -154,6 +154,27 @@ export const basic = [
                     Mandatory for <b>SAD_PROVIDER_AUTH_TYPE = BASIC</b>
                 </>
             )
+    },
+    {
+        property: "SAD_PROVIDER_ENABLE_PREEMPTIVE_AUTH",
+        description:
+            (
+                <>
+                    Enable preemptive authentication. If enabled, the client will send the authentication header without receiving a challenge from the server.
+                </>
+            ),
+        default:
+            (
+                <>
+                    <span class="badge badge--secondary">false</span>
+                </>
+            ),
+        mandatory:
+            (
+                <>
+                    <span class="badge badge--danger">NO</span>
+                </>
+            )
     }
 ];
 
