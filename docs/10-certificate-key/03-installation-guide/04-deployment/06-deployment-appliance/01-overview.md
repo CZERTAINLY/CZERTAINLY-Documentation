@@ -24,10 +24,10 @@ Because of different availability and public/private access to containers, the v
 | Resource | Optimum | Minimum |
 |----------|---------|---------|
 | CPU      | 8 cores | 4 cores |
-| RAM      | 16 GB   | 8 GB    |
+| RAM      | 16 GB   | 12 GB   |
 | disk     | 50 GB   | 20 GB   |
 
-By *minimum* requirements we mean resources which needed for CZERTAINLY and kubernetes installation and for basic evaluation of its features.
+By *minimum* requirements we mean resources which are needed for CZERTAINLY with all configurable componets and kubernetes installation and for basic evaluation of its features.
 
 :::tip[Resource management]
 Resources can be scaled up or down based on the needs of the platform. The resources needed for the CZERTAINLY platform differs based on the number of managed objects, implemented use-cases, and required connectors.
