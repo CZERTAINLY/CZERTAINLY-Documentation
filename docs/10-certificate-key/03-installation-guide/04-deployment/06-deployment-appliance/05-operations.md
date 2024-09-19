@@ -125,6 +125,41 @@ In case you decide to upgrade your Virtual appliance based on Debian Bullseye, y
  * [restore](#restore) database,
  * re-run CZERTAINLY installation from the main menu.
 
+#### Kubernetes upgrades
+
+CZERTAINLY Virtual Appliance is using [RKE2](https://docs.rke2.io/) as Kubernetes distribution, latest version can be checked in their [Relase Notes](https://docs.rke2.io/release-notes/v1.31.X). The actual running version on Appliance can be checked by the shell command `kubectl version`. Example output:
+```bash
+$ kubectl version
+Client Version: v1.28.11+rke2r1
+Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
+Server Version: v1.28.11+rke2r1
+```
+
+To upgrade exec "Install CZERTAINLY" from the main menu. This will download the a version of the RKE2 installer, which you can see in the Ansible output:
+```
+TASK [rke2 : download rke2 installer] ******************************************
+changed: [localhost]
+```
+Exec installer from shell command `sudo /usr/local/bin/rke2-install.sh`, example output:
+```bash
+$ sudo /usr/local/bin/rke2-install.sh
+[sudo] password for czertainly:
+[INFO]  finding release for channel stable
+[INFO]  using v1.30.4+rke2r1 as release
+[INFO]  downloading checksums at https://github.com/rancher/rke2/releases/download/v1.30.4+rke2r1/sha256sum-amd64.txt
+[INFO]  downloading tarball at https://github.com/rancher/rke2/releases/download/v1.30.4+rke2r1/rke2.linux-amd64.tar.gz
+[INFO]  verifying tarball
+[INFO]  unpacking tarball file to /usr/local
+```
+This downloads and deploys a new version of RKE2. Next, you need to restart RKE2. Exec `sudo systemctl restart rke2-server.service` and finally verify that Kubernetes was upgraded:
+
+```bash
+$ kubectl version
+Client Version: v1.30.4+rke2r1
+Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
+Server Version: v1.30.4+rke2r1
+```
+
 
 #### CZERTAINLY upgrade
 
