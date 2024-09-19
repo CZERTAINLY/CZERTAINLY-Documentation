@@ -36,9 +36,9 @@ Resources can be scaled up or down based on the needs of the platform. The resou
 ## Download and import image
 
 To get the virtual appliance running in your environment for further  installation  and configuration, you must:
-1. Download virtual appliance [image](https://threekeycz-my.sharepoint.com/:f:/g/personal/jan_tomasek_3key_company/EvTNcHQYa4BInbGsK-YSGHkBIx9V6DfAxnMKqrvWdEB8NA?e=ujoUdt).
+1. Download virtual appliance [image](https://threekeycz-my.sharepoint.com/:f:/g/personal/jan_tomasek_3key_company/EvTNcHQYa4BInbGsK-YSGHkB7BTKvI9JCZJJaQx2KC6eBw).
 2. Optionally verify SHA256 hash of the image.
-2. Import virtual appliance image to your virtual infrastructure.
+3. Import virtual appliance image to your virtual infrastructure.
 
 For testing purposes, you can use:
 - [Oracle VirtualBox](https://www.virtualbox.org/wiki/Downloads)
