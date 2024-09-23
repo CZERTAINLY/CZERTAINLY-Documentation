@@ -24,18 +24,18 @@ The CZERTAINLY platform is generating the following types of logs. You can find 
 
 Audit logs and event logs body message have specific structure defined by [JSON schema document](!ADD_LINK_HERE!). This ensures that structure of log body is consistent, can be validated and easily parsed by log collectors to work with its information.
 
-| Property        | Type                | Required                                      | Description                                                                                  |
-|-----------------|---------------------|-----------------------------------------------|----------------------------------------------------------------------------------------------|
-| Module          | Enum                | <span class="badge badge--success">Yes</span> | Module where event occured. Represents part or resource of system related to event.          |
-| Actor           | Object              | <span class="badge badge--success">Yes</span> | Affiliated party or platform component that triggered operation/event                        |
-| Source          | Object              | <span class="badge badge--success">Yes</span> | Contains request source information like IP address, agent, etc.                             |
-| Resource        | Object              | <span class="badge badge--success">Yes</span> | Information about resource that is subject of log event                                      |
-| Affiliated      | Object              | <span class="badge badge--danger">No</span>   | Information about affiliated resource that acts in event (e.g. push certificate to location) | 
-| Event Type      | Enum                | <span class="badge badge--success">Yes</span> | Event that happened                                                                          |
-| Event Result    | Enum                | <span class="badge badge--success">Yes</span> | Event result status                                                                          |
-| Event Data      | Object              | <span class="badge badge--danger">No</span>   | Structured data based on event type, defined in schema                                       |
-| Message         | String              | <span class="badge badge--danger">No</span>   | Free form text message to provide additional information                                     |
-| Additional Data | Map<String, Object> | <span class="badge badge--danger">No</span>   | Additional key-paired structured data                                                        |
+| Property        | Type   | Required                                      | Description                                                                                  |
+|-----------------|--------|-----------------------------------------------|----------------------------------------------------------------------------------------------|
+| Module          | Enum   | <span class="badge badge--success">Yes</span> | Module where event occured. Represents part or resource of system related to event.          |
+| Actor           | Object | <span class="badge badge--success">Yes</span> | Affiliated party or platform component that triggered operation/event                        |
+| Source          | Object | <span class="badge badge--success">Yes</span> | Contains request source information like IP address, agent, etc.                             |
+| Resource        | Object | <span class="badge badge--success">Yes</span> | Information about resource that is subject of log event                                      |
+| Affiliated      | Object | <span class="badge badge--danger">No</span>   | Information about affiliated resource that acts in event (e.g. push certificate to location) | 
+| Event Type      | Enum   | <span class="badge badge--success">Yes</span> | Event that happened                                                                          |
+| Event Result    | Enum   | <span class="badge badge--success">Yes</span> | Event result status                                                                          |
+| Event Data      | Object | <span class="badge badge--danger">No</span>   | Structured data based on event type, defined in schema                                       |
+| Message         | String | <span class="badge badge--danger">No</span>   | Free form text message to provide additional information                                     |
+| Additional Data | Map    | <span class="badge badge--danger">No</span>   | Additional key-paired structured data                                                        |
 
 
 ### Module enum
