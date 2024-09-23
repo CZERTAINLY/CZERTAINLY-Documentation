@@ -9,7 +9,7 @@ The application log consists of the following information:
 
 | Part                | Short description                                                                                                                                       |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Date and tme**    | Date and time when the log message was generated in the ISO 8601 format.                                                                                |
+| **Date and time**   | Date and time when the log message was generated in the ISO 8601 format.                                                                                |
 | **Level**           | The severity of the log message, see [Supported log levels](#supported-log-levels) for more information.                                                |
 | **Logger type**     | The type of the logger that generated the log message. Based on the logger type, the log message can be categorized and filtered.                       |
 | **Log ID**          | Unique identifier of the log message, it can be linked to process ID, thread ID, event ID, or similar identifier and correlated with other log records. |

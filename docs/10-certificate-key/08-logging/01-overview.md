@@ -7,15 +7,124 @@ The CZERTAINLY platform consists of multiple components/services that generate l
 - **Connectors** - The connectors are the components that are connecting the CZERTAINLY platform with external systems. The connectors are generating logs for the communication with the external systems. The connector logs are typically outside of the control of the CZERTAINLY platform, and the logs are managed by the external systems.
 
 :::info[Logging guidance]
-The logging guidance is provided for the core components of the CZERTAINLY platform. The same guidane can be applied to the connectors, but the configuration and management of the logs are outside of the control of the CZERTAINLY platform.
+The logging guidance is provided for the core components of the CZERTAINLY platform. The same guidance can be applied to the connectors, but the configuration and management of the logs are outside of the control of the CZERTAINLY platform.
 :::
 
 ## Types of logs
 
 The CZERTAINLY platform is generating the following types of logs. You can find detailed information about the logs in the subsequent sections.
 
-| Log type             | Description                                                                                                                                                                                                        |
-|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Application logs** | The application logs are generated to record the events that are affecting the platform. The application logs are used for monitoring and troubleshooting the platform.                                            |
-| **Audit logs**       | Audit log records all user operations to reconstruct any event in case of investigation. It also proves the compliance with the various standards and regulations, such as PCI DSS, ISO 27k, GDPR, WebTrust, etc.  |
-| **Transaction logs** | Transaction logs are used to record certificate management, cryptographic key management, and other operation-related events. The transaction logs are used to reconstruct the complete history of the operations. |
+| Log type             | Structured                                    | Description                                                                                                                                                                                                                                                                         |
+|----------------------|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Application logs** | <span class="badge badge--danger">No</span>   | The application logs are generated to record the events that are affecting the platform. The application logs are used for monitoring and troubleshooting the platform. Its source could be also libraries used by Core.                                                            |
+| **Audit logs**       | <span class="badge badge--success">Yes</span> | Audit log records all user operations to reconstruct any event in case of investigation. It also proves the compliance with the various standards and regulations, such as PCI DSS, ISO 27k, GDPR, WebTrust, etc.                                                                   |
+| **Event logs**       | <span class="badge badge--success">Yes</span> | Event logs are used to record certificate management, cryptographic key management, and other operation-related events. The transaction logs are used to reconstruct the complete history of the operations and its source can be user or system itself in case of automatic events |
+
+## Logs body structure
+
+Audit logs and event logs body message have specific structure defined by [JSON schema document](!ADD_LINK_HERE!). This ensures that structure of log body is consistent, can be validated and easily parsed by log collectors to work with its information.
+
+| Property        | Type                | Required                                      | Description                                                                                  |
+|-----------------|---------------------|-----------------------------------------------|----------------------------------------------------------------------------------------------|
+| Module          | Enum                | <span class="badge badge--success">Yes</span> | Module where event occured. Represents part or resource of system related to event.          |
+| Actor           | Object              | <span class="badge badge--success">Yes</span> | Affiliated party or platform component that triggered operation/event                        |
+| Source          | Object              | <span class="badge badge--success">Yes</span> | Contains request source information like IP address, agent, etc.                             |
+| Resource        | Object              | <span class="badge badge--success">Yes</span> | Information about resource that is subject of log event                                      |
+| Affiliated      | Object              | <span class="badge badge--danger">No</span>   | Information about affiliated resource that acts in event (e.g. push certificate to location) | 
+| Event Type      | Enum                | <span class="badge badge--success">Yes</span> | Event that happened                                                                          |
+| Event Result    | Enum                | <span class="badge badge--success">Yes</span> | Event result status                                                                          |
+| Event Data      | Object              | <span class="badge badge--danger">No</span>   | Structured data based on event type, defined in schema                                       |
+| Message         | String              | <span class="badge badge--danger">No</span>   | Free form text message to provide additional information                                     |
+| Additional Data | Map<String, Object> | <span class="badge badge--danger">No</span>   | Additional key-paired structured data                                                        |
+
+
+### Module enum
+- `Auth`
+- `Scheduler`
+- `Validation`
+- `Compliance`
+- `Certificates`
+- `Cryptographic keys`
+- `Authorities`
+- `Tokens`
+- `Entities`
+- `Approvals`
+- `Workflows`
+- `Settings`
+
+### Actor
+Actor object contains following properties:
+- **type** - enum with following values
+  - `User`
+  - `Core` - (System?)
+  - `Connector`
+  - `Protocol`
+  - `Other`
+- **authMethod**
+  - `none`
+  - `certificate`
+  - `token`
+  - `api_key`
+- *id* - identification of actor, usually UUID of object representing actor type
+- *name* - associated name with actor based on type. For example, username, protocol name, connector name
+
+### Source (Origin?)`
+Source object contains following properties:
+- IP address
+- user agent
+
+### Resource
+- **type** - identification by enum `Resource`
+- *uuid*
+- *name*
+
+### Affiliated resource
+- **resource** - identification by enum `Resource`
+- *uuid*
+- *name*
+
+### Event type enum
+Items:
+- `Created`
+- `Issued`
+- `Revoked`
+- `Deleted`
+- `Updated`
+- `Started`
+- `Stopped`
+
+### Event Result enum
+- `None`
+- `Success`
+- `Failure`
+
+### Event Data
+Event data are structured and its content is dependent on event type.
+
+### Message
+Free form text describing in more detail logged event. For example, in case of failure, it can contain exception message.
+
+### Additional Data
+Additional data allows to store additional information regarding the event that is not generalized. For example, it can contain information that is specific for that particular instance of event or combination of request input.
+
+## Examples
+
+```json
+{
+  "module": "CERTIFICATES",
+  "actor": {
+    "type": "CORE",
+    "authMethod": "NONE"
+  },
+  "resource": {
+    "type": "CERTIFICATE",
+    "uuid": "a9091e0d-f9b9-4514-b275-1dd52aa870ec"
+  },
+  "eventType": "CERTIFICATE_ISSUED",
+  "eventStatus": "SUCCESS",
+  "eventData": {
+    "subjectDN": "O=3Key Company s.r.o., CN=Demo Client Sub CA",
+    "fingerprint": "7e93115dd0cee213c566ef6ca096dfa65820ecaa980761f35bd7bdb57bfb8715"
+  }
+}
+```
