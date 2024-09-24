@@ -26,6 +26,7 @@ Audit logs and event logs body message have specific structure defined by [JSON 
 
 | Property        | Type   | Required                                      | Description                                                                                  |
 |-----------------|--------|-----------------------------------------------|----------------------------------------------------------------------------------------------|
+| Version         | String | <span class="badge badge--success">Yes</span> | Version of log structure JSON schema                                                         |
 | Module          | Enum   | <span class="badge badge--success">Yes</span> | Module where event occured. Represents part or resource of system related to event.          |
 | Actor           | Object | <span class="badge badge--success">Yes</span> | Affiliated party or platform component that triggered operation/event                        |
 | Source          | Object | <span class="badge badge--success">Yes</span> | Contains request source information like IP address, agent, etc.                             |
@@ -111,6 +112,7 @@ Additional data allows to store additional information regarding the event that 
 
 ```json
 {
+  "version": "1.1",
   "module": "CERTIFICATES",
   "actor": {
     "type": "CORE",
@@ -125,6 +127,35 @@ Additional data allows to store additional information regarding the event that 
   "eventData": {
     "subjectDN": "O=3Key Company s.r.o., CN=Demo Client Sub CA",
     "fingerprint": "7e93115dd0cee213c566ef6ca096dfa65820ecaa980761f35bd7bdb57bfb8715"
+  }
+}
+```
+
+```json
+{
+  "version": "1.0",
+  "module": "DISCOVERY",
+  "actor": {
+    "type": "USER",
+    "authMethod": "CERTIFICATE"
+  },
+  "source": {
+    "ipAddress": "127.0.0.1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+  },
+  "resource": {
+    "type": "DISCOVERY",
+    "uuid": "a9091e0d-f9b9-4514-b275-1dd52aa870ec"
+  },
+  "eventType": "DISCOVERY_STARTED",
+  "eventStatus": "SUCCESS",
+  "eventData": {
+    "connectorName": "Network-Discovery-Provider",
+    "kind": "IP-Hostname"
+  },
+  "message": "Discovery started in background",
+  "additionalData": {
+    "urlNumbers": 300
   }
 }
 ```
