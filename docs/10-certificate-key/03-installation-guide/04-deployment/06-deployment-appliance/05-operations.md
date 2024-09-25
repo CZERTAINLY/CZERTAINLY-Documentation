@@ -105,7 +105,7 @@ For your convenience, we provide the script `czertainly-versions --detailed` whi
 ### Upgrading
 
 :::warning
-Before any upgrade process make sure you have a recent snapshot first!
+Before any upgrade make sure you have a recent snapshot first!
 :::
 
 #### OS packages upgrades
