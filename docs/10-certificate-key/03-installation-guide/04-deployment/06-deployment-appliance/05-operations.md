@@ -92,7 +92,7 @@ The custom values overwrite the default values during the installation/upgrade p
 
 ### Versioning
 
-There are three versions which are related to CZERTAINLY Virtual Appliance.
+There are three version numbers which are related to CZERTAINLY Virtual Appliance.
 
 First, there is a version of **CZERTAINLY Appliance** which is recorded in the file `/etc/czertainly_appliance_version`. The appliance version provides a clue to Debian which was used as a base for the Appliance. This is also why this number is not changed during upgrades.
 
