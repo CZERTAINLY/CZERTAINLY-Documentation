@@ -18,8 +18,8 @@ The CZERTAINLY issuer is a custom resource definition (CRD) that allows you to i
 
 The following steps should be done to successfully integrate the CZERTAINLY with the cert-manager:
 
-| #     | Reference                                        | Short description                                              |
-|-------|--------------------------------------------------|----------------------------------------------------------------|
-| **1** | [install CZERTAINLY Issuer](./enable-pki-engine) | Enable and configure the PKI secrets engine  |
-| **2** | [Create CZERTAINLY Issuer](./create-acl-policy)  | Create ACL policy with permissions for CZERTAINLY              |
-| **3** | [Create Certificate](./enable-auth-methods)      | Enable authentication methods that can be used                 |
+| #     | Reference                                                | Short description                                              |
+|-------|----------------------------------------------------------|----------------------------------------------------------------|
+| **1** | [Install CZERTAINLY Issuer](./install-czertainly-issuer) | Install CZERTAINLY Issuer controller in the Kubernetes cluster |
+| **2** | [Create CZERTAINLY Issuer](./create-czertainly-issuer)   | Create CZERTAINLY Issuer resource                              |
+| **3** | [Create Certificate](./create-certificate)               | Create a certificate using the CZERTAINLY Issuer               |
