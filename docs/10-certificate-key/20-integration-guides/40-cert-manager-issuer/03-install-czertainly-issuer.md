@@ -10,7 +10,10 @@ The Helm chart for the CZERTAINLY Issuer is available in the [CZERTAINLY Issuer 
 
 To install the CZERTAINLY Issuer, run the following command:
 ```bash
-helm install --namespace czertainly-issuer --create-namespace czertainly-issuer oci://harbor.3key.company/czertainly-helm/czertainly-issuer
+helm install czertainly-issuer \
+  --namespace czertainly-issuer \
+  --create-namespace \
+  oci://harbor.3key.company/czertainly-helm/czertainly-issuer
 ```
 
 This command will install the CZERTAINLY Issuer in the `czertainly-issuer` namespace with the default configuration, including the CZERTAINLY Issuer CRD and the CZERTAINLY Issuer controller.
