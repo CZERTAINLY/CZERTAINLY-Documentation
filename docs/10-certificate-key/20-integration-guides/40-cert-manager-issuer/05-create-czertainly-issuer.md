@@ -24,6 +24,17 @@ kubectl create secret tls czertainly-credentials \
 
 The secret with the name `czertainly-credentials` is created and can be used as the `authSecretName` in the CZERTAINLY Issuer.
 
+## CA Bundle
+
+The CZERTAINLY Issuer uses the `caBundleSecretName` referenced secret to verify the CZERTAINLY platform's serving certificates, if needed. The secret must contain the `ca.crt` in the `data` field.
+
+You can create `generic` secret with trusted certificates with the following command:
+```bash
+kubectl create secret generic issuer-czertainly-ca-bundle \
+  --namespace czertainly-issuer \
+  --from-file=ca.crt=<path-to-ca-bundle-file>
+```
+
 ## Create `CzertainlyClusterIssuer` or `CzertainlyIssuer`
 
 The following is an example of the `CzertainlyClusterIssuer` resource:
