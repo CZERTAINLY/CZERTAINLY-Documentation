@@ -19,6 +19,7 @@ const config = {
   favicon: 'img/czertainly_sign_color.svg',
   organizationName: '3KeyCompany', // Usually your GitHub org/user name.
   projectName: 'CZERTAINLY-Documentation', // Usually your repo name.
+  trailingSlash: false,
 
   markdown: {
     mdx1Compat: {
