@@ -52,8 +52,7 @@ const config = {
           // do not redirect root
           if (existingPath === '/') {
             return undefined;
-          }
-          if (existingPath.endsWith('/')) {
+          } else if (existingPath.endsWith('/')) {
             // remove the trailing slash and redirect
             return existingPath.slice(0, -1);
           }
