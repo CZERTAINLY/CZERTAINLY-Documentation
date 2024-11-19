@@ -49,6 +49,10 @@ const config = {
       '@docusaurus/plugin-client-redirects',
       {
         createRedirects(existingPath) {
+          // do not redirect root
+          if (existingPath === '/') {
+            return undefined;
+          }
           if (existingPath.endsWith('/')) {
             // remove the trailing slash and redirect
             return existingPath.slice(0, -1);
