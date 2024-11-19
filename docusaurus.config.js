@@ -45,6 +45,18 @@ const config = {
         documents: ["configurable-parameters.md", "overview.md", "troubleshooting.md", "upgrading.md"], // the file names to download
       },
     ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        createRedirects(existingPath) {
+          if (existingPath.endsWith('/')) {
+            // remove the trailing slash and redirect
+            return existingPath.slice(0, -1);
+          }
+          return undefined; // Return a falsy value: no redirect created
+        },
+      },
+    ]
   ],
   presets: [
     [

@@ -1389,6 +1389,21 @@
     react-helmet-async "*"
     react-loadable "npm:@docusaurus/react-loadable@6.0.0"
 
+"@docusaurus/plugin-client-redirects@3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@docusaurus/plugin-client-redirects/-/plugin-client-redirects-3.4.0.tgz#10eafc9adcf3f9be7cc33d77e816040dc7a8d368"
+  integrity sha512-Pr8kyh/+OsmYCvdZhc60jy/FnrY6flD2TEAhl4rJxeVFxnvvRgEhoaIVX8q9MuJmaQoh6frPk94pjs7/6YgBDQ==
+  dependencies:
+    "@docusaurus/core" "3.4.0"
+    "@docusaurus/logger" "3.4.0"
+    "@docusaurus/utils" "3.4.0"
+    "@docusaurus/utils-common" "3.4.0"
+    "@docusaurus/utils-validation" "3.4.0"
+    eta "^2.2.0"
+    fs-extra "^11.1.1"
+    lodash "^4.17.21"
+    tslib "^2.6.0"
+
 "@docusaurus/plugin-content-blog@3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/plugin-content-blog/-/plugin-content-blog-3.4.0.tgz#6373632fdbababbda73a13c4a08f907d7de8f007"
@@ -9511,6 +9526,7 @@ wildcard@^2.0.0:
   integrity sha512-CC1bOL87PIWSBhDcTrdeLo6eGT7mCFtrg0uIJtqJUFyK+eJnzl8A1niH56uu7KMa5XFrtiV+AQuHO3n7DsHnLQ==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
