@@ -12,7 +12,7 @@ import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin
 const config = {
   title: 'CZERTAINLY Documentation',
   tagline: 'Security and trust assurance and automation in ever connected world',
-  url: 'https://www.czertainly.com',
+  url: 'https://docs.czertainly.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
