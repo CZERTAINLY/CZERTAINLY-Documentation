@@ -1,8 +1,8 @@
 const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 
-const apiVersion = '2.13.0';
-const chartVersion = '2.13.0';
+const apiVersion = '2.13.1';
+const chartVersion = '2.13.1';
 
 import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin.mjs';
 import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin.mjs';
@@ -12,13 +12,14 @@ import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin
 const config = {
   title: 'CZERTAINLY Documentation',
   tagline: 'Security and trust assurance and automation in ever connected world',
-  url: 'https://www.czertainly.com',
+  url: 'https://docs.czertainly.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/czertainly_sign_color.svg',
   organizationName: '3KeyCompany', // Usually your GitHub org/user name.
   projectName: 'CZERTAINLY-Documentation', // Usually your repo name.
+  trailingSlash: false,
 
   markdown: {
     mdx1Compat: {
@@ -33,17 +34,27 @@ const config = {
   // ],
   plugins: [
     [
-      "docusaurus-plugin-remote-content",
+      '@docusaurus/plugin-client-redirects',
       {
-        // options here
-        name: "czertainly-helm-docs", // used by CLI, must be path safe
-        noRuntimeDownloads: true, // disable runtime downloads, use only CLI to download (docusaurus download-remote-czertainly-helm-docs)
-        performCleanup: false, // do not remove downloaded files on build
-        sourceBaseUrl: "https://raw.githubusercontent.com/3KeyCompany/CZERTAINLY-Helm-Charts/"+chartVersion+"/charts/czertainly/docs/", // the base url for the markdown (gets prepended to all of the documents when fetching)
-        outDir: "docs/10-certificate-key/03-installation-guide/04-deployment/04-deployment-helm", // the base directory to output to.
-        documents: ["configurable-parameters.md", "overview.md", "troubleshooting.md", "upgrading.md"], // the file names to download
+        redirects: [
+          {
+            to: '/docs',
+            from: '/test',
+          },
+        ],
+        createRedirects: function (existingPath) {
+          // do not redirect root
+          if (existingPath === '/') {
+            return undefined;
+          }
+          if (existingPath.endsWith('/')) {
+            // remove the trailing slash and redirect
+            return existingPath.slice(0, -1);
+          }
+          return undefined; // Return a falsy value: no redirect created
+        },
       },
-    ],
+    ]
   ],
   presets: [
     [
@@ -519,7 +530,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ['powershell','java','hcl','scala'],
+        additionalLanguages: ['powershell','java','hcl','scala','bash'],
       },
       algolia: {
         // The application ID provided by Algolia

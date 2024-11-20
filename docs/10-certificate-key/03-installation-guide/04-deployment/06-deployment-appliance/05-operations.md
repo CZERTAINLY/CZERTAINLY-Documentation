@@ -90,10 +90,22 @@ If you need to provide your own custom Helm chart values that are not available 
 
 The custom values overwrite the default values during the installation/upgrade process.
 
+### Versioning
+
+There are three version numbers which are related to CZERTAINLY Virtual Appliance.
+
+First, there is a version of **CZERTAINLY Appliance** which is recorded in the file `/etc/czertainly_appliance_version`. The appliance version provides a clue to Debian which was used as a base for the Appliance. This is also why this number is not changed during upgrades.
+
+Next, we have a version of **CZERTAINLY Appliance Tools**. Tools are the core of the Appliance, they come with Ansible Playbooks, Roles and TUI. The tools are distributed as a Debian package and actually instaled version can be displayed by the command `apt -q show czertainly-appliance-tools`. It is perfectly OK to have a higher version of the Tools than of the Appliance, it is the right way how to get new versions of CZERTAINLY itself to the Appliance.
+
+And finally, there is a version of **CZERTAINLY**. Which itself breaks into several components with their [independent versioning](../../../30-current-versions.md), but the main version is defined by the version of the Core and the Helm Chart. You can learn a version of the Helm Chart by running `helm -n czertainly list`.
+
+For your convenience, we provide the script `czertainly-versions --detailed` which displays a list of all relevant versions for your CZERTAINLY.
+
 ### Upgrading
 
 :::warning
-Before any upgrade process make sure you have recent snapshot first!
+Before any upgrade, make sure you have a recent snapshot first!
 :::
 
 #### OS packages upgrades
@@ -159,23 +171,16 @@ Client Version: v1.30.4+rke2r1
 Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
 Server Version: v1.30.4+rke2r1
 ```
+<<<<<<< HEAD
 
+=======
+>>>>>>> d1787681611994dc0d843ab47865e0d0993e8b8f
 
 #### CZERTAINLY upgrade
 
-It is possible to upgrade CZERTAINLY just by raising the version number in [CZERTAINLY configuration](./TUI/main-menu#configure-czertainly) and executing [CZERTAINLY Instalation](./TUI/main-menu#install-czertainly). It should work for upgrades from version 2.8.0 upwards, but you have to raise the minor version number by 1.
+It is possible to upgrade CZERTAINLY just by raising the version number in [CZERTAINLY configuration](./TUI/main-menu#configure-czertainly) and executing [CZERTAINLY Instalation](./TUI/main-menu#install-czertainly). It should work for upgrades from version 2.8.0 upwards.
 
-We recommend removing all CZERTAINLY components and installing them back, database with all configurations and all your certificates is untouched during this task. This process involves downtime. Follow the tasks:
-
-Perform [OS upgrade](#os-upgrades). Log out and re-login to open a new session of the TUI.
-
-From the Advanced menu select [Remove RKE2 & CZERTAINLY](./TUI/advanced-menu#remove-rke2--czertainly) this task will remove the Kubernetes cluster together with CZERTAINLY. The database is installed on the OS so it will remain untouched together with CZERTAINLY settings stored in `/etc/czertainly-ansible/vars/`. It is quite quick.
-
-[Configure parameters of email server](./TUI/main-menu#configure-email-server-parameters), this is a new feature of 2.9.0. If you are sure that you do not need notification services, you can disable it in [CZERTAINLY configuration](./TUI/main-menu#configure-czertainly). If you leave the default settings with `hostname` = `mail.example.com` the installation will hang and later timeout.
-
-From version 2.9.0 is it possible to install KeyCloak to allow logging by using username/password. Installing KeyCloak takes some more time, if you are not planning to use it and continue to use certificates, disable KeyCloak inside [CZERTAINLY configuration](./TUI/main-menu#configure-czertainly).
-
-Execute [Install CZETAINLY](TUI/main-menu#install-czertainly) from the main menu. This task will execute Ansible to install the Kubernetes cluster and later to install CZERTAINLY.
+We strongly recommend first performing [OS packages upgrades](#os-packages-upgrades) to upgrade OS components and to get the latest version of [CZERTAINLY Appliance Tools](#versioning). If you upgrade the Tools first you get support for all new CZERTAINLY components directly in TUI.
 
 ### Backup
 
