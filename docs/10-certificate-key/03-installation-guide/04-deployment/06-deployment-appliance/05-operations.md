@@ -171,11 +171,6 @@ Client Version: v1.30.4+rke2r1
 Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
 Server Version: v1.30.4+rke2r1
 ```
-<<<<<<< HEAD
-
-=======
->>>>>>> d1787681611994dc0d843ab47865e0d0993e8b8f
-
 #### CZERTAINLY upgrade
 
 It is possible to upgrade CZERTAINLY just by raising the version number in [CZERTAINLY configuration](./TUI/main-menu#configure-czertainly) and executing [CZERTAINLY Instalation](./TUI/main-menu#install-czertainly). It should work for upgrades from version 2.8.0 upwards.
