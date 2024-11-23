@@ -103,6 +103,11 @@ const config = {
             route: '/api/core-acme/',
           },
           {
+            id: 'core-approval',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-approval.yaml',
+            route: '/api/core-approval/',
+          },
+          {
             id: 'core-auth',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-auth.yaml',
             route: '/api/core-auth/',
@@ -148,9 +153,9 @@ const config = {
             route: '/api/core-cryptographic-operations/',
           },
           {
-            id: 'core-custom-attributes',
+            id: 'core-attribute',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-attribute.yaml',
-            route: '/api/core-custom-attributes/',
+            route: '/api/core-attribute/',
           },
           {
             id: 'core-discovery',
@@ -203,6 +208,11 @@ const config = {
             route: '/api/core-scep/',
           },
           {
+            id: 'core-scheduler',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-scheduler.yaml',
+            route: '/api/core-scheduler/',
+          },
+          {
             id: 'core-token',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-token.yaml',
             route: '/api/core-token/',
@@ -211,6 +221,11 @@ const config = {
             id: 'core-token-profile',
             spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-token-profile.yaml',
             route: '/api/core-token-profile/',
+          },
+          {
+            id: 'core-workflows',
+            spec: 'https://api.czertainly.com/'+apiVersion+'/doc-openapi-core-workflows.yaml',
+            route: '/api/core-workflows/',
           },
 
 
@@ -323,6 +338,14 @@ const config = {
                 to: '/api/core-acme/',
               },
               {
+                label: 'Approval',
+                to: '/api/core-approval/',
+              },
+              {
+                label: 'Attribute',
+                to: '/api/core-attribute/',
+              },
+              {
                 label: 'Auth',
                 to: '/api/core-auth/',
               },
@@ -339,6 +362,10 @@ const config = {
                 to: '/api/core-client-operations/',
               },
               {
+                label: 'CMP',
+                to: '/api/core-cmp/',
+              },
+              {
                 label: 'Compliance Profile',
                 to: '/api/core-compliance-profile/',
               },
@@ -353,10 +380,6 @@ const config = {
               {
                 label: 'Cryptographic Operations',
                 to: '/api/core-cryptographic-operations/',
-              },
-              {
-                label: 'Custom Attributes',
-                to: '/api/core-custom-attributes/',
               },
               {
                 label: 'Discovery',
@@ -399,12 +422,20 @@ const config = {
                 to: '/api/core-scep/',
               },
               {
+                label: 'Scheduler',
+                to: '/api/core-scheduler/',
+              },
+              {
                 label: 'Token',
                 to: '/api/core-token/',
               },
               {
                 label: 'Token Profile',
                 to: '/api/core-token-profile/',
+              },
+              {
+                label: 'Workflows',
+                to: '/api/core-workflows/',
               },
             ],
           },
@@ -453,6 +484,10 @@ const config = {
               {
                 label: 'ACME',
                 to: '/api/protocol-acme/',
+              },
+              {
+                label: 'CMP',
+                to: '/api/protocol-cmp/',
               },
               {
                 label: 'SCEP',
