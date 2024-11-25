@@ -1,5 +1,6 @@
 {
-  "label": "Audit Logging",
+  "position": 8,
+  "label": "Logging",
   "link": {
     "type": "doc",
     "id": "overview"

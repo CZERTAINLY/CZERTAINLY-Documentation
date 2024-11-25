@@ -1,6 +1,15 @@
-# Examples
+---
+sidebar_position: 99
+---
 
-### Edit group
+# Sample Log Records
+
+The following are sample logs for different operations in the CZERTAINLY platform in JSON format.
+
+## Edit group
+
+This log shows the operation of updating a group `DefaultGroup` by the user `tester`. 
+
 ```json
 {
   "actor": {
@@ -44,7 +53,10 @@
 }
 ```
 
-### ACME directory
+## ACME directory
+
+This log shows the operation of getting the ACME directory for the profile `acmetest`.
+
 ```json
 {
   "actor": {
@@ -79,52 +91,10 @@
 }
 ```
 
-### Local Admin
-```json
-{
-  "actor": {
-    "name": "anonymousUser",
-    "type": "anonymous",
-    "uuid": null,
-    "authMethod": "none"
-  },
-  "module": "auth",
-  "source": {
-    "path": "/api/v1/local/admins",
-    "method": "POST",
-    "ipAddress": "127.0.0.1",
-    "userAgent": "vscode-restclient",
-    "contentType": "application/json"
-  },
-  "audited": true,
-  "message": "Access is denied",
-  "version": "1.0",
-  "resource": {
-    "type": "users",
-    "names": ["newadmin"],
-    "uuids": null
-  },
-  "operation": "create",
-  "operationData": null,
-  "additionalData": {
-    "request": {
-      "name": "newadmin",
-      "email": null,
-      "enabled": null,
-      "lastName": null,
-      "username": "newadmin",
-      "firstName": null,
-      "groupUuids": [],
-      "description": null,
-      "certificateData": null,
-      "certificateUuid": "ec844373-2cfc-4b20-88b6-a58a374610f3",
-      "customAttributes": null
-    }
-  },
-  "operationResult": "failure",
-  "affiliatedResource": null
-}
-```
+## Local Admin
+
+This log shows the operation of creating a local admin `newadmin` which is allowed only from the localhost.
+
 ```json
 {
   "actor": {
