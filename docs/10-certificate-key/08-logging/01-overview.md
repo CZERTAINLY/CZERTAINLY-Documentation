@@ -20,142 +20,67 @@ The CZERTAINLY platform is generating the following types of logs. You can find 
 | **Audit logs**       | <span class="badge badge--success">Yes</span> | Audit log records all user operations to reconstruct any event in case of investigation. It also proves the compliance with the various standards and regulations, such as PCI DSS, ISO 27k, GDPR, WebTrust, etc.                                                                   |
 | **Event logs**       | <span class="badge badge--success">Yes</span> | Event logs are used to record certificate management, cryptographic key management, and other operation-related events. The transaction logs are used to reconstruct the complete history of the operations and its source can be user or system itself in case of automatic events |
 
-## Logs body structure
+## Logs body structure (Log Record)
 
 Audit logs and event logs body message have specific structure defined by [JSON schema document](!ADD_LINK_HERE!). This ensures that structure of log body is consistent, can be validated and easily parsed by log collectors to work with its information.
 
-| Property        | Type   | Required                                      | Description                                                                                  |
-|-----------------|--------|-----------------------------------------------|----------------------------------------------------------------------------------------------|
-| Version         | String | <span class="badge badge--success">Yes</span> | Version of log structure JSON schema                                                         |
-| Module          | Enum   | <span class="badge badge--success">Yes</span> | Module where event occured. Represents part or resource of system related to event.          |
-| Actor           | Object | <span class="badge badge--success">Yes</span> | Affiliated party or platform component that triggered operation/event                        |
-| Source          | Object | <span class="badge badge--success">Yes</span> | Contains request source information like IP address, agent, etc.                             |
-| Resource        | Object | <span class="badge badge--success">Yes</span> | Information about resource that is subject of log event                                      |
-| Affiliated      | Object | <span class="badge badge--danger">No</span>   | Information about affiliated resource that acts in event (e.g. push certificate to location) | 
-| Event Type      | Enum   | <span class="badge badge--success">Yes</span> | Event that happened                                                                          |
-| Event Result    | Enum   | <span class="badge badge--success">Yes</span> | Event result status                                                                          |
-| Event Data      | Object | <span class="badge badge--danger">No</span>   | Structured data based on event type, defined in schema                                       |
-| Message         | String | <span class="badge badge--danger">No</span>   | Free form text message to provide additional information                                     |
-| Additional Data | Map    | <span class="badge badge--danger">No</span>   | Additional key-paired structured data                                                        |
+| Property            | Type    | Required                                      | Description                                                                                                                     |
+|---------------------|---------|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| Version             | String  | <span class="badge badge--success">Yes</span> | Version of log structure JSON schema                                                                                            |
+| Audited             | Boolean | <span class="badge badge--success">Yes</span> | Flag marking log record as audit log, representing user triggered action                                                        |
+| Module              | Enum    | <span class="badge badge--success">Yes</span> | Module where event occured. Represents part or resource of system related to event.                                             |
+| Actor               | Object  | <span class="badge badge--success">Yes</span> | Affiliated party or platform component that triggered operation/event                                                           |
+| Source              | Object  | <span class="badge badge--danger">No</span>   | Contains request source information like IP address, agent, etc.                                                                |
+| Resource            | Object  | <span class="badge badge--success">Yes</span> | Information about resource that is subject of log event                                                                         |
+| Affiliated resource | Object  | <span class="badge badge--danger">No</span>   | Information about affiliated resource that acts in event and is related to subject resource (e.g. push certificate to location) | 
+| Operation           | Enum    | <span class="badge badge--success">Yes</span> | Operation that is being logged                                                                                                  |
+| Operation Result    | Enum    | <span class="badge badge--success">Yes</span> | Operation result which is either success or failed                                                                              |
+| Message             | String  | <span class="badge badge--danger">No</span>   | Free form text message to provide additional information, e.g. error message for failed operation result                        |
+| Operation Data      | Object  | <span class="badge badge--danger">No</span>   | Structured data based on operation, list of possible properties defined in schema                                               |
+| Additional Data     | Map     | <span class="badge badge--danger">No</span>   | Additional key-paired data that can contain debug information or data specific to operation logged                              |
 
 
-### Module enum
-- `Auth`
-- `Scheduler`
-- `Validation`
-- `Compliance`
-- `Certificates`
-- `Cryptographic keys`
-- `Authorities`
-- `Tokens`
-- `Entities`
+### Modules
 - `Approvals`
+- `Auth` - Authentication and authorization module, containing also operations for users and roles resources
+- `Certificates` - Certificates management and operations including RA profiles and authorities
+- `Cryptographic keys` - Cryptographic keys management and operations including tokens and token profiles
+- `Compliance`
+- `Core` - Module containing core functionality including connectors, credentials and attributes
+- `Discovery` - Discovery of different resources
+- `Entities` - Entities and locations management
+- `Protocols` - Protocols management and operations including protocol profiles
+- `Scheduler`
 - `Workflows`
-- `Settings`
 
-### Actor
+### Actor record
 Actor object contains following properties:
 - **type** - enum with following values
-  - `User`
+  - `Anonymous`
   - `Core` - (System?)
+  - `User`
   - `Connector`
   - `Protocol`
-  - `Other`
-- **authMethod**
-  - `none`
-  - `certificate`
-  - `token`
-  - `api_key`
-- *id* - identification of actor, usually UUID of object representing actor type
+- **auth method** - enum with following values
+  - `None`
+  - `Certificate`
+  - `Token`
+  - `API key`
+  - `User proxy`
+- *uuid* - identification of actor, usually UUID of object representing actor type
 - *name* - associated name with actor based on type. For example, username, protocol name, connector name
 
-### Source (Origin?)`
+### Source record
 Source object contains following properties:
+- method - HTTP method of request
+- path - HTTP request path
+- content type
 - IP address
 - user agent
 
-### Resource
-- **type** - identification by enum `Resource`
-- *uuid*
-- *name*
-
-### Affiliated resource
+### Resource and Affiliated resource
 - **resource** - identification by enum `Resource`
-- *uuid*
-- *name*
+- *uuids* - list of UUIDs, possible more values due to bulk operations
+- *names* - list of resource names, possible more values due to bulk operations
 
-### Event type enum
-Items:
-- `Created`
-- `Issued`
-- `Revoked`
-- `Deleted`
-- `Updated`
-- `Started`
-- `Stopped`
-
-### Event Result enum
-- `None`
-- `Success`
-- `Failure`
-
-### Event Data
-Event data are structured and its content is dependent on event type.
-
-### Message
-Free form text describing in more detail logged event. For example, in case of failure, it can contain exception message.
-
-### Additional Data
-Additional data allows to store additional information regarding the event that is not generalized. For example, it can contain information that is specific for that particular instance of event or combination of request input.
-
-## Examples
-
-```json
-{
-  "version": "1.1",
-  "module": "CERTIFICATES",
-  "actor": {
-    "type": "CORE",
-    "authMethod": "NONE"
-  },
-  "resource": {
-    "type": "CERTIFICATE",
-    "uuid": "a9091e0d-f9b9-4514-b275-1dd52aa870ec"
-  },
-  "eventType": "CERTIFICATE_ISSUED",
-  "eventStatus": "SUCCESS",
-  "eventData": {
-    "subjectDN": "O=3Key Company s.r.o., CN=Demo Client Sub CA",
-    "fingerprint": "7e93115dd0cee213c566ef6ca096dfa65820ecaa980761f35bd7bdb57bfb8715"
-  }
-}
-```
-
-```json
-{
-  "version": "1.0",
-  "module": "DISCOVERY",
-  "actor": {
-    "type": "USER",
-    "authMethod": "CERTIFICATE"
-  },
-  "source": {
-    "ipAddress": "127.0.0.1",
-    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
-  },
-  "resource": {
-    "type": "DISCOVERY",
-    "uuid": "a9091e0d-f9b9-4514-b275-1dd52aa870ec"
-  },
-  "eventType": "DISCOVERY_STARTED",
-  "eventStatus": "SUCCESS",
-  "eventData": {
-    "connectorName": "Network-Discovery-Provider",
-    "kind": "IP-Hostname"
-  },
-  "message": "Discovery started in background",
-  "additionalData": {
-    "urlNumbers": 300
-  }
-}
-```
+**Note**: UUIDs and names lists items on same index correspond to each other.
