@@ -27,7 +27,8 @@ The following steps should be done to integrate Keycloak with CZERTAINLY:
 | **1** | [Create Realm and Client](create-realm)                       | Create and configure new Keycloak Realm and Client               |
 | **2** | [Configure OIDC](configure-oidc)                              | Configure OIDC client that can connect to Keycloak OIDC provider |
 | **3** | [Create User and Login](create-user-login)                    | Create new Keycloak User for CZERTAINLY and login                |
-| **3** | **(Optional)** [Add CZERTAINLY Theme](czertainly-theme) | Add CZERTAINLY custom theme to Keycloak and realm                |
+| **4** | [Configure OAuth2 Provider in Settings](provider-settings) | Add Keycloak provider to CZERTAINLY Authentication Settings               |
+| **5** | **(Optional)** [Add CZERTAINLY Theme](czertainly-theme) | Add CZERTAINLY custom theme to Keycloak and realm                |
 
 ## Identity providers
 

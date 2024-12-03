@@ -5,7 +5,9 @@ Configuration of the platform and its components is done primarily through Helm 
 For the list of parameters that can be configured for values, see the [Helm chart configurable parameteres](../installation-guide/deployment/deployment-helm/configurable-parameters).
 
 Settings allows to configure subset of the platform setting during the runtime. The following settings are available:
+
 - [Platform](./platform)
 - [Custom Attributes](./custom-attributes)
 - [Global Metadata](./global-metadata)
 - [Notifications](./notifications)
+- [Authentication](./authentication)
