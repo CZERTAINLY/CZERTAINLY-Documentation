@@ -26,7 +26,7 @@ To create new OIDC client, follow steps described in [Creating an OpenID Connect
 - Name: **CZERTAINLY**
 - Client authentication: **On**
 - Root URL: **https://\<CZERTAINLY_DOMAIN>**, where `<CZERTAINLY_DOMAIN>` is the domain of your CZERTAINLY instance. This serves as an access point to your deployment
-- Valid redirect URIs: URI pointing to redirect in Core after login via Keycloak, must contain `https://<CZERTAINLY_DOMAIN>/api/login/oauth2/code/internal`
+- Valid redirect URIs: URI pointing to redirect in Core after login via Keycloak, must contain `https://<CZERTAINLY_DOMAIN>/api/login/oauth2/code/<oauth2ProviderName>`, where ``oauth2ProviderName`` is a name of OAuth2 Provider configured in settings
 - Valid post logout redirect URIs: list of valid post logout redirect URIs, for example `https://<CZERTAINLY_DOMAIN>/administrator/`
 - Web origins: list of valid web origins, for example `https://<CZERTAINLY_DOMAIN>`
 
