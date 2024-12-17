@@ -1,20 +1,24 @@
+---
+sidebar_position: 3
+---
+
 # Main menu
 
 The main menu allows you to select and execute basic tasks on the CZERTAINLY appliance; it offers the following options.
 
-| Short&nbsp;name | Main&nbsp;menu&nbsp;item                                                        | Description                                                                              |
-|-----------------|---------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
-| **n**etwork     | [Configure network parameters](./network-menu) | It opens another menu which allows the setting of different networking parameters.       |
-| **i**ngressTLS  | [Configure ingress TLS certificates](#configure-ingress-tls-certificates) | Custom HTTPS certificates for CZERTAINLY web interface can be configured here.           |
-| **t**rustedCA   | [Configure custom trusted certificates](#configure-custom-trusted-certificates) | Use this option to change the default list of trusted certificates of CZERTAINLY.            |
-| **p**ostgres    | [Configure database](#configure-database) | You can change the default configuration of the Postgres database with this option.              |
-| **d**ockerRepo  | [Configure Docker repository access credentials](#configure-docker-repository-access-credentials) | Configure credentials for Licensed parts of CZERTAINLY here.           |
-| **m**ail        | [Configure email server parameters](#configure-email-server-parameters) | Parameters of email server are needed for sending notifications.                         |
-| **c**zertainly  | [Configure CZERTAINLY](#configure-czertainly) | Use this option to select the version and components of CZERTAINLY to install.               |
-| **i**nstall     | [Install CZERTAINLY](#install-czertainly) | Execute CZERTAINLY installation.                                                         |
-| **s**tatus      | [Show CZERTAINLY status](#show-czertainly-status) | This option will show the status of CZERTAINLY and Kubernetes subsystem.                     |
-| **a**dvanced    | [Advanced options](./advanced-menu) | Opens another menu with advanced options of CZERTAINLY appliance.                        |
-| **e**xit        | Exit CZERTAINLY manager                                                         | Closes TUI and disconnects from CZERTAINLY appliance.                                    |
+| Short&nbsp;name | Main&nbsp;menu&nbsp;item                                                                          | Description                                                                         |
+|-----------------|---------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| **n**etwork     | [Configure network parameters](./network-menu.md)                                                 | It opens another menu which allows the setting of different networking parameters.  |
+| **i**ngressTLS  | [Configure ingress TLS certificates](#configure-ingress-tls-certificates)                         | Custom HTTPS certificates for CZERTAINLY web interface can be configured here.      |
+| **t**rustedCA   | [Configure custom trusted certificates](#configure-custom-trusted-certificates)                   | Use this option to change the default list of trusted certificates of CZERTAINLY.   |
+| **p**ostgres    | [Configure database](#configure-database)                                                         | You can change the default configuration of the Postgres database with this option. |
+| **d**ockerRepo  | [Configure Docker repository access credentials](#configure-docker-repository-access-credentials) | Configure credentials for Licensed parts of CZERTAINLY here.                        |
+| **m**ail        | [Configure email server parameters](#configure-email-server-parameters)                           | Parameters of email server are needed for sending notifications.                    |
+| **c**zertainly  | [Configure CZERTAINLY](#configure-czertainly)                                                     | Use this option to select the version and components of CZERTAINLY to install.      |
+| **i**nstall     | [Install CZERTAINLY](#install-czertainly)                                                         | Execute CZERTAINLY installation.                                                    |
+| **s**tatus      | [Show CZERTAINLY status](#show-czertainly-status)                                                 | This option will show the status of CZERTAINLY and Kubernetes subsystem.            |
+| **a**dvanced    | [Advanced options](./advanced-menu.md)                                                            | Opens another menu with advanced options of CZERTAINLY appliance.                   |
+| **e**xit        | Exit CZERTAINLY manager                                                                           | Closes TUI and disconnects from CZERTAINLY appliance.                               |
 
 
 ## Configure ingress TLS certificates

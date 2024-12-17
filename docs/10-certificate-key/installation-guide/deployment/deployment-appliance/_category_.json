@@ -1,5 +1,5 @@
 {
-  "label": "Deployment using Helm",
+  "position": 6,
   "link": {
     "type": "doc",
     "id": "overview"

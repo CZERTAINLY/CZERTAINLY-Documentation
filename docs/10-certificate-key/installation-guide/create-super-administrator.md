@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Create Super Administrator
 
 When you deploy the platform for the first time, there are no Super Administrators and Administrators registered.
