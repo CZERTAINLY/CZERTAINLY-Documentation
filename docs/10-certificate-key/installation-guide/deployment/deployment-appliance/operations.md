@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Operations
 
 The following document describes advanced operations for the management of virtual appliance:
@@ -86,7 +90,7 @@ The installation/upgrade process of CZERTAINLY is managed by the [Helm](https://
 
 Default values are stored in file `/root/install/czertainly-values.yaml`. This file gets updated during installation/upgrade when there is newer version of CZERTAINLY chart.
 
-If you need to provide your own custom Helm chart values that are not available through the [TUI](./TUI/intro), you need to access the shell of the appliance, create file `/home/czertainly/czertainly-values.custom.yaml`, and put it there.
+If you need to provide your own custom Helm chart values that are not available through the [TUI](./TUI/intro.md), you need to access the shell of the appliance, create file `/home/czertainly/czertainly-values.custom.yaml`, and put it there.
 
 The custom values overwrite the default values during the installation/upgrade process.
 
@@ -110,7 +114,7 @@ Before any upgrade, make sure you have a recent snapshot first!
 
 #### OS packages upgrades
 
-CZERTAINLY Virtual Appliance is based on Debian GNU/Linux. To upgrade it [enter system shell](./TUI/advanced-menu#enter-system-shell), and execute command `sudo apt update && sudo apt upgrade`. This command also upgrades `czertainly-appliance-tools` package, this package provides [TUI](./TUI/intro), it is necessary to close the open shell connection and login back to start using the new version of the TUI.
+CZERTAINLY Virtual Appliance is based on Debian GNU/Linux. To upgrade it [enter system shell](./TUI/advanced-menu.md#enter-system-shell), and execute command `sudo apt update && sudo apt upgrade`. This command also upgrades `czertainly-appliance-tools` package, this package provides [TUI](./TUI/intro.md), it is necessary to close the open shell connection and login back to start using the new version of the TUI.
 
 The above command first updates information about package versions and the second upgrades them. This way is safe from major upgrades and should be done periodically.
 
@@ -173,7 +177,7 @@ Server Version: v1.30.4+rke2r1
 ```
 #### CZERTAINLY upgrade
 
-It is possible to upgrade CZERTAINLY just by raising the version number in [CZERTAINLY configuration](./TUI/main-menu#configure-czertainly) and executing [CZERTAINLY Instalation](./TUI/main-menu#install-czertainly). It should work for upgrades from version 2.8.0 upwards.
+It is possible to upgrade CZERTAINLY just by raising the version number in [CZERTAINLY configuration](./TUI/main-menu.md#configure-czertainly) and executing [CZERTAINLY Instalation](./TUI/main-menu.md#install-czertainly). It should work for upgrades from version 2.8.0 upwards.
 
 We strongly recommend first performing [OS packages upgrades](#os-packages-upgrades) to upgrade OS components and to get the latest version of [CZERTAINLY Appliance Tools](#versioning). If you upgrade the Tools first you get support for all new CZERTAINLY components directly in TUI.
 
@@ -199,7 +203,7 @@ Start a brand new instance of Appliance, [upgrade OS](#os-upgrades).
 
 Extract backups of `/home/czertainly` and `/etc/czertainly-ansible/vars/`.
 
-Execute [Install CZETAINLY](TUI/main-menu#install-czertainly) from the main menu. This will install a completely new CZERTAINLY based on your settings.
+Execute [Install CZETAINLY](TUI/main-menu.md#install-czertainly) from the main menu. This will install a completely new CZERTAINLY based on your settings.
 
 Stop Kubernetes:
 ```

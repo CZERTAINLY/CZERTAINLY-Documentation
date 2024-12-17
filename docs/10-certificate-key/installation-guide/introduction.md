@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Introduction
 
 One of the approaches we have adopted from the beginning of development of the platform is easy installation and deployment. We believe that you should not spend weeks or even months working on the configuration before starting to use the platform.
@@ -14,12 +18,12 @@ The following diagram represents the deployment of the platform in Kubernetes. B
 
 Independently of the installation and deployment options, you need to follow the steps below to get the platform up and running:
 
-| Step                                   | Description                                                               | Reference                                                  |
-|----------------------------------------|---------------------------------------------------------------------------|------------------------------------------------------------|
-| 1. Prepare the database                | Install and crate a database to be used by the platform.                  | [Database setup](database-setup)                           |
-| 2. Create Trusted Certificates         | Create set of trusted certificates for the platform.                      | [Create Trusted Certificates](create-trusted-certificates) |
-| 3. Deploy the platform                 | Deploy the platform using the docker images and the Kubernetes manifests. | [Deployment options](deployment/deployment-options)        |
-| 4. Configure first Super Administrator | Create a Super Administrator and configure the platform.                  | [Create Super Administrator](create-super-administrator)   |
+| Step                                   | Description                                                               | Reference                                                     |
+|----------------------------------------|---------------------------------------------------------------------------|---------------------------------------------------------------|
+| 1. Prepare the database                | Install and crate a database to be used by the platform.                  | [Database setup](database-setup.md)                           |
+| 2. Create Trusted Certificates         | Create set of trusted certificates for the platform.                      | [Create Trusted Certificates](create-trusted-certificates.md) |
+| 3. Deploy the platform                 | Deploy the platform using the docker images and the Kubernetes manifests. | [Deployment options](deployment/deployment-options.md)        |
+| 4. Configure first Super Administrator | Create a Super Administrator and configure the platform.                  | [Create Super Administrator](create-super-administrator.md)   |
 
 Once the first administrator is created, you can access the Administrator Interface.
 Use the following URL with the client certificate authentication (first administrator):

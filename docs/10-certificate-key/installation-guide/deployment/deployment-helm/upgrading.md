@@ -62,7 +62,7 @@ hashicorpVaultConnector:
   enabled: false
 ```
 
-See the [CZERTAINLY Helm chart 2.11.0-1 release notes](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/releases/tag/2.11.0-1) for more information.
+See the [CZERTAINLY Helm chart 2.11.0-1 release notes](https://github.com/CZERTAINLY/CZERTAINLY-Helm-Charts/releases/tag/2.11.0-1) for more information.
 
 ## To 2.11.0
 
@@ -77,7 +77,7 @@ pyAdcsConnector:
   enabled: true
 ```
 
-See the [CZERTAINLY Helm chart 2.11.0 release notes](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/releases/tag/2.11.0) for more information.
+See the [CZERTAINLY Helm chart 2.11.0 release notes](https://github.com/CZERTAINLY/CZERTAINLY-Helm-Charts/releases/tag/2.11.0) for more information.
 
 ## To 2.9.0
 
@@ -151,7 +151,7 @@ apiGateway:
       nodePort: 30081
 ```
 
-See the [CZERTAINLY Helm chart 2.8.0 release notes](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/releases/tag/2.8.0) for more information.
+See the [CZERTAINLY Helm chart 2.8.0 release notes](https://github.com/CZERTAINLY/CZERTAINLY-Helm-Charts/releases/tag/2.8.0) for more information.
 
 ## To 2.7.1
 
@@ -164,7 +164,7 @@ global:
     enabled: false
 ```
 
-See the [CZERTAINLY Helm chart 2.7.1 release notes](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/releases/tag/2.7.1) for more information.
+See the [CZERTAINLY Helm chart 2.7.1 release notes](https://github.com/CZERTAINLY/CZERTAINLY-Helm-Charts/releases/tag/2.7.1) for more information.
 
 ## To 2.7.0
 
@@ -241,7 +241,7 @@ utilsService:
   enabled: false
 ```
 
-See the [CZERTAINLY Helm chart 2.7.0 release notes](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/releases/tag/2.7.0) for more information.
+See the [CZERTAINLY Helm chart 2.7.0 release notes](https://github.com/CZERTAINLY/CZERTAINLY-Helm-Charts/releases/tag/2.7.0) for more information.
 
 ## To 2.6.0
 
@@ -266,7 +266,7 @@ softwareCryptographyProvider:
   enabled: false
 ```
 
-See the [CZERTAINLY Helm chart 2.6.0 release notes](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/releases/tag/2.6.0) for more information.
+See the [CZERTAINLY Helm chart 2.6.0 release notes](https://github.com/CZERTAINLY/CZERTAINLY-Helm-Charts/releases/tag/2.6.0) for more information.
 
 ## To 2.5.2
 
@@ -322,4 +322,4 @@ keystoreEntityProvider:
   enabled: false
 ```
 
-See the [CZERTAINLY Helm chart 2.5.2 release notes](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts/releases/tag/2.5.2) for more information.
+See the [CZERTAINLY Helm chart 2.5.2 release notes](https://github.com/CZERTAINLY/CZERTAINLY-Helm-Charts/releases/tag/2.5.2) for more information.

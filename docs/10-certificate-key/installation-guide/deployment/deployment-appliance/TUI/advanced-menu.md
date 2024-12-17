@@ -1,6 +1,10 @@
+---
+sidebar_position: 6
+---
+
 # Advanced menu
 
-Advanced menu is used for advanced operations with CZERTAINLY Appliance. You can access it from [**Main menu**](./main-menu) by selecting **Advanced options**.
+Advanced menu is used for advanced operations with CZERTAINLY Appliance. You can access it from [**Main menu**](./main-menu.md) by selecting **Advanced options**.
 
 | Short&nbsp;name | Advanced&nbsp;menu&nbsp;item                         | Description                                                                                  |
 |-----------------|------------------------------------------------------|----------------------------------------------------------------------------------------------|
@@ -11,7 +15,7 @@ Advanced menu is used for advanced operations with CZERTAINLY Appliance. You can
 | **s**hell       | [Enter system shell](#enter-system-shell)            | You can enter system shell as `czertainly` user.                                             |
 | **r**eboot      | Reboot system                                        | This option reboots CZERTAINLY Appliance by `shutdown -r now` command.                       |
 | **s**hutdown    | Shutdown system                                      | This option shutdown CZERTAINLY Appliance by `shutdown -h now` command.                      |
-| **e**xit        | [Exit advanced menu](./main-menu)                    | By selecting this option you can return to Main menu.                                        |
+| **e**xit        | [Exit advanced menu](./main-menu.md)                 | By selecting this option you can return to Main menu.                                        |
 
 ## Remove CZERTAINLY
 

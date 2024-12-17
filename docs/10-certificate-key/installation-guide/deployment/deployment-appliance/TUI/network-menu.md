@@ -1,13 +1,17 @@
+---
+sidebar_position: 4
+---
+
 # Network menu menu
 
 The network menu allows you to configure several network parameters of the CZERTAINLY appliance; it offers the following options.
 
-| Short&nbsp;name | Main&nbsp;menu&nbsp;item                                                        | Description                                                                              |
-|-----------------|---------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
-| **h**ostname    | [Configure hostname](#configure-hostname) | By default appliance uses czertainly.local.                                                                                         |
-| **n**etwork     | [Configure network parameters](#configure-network-parameters) | Allow to static network configuration, if needed.                                        |
-| **p**roxyHTTP   | [Configure HTTP proxy](#configure-http-proxy) | If your network policy requires using HTTP proxy you can configure it under this option. |
-| **t**imeSync    | [Configure time parameters](#configure-time-parameters) | Configure NTP time synchronization, if needed.
+| Short name    | Main menu item                                                | Description                                                                              |
+|---------------|---------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| **h**ostname  | [Configure hostname](#configure-hostname)                     | By default appliance uses czertainly.local.                                              |
+| **n**etwork   | [Configure network parameters](#configure-network-parameters) | Allow to static network configuration, if needed.                                        |
+| **p**roxyHTTP | [Configure HTTP proxy](#configure-http-proxy)                 | If your network policy requires using HTTP proxy you can configure it under this option. |
+| **t**imeSync  | [Configure time parameters](#configure-time-parameters)       | Configure NTP time synchronization, if needed.                                           |
 
 ## Configure hostname
 
