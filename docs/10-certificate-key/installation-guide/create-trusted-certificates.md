@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Create Trusted Certificates
 
 :::success[Publicly trusted certificates]
@@ -16,7 +20,7 @@ Trusted certificates are configured in the platform through the list of PEM-enco
 - in `Connectors` to establish trust with the technology
 
 :::info[Different set of trusted certificates for different services]
-The list of trusted certificates is globally applied to all services that supports custom trust lists. However, it is possible to apply different sets of trusted certificates to different services. In such case, the trusted certificates should not be configured as a global parameter for the Helm chart, but instead included as a parameter for each particular chart and sub-chart. See [CZERTAINLY-Helm-Charts](https://github.com/3KeyCompany/CZERTAINLY-Helm-Charts) for more information.
+The list of trusted certificates is globally applied to all services that supports custom trust lists. However, it is possible to apply different sets of trusted certificates to different services. In such case, the trusted certificates should not be configured as a global parameter for the Helm chart, but instead included as a parameter for each particular chart and sub-chart. See [CZERTAINLY-Helm-Charts](https://github.com/CZERTAINLY/CZERTAINLY-Helm-Charts) for more information.
 :::
 
 ## Mandatory certificates in the list
@@ -29,7 +33,7 @@ The list of trusted certificate must always include at least the following certi
 ## Changing trusted certificates
 
 When you need to change the list of trusted certificates (add / remove trusted certificates), the changes must be applied to the deployment of the platform.
-This is done automatically installing and upgrading using [Helm chart](deployment/deployment-helm/overview).
+This is done automatically installing and upgrading using [Helm chart](deployment/deployment-helm/overview.md).
 
 :::warning[Management of trusted certificates]
 Be sure that all changes in the list of trusted certificates are properly propagated in the deployment when managing the list manually or externally to Helm chart.
