@@ -14,17 +14,19 @@ To protect using OpenID connect protocol, we will need to create an OIDC client 
 ## Create Realm
 
 To create a new realm, follow steps in [Creating a realm](https://www.keycloak.org/docs/latest/server_admin/#proc-creating-a-realm_server_administration_guide) with the following attributes:
+
 - Realm name: **CZERTAINLY**
 
 ## Create OIDC Client
 
 To create new OIDC client, follow steps described in [Creating an OpenID Connect client](https://www.keycloak.org/docs/latest/server_admin/#proc-creating-oidc-client_server_administration_guide) with the following attributes:
+
 - Client type: **OpenID Connect**
 - Client ID: **CZERTAINLY**
 - Name: **CZERTAINLY**
-- Client suthentication: **On**
+- Client authentication: **On**
 - Root URL: **https://\<CZERTAINLY_DOMAIN>**, where `<CZERTAINLY_DOMAIN>` is the domain of your CZERTAINLY instance. This serves as an access point to your deployment
-- Valid redirect URIs: list of valid redirect URIs, for example `https://<CZERTAINLY_DOMAIN>*`
+- Valid redirect URIs: URI pointing to redirect in Core after login via Keycloak, must contain `https://<CZERTAINLY_DOMAIN>/api/login/oauth2/code/<oauth2ProviderName>`, where ``oauth2ProviderName`` is a name of OAuth2 Provider configured in settings
 - Valid post logout redirect URIs: list of valid post logout redirect URIs, for example `https://<CZERTAINLY_DOMAIN>/administrator/`
 - Web origins: list of valid web origins, for example `https://<CZERTAINLY_DOMAIN>`
 
@@ -34,12 +36,13 @@ Valid URIs and web origins should be properly configured to avoid any security r
 
 ### Configure CZERTAINLY dedicated scope
 
-The user in the platform is identified using JSON ID as described in the [Identification](../../concept-design/architecture/access-control/identification#json-id) part of the access control.
+The user in the platform is identified using JWT Access Token as described in the [Identification](../../concept-design/architecture/access-control/identification#json-web-token-jwt) part of the access control.
 
 Based on the attributes coming from the configuration of the identity provider, proper mappers for the dedicated scope should be created.
 For more information, see [OIDC token and SAML assertion mappings](https://www.keycloak.org/docs/latest/server_admin/#_protocol-mappers) in the Keycloak documentation.
 
-As an example, if you want to create mapper that will map `groups` attributes (that are sent from Active Directory) to array of `roles` in the JSON ID, you can use the following configuration:
+As an example, if you want to create mapper that will map `groups` attributes (that are sent from Active Directory) to array of `roles` in the JWT Claims Set, you can use the following configuration:
+
 - Mapper type: **User Attribute**
 - Name: **Groups**
 - User Attribute: **groups**
