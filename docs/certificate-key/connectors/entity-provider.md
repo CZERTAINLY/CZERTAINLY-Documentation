@@ -1,3 +1,7 @@
+---
+sidebar_position: 24
+---
+
 # Entity Provider
 
 :::info[Using Entity Provider]
@@ -16,7 +20,7 @@ Entity Provider `Connector` provides access to the locations on the remote devic
 
 ## Provider objects
 
-[`Entity`](../concept-design/core-components/entity) and [`Location`](../concept-design/core-components/location) objects are managed in the platform through the Entity Provider implementation.
+[`Entity`](../concept-design/core-components/entity.md) and [`Location`](../concept-design/core-components/location.md) objects are managed in the platform through the Entity Provider implementation.
 `Entity` represents end user of the `Certificate` and it can have access to multiple `Locations`.
 
 The following diagram shows the relation (sample) between `Entity Provier`, `Entity`, `Location`, and `Certificate`:
@@ -300,7 +304,7 @@ The following processes are associated with the Entity Provider and management o
 
 ## Specification and example
 
-The Entity Provider implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
+The Entity Provider implements [Common Interfaces](common-interfaces/overview.md) and the following additional interfaces:
 - [Entity Management](/api/connector-entity-provider/#tag/Entity-Management)
 - [Location Operations](/api/connector-entity-provider/#tag/Location-Operations)
 

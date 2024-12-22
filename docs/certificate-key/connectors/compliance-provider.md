@@ -1,3 +1,7 @@
+---
+sidebar_position: 16
+---
+
 # Compliance Provider
 
 ## Overview
@@ -14,7 +18,7 @@ Compliance checking can be executed on `RA Profile` level (for all `Certificates
 
 ## Provider objects
 
-[`Compliance Profiles`](../concept-design/core-components/compliance-profile) objects are managed in the platform through the Compliance Provider implementation.
+[`Compliance Profiles`](../concept-design/core-components/compliance-profile.md) objects are managed in the platform through the Compliance Provider implementation.
 Each `Compliance Profile` contains a list of available compliance rules and groups that can be applied for a compliance checking.
 Many different `Compliance Profiles` with differenty compliance requirements can be managed and applied on certificates.
 
@@ -66,7 +70,7 @@ When a request is made to check the compliance of the `Certificate`, the `Core` 
 
 ## Specification and example
 
-The Compliance Provider implements [Common Interfaces](common-interfaces/overview) and the following additional interfaces:
+The Compliance Provider implements [Common Interfaces](common-interfaces/overview.md) and the following additional interfaces:
 - [Compliance Rules](/api/connector-compliance-provider/#tag/Compliance-Rules)
 - [Compliance](/api/connector-compliance-provider/#tag/Compliance)
 
