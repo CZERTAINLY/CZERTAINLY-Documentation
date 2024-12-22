@@ -1,3 +1,7 @@
+---
+sidebar_position: 9
+---
+
 # OpenSSL CMP Command
 
 Since version 3.0, the OpenSSL library has included a CMP command that can be used to interact with a CMP server. It is a command-line tool that can be used to send CMP messages to the server and receive responses. The command can be used to perform various operations such as requesting certificates, revoking certificates, and updating keys. 
@@ -15,7 +19,7 @@ The OpenSSL CMP command is implemented according to the [RFC 4210 - Internet X.5
 Before you can use the OpenSSL CMP command with the CZERTAINLY, you need to have the following:
 - OpenSSL library installed on your system. You can download the library from the [OpenSSL website](https://www.openssl.org/).
 - Configured at least one `RA Profile` certificate service
-- CMP protocol enabled according to the [Enable CMP Protocol](./enable-cmp-protocol)
+- CMP protocol enabled according to the [Enable CMP Protocol](./enable-cmp-protocol.md)
 
 ## Create `openssl.conf` configuration file
 

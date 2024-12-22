@@ -1,7 +1,8 @@
 {
-  "label": "CMP",
+  "position": 7,
+  "label": "Protocols",
   "link": {
     "type": "doc",
     "id": "overview"
-  },
+  }
 }

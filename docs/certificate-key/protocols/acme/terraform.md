@@ -1,3 +1,7 @@
+---
+sidebar_position: 17
+---
+
 # Terraform acme provider
 
 Terraform is an open-source infrastructure as code (IaC) software tool that enables you to safely and predictably create, change, and improve infrastructure. It is widely used for deployment of cloud infrastructure, but it can also be used to manage on-premises infrastructure and hybrid infrastructures.
@@ -20,7 +24,7 @@ Before you can configure Terraform `acme` provider with the CZERTAINLY, you need
 - Terraform installed
 - Configured at least one `RA Profile` certificate service
 - Access to HTTP or DNS resources, that will be used to validate ACME challenges
-- ACME protocol enabled according to the [Enable ACME](enable-acme)
+- ACME protocol enabled according to the [Enable ACME](enable-acme.md)
 
 To install Terraform, follow the [installation instructions](https://learn.hashicorp.com/tutorials/terraform/install-cli).
 

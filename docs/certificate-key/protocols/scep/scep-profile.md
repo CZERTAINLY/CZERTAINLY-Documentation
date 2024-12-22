@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # SCEP Profile
 
 `SCEP Profile` specifies the configurations of the SCEP server behaviour. It holds the configuration listed below:
@@ -26,7 +30,7 @@ The certificate to be used for the `SCEP Profile` should meet the following crit
 3. The key pair should have appropriate key set enabled (for encryption and signing)
 
 :::warning[Microsoft Intune certificate requirements]
-For Microsoft Intune validation, there may be additional requirements for the certificate. See the [Intune Integration Guide](../../integration-guides/intune/overview) for more information.
+For Microsoft Intune validation, there may be additional requirements for the certificate. See the [Intune Integration Guide](../../integration-guides/intune/overview.md) for more information.
 :::
 
 ## Attributes for certificate management

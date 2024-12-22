@@ -1,3 +1,7 @@
+---
+sidebar_position: 11
+---
+
 # Kubernetes cert-manager
 
 One of the most common use cases for ACME is to manage certificates for containerized applications and environment like Kubernetes.
@@ -14,7 +18,7 @@ Before you can configure `cert-manager` with the CZERTAINLY, you need to have th
 - Kubernetes cluster with `cert-manager` installed
 - Configured at least one `RA Profile` certificate service
 - Access to HTTP or DNS resources, that will be used to validate ACME challenges
-- ACME protocol enabled according to the [Enable ACME](enable-acme)
+- ACME protocol enabled according to the [Enable ACME](enable-acme.md)
 
 For this guide, we will use `http-01` challenge validation, but the `dns-01` can be also configured and the process is the same.
 

@@ -1,3 +1,7 @@
+---
+sidebar_position: 13
+---
+
 # Certbot
 
 [`Certbot`](https://certbot.eff.org/) can be used to issue and manage the certificates on manually administered servers. It allows requesting and downloading certificate from ACME enabled servers.
@@ -12,7 +16,7 @@ Before configuring `Certbot` with CZERTAINLY, you need to have the following:
 - Certbot installed in the host server
 - Configured at least one `RA Profile` certificate service in CZERTAINLY
 - Access to HTTP or DNS resources, that will be used to validate ACME challenges
-- ACME protocol enabled according to the [Enable ACME](enable-acme)
+- ACME protocol enabled according to the [Enable ACME](enable-acme.md)
 
 To install `Certbot`, follow the [installation guide](https://certbot.eff.org/).
 

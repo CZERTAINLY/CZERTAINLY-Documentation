@@ -1,3 +1,7 @@
+---
+sidebar_position: 9
+---
+
 # Simple SCEP (SSCEP)
 
 [`SSCEP (Simple SCEP client)`](https://github.com/certnanny/sscep) is a client-only implementation of the SCEP protocol. It is a simple command-line tool that can be used to communicate with a SCEP server to obtain signed certificates.
@@ -9,7 +13,7 @@ This guide shows, how to use `SSCEP` to manage certificates using SCEP protocol 
 Before you can use `SSCEP` with the CZERTAINLY, you need to have the following:
 - `SSCEP` installed and configured
 - Configured at least one `RA Profile` certificate service
-- SCEP protocol enabled according to the [Enable SCEP for RA Profile](./enable-scep-ra-profile)
+- SCEP protocol enabled according to the [Enable SCEP for RA Profile](./enable-scep-ra-profile.md)
 
 In case you do not have the `SSCEP` installed, follow the [installation instructions](https://github.com/certnanny/sscep).
 

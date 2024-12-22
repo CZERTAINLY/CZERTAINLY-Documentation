@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # Enable CMP Protocol
 
 Let's assume we would like to enable `CMP Profile` for the `RA Profile` with name `czertainly` and know UUID `e4d5552d-f1a6-4ac9-8c7c-7ec74c4b2739`.
@@ -10,7 +14,7 @@ The CMP service can be also enabled based on the `CMP Profile` configuration onl
 
 ## Configuration of `CMP Profile`
 
-First step is to configure the [`CMP Profile`](./cmp-profile). It will create an instance of the CMP service with specific attributes that will be used to control the certificate management process and CMP clients will need to follow. You can create as many `CMP Profiles` as you need. Each of them can have a different configuration.
+First step is to configure the [`CMP Profile`](./cmp-profile.md). It will create an instance of the CMP service with specific attributes that will be used to control the certificate management process and CMP clients will need to follow. You can create as many `CMP Profiles` as you need. Each of them can have a different configuration.
 
 Configuration of the default `RA Profile` is optional, we will enable CMP protocol for a specific `RA Profile` with name `czertainly`. Let's do this in `czertainly` `RA Profile` configuration.
 

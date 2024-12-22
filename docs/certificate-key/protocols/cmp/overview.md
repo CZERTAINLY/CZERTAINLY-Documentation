@@ -1,10 +1,14 @@
+---
+sidebar_position: 1
+---
+
 # Overview
 
 The CMP prootocol is comprehensive and flexible protocol for certificate management supporting any type of cryptography and use case. CMP messages are self-contained and can be used in any environment, which makes the CMP independent of the transport mechanism and provides a high level of security.
 
 The platform implements CMP (Certificate Management Protocol) protocol for comprehensive and future-proof certificate management for any use case, including mobile networks and telecommunications, IoT, and more.
 
-Implementation of CMP server provides a flexibility for the clients and administrators to choose between running CMP endpoint that are bound to a specific [RA Profile](../../concept-design/core-components/ra-profile).
+Implementation of CMP server provides a flexibility for the clients and administrators to choose between running CMP endpoint that are bound to a specific [RA Profile](../../concept-design/core-components/ra-profile.md).
 
 :::info
 CMP implementation follows [RFC 4210 - Internet X.509 Public Key Infrastructure Certificate Management Protocol (CMP)](https://datatracker.ietf.org/doc/html/rfc4210) with enrollment request format according to the [RFC 4211 - Internet X.509 Public Key Infrastructure Certificate Request Message Format (CRMF)](https://datatracker.ietf.org/doc/html/rfc4211).
@@ -42,7 +46,7 @@ The CRMF request format is supported by the following connectors:
 
 In order to start with the CMP protocol, the platform must be configured and act as the CMP server.
 
-For this purpose we define the [`CMP Profile`](./cmp-profile) that contains configuration of the CMP server.
+For this purpose we define the [`CMP Profile`](./cmp-profile.md) that contains configuration of the CMP server.
 
 You can manage `CMP Profile` through the web interface or through the [`Core CMP API`](/api/core-cmp/).
 

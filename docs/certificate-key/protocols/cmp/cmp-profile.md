@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # CMP Profile
 
 `CMP Profile` specifies the configurations of the CMP server behaviour. It holds the configuration listed below:

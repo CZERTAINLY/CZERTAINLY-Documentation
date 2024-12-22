@@ -1,3 +1,7 @@
+---
+sidebar_position: 25
+---
+
 # Ansible acme module
 
 [Ansible](https://www.ansible.com/) is a suite of tools to enable the automatization of software configuration. It can be used in conjunction with an ACME server running on the CZERTAINLY platform to automate certificate management, especially in situations where a target entity isn't capable of certificate management operations and direct communication with an ACME server through available ACME client implementations.
@@ -16,7 +20,7 @@ To use Ansible with CZERTAINLY, you need to have the following:
 - Ansible installed
 - Configured at least one `RA Profile` certificate service in CZERTAINLY
 - Access to HTTP or DNS resources that will be used to validate ACME challenges
-- ACME protocol enabled according to the [Enable ACME](enable-acme)
+- ACME protocol enabled according to the [Enable ACME](enable-acme.md)
 
 To install Ansible, follow the [installation instructions](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
 

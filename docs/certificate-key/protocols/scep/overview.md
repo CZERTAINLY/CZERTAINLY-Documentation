@@ -1,10 +1,14 @@
+---
+sidebar_position: 1
+---
+
 # Overview
 
 One of the most common use cases for SCEP is to manage certificates for devices that do not have a user interface. For example, a device that is not a computer, such as a router or a printer, or a computer that is not running any user interface. SCEP is also used to manage certificates for mobile devices that are not connected to the network all the time.
 
 The platform implements SCEP (Simple Certificate Enrolment Protocol) protocol for certificate management and certificate and CRL queries. It supports various SCEP clients and are easy to configure and to manage.
 
-Implementation of SCEP server provides a flexibility for the clients and administrators to choose between running SCEP endpoint that are bound to any [RA Profile](../../concept-design/core-components/ra-profile).
+Implementation of SCEP server provides a flexibility for the clients and administrators to choose between running SCEP endpoint that are bound to any [RA Profile](../../concept-design/core-components/ra-profile.md).
 
 :::info
 SCEP implementation follows [RFC 8894 - Simple Certificate Enrolment Protocol](https://datatracker.ietf.org/doc/html/rfc8894) with backward compatibility with [draft-nourse-scep-23](https://datatracker.ietf.org/doc/html/draft-nourse-scep-23).
@@ -56,7 +60,7 @@ Encryption of the message data, according to the [RFC 8894, section 3.1](https:/
 
 ## Microsoft Intune support
 
-The SCEP protocol implementation supports the Microsoft Intune request validation. For more information, see [Intune Integration Guide](../../integration-guides/intune/overview).
+The SCEP protocol implementation supports the Microsoft Intune request validation. For more information, see [Intune Integration Guide](../../integration-guides/intune/overview.md).
 
 ### Certificate revocation
 
@@ -67,10 +71,9 @@ Revocation request is submitted to associated `RA Profile` to revoke certificate
 
 In order to start with the SCEP protocol, the platform must be configured and act as the SCEP server.
 
-For this purpose we define the [`SCEP Profile`](./scep-profile) that contains configuration of the SCEP server.
+For this purpose we define the [`SCEP Profile`](./scep-profile.md) that contains configuration of the SCEP server.
 
-[//]: # (TODO)
-You can manage `SCEP Profile` through the web interface or through the [`Core SCEP API`](#).
+You can manage `SCEP Profile` through the web interface or through the [`Core SCEP API`](/api/core-scep).
 
 ## SCEP Profile vs RA Profile SCEP API
 
@@ -100,4 +103,3 @@ The platform performs various validations on the backend including the following
 - If both `SCEP Profile` and `RA Profile` are available and enabled
 - If the `SCEP Profile` has configured default `RA Profile`
 :::
-- 

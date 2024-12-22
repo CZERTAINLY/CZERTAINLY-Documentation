@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # Enable ACME
 
 Before the platform can be used as ACME server, it must be configured.
@@ -12,7 +16,7 @@ The ACME server can be also enabled based on the `ACME Profile` configuration on
 
 ## Configuration of `ACME Profile`
 
-First step is to configure the [`ACME Profile`](acme-profile). It will create an instance of the ACME server with specific attributes that will be used to control the certificate management process and ACME clients will need to follow. You can create as many `ACME Profiles` as you need. Each of them can have a different configuration, validation limits, terms of service, etc.
+First step is to configure the [`ACME Profile`](acme-profile.md). It will create an instance of the ACME server with specific attributes that will be used to control the certificate management process and ACME clients will need to follow. You can create as many `ACME Profiles` as you need. Each of them can have a different configuration, validation limits, terms of service, etc.
 
 We do not need to configure default `RA Profile`, we will enable ACME protocol for a specific `RA Profile` with name `czertainly`. Let's do this in `czertainly` `RA Profile` configuration.
 

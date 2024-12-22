@@ -1,3 +1,7 @@
+---
+sidebar_position: 14
+---
+
 # IIS win-acme
 
 ACME protocol can be used for Windows web servers and other services as well. Since `certbot` supports binding only to `Apache` and `Ngnix` servers, we will use another available tool `win-acme` - Windows ACMEv2 client, which enables to manage the certificates on `IIS` Windows web servers, Exchange servers or enables the use of custom scripts to automate certificate issuance and renewal in Windows server environments. 
@@ -16,7 +20,7 @@ Before configuring `win-acme` with CZERTAINLY, you need to have the following:
 - Properly configured DNS records for the hostname you are trying to obtain the certificate for (for HTTP validation, the machine that `win-acme` is running on must have the correct common name configured in DNS)
 - If you intend to use automated detection of certificate common name, the IIS server needs to have at least configured hostname for one binding (port 80 for instance)
 - Access to HTTP or DNS resources on your `IIS` Web server, that will be used to validate ACME challenges
-- ACME protocol enabled according to the [Enable ACME](enable-acme)
+- ACME protocol enabled according to the [Enable ACME](enable-acme.md)
 
 For this guide, we will use `http-01` challenge validation, but the `dns-01` can be also configured and the process is similar.
 
@@ -24,10 +28,10 @@ For this guide, we will use `http-01` challenge validation, but the `dns-01` can
 
 `win-acme` client is designed to be primary used as ACMEv2 client for Let's Encrypt Certification Authority and other ACME compliant servers. Before the first use we need to configure `win-amce` client to connect to CZERTAINLY platform instead of Let's Encrypt CA that is the default server. To achieve this, we need to set up correct endpoints in `win-acme` configuration file *`settings.json`*. Edit the *`settings.json`* file located in the root of `win-acme` directory with your preferred text editor and change the following lines:
 
-| Line | Value |
-| ---- | ----- |
-| **DefaultBaseUri** | `https://[domain]:[port]/api/v1/protocols/acme/raProfile/czertainly/directory` |
-| **DefaultBaseUriTest** | `https://[domain]:[port]/api/v1/protocols/acme/raProfile/czertainly/directory` |
+| Line                     | Value                                                                          |
+|--------------------------|--------------------------------------------------------------------------------|
+| **DefaultBaseUri**       | `https://[domain]:[port]/api/v1/protocols/acme/raProfile/czertainly/directory` |
+| **DefaultBaseUriTest**   | `https://[domain]:[port]/api/v1/protocols/acme/raProfile/czertainly/directory` |
 | **DefaultBaseUriImport** | `https://[domain]:[port]/api/v1/protocols/acme/raProfile/czertainly/directory` |
 
 With these parameters, we are directly connecting to the already configured `RA Profile` with name `czertainly` that has ACME enabled. 
@@ -91,4 +95,3 @@ wacs.exe `
 :::danger[Compatibility issues in older versions of Windows server]
 `win-acme` might have issues running properly on older versions of Windows Server (2012 and older) due to compatibility with TLS 1.2 cipher suite. If you are struggling to establish the connection with the ACME server, try to consult your SSL and TLS settings with administrators of your system.
 :::
-
