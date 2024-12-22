@@ -6,16 +6,18 @@ User can be associated with the X.509 certificate. In such case, the user can be
 
 User can be assigned with multiple roles. In this case, permissions from all assigner roles will be merged to form authorization token for the user.
 
-## System user
+## System users
 
-System user is used only for internal purposes. System users can elevate permissions and perform actions that are otherwise subject to authorization. These users are not exposed to external authentication system, nor they can be edited and changed.
+System users are used only for internal purposes. System users can elevate permissions and perform actions that are otherwise subject to authorization. These users are not exposed to external authentication system, nor they can be edited and changed.
 
 The following system users are defined:
 
-| Name   | Short description                      |
-|--------|----------------------------------------|
-| `acme` | System user for ACME client operations |
-| `scep` | System user for SCEP client operations |
+| Name        | Short description                      |
+|-------------|----------------------------------------|
+| `acme`      | System user for ACME client operations |
+| `scep`      | System user for SCEP client operations |
+| `cmp`       | System user for CMP client operations  |
+| `localhost` | System user for local operations       |
 
 ## Anonymous user
 
