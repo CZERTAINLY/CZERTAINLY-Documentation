@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Check Discovery Status
 
 Check Discovery process status for see whether the `Discovery` is completed. 

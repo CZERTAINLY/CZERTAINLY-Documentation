@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # Get Discovery Results
 
 Once the `Discovery` is completed, we can retrieve the results.
