@@ -1,8 +1,8 @@
 const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 
-const apiVersion = '2.13.1';
-const chartVersion = '2.13.1';
+const apiVersion = '2.14.0';
+const chartVersion = '2.14.0';
 
 import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin.mjs';
 import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin.mjs';
@@ -33,6 +33,18 @@ const config = {
   //     './src/plugins/test'
   // ],
   plugins: [
+    [
+      "docusaurus-plugin-remote-content",
+      {
+        // options here
+        name: "czertainly-helm-docs", // used by CLI, must be path safe
+        noRuntimeDownloads: true, // disable runtime downloads, use only CLI to download (docusaurus download-remote-czertainly-helm-docs)
+        performCleanup: false, // do not remove downloaded files on build
+        sourceBaseUrl: "https://raw.githubusercontent.com/3KeyCompany/CZERTAINLY-Helm-Charts/"+chartVersion+"/charts/czertainly/docs/", // the base url for the markdown (gets prepended to all of the documents when fetching)
+        outDir: "docs/certificate-key/installation-guide/deployment/deployment-helm", // the base directory to output to.
+        documents: ["configurable-parameters.md", "overview.md", "troubleshooting.md", "upgrading.md"], // the file names to download
+      },
+    ],
     [
       '@docusaurus/plugin-client-redirects',
       {
@@ -68,22 +80,22 @@ const config = {
             [
               remarkFindReplacePlugin,
               {
-              // List your find and replace values. Both values must be strings.
-              // This is required.
-              replacements: {
-                API_BASE_URL: 'https://docs.czertainly.com/api/',
-              },
-              // By default, find values are prefixed to reduce the chances of
-              // conflicting with real content. You can change the prefix here.
-              // Set to `false` to disable the prefix.
-              prefix: '%'
+                // List your find and replace values. Both values must be strings.
+                // This is required.
+                replacements: {
+                  API_BASE_URL: 'https://docs.czertainly.com/api/',
+                },
+                // By default, find values are prefixed to reduce the chances of
+                // conflicting with real content. You can change the prefix here.
+                // Set to `false` to disable the prefix.
+                prefix: '%'
               },
             ],
             [
               remarkSimplePlantumlPlugin,
               {
-                  baseUrl: "https://www.plantuml.com/plantuml/svg",
-                  type: "svg"
+                baseUrl: "https://www.plantuml.com/plantuml/svg",
+                type: "svg"
               }
             ],
           ],
@@ -302,281 +314,281 @@ const config = {
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
-      docs: {
-        sidebar: {
-          hideable: true,
+  /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+      ({
+        docs: {
+          sidebar: {
+            hideable: true,
+          },
         },
-      },
-      navbar: {
-        title: 'CZERTAINLY Documentation',
-        logo: {
-          alt: 'CZERTAINLY Logo',
-          src: 'img/czertainly_sign_color.svg',
-          srcDark: 'img/czertainly_sign_white.svg',
+        navbar: {
+          title: 'CZERTAINLY Documentation',
+          logo: {
+            alt: 'CZERTAINLY Logo',
+            src: 'img/czertainly_sign_color.svg',
+            srcDark: 'img/czertainly_sign_white.svg',
+          },
+          items: [
+            // {
+            //   type: 'doc',
+            //   docId: 'intro',
+            //   position: 'left',
+            //   label: 'Tutorial',
+            // },
+            // {to: '/blog', label: 'Blog', position: 'left'},
+            {
+              label: 'Docs',
+              position: 'left',
+              to: '/docs',
+            },
+            {
+              label: 'Core API',
+              position: 'left',
+              items: [
+                {
+                  label: 'ACME',
+                  to: '/api/core-acme/',
+                },
+                {
+                  label: 'Approval',
+                  to: '/api/core-approval/',
+                },
+                {
+                  label: 'Attribute',
+                  to: '/api/core-attribute/',
+                },
+                {
+                  label: 'Auth',
+                  to: '/api/core-auth/',
+                },
+                {
+                  label: 'Authority',
+                  to: '/api/core-authority/',
+                },
+                {
+                  label: 'Certificate',
+                  to: '/api/core-certificate/',
+                },
+                {
+                  label: 'Client Operations',
+                  to: '/api/core-client-operations/',
+                },
+                {
+                  label: 'CMP',
+                  to: '/api/core-cmp/',
+                },
+                {
+                  label: 'Compliance Profile',
+                  to: '/api/core-compliance-profile/',
+                },
+                {
+                  label: 'Connector',
+                  to: '/api/core-connector/',
+                },
+                {
+                  label: 'Credential',
+                  to: '/api/core-credential/',
+                },
+                {
+                  label: 'Cryptographic Operations',
+                  to: '/api/core-cryptographic-operations/',
+                },
+                {
+                  label: 'Discovery',
+                  to: '/api/core-discovery/',
+                },
+                {
+                  label: 'Entity',
+                  to: '/api/core-entity/',
+                },
+                {
+                  label: 'Group',
+                  to: '/api/core-group/',
+                },
+                {
+                  label: 'Key',
+                  to: '/api/core-key/',
+                },
+                {
+                  label: 'Local',
+                  to: '/api/core-local/',
+                },
+                {
+                  label: 'Location',
+                  to: '/api/core-location/',
+                },
+                {
+                  label: 'Notification',
+                  to: '/api/core-notification/',
+                },
+                {
+                  label: 'Other',
+                  to: '/api/core-other/',
+                },
+                {
+                  label: 'RA Profile',
+                  to: '/api/core-ra-profile/',
+                },
+                {
+                  label: 'SCEP',
+                  to: '/api/core-scep/',
+                },
+                {
+                  label: 'Scheduler',
+                  to: '/api/core-scheduler/',
+                },
+                {
+                  label: 'Token',
+                  to: '/api/core-token/',
+                },
+                {
+                  label: 'Token Profile',
+                  to: '/api/core-token-profile/',
+                },
+                {
+                  label: 'Workflows',
+                  to: '/api/core-workflows/',
+                },
+              ],
+            },
+            {
+              label: 'Connector API',
+              position: 'left',
+              items: [
+                {
+                  label: 'Authority Provider Legacy',
+                  to: '/api/connector-authority-provider-legacy/',
+                },
+                {
+                  label: 'Authority Provider v2',
+                  to: '/api/connector-authority-provider-v2/',
+                },
+                {
+                  label: 'Compliance Provider',
+                  to: '/api/connector-compliance-provider/',
+                },
+                {
+                  label: 'Credential Provider',
+                  to: '/api/connector-credential-provider/',
+                },
+                {
+                  label: 'Cryptography Provider',
+                  to: '/api/connector-cryptography-provider/',
+                },
+                {
+                  label: 'Discovery Provider',
+                  to: '/api/connector-discovery-provider/',
+                },
+                {
+                  label: 'Entity Provider',
+                  to: '/api/connector-entity-provider/',
+                },
+                {
+                  label: 'Notification Provider',
+                  to: '/api/connector-notification-provider/',
+                },
+              ],
+            },
+            {
+              label: 'Protocol API',
+              position: 'left',
+              items: [
+                {
+                  label: 'ACME',
+                  to: '/api/protocol-acme/',
+                },
+                {
+                  label: 'CMP',
+                  to: '/api/protocol-cmp/',
+                },
+                {
+                  label: 'SCEP',
+                  to: '/api/protocol-scep/',
+                },
+              ],
+            },
+            // {
+            //   href: 'https://api.czertainly.com',
+            //   label: 'OpenAPI',
+            //   position: 'left',
+            // },
+            {
+              href: 'https://github.com/3KeyCompany/CZERTAINLY/discussions',
+              className: 'pseudo-icon github-icon',
+              position: 'right',
+            },
+            {
+              href: 'https://discord.gg/XYsSZKjSt4',
+              className: 'pseudo-icon discord-icon',
+              position: 'right',
+            },
+            {
+              href: 'https://www.czertainly.com',
+              label: 'About CZERTAINLY',
+              position: 'right',
+            },
+          ],
         },
-        items: [
-          // {
-          //   type: 'doc',
-          //   docId: 'intro',
-          //   position: 'left',
-          //   label: 'Tutorial',
-          // },
-          // {to: '/blog', label: 'Blog', position: 'left'},
-          {
-            label: 'Docs',
-            position: 'left',
-            to: '/docs',
-          },
-          {
-            label: 'Core API',
-            position: 'left',
-            items: [
-              {
-                label: 'ACME',
-                to: '/api/core-acme/',
-              },
-              {
-                label: 'Approval',
-                to: '/api/core-approval/',
-              },
-              {
-                label: 'Attribute',
-                to: '/api/core-attribute/',
-              },
-              {
-                label: 'Auth',
-                to: '/api/core-auth/',
-              },
-              {
-                label: 'Authority',
-                to: '/api/core-authority/',
-              },
-              {
-                label: 'Certificate',
-                to: '/api/core-certificate/',
-              },
-              {
-                label: 'Client Operations',
-                to: '/api/core-client-operations/',
-              },
-              {
-                label: 'CMP',
-                to: '/api/core-cmp/',
-              },
-              {
-                label: 'Compliance Profile',
-                to: '/api/core-compliance-profile/',
-              },
-              {
-                label: 'Connector',
-                to: '/api/core-connector/',
-              },
-              {
-                label: 'Credential',
-                to: '/api/core-credential/',
-              },
-              {
-                label: 'Cryptographic Operations',
-                to: '/api/core-cryptographic-operations/',
-              },
-              {
-                label: 'Discovery',
-                to: '/api/core-discovery/',
-              },
-              {
-                label: 'Entity',
-                to: '/api/core-entity/',
-              },
-              {
-                label: 'Group',
-                to: '/api/core-group/',
-              },
-              {
-                label: 'Key',
-                to: '/api/core-key/',
-              },
-              {
-                label: 'Local',
-                to: '/api/core-local/',
-              },
-              {
-                label: 'Location',
-                to: '/api/core-location/',
-              },
-              {
-                label: 'Notification',
-                to: '/api/core-notification/',
-              },
-              {
-                label: 'Other',
-                to: '/api/core-other/',
-              },
-              {
-                label: 'RA Profile',
-                to: '/api/core-ra-profile/',
-              },
-              {
-                label: 'SCEP',
-                to: '/api/core-scep/',
-              },
-              {
-                label: 'Scheduler',
-                to: '/api/core-scheduler/',
-              },
-              {
-                label: 'Token',
-                to: '/api/core-token/',
-              },
-              {
-                label: 'Token Profile',
-                to: '/api/core-token-profile/',
-              },
-              {
-                label: 'Workflows',
-                to: '/api/core-workflows/',
-              },
-            ],
-          },
-          {
-            label: 'Connector API',
-            position: 'left',
-            items: [
-              {
-                label: 'Authority Provider Legacy',
-                to: '/api/connector-authority-provider-legacy/',
-              },
-              {
-                label: 'Authority Provider v2',
-                to: '/api/connector-authority-provider-v2/',
-              },
-              {
-                label: 'Compliance Provider',
-                to: '/api/connector-compliance-provider/',
-              },
-              {
-                label: 'Credential Provider',
-                to: '/api/connector-credential-provider/',
-              },
-              {
-                label: 'Cryptography Provider',
-                to: '/api/connector-cryptography-provider/',
-              },
-              {
-                label: 'Discovery Provider',
-                to: '/api/connector-discovery-provider/',
-              },
-              {
-                label: 'Entity Provider',
-                to: '/api/connector-entity-provider/',
-              },
-              {
-                label: 'Notification Provider',
-                to: '/api/connector-notification-provider/',
-              },
-            ],
-          },
-          {
-            label: 'Protocol API',
-            position: 'left',
-            items: [
-              {
-                label: 'ACME',
-                to: '/api/protocol-acme/',
-              },
-              {
-                label: 'CMP',
-                to: '/api/protocol-cmp/',
-              },
-              {
-                label: 'SCEP',
-                to: '/api/protocol-scep/',
-              },
-            ],
-          },
-          // {
-          //   href: 'https://api.czertainly.com',
-          //   label: 'OpenAPI',
-          //   position: 'left',
-          // },
-          {
-            href: 'https://github.com/3KeyCompany/CZERTAINLY/discussions',
-            className: 'pseudo-icon github-icon',
-            position: 'right',
-          },
-          {
-            href: 'https://discord.gg/XYsSZKjSt4',
-            className: 'pseudo-icon discord-icon',
-            position: 'right',
-          },
-          {
-            href: 'https://www.czertainly.com',
-            label: 'About CZERTAINLY',
-            position: 'right',
-          },
-        ],
-      },
-      footer: {
-        style: 'dark',
-        // links: [
-        //   {
-        //     title: 'Docs',
-        //     items: [
-        //       {
-        //         label: 'Tutorial',
-        //         to: '/docs/intro',
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     title: 'Community',
-        //     items: [
-        //       {
-        //         label: 'Stack Overflow',
-        //         href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-        //       },
-        //       {
-        //         label: 'Discord',
-        //         href: 'https://discordapp.com/invite/docusaurus',
-        //       },
-        //       {
-        //         label: 'Twitter',
-        //         href: 'https://twitter.com/docusaurus',
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     title: 'More',
-        //     items: [
-        //       {
-        //         label: 'Blog',
-        //         to: '/blog',
-        //       },
-        //       {
-        //         label: 'GitHub',
-        //         href: 'https://github.com/facebook/docusaurus',
-        //       },
-        //     ],
-        //   },
-        // ],
-        copyright: `Copyright © 2018 - ${new Date().getFullYear()} CZERTAINLY s.r.o. Built with Docusaurus`,
-      },
-      prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
-        additionalLanguages: ['powershell','java','hcl','scala','bash'],
-      },
-      algolia: {
-        // The application ID provided by Algolia
-        appId: '9LVBEQBLSX',
-        // Public API key: it is safe to commit it
-        apiKey: 'e5c6094c457339acfcd8114bef0f509a',
-        indexName: 'czertainly',
-        // Optional: see doc section below
-        contextualSearch: true,
-      },
-    }),
+        footer: {
+          style: 'dark',
+          // links: [
+          //   {
+          //     title: 'Docs',
+          //     items: [
+          //       {
+          //         label: 'Tutorial',
+          //         to: '/docs/intro',
+          //       },
+          //     ],
+          //   },
+          //   {
+          //     title: 'Community',
+          //     items: [
+          //       {
+          //         label: 'Stack Overflow',
+          //         href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+          //       },
+          //       {
+          //         label: 'Discord',
+          //         href: 'https://discordapp.com/invite/docusaurus',
+          //       },
+          //       {
+          //         label: 'Twitter',
+          //         href: 'https://twitter.com/docusaurus',
+          //       },
+          //     ],
+          //   },
+          //   {
+          //     title: 'More',
+          //     items: [
+          //       {
+          //         label: 'Blog',
+          //         to: '/blog',
+          //       },
+          //       {
+          //         label: 'GitHub',
+          //         href: 'https://github.com/facebook/docusaurus',
+          //       },
+          //     ],
+          //   },
+          // ],
+          copyright: `Copyright © 2018 - ${new Date().getFullYear()} CZERTAINLY s.r.o. Built with Docusaurus`,
+        },
+        prism: {
+          theme: lightCodeTheme,
+          darkTheme: darkCodeTheme,
+          additionalLanguages: ['powershell','java','hcl','scala','bash'],
+        },
+        algolia: {
+          // The application ID provided by Algolia
+          appId: '9LVBEQBLSX',
+          // Public API key: it is safe to commit it
+          apiKey: 'e5c6094c457339acfcd8114bef0f509a',
+          indexName: 'czertainly',
+          // Optional: see doc section below
+          contextualSearch: true,
+        },
+      }),
 };
 
 export default config;
