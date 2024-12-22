@@ -17,7 +17,7 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/czertainly_sign_color.svg',
-  organizationName: '3KeyCompany', // Usually your GitHub org/user name.
+  organizationName: 'CZERTAINLY', // Usually your GitHub org/user name.
   projectName: 'CZERTAINLY-Documentation', // Usually your repo name.
   trailingSlash: false,
 
@@ -40,7 +40,7 @@ const config = {
         name: "czertainly-helm-docs", // used by CLI, must be path safe
         noRuntimeDownloads: true, // disable runtime downloads, use only CLI to download (docusaurus download-remote-czertainly-helm-docs)
         performCleanup: false, // do not remove downloaded files on build
-        sourceBaseUrl: "https://raw.githubusercontent.com/3KeyCompany/CZERTAINLY-Helm-Charts/"+chartVersion+"/charts/czertainly/docs/", // the base url for the markdown (gets prepended to all of the documents when fetching)
+        sourceBaseUrl: "https://raw.githubusercontent.com/CZERTAINLY/CZERTAINLY-Helm-Charts/"+chartVersion+"/charts/czertainly/docs/", // the base url for the markdown (gets prepended to all of the documents when fetching)
         outDir: "docs/certificate-key/installation-guide/deployment/deployment-helm", // the base directory to output to.
         documents: ["configurable-parameters.md", "overview.md", "troubleshooting.md", "upgrading.md"], // the file names to download
       },
@@ -73,9 +73,11 @@ const config = {
       '@docusaurus/preset-classic',
       ({
         docs: {
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: ({versionDocsDirPath, docPath}) =>
-              `https://github.com/3KeyCompany/CZERTAINLY-Documentation/edit/documentation/${versionDocsDirPath}/${docPath}`,
+              `https://github.com/CZERTAINLY/CZERTAINLY-Documentation/edit/documentation/${versionDocsDirPath}/${docPath}`,
           remarkPlugins: [
             [
               remarkFindReplacePlugin,
@@ -513,7 +515,7 @@ const config = {
             //   position: 'left',
             // },
             {
-              href: 'https://github.com/3KeyCompany/CZERTAINLY/discussions',
+              href: 'https://github.com/CZERTAINLY/CZERTAINLY/discussions',
               className: 'pseudo-icon github-icon',
               position: 'right',
             },
