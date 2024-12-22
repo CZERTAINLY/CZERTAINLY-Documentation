@@ -13,7 +13,7 @@ Create user in the CZERTAINLY realm following steps described in the [Creating u
 You can use the attributes mapping to define roles for the user. For that purpose, set the user attributes according to [Configuring user attributes](https://www.keycloak.org/docs/latest/server_admin/#proc-configuring-user-attributes_server_administration_guide):
 - groups: **superadmin**
 
-This will map the `groups` attribute to the `roles` attribute in the JSON ID of the user and the resulting JSON ID will look like this:
+This will map the `groups` attribute to the `roles` attribute in the token of the user and the resulting token will contain the following roles:
 ```json
 {
   "email_verified": true,
