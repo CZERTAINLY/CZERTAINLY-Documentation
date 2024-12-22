@@ -1,3 +1,7 @@
+---
+sidebar_position: 21
+---
+
 # Penetration Testing
 
 Penetration testing is focused on testing the security of the platform. The penetration testing is executed by the external and independent individual or company that is specialized in this area. The penetration testing is executed on the production-like environment.
@@ -34,7 +38,7 @@ The CVSS provides an open framework for communicating the characteristics and im
 Ranking should be calculated in accordance with the CVSS framework, and mapped to one of the following severity categories:
 
 | Severity | CVSS Score |
-| -------- | ---------- |
+|----------|------------|
 | Critical | 9.0 - 10.0 |
 | High     | 7.0 - 8.9  |
 | Medium   | 4.0 - 6.9  |

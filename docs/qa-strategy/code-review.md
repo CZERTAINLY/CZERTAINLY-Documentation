@@ -1,3 +1,7 @@
+---
+sidebar_position: 11
+---
+
 # Code Review
 
 Code review is a process of reviewing the code changes by the other developers before the code is merged in the code base. Code review helps to ensure that coding best practices and conventions are being followed and that changes in the source code are compliant.

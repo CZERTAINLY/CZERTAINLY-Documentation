@@ -1,3 +1,7 @@
+---
+sidebar_position: 19
+---
+
 # Flow Testing
 
 Flow testing is focused on testing end-to-end functionality of the platform provided by the core components. It does cover scenarios that are not covered by the user interfaces like API scenarios, or scenarios that are executed through the UI (web-based or CLI).
