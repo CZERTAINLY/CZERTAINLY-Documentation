@@ -1,17 +1,21 @@
+---
+sidebar_position: 8
+---
+
 # Access control
 
-Authorization is an integral part of CZERTAINLY platform. Each authenticated user and permissions are represented by internal authorization token which is evaluated using [Open Policy Agent](https://www.openpolicyagent.org/) (OPA) and pre-defined policies. For more information, refer to [Access Control](/docs/certificate-key/concept-design/architecture/access-control/overview).
+Authorization is an integral part of CZERTAINLY platform. Each authenticated user and permissions are represented by internal authorization token which is evaluated using [Open Policy Agent](https://www.openpolicyagent.org/) (OPA) and pre-defined policies. For more information, refer to [Access Control](../certificate-key/concept-design/architecture/access-control/overview).
 
-For more information about the definition of authorization policies, refer to [CZERTAINLY Auth OPA Policies](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies) repository. Individual permissions are set for roles existing in `Auth` service which then can be assigned to users.
+For more information about the definition of authorization policies, refer to [CZERTAINLY Auth OPA Policies](https://github.com/CZERTAINLY/CZERTAINLY-Auth-OPA-Policies) repository. Individual permissions are set for roles existing in `Auth` service which then can be assigned to users.
 
 ## Resources and actions
 
 `Core` service works with different types of objects (entities) that are called **resources**. Each resource then has defined set of **actions** that are available for that particular resource. Available resources and actions are defined as `enum` type to easily refer to.
 
-| Access Control Enum | Reference                                                                                                                                          |
-|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Resources**       | [Resource enum](https://github.com/3KeyCompany/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/model/auth/Resource.java)             |
-| **Actions**         | [ResourceAction enum](https://github.com/3KeyCompany/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/model/auth/ResourceAction.java) |
+| Access Control Enum | Reference                                                                                                                                         |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Resources**       | [Resource enum](https://github.com/CZERTAINLY/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/model/auth/Resource.java)             |
+| **Actions**         | [ResourceAction enum](https://github.com/CZERTAINLY/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/model/auth/ResourceAction.java) |
 
 The list of available actions for particular resources is dynamically constructed by the `Core` service based on the `@ExternalAuthorization` annotation. Continue reading to get more details.
 
@@ -20,8 +24,8 @@ The list of available actions for particular resources is dynamically constructe
 The permissions object represents set of actions performed on resources that need to be evaluated. It conforms with the JSON data structure and is constructed by the `Auth` service and evaluated by the `OPA` service.
 
 Individual permissions can be evaluated on two levels (represented by different OPA policies), generally if action is allowed / denied on:
-- resource level or ([Method policy](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies/blob/develop/policies/method_policy.rego))
-- on object level for specific object UUID. ([Objects policy](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies/blob/develop/policies/objects_policy.rego))
+- resource level or ([Method policy](https://github.com/CZERTAINLY/CZERTAINLY-Auth-OPA-Policies/blob/master/policies/method_policy.rego))
+- on object level for specific object UUID. ([Objects policy](https://github.com/CZERTAINLY/CZERTAINLY-Auth-OPA-Policies/blob/master/policies/objects_policy.rego))
 
 Example of permissions objects for some resource can be seen on following excerpt from authorization token:
 
@@ -61,12 +65,12 @@ In this example there are permissions defined for two resources:
   For `certificates` resource all actions are allowed and for `raProfiles` detail and list action on any RA Profile except RA Profile named *NG-RA-Profile1* where detail action is denied.
 
 :::info[OPA evaluation input]
-You can see [`input.json`](https://github.com/3KeyCompany/CZERTAINLY-Auth-OPA-Policies/blob/master/samples/input.json) for a complete input sample for OPA evaluation.
+You can see [`input.json`](https://github.com/CZERTAINLY/CZERTAINLY-Auth-OPA-Policies/blob/master/samples/input.json) for a complete input sample for OPA evaluation.
 :::
 
 ## `@ExternalAuthorization` annotation
 
-Authorization process is triggered by accessing methods annotated with [`@ExternalAuthorization` annotation](https://github.com/3KeyCompany/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/security/authz/ExternalAuthorization.java). Typically, public methods of service implementations are annotated with this annotation, to require authorization if service is called from anywhere across `Core` service.
+Authorization process is triggered by accessing methods annotated with [`@ExternalAuthorization` annotation](https://github.com/CZERTAINLY/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/security/authz/ExternalAuthorization.java). Typically, public methods of service implementations are annotated with this annotation, to require authorization if service is called from anywhere across `Core` service.
 
 Authorization mechanism itself is driven by [Spring framework](https://docs.spring.io/spring-security/reference/servlet/authorization/architecture.html) security layer and custom implementations of `AccessDecisionVoter`.
 
@@ -154,7 +158,7 @@ This way, `Core` and `Auth` services are in sync and permissions can refer to al
 
 ## `@AuthEndpoint` annotation
 
-In addition, you can mark resources to allow adding permissions on object access level. It can be achieved by annotating listing endpoint in corresponding **controller** that can be used to list objects. The [annotation `@AuthEndpoint`](https://github.com/3KeyCompany/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/auth/AuthEndpoint.java) is used to set object listing endpoint path for a resource which can be later used in permissions editor to dynamically retrieve available objects of that resource.
+In addition, you can mark resources to allow adding permissions on object access level. It can be achieved by annotating listing endpoint in corresponding **controller** that can be used to list objects. The [annotation `@AuthEndpoint`](https://github.com/CZERTAINLY/CZERTAINLY-Core/blob/master/src/main/java/com/czertainly/core/auth/AuthEndpoint.java) is used to set object listing endpoint path for a resource which can be later used in permissions editor to dynamically retrieve available objects of that resource.
 
 Example of using `@AuthEndpoint` annotation to mark RA profile resource to have object access level permissions:
 

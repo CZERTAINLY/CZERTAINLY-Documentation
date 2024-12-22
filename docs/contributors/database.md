@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Database control
 
 The platform is using [Flyway](https://flywaydb.org/) as a version control for the database and all related migration scripts.
@@ -42,7 +46,7 @@ SQL migrations must comply with the following naming pattern:
 The schema of the database is managed by the configuration of the Flyway and JPA.
 You should not include the database schema in the migration scripts.
 
-Database schema can be configured by the `DB_SCHEMA` environment variable. Default value is `core`. See the [Core properties](https://github.com/3KeyCompany/CZERTAINLY-Core/blob/develop/src/main/resources/application.properties).
+Database schema can be configured by the `DB_SCHEMA` environment variable. Default value is `core`. See the [Core properties](https://github.com/CZERTAINLY/CZERTAINLY-Core/blob/master/src/main/resources/application.properties).
 
 ## Complex migrations using Java
 

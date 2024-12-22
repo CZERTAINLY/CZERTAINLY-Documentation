@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Properties
 
 Properties defines the behaviour of the `Attribute`.
@@ -36,12 +40,12 @@ Not every property is mandatory and applicable for every `Attribute` type. The f
 - <span class="badge badge--secondary"></span> - the property is not applicable
 
 :::info[Attribute types]
-For more details about `Attribute` types, see [Attributes](attributes).
+For more details about `Attribute` types, see [Attributes](attributes.mdx).
 :::
 
 ## Properties model
 
-Th following diagram represents the Properties model inherited from the `AbstractBaseAttribute`. Details can be found in the [CZERTAINLY Interfaces repository](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/tree/master/src/main/java/com/czertainly/api/model/common/attribute/v2/properties).
+Th following diagram represents the Properties model inherited from the `AbstractBaseAttribute`. Details can be found in the [CZERTAINLY Interfaces repository](https://github.com/CZERTAINLY/CZERTAINLY-Interfaces/tree/master/src/main/java/com/czertainly/api/model/common/attribute/v2/properties).
 
 ```plantuml
 @startuml

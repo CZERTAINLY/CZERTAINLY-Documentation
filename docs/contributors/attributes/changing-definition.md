@@ -1,3 +1,7 @@
+---
+sidebar_position: 15
+---
+
 # Attribute Definition Management
 
 Attributes play a crucial role in exchanging parameters and values for various operations. Maintaining consistency in their definition and content is essential, particularly for `Data` and `Metadata` attributes. These definitions are specified within connectors and are not managed by `Core`.
@@ -50,4 +54,4 @@ When specifying an attribute definition, it is important to generate a unique co
 
 ### Can I delete unused Data or Metadata attribute definition from `Core`?
 
-Currently, there is no way how to manually delete stored definitions except custom attributes. Plan for the future is to include automatic cleanup of unused definitions without linked content for objects automatically.  
+Currently, there is no way how to manually delete stored definitions except custom attributes. Plan for the future is to include automatic cleanup of unused definitions without linked content for objects automatically.

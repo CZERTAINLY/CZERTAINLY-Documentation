@@ -1,3 +1,7 @@
+---
+sidebar_position: 11
+---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -7,26 +11,26 @@ Attribute, specifically its type is used to control different behaviour of the c
 
 ## Attribute properties
 
-The following is a list of properties that can be used to define the behaviour of the `Attribute` and extends properties of the [`BaseAttribute`](overview#baseattribute):
+The following is a list of properties that can be used to define the behaviour of the `Attribute` and extends properties of the [`BaseAttribute`](overview.md#baseattribute):
 
-| Property            | Type                                                      | Required                                      |
-|---------------------|-----------------------------------------------------------|-----------------------------------------------|
-| `contentType`       | [`AttributeContentType`](content#supported-content-types) | <span class="badge badge--success">Yes</span> |
-| `constraints`       | list of [`BaseAttributeConstraint`](constraints)          | <span class="badge badge--danger">No</span>   |
-| `properties`        | [`AttributeProperties`](properties)                       | <span class="badge badge--success">Yes</span> |
-| `attributeCallback` | [`AttributeCallback`](callbacks)                          | <span class="badge badge--danger">No</span>   |
+| Property            | Type                                                         | Required                                      |
+|---------------------|--------------------------------------------------------------|-----------------------------------------------|
+| `contentType`       | [`AttributeContentType`](content.md#supported-content-types) | <span class="badge badge--success">Yes</span> |
+| `constraints`       | list of [`BaseAttributeConstraint`](constraints.mdx)         | <span class="badge badge--danger">No</span>   |
+| `properties`        | [`AttributeProperties`](properties.md)                       | <span class="badge badge--success">Yes</span> |
+| `attributeCallback` | [`AttributeCallback`](callbacks.mdx)                         | <span class="badge badge--danger">No</span>   |
 
 ## Attribute Types
 
-Based on the usage and specific behaviour you want to provide, `Attribute` can be one of the following defined types in [AttributeType](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/AttributeType.java):
+Based on the usage and specific behaviour you want to provide, `Attribute` can be one of the following defined types in [AttributeType](https://github.com/CZERTAINLY/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/AttributeType.java):
 
-| `AttributeType` | Class                                                                                                                                                                      | Short description                                                                                                                                                                     |
-|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `DATA`          | [`DataAttribute`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/DataAttribute.java)          | Full fledged data carriers used by in the platform for information exchange                                                                                                           |
-| `INFO`          | [`InfoAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/InfoAttribute.java)         | Information carriers whose primary responsibility is to provide additional helper information. The content of this attribute is not sent back to the platform, it is just informative |
-| `GROUP`         | [`GroupAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/GroupAttribute.java)       | Advanced type of attribute that can group multiple attributes. Main use is when the attributes are dependent on the content selected from other attributes                            |
-| `META`          | [`MetadataAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/MetadataAttribute.java) | Metadata representation that can be exchanged between the platform and connectors                                                                                                     |
-| `CUSTOM`        | [`CustomAttributes`](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/CustomAttribute.java)     | Used defined attributes for storing additional information about the objects supported in the platform                                                                                |
+| `AttributeType` | Class                                                                                                                                                                     | Short description                                                                                                                                                                     |
+|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `DATA`          | [`DataAttribute`](https://github.com/CZERTAINLY/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/DataAttribute.java)          | Full fledged data carriers used by in the platform for information exchange                                                                                                           |
+| `INFO`          | [`InfoAttributes`](https://github.com/CZERTAINLY/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/InfoAttribute.java)         | Information carriers whose primary responsibility is to provide additional helper information. The content of this attribute is not sent back to the platform, it is just informative |
+| `GROUP`         | [`GroupAttributes`](https://github.com/CZERTAINLY/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/GroupAttribute.java)       | Advanced type of attribute that can group multiple attributes. Main use is when the attributes are dependent on the content selected from other attributes                            |
+| `META`          | [`MetadataAttributes`](https://github.com/CZERTAINLY/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/MetadataAttribute.java) | Metadata representation that can be exchanged between the platform and connectors                                                                                                     |
+| `CUSTOM`        | [`CustomAttributes`](https://github.com/CZERTAINLY/CZERTAINLY-Interfaces/blob/master/src/main/java/com/czertainly/api/model/common/attribute/v2/CustomAttribute.java)     | Used defined attributes for storing additional information about the objects supported in the platform                                                                                |
 
 ## Attribute properties and types
 
@@ -245,7 +249,7 @@ The following samples show how the `Attribute` can be defined in the platform fo
 
 ## `Attribute` model
 
-Th following diagram represents the `Attribute` model inherited from the `AbstractBaseAttribute`. Details can be found in the [CZERTAINLY Interfaces repository](https://github.com/3KeyCompany/CZERTAINLY-Interfaces/tree/develop/src/main/java/com/czertainly/api/model/common/attribute/v2).
+Th following diagram represents the `Attribute` model inherited from the `AbstractBaseAttribute`. Details can be found in the [CZERTAINLY Interfaces repository](https://github.com/CZERTAINLY/CZERTAINLY-Interfaces/tree/develop/src/main/java/com/czertainly/api/model/common/attribute/v2).
 
 ```plantuml
 @startuml
