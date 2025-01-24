@@ -37,4 +37,8 @@ The following steps should be done to integrate Keycloak with CZERTAINLY:
 
 For the first experiments with Keycloak, you would probably just [create local users](create-user-login.md).
 
-For production, you can configure Identity Providers together with appropriate attribute mapping to allow users to log in to CZERTAINLY with their existing accounts from your organizational IdP. Keycloak supports multiple identity providers. For more information, refer to [Identity Providers](https://www.keycloak.org/docs/latest/server_admin/#_identity_broker) in the Keycloak documentation. You can also use our guide to integrate with [MS Active Directory Federation Services](../adfs/overview.mdx).
+For production, you can configure Identity Providers together with appropriate attribute mapping to allow users to log in to CZERTAINLY with their existing accounts from your organizational IdP. Keycloak supports multiple identity providers. For more information, refer to [Identity Providers](https://www.keycloak.org/docs/latest/server_admin/#_identity_broker) in the Keycloak documentation.
+
+:::tip[MS Active Directory Federation Services]
+You can also use [MS Active Directory Federation Services](../adfs/overview.mdx) integration guide for more information on how to federate AD users with Keycloak.
+:::
