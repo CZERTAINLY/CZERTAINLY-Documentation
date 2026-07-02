@@ -38,4 +38,4 @@ The following `Connectors` are officially available:
 
 | Connector Name                   | Interface                                                                                                    |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------|
-| Timestamping Format Provider      | [Timestamping Format Provider](./provider-interfaces/timestamping-format-provider.md) (Signature Formatter Connector) |
+| Timestamping Format Provider      | [Timestamping Format Provider](./provider-interfaces/timestamping-format-provider.md) (Signature Formatting Connector) |
