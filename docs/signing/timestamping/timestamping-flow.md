@@ -29,7 +29,7 @@ participant "TSP & Signing\nProfiles" as Profiles
 participant "Time Quality\nRegister" as TQ
 participant "Certificate\nValidator" as Cert
 participant "Serial Number\nGenerator" as Serial
-participant "Signature Formatter\nConnector" as Fmt
+participant "Signature Formatting\nConnector" as Fmt
 participant "Cryptographic\nToken" as Token
 participant "Signing Record" as Rec
 
@@ -125,7 +125,7 @@ ILM sends those bytes to the configured cryptographic token and asks it to sign 
 
 ### 10. Assembling the final token
 
-In the second round-trip to the formatter connector, ILM sends back the signed bytes together with the signature, and the connector assembles the complete, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature against the signing certificate before returning it — if that check fails, the request is rejected even though signing itself succeeded.
+In the second round-trip to the formatting connector, ILM sends back the signed bytes together with the signature, and the connector assembles the complete, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature against the signing certificate before returning it — if that check fails, the request is rejected even though signing itself succeeded.
 
 ### 11. Signing record
 
@@ -135,7 +135,7 @@ Depending on the profile's configuration, ILM writes a record of what it just si
 - **Deferred, durable** — staged first, then written asynchronously; nothing is lost if ILM restarts.
 - **Best effort** — queued in memory; can be dropped if the queue is overwhelmed.
 
-See [Signing records](./signing-records.md) for the record's contents, how to retrieve them, and how long they're kept.
+See [Signing records](../signing-records.md) for the record's contents, how to retrieve them, and how long they're kept.
 
 ### 12. Response
 
@@ -159,7 +159,7 @@ As in step 2, an authorization failure and a "profile doesn't exist" failure loo
 | Certificate validation | Certificate not eligible for time-stamping | Rejection: system failure |
 | Serial number | Clock jumped backwards more than 100 ms | Rejection: time not available |
 | Serial number | Ran out of numbers within one clock tick | Rejection: system failure |
-| Formatter connector | Communication error, either round-trip | Rejection: system failure |
+| Formatting connector | Communication error, either round-trip | Rejection: system failure |
 | Token signature verification | Verification failed | Rejection: system failure |
 | Signing record | Write failed | Not surfaced — the token was already granted |
 
@@ -177,7 +177,7 @@ A time quality rejection isn't limited to "the monitor reported a problem" — a
 Pages that expand on topics touched here:
 
 - [Authentication & authorization](./authentication-authorization.md) — credential types, cache, secret mapping
-- [Signing records](./signing-records.md) — schema, retrieval, retention
+- [Signing records](../signing-records.md) — schema, retrieval, retention
 - [Time quality monitor](./time-quality-monitor.md) — how clock accuracy is measured and reported
 - [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) — connector operation and the two-round-trip calling convention
 - [Limitations](./limitations.md) — serial number throughput and overflow

@@ -107,6 +107,6 @@ Once all references and records are cleared, the profile can be deleted.
 
 - [TSP Profile](./timestamping/tsp-profile.md) — authentication methods and the default Signing Profile
 - [Time Quality Configuration](./timestamping/time-quality-configuration.md) — time-source evaluation parameters
-- [Signing Records](./timestamping/signing-records.md) — record structure, retrieval, and retention
+- [Signing Records](./signing-records.md) — record structure, retrieval, and retention
 - [Timestamping Request Flow](./timestamping/timestamping-flow.md) — how a profile is resolved and used per request
 - [Limitations](./timestamping/limitations.md) — dependent-resource deletion behaviour

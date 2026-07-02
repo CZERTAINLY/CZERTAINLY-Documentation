@@ -8,7 +8,7 @@ Timestamping is configured through a [`Signing Profile`](/docs/signing/signing-p
 
 | Field | Required | Description |
 |---|---|---|
-| **Signature Formatter Connector** | Yes | The connector responsible for formatting the signature into the RFC 3161 timestamp token structure. See [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider). |
+| **Signature Formatting Connector** | Yes | The connector responsible for formatting the signature into the RFC 3161 timestamp token structure. See [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider). |
 | **Qualified Timestamp** | Yes | When enabled, the issued token carries the qualified electronic time-stamp statement as required by eIDAS and ETSI EN 319 422. Defaults to `false`. |
 | **Validate Signature** | Yes | When enabled, the produced timestamp signature is validated before the token is returned to the caller. Defaults to `false`. |
 | **Time Quality Configuration** | Required when Qualified Timestamp is enabled | Defines the required clock accuracy and related time quality settings. See [Time Quality Configuration](./time-quality-configuration.md). |

@@ -77,7 +77,7 @@ covers it in depth.
 | Qualified time-stamp token profile | ETSI EN 319 422; eIDAS Art. 42 | `qcStatements` extension with `esi4-qtstStatement-1` injected for qualified requests, authoritative over client extensions | [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) |
 | TSA signing certificate eligible for time-stamping | RFC 5280 (`id-kp-timeStamping` EKU); ETSI EN 319 412 | Signing-certificate eligibility check (EKU, key usage, validity) for the configured qualification level | [Request flow](./timestamping-flow.md) §6 |
 | Permitted cryptographic algorithms | ETSI TS 119 312 | `allowedDigestAlgorithms` request validation; configured signature algorithm | [Request flow](./timestamping-flow.md) §3, §9 |
-| Event logging and record retention | ETSI EN 319 421 (records of operation) | Signing records with configurable persistence and retention | [Signing Records](./signing-records.md) |
+| Event logging and record retention | ETSI EN 319 421 (records of operation) | Signing records with configurable persistence and retention | [Signing Records](../signing-records.md) |
 
 ---
 
