@@ -1,16 +1,16 @@
 ---
-sidebar_position: 4
+sidebar_position: 9
 ---
 
-# Timestamping Request Flow
+# Timestamping request flow
 
-This page documents the end-to-end path of a managed static-key RFC 3161 timestamp request through ILM Core. Only the **TIMESTAMPING × MANAGED (static key)** combination is available today (see [Timestamping Overview](./overview.md)).
+A timestamp request is a short conversation: a client asks ILM to certify "this hash existed at this time," and ILM either hands back a signed proof or explains why it can't. This page walks through that conversation stage by stage, so you can see what ILM checks, what it produces, and where a request can be rejected. It covers the **Timestamping × Managed (static key)** combination — currently the only one available (see [Timestamping overview](./overview.md)).
 
 ---
 
 ## Sequence diagram
 
-The diagram below shows every stage a request passes through, from the moment it arrives at the TSP endpoint to the moment the RFC 3161 response is returned to the caller. Authentication is folded into the sequence because it happens before any business logic runs.
+The diagram shows every stage a request passes through, from the moment it reaches the TSP endpoint to the moment the response goes back to the caller. Authentication happens first, before any of the timestamping logic runs.
 
 ```plantuml
 @startuml
@@ -64,125 +64,120 @@ Core --> Client: TimeStampResp\n(granted / rejection)
 
 ### 1. Authentication
 
-Every `/v1/protocols/tsp/**` request is authenticated before any business logic runs:
+Before ILM looks at what's being asked, it checks who's asking:
 
-- The TSP Profile is resolved from the URL path. If no profile matches, the request is rejected with HTTP 401 before any credential is examined.
-- Authentication methods are tried in fixed priority order — client certificate (mTLS), then Bearer token, then Basic password. The first method that matches the request claims it; if that method is not listed in the TSP Profile's `allowedAuthenticationMethods`, the request is rejected with HTTP 401. Selection does not fall through to a second method.
-- On rejection, a `WWW-Authenticate` response header lists the HTTP-level methods the profile accepts.
+- ILM identifies the `TSP Profile` from the request's URL. If the URL doesn't match any profile, the request is rejected immediately — no credentials are even examined.
+- ILM then tries the caller's credentials in a fixed order: client certificate (mTLS) first, then bearer token, then username/password. Whichever method the request actually presents is the one that's checked — ILM doesn't try the others as a fallback. If that method isn't one of the profile's `allowedAuthenticationMethods`, the request is rejected.
+- On rejection, the response tells the caller which authentication methods the profile does accept.
 
-Repeat Basic-password requests are served from the credential verification cache, so the fingerprint comparison is not redone on every call. The three credential types, the credential cache, and the secret-mapping model are covered in [Authentication and Authorization](./authentication-authorization.md).
+Repeated password logins are checked against a short-lived cache, so ILM doesn't recompute the credential check on every single call. Credential types, the cache, and how secrets are mapped to callers are covered in [Authentication and authorization](./authentication-authorization.md).
 
 ### 2. Request parsing and profile lookup
 
-The raw request body is decoded from its ASN.1 `TimeStampReq` form into its fields: hash algorithm, hashed message, optional nonce, optional policy OID, the include-signer-certificate flag, and any request extensions. Core then:
+ILM decodes the request into its individual fields — the hash algorithm, the hash itself, an optional nonce, an optional policy identifier, whether the caller wants the signing certificate included, and any extra request extensions. It then:
 
-1. Looks up the TSP Profile by name.
-2. Authorizes the request — an OPA policy check verifies the authenticated principal holds the `timestamp` action on the TSP Profile. A denial is rendered as the same generic `badRequest` rejection as a non-existent profile, so callers cannot distinguish missing from forbidden (enumeration defence).
-3. Fetches the linked Signing Profile and verifies it is enabled and has the TSP protocol active.
+1. Looks up the `TSP Profile` by name.
+2. Checks that the caller is allowed to request timestamps from this profile. If they aren't, ILM returns the exact same rejection it would return for a profile that doesn't exist at all — this is deliberate, so a caller can't use error messages to discover which profiles exist.
+3. Loads the linked `Signing Profile` and confirms it's enabled and configured for timestamping.
 
 ### 3. Request validation
 
-The request is validated against the rules declared on the signing profile's workflow:
+ILM checks the request against rules set on the `Signing Profile`:
 
-- **Hash algorithm** — if `allowedDigestAlgorithms` is set, the request's hash algorithm must be in the list; otherwise the request is rejected with `badAlg`. Restricting the permitted digest algorithms is how a deployment enforces an approved cryptographic suite (ETSI TS 119 312).
-- **Policy OID** — if `allowedPolicyIds` is set and the request specifies a policy OID, it must match one of the allowed OIDs; otherwise the request is rejected with `unacceptedPolicy`.
+- **Hash algorithm** — if the profile restricts which hash algorithms it accepts, the request's algorithm must be on that list, or it's rejected. This is how you enforce an approved set of cryptographic algorithms across your deployment.
+- **Policy identifier** — if the profile restricts allowed policy identifiers and the request specifies one, it must be on that list, or it's rejected.
 
 ### 4. Profile resolution
 
-The profile's stored references are dereferenced at request time (the resolved form is never cached):
-
-- **Signing certificate and chain**
-- **Key items**
-- **Time Quality Configuration** — if none is configured, a local-clock configuration is used, which always reports `OK`.
-- **Signature Formatter Connector**
+ILM loads everything the profile points to — the signing certificate and its chain, the key, and the connector that will format the token. None of this is cached; it's fetched fresh on every request. If no time quality configuration is set on the profile, ILM falls back to using its own system clock, which is always treated as accurate.
 
 ### 5. Time quality check
 
-The timestamping engine's first step is to read the current time-quality status for the profile's Time Quality Configuration:
+Timestamps are only meaningful if the clock that produced them can be trusted, so this is the first substantive check ILM performs. It asks: is the clock backing this profile currently accurate?
 
-- With no explicit configuration (local clock), the status is always `OK`.
-- With an explicit configuration, the status is `OK` only when a result is present for the configuration, that result is not stale (age ≤ `accuracy`), the monitor-reported status is `OK`, and the leap-second and drift guards are not triggered.
+- If the profile has no time quality configuration, the answer is always yes (ILM's own clock is used, unverified).
+- If it does have one, the answer is yes only when all of the following hold: a recent measurement exists, that measurement isn't stale, the measurement itself reports the clock as accurate, and neither a leap-second nor a drift guard has been tripped.
 
-If the status is anything other than `OK`, the engine returns a `timeNotAvailable` rejection and no token is assembled. The monitor that populates this status is documented on the [Time Quality Monitor](./time-quality-monitor.md) page.
+If the answer is anything but yes, ILM rejects the request outright — no token is produced. The component that continuously measures clock accuracy is described in [Time quality monitor](./time-quality-monitor.md).
 
 ### 6. Signing certificate validation
 
-The signing certificate is checked against the timestamping eligibility rules for the configured qualification level (qualified or non-qualified):
+ILM confirms the certificate it's about to sign with is actually allowed to issue timestamps:
 
-- **Extended key usage** — the certificate must assert the `id-kp-timeStamping` extended key usage (OID `1.3.6.1.5.5.7.3.8`, RFC 5280 §4.2.1.12), which is the EKU that marks a certificate as valid for signing time-stamp tokens.
-- **Key usage and validity** — checked alongside the EKU; the certificate (and chain) profile follows ETSI EN 319 412.
+- The certificate must be explicitly marked for time-stamping use (a specific certificate extension that certificate authorities set when issuing a timestamping certificate).
+- Its usage restrictions and validity period must also check out.
 
-A failure returns a `systemFailure` rejection.
+If either check fails, the request is rejected.
 
 ### 7. Serial number generation
 
-A unique serial number is generated for the token. Serial-number uniqueness is a requirement of both RFC 3161 (§2.4.2) and ETSI EN 319 421 for TSPs issuing time-stamps. The generator is coordination-free and has a throughput ceiling of 25,600 tokens per second per instance; it protects against sequence overflow and backward clock jumps, rejecting with `timeNotAvailable` if the clock regresses by more than 100 ms. Serial numbers stay within the 160-bit field limit mandated by RFC 5280 and referenced by RFC 3161. The scheme's operational limits are covered on the [Limitations](./limitations.md) page.
+Every token gets a serial number that's guaranteed unique — this is required by the timestamping standard and by EU trust-service rules. The generator can issue up to 25,600 serial numbers per second on a single instance without any coordination overhead, and it protects itself against two failure modes: running out of numbers in a single clock tick, and the system clock jumping backwards. If the clock regresses by more than 100 milliseconds, the request is rejected rather than risk issuing an inconsistent timestamp. Operational limits of this scheme are detailed on the [Limitations](./limitations.md) page.
 
-The generation time (`genTime`) is captured immediately after the serial number is issued, so both reflect the same clock sample.
+Immediately after the serial number is issued, ILM captures the timestamp value itself (`genTime`), so both are sampled from the same instant.
 
-### 8. Formatter phase 1 — build the data to be signed
+### 8. Building the data to be signed
 
-Token assembly is a two-phase exchange with the Signature Formatter Connector. In phase 1, Core sends the request fields (hash, nonce, policy OID, extensions, serial number, `genTime`, accuracy, certificate chain, signature algorithm, formatter attributes) to the connector. The connector encodes the CMS (RFC 5652) `SignedAttributes` computed over the `TSTInfo` (RFC 3161) — including the `SigningCertificateV2` attribute (carrying `ESSCertIDv2`, RFC 5816) that binds the TSA certificate to the token — and returns the DER bytes, the exact data to be signed. The connector and its two-phase calling convention are described on the [Timestamp Formatter Connector](./timestamp-formatter-connector.md) page.
+Assembling the final token takes two round-trips to the Timestamping Format Provider — a pluggable component that knows how to build the token's internal structure. In this first round-trip, ILM sends the connector everything it has gathered so far: the hash, nonce, policy identifier, extensions, serial number, timestamp, accuracy, certificate chain, and signature algorithm. The connector assembles the exact byte sequence that needs to be signed — including the piece that cryptographically ties the token to the specific signing certificate — and hands those bytes back. See [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) for how this two-step exchange works.
 
 ### 9. Signing
 
-Core signs the returned bytes with the profile's managed key through the configured cryptographic token. The managed key never leaves the token; Core receives only the raw signature bytes. The signature algorithm is determined before phase 1 so the same algorithm is supplied to both formatter calls.
+ILM sends those bytes to the configured cryptographic token and asks it to sign them with the profile's managed key. The key itself never leaves the token — ILM only ever receives the resulting signature.
 
-### 10. Formatter phase 2 — assemble the token
+### 10. Assembling the final token
 
-In phase 2, Core sends the data-to-be-signed and the raw signature back to the connector, which injects the signature into the CMS `SignedData` structure (RFC 5652) and returns the fully assembled RFC 3161 `TimeStampToken`. If `validateTokenSignature` is set on the profile, Core verifies the token signature against the signing certificate before proceeding; a verification failure returns a `systemFailure` rejection.
+In the second round-trip to the formatter connector, ILM sends back the signed bytes together with the signature, and the connector assembles the complete, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature against the signing certificate before returning it — if that check fails, the request is rejected even though signing itself succeeded.
 
 ### 11. Signing record
 
-Depending on the profile's record policy, a signing record is written. The record write never affects the response — a failure is logged and the token is still returned. The persistence mode selects how the record is written:
+Depending on the profile's configuration, ILM writes a record of what it just signed. This never blocks or fails the response to the caller — if writing the record fails, it's logged, but the caller still gets their token. Three write modes are available, trading off durability against latency:
 
-- **IMMEDIATE** — synchronous write before the response is returned.
-- **DEFERRED_DURABLE** — staged to a durable outbox and drained asynchronously.
-- **BEST_EFFORT** — enqueued in an in-memory queue; dropped under backpressure.
+- **Immediate** — written synchronously, before the response goes out.
+- **Deferred, durable** — staged first, then written asynchronously; nothing is lost if ILM restarts.
+- **Best effort** — queued in memory; can be dropped if the queue is overwhelmed.
 
-The [Signing Records](./signing-records.md) page covers the record schema, retrieval API, and retention policy.
+See [Signing records](./signing-records.md) for the record's contents, how to retrieve them, and how long they're kept.
 
 ### 12. Response
 
-Core encodes the result into an RFC 3161 `TimeStampResp` and returns it as `HTTP 200 application/timestamp-reply`. RFC 3161 status codes (granted, rejection, waiting) are carried inside the response body — the HTTP status code is always 200 for any conforming TSP exchange.
+ILM packages the result — either the granted token or a rejection — into the response format the timestamping standard expects, and returns it. Note that this response always comes back as a successful HTTP call; whether the timestamp was actually granted or rejected is indicated inside the response body, not by the HTTP status.
 
-Authorization denials and resource-not-found errors are both mapped to a generic `badRequest` rejection so callers cannot distinguish a missing profile from a forbidden one.
+As in step 2, an authorization failure and a "profile doesn't exist" failure look identical to the caller.
 
 ---
 
 ## Error outcomes
 
-| Stage | Failure type | RFC 3161 failure code |
+| Stage | What went wrong | What the caller sees |
 |---|---|---|
-| Authentication | Method not allowed, bad credentials | HTTP 401 (before RFC 3161 encoding) |
-| Authorization | OPA denial | `badRequest` (enumeration defence) |
-| TSP/Signing Profile not found or disabled | Profile missing or disabled | `badRequest` |
-| Request validation | Bad hash algorithm | `badAlg` |
-| Request validation | Disallowed policy OID | `unacceptedPolicy` |
-| Profile resolution | Certificate/key/connector not found | `systemFailure` |
-| Time quality | Status not OK (see note) | `timeNotAvailable` |
-| Certificate validation | Eligibility check failed | `systemFailure` |
-| Serial number | Clock drift > 100 ms | `timeNotAvailable` |
-| Serial number | Tick overflow | `systemFailure` |
-| Formatter (either phase) | Connector communication error | `systemFailure` |
-| Token signature verification | Verification failure | `systemFailure` |
-| Signing record | Write failure | (not propagated — token already granted) |
+| Authentication | Method not allowed, or bad credentials | HTTP 401, before any timestamp-specific response is built |
+| Authorization | Caller not permitted to use this profile | Generic rejection (indistinguishable from "profile not found") |
+| Profile lookup | TSP or Signing Profile missing or disabled | Generic rejection |
+| Request validation | Hash algorithm not allowed | Rejection: bad algorithm |
+| Request validation | Policy identifier not allowed | Rejection: unaccepted policy |
+| Profile resolution | Certificate, key, or connector can't be loaded | Rejection: system failure |
+| Time quality | Clock accuracy not confirmed | Rejection: time not available |
+| Certificate validation | Certificate not eligible for time-stamping | Rejection: system failure |
+| Serial number | Clock jumped backwards more than 100 ms | Rejection: time not available |
+| Serial number | Ran out of numbers within one clock tick | Rejection: system failure |
+| Formatter connector | Communication error, either round-trip | Rejection: system failure |
+| Token signature verification | Verification failed | Rejection: system failure |
+| Signing record | Write failed | Not surfaced — the token was already granted |
 
-The time-quality check rejects for more than a `DEGRADED` status alone — a stale result, excessive clock drift, or a leap-second conflict each resolve to a not-OK status. See [Time Quality Configuration](./profiles/time-quality-configuration.md) for the full set of rejection causes.
+A time quality rejection isn't limited to "the monitor reported a problem" — a stale measurement, excessive clock drift, or a leap-second conflict each count as not-OK on their own. See [Time quality configuration](./time-quality-configuration.md) for the complete list of causes.
 
 ---
 
 ## Related pages
 
-- [Signing Profile](./profiles/signing-profile.md) — workflow and scheme configuration
-- [TSP Profile](./profiles/tsp-profile.md) — authentication methods, linked signing profile
-- [Time Quality Configuration](./profiles/time-quality-configuration.md) — NTP reference, accuracy, leap-second guard
-- [Timestamping Overview](./overview.md) — signing workflow/scheme taxonomy and component architecture
+- [Signing profile](/docs/signing/signing-profile) — workflow and scheme configuration
+- [TSP profile](./tsp-profile.md) — authentication methods, linked signing profile
+- [Time quality configuration](./time-quality-configuration.md) — reference clock, accuracy, leap-second guard
+- [Timestamping overview](./overview.md) — workflow taxonomy and component architecture
 
 Pages that expand on topics touched here:
 
-- [Authentication & Authorization](./authentication-authorization.md) — credential types, cache, secret mapping
-- [Signing Records](./signing-records.md) — schema, retrieval, retention
-- [Time Quality Monitor](./time-quality-monitor.md) — TQM sidecar, AMQP contract
-- [Timestamp Formatter Connector](./timestamp-formatter-connector.md) — connector operation and the two-phase DTBS/response calling convention
+- [Authentication & authorization](./authentication-authorization.md) — credential types, cache, secret mapping
+- [Signing records](./signing-records.md) — schema, retrieval, retention
+- [Time quality monitor](./time-quality-monitor.md) — how clock accuracy is measured and reported
+- [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) — connector operation and the two-round-trip calling convention
 - [Limitations](./limitations.md) — serial number throughput and overflow

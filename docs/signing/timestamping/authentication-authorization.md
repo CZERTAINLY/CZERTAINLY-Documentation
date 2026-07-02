@@ -1,10 +1,10 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Authentication and Authorization
 
-Every RFC 3161 timestamp request must pass two gates before the timestamping engine runs: **authentication** (who is calling?) and **authorization** (is that principal allowed to use this TSP Profile?). Both gates are enforced before any business logic executes.
+Before ILM processes a timestamp request, it checks two things: who is making the request (authentication), and whether that user is allowed to perform timestamping using the `TSP Profile`, `Signing Profile`, and other related resources they are targeting (authorization). Both checks happen before any timestamping takes place.
 
 For the full request sequence from HTTP arrival to RFC 3161 response, see [Timestamping Request Flow](./timestamping-flow.md).
 
@@ -12,11 +12,7 @@ For the full request sequence from HTTP arrival to RFC 3161 response, see [Times
 
 ## Authentication
 
-Authentication is enforced before any business logic, on every `/v1/protocols/tsp/**` request. Three things happen in order:
-
-1. **Route resolution** — the TSP Profile is resolved from the request path. If no matching profile is found, the request is rejected with HTTP 401 before any credential is examined.
-2. **Method selection** — each authentication method is tried in fixed priority order; the first that matches the request claims it. If the selected method is not listed in the TSP Profile's `allowedAuthenticationMethods`, the request is rejected with HTTP 401. Selection does not fall through: if the matched method is rejected or fails, the request is not retried with another method.
-3. **Challenge** — on any failure, an HTTP 401 is returned with a `WWW-Authenticate` header listing the `Basic` and `Bearer` schemes the profile accepts (where applicable). If the profile allows only `CLIENT_CERTIFICATE`, or if the profile cannot be resolved, no `WWW-Authenticate` header is sent.
+Authentication for timestamping is configured on the `TSP Profile`. For a description of each authentication method and how credentials are configured, see [TSP Profile — Authentication methods](./tsp-profile.md#authentication-methods).
 
 ### Method detection and priority
 
@@ -26,101 +22,43 @@ The priority order is fixed:
 2. **Bearer token** — detected when the `Authorization` header begins with `Bearer `
 3. **Basic password** — detected when the `Authorization` header begins with `Basic `
 
-A request that presents both a client-certificate header and an `Authorization` header is handled exclusively by the certificate method.
-
----
-
-## Authentication methods
-
-### CLIENT_CERTIFICATE
-
-**Transport:** Mutual-TLS. The TLS-terminating proxy strips the client certificate from the TLS handshake and forwards it in the `ssl-client-cert` request header as a URL-encoded PEM string.
-
-**How the credential is validated:**
-
-The certificate is read from the header, URL-decoded, PEM-normalized, and reduced to its SHA-256 thumbprint. That thumbprint is resolved to the platform identity mapped to the certificate, through the platform's certificate authentication subsystem; a successful lookup establishes the principal for the request.
-
-**Configuration on the TSP Profile:**
-
-The method must be listed in `allowedAuthenticationMethods` as `CLIENT_CERTIFICATE`. No credential records on the TSP Profile are required — identity resolution is handled through the platform's certificate authentication subsystem.
-
----
-
-### BEARER_TOKEN
-
-**Transport:** `Authorization: Bearer <jwt>` HTTP header.
-
-**How the credential is validated:**
-
-The JWT is extracted, decoded, and validated, and its verified claims are resolved to a platform identity that becomes the request principal. The JWT is validated against the platform's configured OAuth2 issuer.
-
-**Configuration on the TSP Profile:**
-
-The method must be listed in `allowedAuthenticationMethods` as `BEARER_TOKEN`. No credential records on the TSP Profile are required — the JWT is validated against the platform's configured OAuth2 issuer.
-
----
-
-### BASIC_PASSWORD
-
-**Transport:** `Authorization: Basic <base64>` HTTP header containing `username:password`.
-
-**How the credential is validated:**
-
-The Base64 value is decoded and split on the first `:` into username and password. Then:
-
-1. A `TspProfileBasicCredential` record on the profile whose `username` matches the presented username is looked up. If none is found, a fingerprint is still computed and discarded (constant-time dummy work to prevent a timing side-channel) and the attempt is rejected.
-2. The credential verification cache is checked for a cached positive result keyed on `(secretUuid, password)`. On a cache hit the principal is established immediately, without repeating the fingerprint check.
-3. On a cache miss, a fingerprint is computed from the presented credentials and compared against the stored `fingerprint` using a constant-time comparison.
-4. On a match, the positive result is cached and the principal is established as the credential's `mappedUserUuid`.
-
-**Configuration on the TSP Profile:**
-
-The method must be listed in `allowedAuthenticationMethods` as `BASIC_PASSWORD`. At least one `TspProfileBasicCredential` child record must exist on the profile. Each credential record binds:
-
-| Field | Purpose |
-|---|---|
-| `username` | The username the client presents in the `Authorization: Basic` header |
-| `secretUuid` | Reference to the platform-managed secret that holds the hashed credential |
-| `mappedUserUuid` | The platform user to which this credential is mapped for authorization decisions |
-| `fingerprint` | Pre-computed fingerprint of the stored credential, used for constant-time comparison |
-
-Credentials are managed via the sub-resource API at `%API_BASE_URL%tspProfiles/{uuid}/basicCredentials`.
-
-For a complete description of the `allowedAuthenticationMethods` field and the credential sub-resource, see [TSP Profile](./profiles/tsp-profile.md).
-
----
-
-## `allowedAuthenticationMethods` enforcement
-
-`allowedAuthenticationMethods` is a list field on the TSP Profile that declares which authentication methods the endpoint will accept. The endpoint enforces it strictly:
-
-- If the presented method is not in the list, the request is rejected with HTTP 401 even if the credential would otherwise be valid.
-- Multiple methods may be listed; the endpoint accepts any request that satisfies one of them.
-- At least one method must be configured for the endpoint to be functional.
-
-The `WWW-Authenticate` response on a 401 advertises only the HTTP-level schemes (`Basic`, `Bearer`) that the profile lists. `CLIENT_CERTIFICATE` is not advertised because there is no HTTP challenge mechanism for mTLS.
+When multiple methods are present in a request, the first one in the priority order above takes precedence.
 
 ---
 
 ## Authorization
 
-Authorization runs immediately after authentication, before any timestamping logic executes. The authenticated principal must be permitted the **timestamp** action on the specific TSP Profile, evaluated against the platform's Open Policy Agent (OPA) access-control policies:
+Two distinct accounts are involved in a production timestamping setup:
 
-| Dimension | Value |
-|---|---|
-| Resource type | `tspProfiles` |
-| Resource instance | UUID of the TSP Profile |
-| Action | `timestamp` |
+- **Provisioning operator** — a human administrator who creates and configures `TSP Profiles`, `Signing Profiles`, tokens, and credentials. This account needs broad permissions across many resources.
+- **Timestamping user** — a platform user that TSP clients authenticate as. This can be a real user account, a system account, or a dedicated application account. Either way, it should have only the permissions required to perform timestamping against the specific profiles and keys it is authorized for.
 
-If the policy denies access, the request is mapped to an RFC 3161 `badRequest` rejection — the same response as a non-existent profile, so callers cannot distinguish a missing profile from a forbidden one (enumeration defence).
+Keeping these two accounts separate is important: the timestamp client user's permission set is the effective security boundary on what a TSP client can timestamp with.
 
-Role-based access to TSP Profiles is configured through the platform's access-control management API. For the overall access-control and OPA model, see the [Access Control](../../certificate-key/concept-design/architecture/access-control/overview.md) section of the architecture documentation.
+### Required permissions for timestamping
+
+For a timestamp request to complete successfully, the timestamp client user must have the following permissions:
+
+| Resource | Action | Why |
+|---|---|---|
+| `TSP Profile` | `timestamp` | The timestamp operation itself |
+| `TSP Profile` | `detail` | Loading the `TSP Profile` by name |
+| `Signing Profile` | `detail` | Loading the `Signing Profile` referenced by the `TSP Profile` |
+| `Token Profile` | `detail` | Loading the `Token Profile` |
+| `Token` | `detail` | Loading the `Token` that owns the key |
+| `Key` | `sign` | The cryptographic signing operation |
+
+Grant `TSP Profile`, `Signing Profile`, `Token`, and `Token Profile` permissions to the specific object UUIDs the timestamping user needs — the account should not be able to see or interact with any other objects of those types. `Key` is an exception: it does not support object-scoped grants and must be granted resource-wide.
+
+If a timestamp request is denied, ILM returns an HTTP 200 response with a timestamp response with a failed status.
+
+For the overall access-control model, see the [Access Control](../../certificate-key/concept-design/architecture/access-control/overview.md) section of the architecture documentation.
 
 ---
 
 ## Performance: caching
 
-On a high-throughput endpoint, the same profiles, certificates, keys, and credentials are looked up on every request. Several caches keep this hot path off the database and off repeated cryptographic work — including positive `BASIC_PASSWORD` verification results and the platform identity resolved for `CLIENT_CERTIFICATE` and `BEARER_TOKEN` requests.
+On a high-throughput endpoint, the same profiles, certificates, keys, and credentials are looked up on every request. Several caches keep this off the database and avoid repeated cryptographic work — including verified **Basic Authentication** credentials and the platform identity resolved for **Client Certificate** and **Bearer Token** requests.
 
 For the caches involved, their bounds, time-to-live, multi-instance behaviour, and invalidation, see [Caching](/docs/certificate-key/concept-design/architecture/caching).
 
@@ -128,6 +66,6 @@ For the caches involved, their bounds, time-to-live, multi-instance behaviour, a
 
 ## Related pages
 
-- [TSP Profile](./profiles/tsp-profile.md) — `allowedAuthenticationMethods` field reference, credential sub-resource API
+- [TSP Profile](./tsp-profile.md) — authentication methods configuration and credential management
 - [Timestamping Request Flow](./timestamping-flow.md) — end-to-end sequence including the authentication and authorization stages
-- [Timestamping Overview](./overview.md) — component architecture and workflow taxonomy
+- [Access Control](../../certificate-key/concept-design/architecture/access-control/overview.md) — the platform's role-based access control model

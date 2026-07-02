@@ -31,3 +31,11 @@ The following `Connectors` are officially available:
 | Network Discovery Provider     | <span class="badge">Discovery Provider</span>    | <span class="badge">IP-Hostname</span>                                                                     |
 | Software Cryptography Provider | <span class="badge">Cryptography Provider</span> | <span class="badge">SOFT</span>                                                                            |
 | X.509 Compliance Provider      | <span class="badge">Compliance Provider</span>   | <span class="badge">x509</span>                                                                            |
+
+## Connector NG
+
+[Connector NG](./common-interfaces/overview.md#connector-ng) connectors describe their capabilities through versioned interfaces rather than Function Groups and Kinds. The following Connector NG connectors are officially available:
+
+| Connector Name                   | Interface                                                                                                    |
+|-----------------------------------|---------------------------------------------------------------------------------------------------------------|
+| Timestamping Format Provider      | [Timestamping Format Provider](./provider-interfaces/timestamping-format-provider.md) (Signature Formatter Connector) |
