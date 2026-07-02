@@ -101,4 +101,4 @@ See the [entity-relationship diagram on the Signing Profile page](/docs/signing/
 
 - [Signing Profile](/docs/signing/signing-profile) — the profile a TSP endpoint resolves to
 - [Authentication and Authorization](./authentication-authorization.md) — credential types, allowed-method enforcement, identity mapping
-- [Timestamping Request Flow](../timestamping-flow.md) — where the TSP Profile sits in the request path
+- [Timestamping Request Flow](./timestamping-flow.md) — where the TSP Profile sits in the request path

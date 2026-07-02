@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Time Quality Configuration
 
-A `Time Quality Configuration` specifies the desired clock accuracy requirements for timestamping. It is consumed by the [Time Quality Monitor](../time-quality-monitor.md), which continuously monitors the local clock against those requirements and reports whether the clock is in a state suitable for issuing timestamp tokens. Each `Signing Profile` can be associated with at most one `Time Quality Configuration`. When no configuration is associated, time quality enforcement is not applied.
+A `Time Quality Configuration` specifies the desired clock accuracy requirements for timestamping. It is consumed by the [Time Quality Monitor](./time-quality-monitor.md), which continuously monitors the local clock against those requirements and reports whether the clock is in a state suitable for issuing timestamp tokens. Each `Signing Profile` can be associated with at most one `Time Quality Configuration`. When no configuration is associated, time quality enforcement is not applied.
 
 For the entity-relationship diagram showing how `Time Quality Configuration` relates to `Signing Profiles` and other resources, see the [entity-relationship diagram on the Signing Profile page](/docs/signing/signing-profile#relationships).
 
@@ -12,7 +12,7 @@ For the entity-relationship diagram showing how `Time Quality Configuration` rel
 
 ## Regulatory requirements
 
-A qualified electronic timestamp must, under eIDAS Art. 42(1)(b), be based on an accurate time source linked to UTC. ETSI EN 319 421 translates this into concrete calibration and accuracy requirements for the TSP: a miscalibrated or drifted clock produces a timestamp assertion that is meaningless or misleading, regardless of the cryptographic validity of the token itself. The `Time Quality Configuration` lets operators encode their policy thresholds to satisfy these requirements, and the [Time Quality Monitor](../time-quality-monitor.md) enforces them continuously at runtime.
+A qualified electronic timestamp must, under eIDAS Art. 42(1)(b), be based on an accurate time source linked to UTC. ETSI EN 319 421 translates this into concrete calibration and accuracy requirements for the TSP: a miscalibrated or drifted clock produces a timestamp assertion that is meaningless or misleading, regardless of the cryptographic validity of the token itself. The `Time Quality Configuration` lets operators encode their policy thresholds to satisfy these requirements, and the [Time Quality Monitor](./time-quality-monitor.md) enforces them continuously at runtime.
 
 ---
 
@@ -21,7 +21,7 @@ A qualified electronic timestamp must, under eIDAS Art. 42(1)(b), be based on an
 `Time Quality Configurations` are managed under **Settings → Time Quality Configuration**. To create or edit one, open the list, click **Add** or select an existing entry, and fill in the fields on the edit page. Each configuration can then be referenced by one or more `Signing Profiles` under the profile's [Workflow Properties tab](./configuration.md).
 
 :::tip
-Several fields below control how NTP measurements are collected and how the clock offset is computed. Before configuring them, it is useful to understand how the Time Quality Monitor evaluates NTP results — see the [NTP evaluation](../time-quality-monitor.md#ntp-evaluation) section on the Time Quality Monitor page.
+Several fields below control how NTP measurements are collected and how the clock offset is computed. Before configuring them, it is useful to understand how the Time Quality Monitor evaluates NTP results — see the [NTP evaluation](./time-quality-monitor.md#ntp-evaluation) section on the Time Quality Monitor page.
 :::
 
 | Field | Required | Description |
@@ -45,11 +45,11 @@ A Signing Profile references at most one Time Quality Configuration. When:
 - The Signing Profile has a Time Quality Configuration associated **and** the monitor reports **OK** — timestamp issuance proceeds normally.
 - The Signing Profile has **no** Time Quality Configuration associated — time quality enforcement is not applied.
 
-The [Time Quality Monitor](../time-quality-monitor.md) page describes how the monitor evaluates each parameter and how the resulting status is reported.
+The [Time Quality Monitor](./time-quality-monitor.md) page describes how the monitor evaluates each parameter and how the resulting status is reported.
 
 ---
 
 ## Related pages
 
-- [Time Quality Monitor](../time-quality-monitor.md) — how the monitor evaluates these parameters and reports status
+- [Time Quality Monitor](./time-quality-monitor.md) — how the monitor evaluates these parameters and reports status
 - [Signing Profile](/docs/signing/signing-profile) — how a profile associates a Time Quality Configuration
