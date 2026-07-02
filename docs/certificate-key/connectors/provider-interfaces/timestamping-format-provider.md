@@ -4,7 +4,7 @@ sidebar_position: 26
 
 # Timestamping Format Provider
 
-The Timestamping Format Provider is the Signature Formatter Connector implementation for RFC 3161 Time-Stamp Tokens. It is a stateless HTTP service that handles all ASN.1 construction work required to produce a verifiable `TimeStampToken` in the managed static-key signing flow.
+The Timestamping Format Provider is the Signature Formatting Connector implementation for RFC 3161 Time-Stamp Tokens. It is a stateless HTTP service that handles all ASN.1 construction work required to produce a verifiable `TimeStampToken` in the managed static-key signing flow.
 
 ## Overview
 
@@ -47,7 +47,7 @@ Values that vary per timestamp token — for example the qualified status, accur
 
 ## Provider objects
 
-The Timestamping Format Provider is referenced by a [`Signing Profile`](../../../signing/signing-profile.md) as its **Signature Formatter Connector** — a required field once the profile's workflow is set to Timestamping. See [Configuration](../../../signing/timestamping/configuration.md) for where this is set.
+The Timestamping Format Provider is referenced by a [`Signing Profile`](../../../signing/signing-profile.md) as its **Signature Formatting Connector** — a required field once the profile's workflow is set to Timestamping. See [Configuration](../../../signing/timestamping/configuration.md) for where this is set.
 
 ## Processes
 
