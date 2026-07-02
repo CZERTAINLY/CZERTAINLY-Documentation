@@ -1,6 +1,6 @@
 {
   "position": 31,
-  "label": "Digital Signing — legacy",
+  "label": "Digital Signing - SignServer",
   "link": {
     "type": "doc",
     "id": "introduction"

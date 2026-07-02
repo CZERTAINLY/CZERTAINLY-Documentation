@@ -2,70 +2,33 @@
 sidebar_position: 1
 ---
 
-# Timestamping Overview
+# Timestamping overview
 
-ILM-native timestamping is the platform's built-in RFC 3161 Time-Stamp Authority (TSA) implementation. It runs directly on ILM Core — using the same profile, connector, and credential infrastructure as the rest of the platform — without requiring an external signing server.
+ILM-native timestamping builds on the same infrastructure as general signing — `Signing Profile`, `Signing Record`, and `Cryptography Provider` — but introduces two things not present in any other workflow: a Time Quality Monitor that continuously verifies clock accuracy, and a TSP Profile that configures and exposes the signing profile as an RFC 3161 endpoint.
 
-The implementation targets the regulatory regime its operators work under. In the EU, electronic time stamps are governed by **Regulation (EU) No 910/2014 (eIDAS)**, and the technical requirements for trust service providers issuing them are set out in the **ETSI EN 319 42x** family. ILM issues both standard RFC 3161 tokens and **qualified electronic time stamps** in the sense of eIDAS Art. 42. For the full set of normative references and how each requirement maps to an ILM mechanism, see [Standards and Compliance](./standards-and-compliance.md).
-
-For teams already using the SignServer-based implementation, the SignServer path continues to be supported. See [Digital Signing — legacy](/docs/signserver/introduction) for that track.
+If you are new to ILM signing, read [Concepts](/docs/signing/concepts) first, then return here to understand what timestamping adds on top.
 
 ---
 
-## How this section is organised
+## What makes timestamping different
 
-The timestamping documentation covers:
+### Time quality enforcement
 
-- **Standards and compliance** — the normative references the implementation follows and how eIDAS / ETSI requirements map to ILM mechanisms.
-- **Profiles** — the configuration objects that define a TSA: Signing Profiles, TSP Profiles, and Time Quality Configurations.
-- **Request flow** — how a timestamp request is processed end to end, including authentication and authorization and the signing records it produces.
-- **Supporting components** — the Time Quality Monitor, the timestamp formatter connector, and the Time Quality messaging contract between Core and the monitor.
-- **Reference** — operational limitations.
+In other signing workflows the accuracy of ILM's system clock affects only audit log timestamps, not the validity of the signature itself. Timestamping is different: the binding between a document hash and a point in time is the entire purpose of a timestamp token, so the issuing clock must demonstrably be within a known accuracy bound.
 
----
+ILM addresses this through the **Time Quality Monitor (TQM)**, a component that continuously polls NTP servers and reports the current clock accuracy back to ILM. A `Signing Profile` can reference a [Time Quality Configuration](./time-quality-configuration.md) that sets an accuracy threshold; if TQM reports that the clock is outside that threshold, ILM refuses to issue the token. This enforcement is opt-in — a `Signing Profile` with no Time Quality Configuration skips the check entirely.
 
-## Signing workflows
+### TSP protocol exposure
 
-A **Signing Profile** is parameterised by a workflow type, which defines the kind of cryptographic operation the profile governs.
+In the general signing flow clients call the ILM API directly. Timestamping additionally supports the **Time-Stamp Protocol (TSP)** defined in RFC 3161. This allows standard TSA clients — PDF signing libraries, document management systems, and archival tools — to request timestamps without any ILM-specific integration.
 
-**TIMESTAMPING** — The profile issues RFC 3161 timestamp tokens. The engine validates time quality, generates a serial number, constructs a `TSTInfo` structure, and signs it using the configured TSA key. This is the only workflow documented in depth in this section.
-
-**CONTENT\_SIGNING** — The profile signs arbitrary document content. Not covered in depth here.
-
-**RAW\_SIGNING** — The profile signs a caller-supplied raw byte sequence. Intended for low-level integrations. Not covered in depth here.
+The TSP protocol is configured through a [TSP Profile](./tsp-profile.md), which can be linked to a `Signing Profile` to expose the RFC 3161 protocol.
 
 ---
 
-## Signing schemes
+## Components
 
-Every Signing Profile also specifies a **signing scheme**, which controls who holds the key and how the cryptographic operation is performed.
-
-**MANAGED** — ILM holds and operates the key. Two variants exist based on how the key is provisioned:
-
-- **Static Key** (`static_key`) — A pre-existing certificate and key pair are configured once on the Signing Profile and reused for every operation. The key persists on the cryptographic token for the lifetime of the profile. Required resources: a certificate (with its associated key) and the profile's signing operation attributes.
-- **One-Time Key** (`one_time_key`) — A fresh certificate and key pair are issued by the configured CA for each individual signing operation. The newly issued certificate is valid only for that operation and is not reused. Required resources: an RA Profile, a Token Profile, and the profile's signing operation attributes.
-
-**DELEGATED** — ILM delegates the signing to an external signing service via a Connector. Core passes the request to the connector and receives the signature. Required resources: a Connector UUID and its configuration attributes.
-
----
-
-## RFC 3161 TSP protocol
-
-ILM-native timestamping speaks the IETF RFC 3161 Time-Stamp Protocol (TSP). A TSA consumer sends a `TimeStampReq` (containing the hash of the datum to be timestamped and an optional policy OID) over HTTP to the ILM Core TSP endpoint. Core validates the request, checks time quality, and returns a `TimeStampResp` carrying a signed `TSTInfo` with the authoritative generation time, serial number, and TSA policy OID. Status information (granted, rejection, waiting) is carried in-band inside the response structure — there is no separate notification channel.
-
----
-
-## Time quality
-
-A timestamp is only meaningful if the TSA's clock is demonstrably accurate — eIDAS Art. 42(1)(b) requires a qualified time stamp to be based on an accurate time source linked to UTC, and ETSI EN 319 421 sets out the corresponding time-source accuracy and calibration requirements. ILM supports this through the **Time Quality Monitor (TQM)** — a lightweight sidecar service that polls a set of NTP servers on a configurable interval and publishes the result back to Core via the message broker (AMQP). Time-quality enforcement is **opt-in**: when a Signing Profile is associated with a Time Quality Configuration, Core checks the current time-quality status before issuing a timestamp token, and rejects the request with `timeNotAvailable` if that status is anything other than `OK`. A profile with no Time Quality Configuration does not perform this check.
-
-Monitor setup is covered on the [Time Quality Monitor](./time-quality-monitor.md) page, and the message contract between Core and the monitor on the [Time Quality Messaging](./time-quality-messaging.md) page.
-
----
-
-## Architecture at a glance
-
-The diagram below shows how the main components fit together for an ILM-managed TIMESTAMPING operation with the static-key variant.
+Here is a recap of the components involved in a timestamping operation and their responsibilities.
 
 ```plantuml
 @startuml
@@ -76,33 +39,40 @@ skinparam NoteBackgroundColor #F7F7F7
 skinparam defaultFontName sans-serif
 skinparam componentStyle rectangle
 
+actor "Client" as Client #F7F7F7
 component "ILM Core" as Core #E1F5E0
-component "Signature Formatter\nConnector" as Formatter #E1F5E0
-component "Cryptographic Token /\nKey Provider Connector" as Token #E1F5E0
+component "Signature Formatting\nConnector" as Formatter #E1F5E0
+component "Cryptography Provider" as Token #E1F5E0
 component "Time Quality\nMonitor (TQM)" as TQM #E1F5E0
 collections "NTP Servers" as NTP #F7F7F7
 
-Core -[#1573B5]-> Formatter : format timestamp token (HTTP)
+Client -[#1573B5]-> Core : TSP (other protocols planned)
+Core -[#1573B5]-> Formatter : format timestamp token
 Core -[#1573B5]-> Token : sign
-Core <-[#1573B5]-> TQM : time quality (AMQP)
+Core <-[#1573B5]-> TQM : time quality
 TQM -[#1573B5]-> NTP : NTP poll
 @enduml
 ```
 
-The Signature Formatter Connector is responsible for assembling the data to be signed — the CMS `SignedAttributes` computed over the `TSTInfo` structure. Core calls it synchronously over HTTP, receives the encoded bytes, signs them with the TSA key via the configured cryptographic token provider, and wraps the result into the RFC 3161 response.
+| Component | Responsibility |
+|---|---|
+| **ILM** | Receives the request, coordinates with all other components, and returns the signed token. |
+| **Cryptography Provider** | Holds and operates the TSA private key. |
+| **Signature Formatting Connector** | Assembles the data structure to be signed. See [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider). |
+| **Time Quality Monitor (TQM)** | Continuously polls NTP servers and reports clock accuracy to ILM. |
 
-The Time Quality Monitor is a stateless sidecar. It has no inbound API surface; all communication is outbound over AMQP — it receives Time Quality Configuration from Core via the broker, polls the configured NTP servers, and publishes time-check results back. Core maintains the current time-quality status for each active Time Quality Configuration.
+For a detailed end-to-end walkthrough, see [Timestamping Request Flow](./timestamping-flow.md).
 
 ---
 
-## Availability today
+## Configuring Timestamping
 
-The signing model is organised as a workflow × scheme matrix. Only one combination is available today — **TIMESTAMPING × MANAGED (static key)**; the others are planned but not yet available.
+To issue timestamps, configure a [Signing Profile](/docs/signing/signing-profile) with the **Timestamping** workflow selected. The workflow unlocks a set of timestamping-specific fields on the profile — see [Configuration](./configuration.md) for the full reference.
 
-| Workflow ↓ / Scheme → | MANAGED · Static Key | MANAGED · One-Time Key | DELEGATED |
-| --- | --- | --- | --- |
-| **TIMESTAMPING** | ✓ available | — | — |
-| **CONTENT_SIGNING** | — | — | — |
-| **RAW_SIGNING** | — | — | — |
+### TSP Profile
 
-*✓ = available and documented in this section. — = not yet available.*
+A `TSP Profile` can be linked to the `Signing Profile` to expose the RFC 3161 protocol. See [TSP Profile](./tsp-profile.md).
+
+### Time Quality Configuration
+
+A `Time Quality Configuration` can be linked to the `Signing Profile` to enforce clock accuracy before issuing a token. See [Time Quality Configuration](./time-quality-configuration.md).

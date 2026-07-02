@@ -4,19 +4,17 @@ sidebar_position: 1
 
 # Introduction
 
-ILM is bringing its digital-signing capabilities natively into the platform, built directly on ILM Core profiles, connectors, and supporting microservices. Capabilities are delivered incrementally; **timestamping** is the first to land.
+Starting with release 2.19.0, ILM brings digital signing natively into the platform, built on ILM's native building blocks. Individual signing capabilities are delivered incrementally — **timestamping** is the first to land.
 
-During the transition, two implementations are documented side by side:
+While ILM-native signing rolls out incrementally, the established SignServer-based implementation continues to be supported. Both are documented here:
 
-- **ILM-native signing** — this section. Built on Core profiles and connectors.
-- **SignServer-based signing** — see [Digital Signing — legacy](/docs/signserver/introduction). The established implementation, supported during the transition.
+- **ILM-native signing** — this section, built on ILM's native building blocks.
+- **SignServer-based signing** — [Digital Signing — SignServer](/docs/signserver/introduction). The established implementation, supported throughout the transition.
 
-## Timestamping
+:::tip
+ILM-native timestamping is currently in preview and not yet production-ready, but is planned to reach production readiness in the next release. If you are planning a new digital signing deployment, we strongly recommend considering the ILM-native approach.
+:::
 
-Timestamping is the first ILM-native signing capability. It issues both standard RFC 3161 tokens and **qualified electronic time stamps** under eIDAS (Regulation (EU) No 910/2014) Art. 42. Start with the [Timestamping overview](/docs/signing/timestamping/overview), then explore the rest of the section:
+## Available capabilities
 
-- **Standards and compliance** — [normative references and requirement mapping](/docs/signing/timestamping/standards-and-compliance)
-- **Profiles** — [Signing Profile](/docs/signing/timestamping/profiles/signing-profile), [TSP Profile](/docs/signing/timestamping/profiles/tsp-profile), [Time Quality Configuration](/docs/signing/timestamping/profiles/time-quality-configuration)
-- **Request flow** — [request flow](/docs/signing/timestamping/timestamping-flow), [authentication & authorization](/docs/signing/timestamping/authentication-authorization), [signing records](/docs/signing/timestamping/signing-records)
-- **Supporting components** — [Time Quality Monitor](/docs/signing/timestamping/time-quality-monitor), [formatter connector](/docs/signing/timestamping/timestamp-formatter-connector), [Time Quality messaging](/docs/signing/timestamping/time-quality-messaging)
-- **Reference** — [limitations](/docs/signing/timestamping/limitations)
+- **Timestamping** — [Overview and documentation](/docs/signing/timestamping/overview)
