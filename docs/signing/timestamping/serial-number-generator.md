@@ -4,7 +4,7 @@ sidebar_position: 8
 
 # Serial number generator
 
-Every RFC 3161 timestamp token must carry a serial number that is unique within the issuing timestamp authority. This uniqueness is a non-repudiation requirement: when two distinct tokens share the same serial under the same authority, an auditor or relying party cannot tell them apart, which breaks the integrity guarantee that timestamping is designed to provide. ETSI EN 319 421 requires every TSP to ensure uniqueness across all the timestamp tokens it issues.
+Every RFC 3161 timestamp token must carry a serial number that is unique within the issuing timestamp authority. Uniqueness is a non-repudiation requirement. If two tokens share a serial under the same authority, an auditor or relying party cannot tell them apart, and the integrity guarantee timestamping is designed to provide breaks down. ETSI EN 319 421 requires every TSP to ensure uniqueness across all the timestamp tokens it issues.
 
 ILM generates these serial numbers using a Snowflake-style 64-bit algorithm that produces monotonically increasing, structurally unique identifiers. Serial generation is fast, as it requires no synchronization between nodes when running in a cluster.
 
@@ -39,7 +39,7 @@ The generator protects against three failure modes:
 
 ## Configuration
 
-For serial number generation to produce unique, non-repudiable serial numbers, care must be taken during configuration — especially when deploying in a cluster with multiple nodes. The single configuration property relevant to timestamping is the instance ID: it can either be auto-derived by the generator or set explicitly.
+To keep serial numbers unique and non-repudiable, you must configure the generator carefully — especially when deploying in a cluster with multiple nodes. The single configuration property relevant to timestamping is the instance ID: it can either be auto-derived by the generator or set explicitly.
 
 ### `PLATFORM_INSTANCE_ID`
 

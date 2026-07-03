@@ -2,11 +2,11 @@
 sidebar_position: 7
 ---
 
-# Authentication and Authorization
+# Authentication and authorization
 
 Before ILM processes a timestamp request, it checks two things: who is making the request (authentication), and whether that user is allowed to perform timestamping using the `TSP Profile`, `Signing Profile`, and other related resources they are targeting (authorization). Both checks happen before any timestamping takes place.
 
-For the full request sequence from HTTP arrival to RFC 3161 response, see [Timestamping Request Flow](./timestamping-flow.md).
+For the full request sequence from HTTP arrival to RFC 3161 response, see [Timestamping request flow](./timestamping-flow.md).
 
 ---
 
@@ -67,5 +67,5 @@ For the caches involved, their bounds, time-to-live, multi-instance behaviour, a
 ## Related pages
 
 - [TSP Profile](./tsp-profile.md) — authentication methods configuration and credential management
-- [Timestamping Request Flow](./timestamping-flow.md) — end-to-end sequence including the authentication and authorization stages
+- [Timestamping request flow](./timestamping-flow.md) — end-to-end sequence including the authentication and authorization stages
 - [Access Control](../../certificate-key/concept-design/architecture/access-control/overview.md) — the platform's role-based access control model

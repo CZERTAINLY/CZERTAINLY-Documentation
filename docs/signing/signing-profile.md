@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Signing Profile
 
-A Signing Profile is the central configuration object for a signing operation in ILM. It declares **what** is being signed (the workflow type), **how** the signing key is obtained and used (the scheme), which TSP Profile accepts inbound timestamp requests that resolve to this profile, which Time Quality Configuration governs time-source evaluation, and what signing records to retain.
+A Signing Profile is the central configuration object for a signing operation in ILM. It declares **what** is being signed (the workflow) and **how** the signing key is used (the scheme). It also binds the `TSP Profile` that accepts inbound timestamp requests, the `Time Quality Configuration` that governs time-source evaluation, and the signing records to retain.
 
 ---
 

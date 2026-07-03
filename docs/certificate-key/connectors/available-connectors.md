@@ -2,7 +2,7 @@
 sidebar_position: 30
 ---
 
-# Available Connectors
+# Available connectors
 
 `Connectors` can be developed by anyone. There may be number of `Connectors` driven by the community and also `Connectors` developed for some specific purpose and use case.
 
