@@ -54,7 +54,7 @@ Each workflow may introduce additional components beyond the ones shown here. Fo
 
 ---
 
-## Configuring Signing
+## Configuring signing
 
 Signing in ILM is configured primarily through the [Signing Profile](./signing-profile.md). To configure it correctly, you need to understand two foundational concepts: **workflows** and **schemes**. A workflow defines *what* ILM signs; a scheme defines *how* it signs it. Together they determine which configuration options and connectors are required on the profile.
 

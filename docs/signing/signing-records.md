@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Signing Records
+# Signing records
 
 Every signing operation can produce a **signing record** — a persisted log entry that captures what was signed, when, by whom, and under which Signing Profile and version. Signing records are the basis for audit trails, compliance reporting, and record-retention obligations.
 
@@ -14,7 +14,7 @@ Signing records are scoped to a specific `Signing Profile` version. This is why 
 
 ---
 
-## What a Signing Record Captures
+## What a signing record captures
 
 A signing record always carries the following intrinsic fields:
 
@@ -39,15 +39,15 @@ When recording is enabled but no payload toggle is set, only the intrinsic field
 
 ---
 
-## Recording Policy Settings
+## Recording policy settings
 
 The recording policy is configured per Signing Profile version on the **Record Policy** tab.
 
-### Recording Enabled
+### Recording enabled
 
 The **Recording Enabled** toggle is the master switch. When off, no signing record is created for any operation under this profile version. Enabling it reveals the remaining settings.
 
-### Captured Content
+### Captured content
 
 The **Captured Content** section lets you configure which data is stored with each record. The available toggles depend on the type of signing workflow selected: **Request Metadata**, **Signature**, **Signed Document**, and **Data to Be Signed (DTBS)**. See [What a Signing Record Captures](#what-a-signing-record-captures) for descriptions of each field.
 
@@ -55,7 +55,7 @@ The **Captured Content** section lets you configure which data is stored with ea
 
 **Retain Indefinitely** — when checked, records are kept until manually deleted. When unchecked, a **Retention Days** field appears where you specify how many days records are kept before they are automatically purged.
 
-### Persistence Mode
+### Persistence mode
 
 Controls the write guarantee for each record:
 
@@ -71,7 +71,7 @@ Controls the write guarantee for each record:
 
 ---
 
-## How Deferred-Durable Mode Works
+## How deferred-durable mode works
 
 When a signing operation completes, the signing record is saved synchronously into the **outbox** — a dedicated intermediate storage area — before the response is returned to the caller. This means the record is guaranteed to be persisted and cannot be lost, even if the system restarts immediately after.
 
@@ -97,7 +97,7 @@ SS --> D: Record becomes visible\n(background process)
 @enduml
 ```
 
-### Poisoned Records
+### Poisoned records
 
 In normal operation all records should drain successfully. However, in rare cases a record may fail to drain repeatedly — for example if data becomes corrupted or a referenced signing profile is deleted. To prevent a single problematic record from blocking all others, the Outbox Drainer tracks how many consecutive times it has failed to drain each record. Once that count reaches the poison threshold, the record is marked as poisoned and excluded from further drain attempts. Each poisoning event is logged at warn level in the server log. The reason for the last unsuccessful drain attempt is also stored alongside the record in the outbox, making it possible to investigate the root cause without trawling through logs.
 

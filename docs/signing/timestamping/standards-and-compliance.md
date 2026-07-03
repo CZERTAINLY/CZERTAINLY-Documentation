@@ -2,13 +2,13 @@
 sidebar_position: 9
 ---
 
-# Standards and Compliance
+# Standards and compliance
 
 ILM-native timestamping is built to the standards that govern electronic time-stamping in
-the European Union and the wider PKI ecosystem. This page consolidates the normative
-references the implementation follows, and maps the requirements most relevant to a
-Qualified Trust Service Provider (QTSP) to the ILM mechanism that satisfies them and the
-page that documents it.
+the European Union and the wider PKI ecosystem. If you need to know which standards ILM
+follows, start here. This page lists the normative references ILM implements and maps each
+requirement — especially those that matter to a Qualified Trust Service Provider (QTSP) —
+to the ILM mechanism that satisfies it and the page that documents it.
 
 The references below are cited by their latest published editions. Specific clauses are
 named where they are stable across editions; otherwise requirements are referenced by
@@ -29,7 +29,7 @@ The Regulation distinguishes two assurance levels:
   date and time it indicates and the integrity of the data it is bound to. Only a QTSP may
   issue them.
 
-ILM supports both. A Signing Profile issues a qualified time-stamp token when the
+ILM supports both. A `Signing Profile` issues a qualified time-stamp token when the
 qualified status is requested (the `qualifiedTimestamp` flag), which causes the
 [Timestamp Formatting Connector](./timestamp-formatting-connector.md) to add the
 `qcStatements` extension required by ETSI EN 319 422; otherwise it issues a standard
@@ -83,7 +83,7 @@ covers it in depth.
 
 ## Related pages
 
-- [Timestamping Overview](./overview.md) — workflow/scheme taxonomy and component architecture
-- [Timestamping Request Flow](./timestamping-flow.md) — where each standard is applied in the request path
+- [Timestamping overview](./overview.md) — workflow/scheme taxonomy and component architecture
+- [Timestamping request flow](./timestamping-flow.md) — where each standard is applied in the request path
 - [Timestamp Formatting Connector](./timestamp-formatting-connector.md) — qualified time-stamp `qcStatements`
 - [Time Quality Configuration](./time-quality-configuration.md) — accuracy and drift parameters

@@ -34,7 +34,7 @@ At least one `TSP Profile` must exist before you can activate the protocol. See 
 4. In the dialog, select the `TSP Profile` you want to link to this `Signing Profile`.
 5. Click **Activate** to confirm.
 
-The `Signing Profile` is now associated with the selected `TSP Profile`. Inbound requests addressed to that `TSP Profile` can resolve to this `Signing Profile` via the indirect route (`/v1/protocols/tsp/signingProfiles/{signingProfileName}`).
+The `Signing Profile` is now associated with the selected `TSP Profile`. Clients can now reach this `Signing Profile` directly through the **Signing Profile route** (`/v1/protocols/tsp/signingProfiles/{signingProfileName}`).
 
 Once activated, click on the **Timestamping** row in the table to expand its details. The detail view shows the current status and, most importantly, the **URL** your RFC 3161 clients should send timestamp requests to. The URL shown here is the **Signing Profile route** — it addresses the `Signing Profile` directly:
 
@@ -44,7 +44,7 @@ POST /v1/protocols/tsp/signingProfiles/{signingProfileName}
 
 ### Set from the TSP Profile
 
-You can also link from the other direction by setting the **Default Signing Profile** on an existing `TSP Profile`. This makes the `Signing Profile` the target of all direct-route requests (`/v1/protocols/tsp/{tspProfileName}`) where no explicit `Signing Profile` is named. See [TSP Profile — Default Signing Profile](./tsp-profile.md#default-signing-profile) for details.
+You can also link from the other direction by setting the **Default Signing Profile** on an existing `TSP Profile`. This makes the `Signing Profile` the target of all **TSP Profile route** requests (`/v1/protocols/tsp/{tspProfileName}`) where no explicit `Signing Profile` is named. See [TSP Profile — Default Signing Profile](./tsp-profile.md#default-signing-profile) for details.
 
 When using this route, the endpoint URL is keyed by the `TSP Profile` name and is available on the `TSP Profile` detail page:
 

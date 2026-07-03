@@ -29,7 +29,7 @@ participant "TSP & Signing\nProfiles" as Profiles
 participant "Time Quality\nRegister" as TQ
 participant "Certificate\nValidator" as Cert
 participant "Serial Number\nGenerator" as Serial
-participant "Signature Formatting\nProvider" as Fmt
+participant "Timestamp Formatting\nConnector" as Fmt
 participant "Cryptographic\nToken" as Token
 participant "Signing Record" as Rec
 
@@ -114,7 +114,7 @@ Immediately after the serial number is issued, ILM captures the timestamp value 
 
 ### Signing (steps 14–19)
 
-Building the token takes three steps. ILM first asks the Signature Formatting Provider — a pluggable component that knows how to build the token's internal structure — to assemble the exact bytes to be signed. It sends those bytes to the configured cryptographic token to be signed with the profile's managed key (the key never leaves the token — ILM only receives the signature back). It then asks the provider to assemble the finished, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature before returning it; if that check fails, the request is rejected even though signing succeeded. See [Timestamp Formatting Connector](./timestamp-formatting-connector.md) for the two-round-trip calling convention.
+Building the token takes three steps. ILM first asks the `Timestamp Formatting Connector` — the component that knows how to build the token's internal structure — to assemble the exact bytes to be signed. It sends those bytes to the configured cryptographic token to be signed with the profile's managed key (the key never leaves the token — ILM only receives the signature back). It then asks the connector to assemble the finished, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature before returning it; if that check fails, the request is rejected even though signing succeeded. See [Timestamp Formatting Connector](./timestamp-formatting-connector.md) for the two-round-trip calling convention.
 
 ### Signing record (steps 20–21)
 
@@ -142,7 +142,7 @@ As during profile lookup, an authorization failure and a "profile doesn't exist"
 | Certificate validation | Certificate not eligible for time-stamping | Rejection: system failure |
 | Serial number | Clock jumped backwards more than 100 ms | Rejection: time not available |
 | Serial number | Ran out of numbers within one clock tick | Rejection: system failure |
-| Signature Formatting Provider | Communication error, either round-trip | Rejection: system failure |
+| Timestamp Formatting Connector | Communication error, either round-trip | Rejection: system failure |
 | Token signature verification | Verification failed | Rejection: system failure |
 | Signing record | Write failed | Not surfaced — the token was already granted |
 

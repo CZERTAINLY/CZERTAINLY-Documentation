@@ -126,7 +126,7 @@ Create one exchange. Neither ILM nor TQM declares it at runtime — it must alre
 
 | Property | Default | Override |
 |---|---|---|
-| Queue name | `ilm` | `BROKER_EXCHANGE` |
+| Exchange name | `ilm` | `BROKER_EXCHANGE` |
 
 **2. Queue: Config request**
 
