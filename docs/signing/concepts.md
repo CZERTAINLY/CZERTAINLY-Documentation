@@ -29,7 +29,7 @@ skinparam componentStyle rectangle
 
 actor "Client" as Client #F7F7F7
 component "ILM Core" as Core #E1F5E0
-component "Signature Formatting\nConnector" as Formatter #E1F5E0
+component "Signature Formatting\nProvider" as Formatter #E1F5E0
 component "Cryptography Provider" as Token #E1F5E0
 component "TSP Profile" as TSP #F7F7F7
 component "Time Quality\nConfiguration" as TQC #F7F7F7
@@ -46,7 +46,7 @@ Core -[#1573B5,dashed]-> TQC : workflow-specific
 
 **Cryptography Provider** holds and operates the signing key. This is the same connector concept you already know from key management — nothing new here.
 
-**Signature Formatting Connector** assembles the correct data structures before and after ILM Core performs the cryptographic operation. The specific connector implementation depends on the workflow — see the workflow-specific section for details.
+**Signature Formatting Provider** assembles the correct data structures before and after ILM Core performs the cryptographic operation. The specific connector implementation depends on the workflow — see the workflow-specific section for details.
 
 :::note
 Each workflow may introduce additional components beyond the ones shown here. For example, timestamping adds a Time Quality Monitor that continuously verifies clock accuracy. See the workflow-specific documentation for the full picture.

@@ -1,20 +1,20 @@
 ---
-sidebar_position: 26
+sidebar_position: 6
 ---
 
-# Timestamping Format Provider
+# Timestamp Formatting Connector
 
-The Timestamping Format Provider is the Signature Formatting Connector implementation for RFC 3161 Time-Stamp Tokens. It is a stateless HTTP service that handles all ASN.1 construction work required to produce a verifiable `TimeStampToken` in the managed static-key signing flow.
+The Timestamp Formatting Connector is the RFC 3161 implementation of the [Signature Formatting Provider](../../certificate-key/connectors/provider-interfaces/signature-formatting-provider.md) interface for Time-Stamp Tokens. It is a stateless HTTP service that handles all ASN.1 construction work required to produce a verifiable `TimeStampToken` in the managed static-key signing flow.
 
 ## Overview
 
 The connector is responsible for formatting the data to be signed, then assembling the final `TimeStampToken` once `ILM Core` has signed it. It holds no keys and performs no cryptographic signing itself — that stays with `ILM Core` and the profile's managed key.
 
-For the architecture context, including where the Timestamping Format Provider fits among `ILM Core`, TQM, and the cryptographic token, see [Timestamping overview](../../../signing/timestamping/overview.md).
+For the architecture context, including where the Timestamp Formatting Connector fits among `ILM Core`, TQM, and the cryptographic token, see [Timestamping overview](./overview.md).
 
 ## How it works
 
-When `ILM Core` issues a timestamp token for a managed static-key `Signing Profile`, it calls the Timestamping Format Provider at two points in the flow (see [Timestamping request flow](../../../signing/timestamping/timestamping-flow.md) for the full sequence):
+When `ILM Core` issues a timestamp token for a managed static-key `Signing Profile`, it calls the Timestamp Formatting Connector at two points in the flow (see [Timestamping request flow](./timestamping-flow.md) for the full sequence):
 
 1. **`formatDtbs`** — build the DER structures to be signed, given the hash, nonce, policy identifier, extensions, serial number, timestamp, accuracy, certificate chain, and signature algorithm gathered by `ILM Core`.
 2. **`formatSigningResponse`** — after `ILM Core` has signed the DTBS with the profile's static key, assemble those signed bytes into the final, standards-compliant `TimeStampToken`.
@@ -23,7 +23,7 @@ Each call is independent — the connector receives everything it needs as reque
 
 ## Configuration
 
-The Timestamping Format Provider is configured through environment variables.
+The Timestamp Formatting Connector is configured through environment variables.
 
 | Variable | Default | Description |
 |---|---|---|
@@ -31,7 +31,7 @@ The Timestamping Format Provider is configured through environment variables.
 
 ## Attributes
 
-The connector exposes a set of configurable attributes that control optional content added to the assembled `TimeStampToken`. These are set when configuring the connector on the `Signing Profile` and validated through the connector's [Attributes interface](../common-interfaces/attributes-interface.md); an unrecognized attribute name is rejected.
+The connector exposes a set of configurable attributes that control optional content added to the assembled `TimeStampToken`. These are set when configuring the connector on the `Signing Profile` and validated through the connector's [Attributes interface](../../certificate-key/connectors/common-interfaces/attributes-interface.md); an unrecognized attribute name is rejected.
 
 | Attribute key | Label | Type | Required | Default | Effect |
 |---|---|---|---|---|---|
@@ -47,7 +47,7 @@ Values that vary per timestamp token — for example the qualified status, accur
 
 ## Provider objects
 
-The Timestamping Format Provider is referenced by a [`Signing Profile`](../../../signing/signing-profile.md) as its **Signature Formatting Connector** — a required field once the profile's workflow is set to Timestamping. See [Configuration](../../../signing/timestamping/configuration.md) for where this is set.
+The Timestamp Formatting Connector is referenced by a [`Signing Profile`](../signing-profile.md) as its **Signature Formatting Connector** — a required field once the profile's workflow is set to Timestamping. See [Configuration](./configuration.md) for where this is set.
 
 ## Processes
 
@@ -83,6 +83,6 @@ A `TimeStampToken`'s extensions can come from two sources: **request-supplied** 
 
 ### Qualified timestamp (`qcStatements`)
 
-The `qcStatements` extension is a server-supplied extension. When the qualified status passed to `formatDtbs`/`formatSigningResponse` is `true` — driven by the **Qualified Timestamp** setting on the `Signing Profile`, see [Configuration](../../../signing/timestamping/configuration.md) — the connector adds a `qcStatements` extension carrying `esi4-qtstStatement-1` (OID `0.4.0.19422.1.1`), as required by ETSI EN 319 422 for a qualified electronic time-stamp. Because it is server-supplied, it always wins over any conflicting extension the client attempts to request.
+The `qcStatements` extension is a server-supplied extension. When the qualified status passed to `formatDtbs`/`formatSigningResponse` is `true` — driven by the **Qualified Timestamp** setting on the `Signing Profile`, see [Configuration](./configuration.md) — the connector adds a `qcStatements` extension carrying `esi4-qtstStatement-1` (OID `0.4.0.19422.1.1`), as required by ETSI EN 319 422 for a qualified electronic time-stamp. Because it is server-supplied, it always wins over any conflicting extension the client attempts to request.
 
 Setting the qualified status to `false` (or omitting it) produces a non-qualified RFC 3161 token without the ETSI EN 319 422 extension.
