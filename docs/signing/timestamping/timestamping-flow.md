@@ -46,11 +46,11 @@ Cert --> Core: OK / NOK
 Core -> Serial: generate serial
 Serial --> Core: serial number
 Core -> Core: Capture genTime
-Core -> Fmt: formatDtbs()
-Fmt --> Core: DTBS
-Core -> Token: sign(DTBS)
+Core -> Fmt: build data to be signed
+Fmt --> Core: data to be signed
+Core -> Token: sign
 Token --> Core: signature
-Core -> Fmt: formatSigningResponse()
+Core -> Fmt: assemble token
 Fmt --> Core: TimeStampToken
 Core -> Rec: record signing
 Rec --> Core: written (per policy)
@@ -62,7 +62,7 @@ Core --> Client: TimeStampResp\n(granted / rejection)
 
 ## Stage-by-stage walkthrough
 
-### 1. Authentication
+### Authentication (step 2)
 
 Before ILM looks at what's being asked, it checks who's asking:
 
@@ -72,7 +72,7 @@ Before ILM looks at what's being asked, it checks who's asking:
 
 Repeated password logins are checked against a short-lived cache, so ILM doesn't recompute the credential check on every single call. Credential types, the cache, and how secrets are mapped to callers are covered in [Authentication and authorization](./authentication-authorization.md).
 
-### 2. Request parsing and profile lookup
+### Request parsing and profile lookup (steps 3–4)
 
 ILM decodes the request into its individual fields — the hash algorithm, the hash itself, an optional nonce, an optional policy identifier, whether the caller wants the signing certificate included, and any extra request extensions. It then:
 
@@ -80,27 +80,24 @@ ILM decodes the request into its individual fields — the hash algorithm, the h
 2. Checks that the caller is allowed to request timestamps from this profile. If they aren't, ILM returns the exact same rejection it would return for a profile that doesn't exist at all — this is deliberate, so a caller can't use error messages to discover which profiles exist.
 3. Loads the linked `Signing Profile` and confirms it's enabled and configured for timestamping.
 
-### 3. Request validation
+### Request validation (step 5)
 
 ILM checks the request against rules set on the `Signing Profile`:
 
 - **Hash algorithm** — if the profile restricts which hash algorithms it accepts, the request's algorithm must be on that list, or it's rejected. This is how you enforce an approved set of cryptographic algorithms across your deployment.
 - **Policy identifier** — if the profile restricts allowed policy identifiers and the request specifies one, it must be on that list, or it's rejected.
 
-### 4. Profile resolution
+### Profile resolution (step 6)
 
 ILM loads everything the profile points to — the signing certificate and its chain, the key, and the connector that will format the token. None of this is cached; it's fetched fresh on every request. If no time quality configuration is set on the profile, ILM falls back to using its own system clock, which is always treated as accurate.
 
-### 5. Time quality check
+### Time quality check (steps 7–8)
 
-Timestamps are only meaningful if the clock that produced them can be trusted, so this is the first substantive check ILM performs. It asks: is the clock backing this profile currently accurate?
+Timestamps are only meaningful if the clock that produced them can be trusted, so this is the first substantive check ILM performs. The clock backing the profile must be currently confirmed accurate, or the request is rejected outright — no token is produced. (If the profile has no time quality configuration, ILM's own clock is used, unverified, and this check always passes.)
 
-- If the profile has no time quality configuration, the answer is always yes (ILM's own clock is used, unverified).
-- If it does have one, the answer is yes only when all of the following hold: a recent measurement exists, that measurement isn't stale, the measurement itself reports the clock as accurate, and neither a leap-second nor a drift guard has been tripped.
+What counts as "confirmed accurate" — recency, drift, and leap-second conditions — is covered in [Time quality configuration](./time-quality-configuration.md); how it's measured is covered in [Time quality monitor](./time-quality-monitor.md).
 
-If the answer is anything but yes, ILM rejects the request outright — no token is produced. The component that continuously measures clock accuracy is described in [Time quality monitor](./time-quality-monitor.md).
-
-### 6. Signing certificate validation
+### Signing certificate validation (steps 9–10)
 
 ILM confirms the certificate it's about to sign with is actually allowed to issue timestamps:
 
@@ -109,39 +106,25 @@ ILM confirms the certificate it's about to sign with is actually allowed to issu
 
 If either check fails, the request is rejected.
 
-### 7. Serial number generation
+### Serial number generation (steps 11–13)
 
-Every token gets a serial number that's guaranteed unique — this is required by the timestamping standard and by EU trust-service rules. The generator can issue up to 25,600 serial numbers per second on a single instance without any coordination overhead, and it protects itself against two failure modes: running out of numbers in a single clock tick, and the system clock jumping backwards. If the clock regresses by more than 100 milliseconds, the request is rejected rather than risk issuing an inconsistent timestamp. Operational limits of this scheme are detailed on the [Limitations](./limitations.md) page.
+Every token gets a serial number that's guaranteed unique — this is required by the timestamping standard and by EU trust-service rules. If the system clock jumps backwards far enough to risk an inconsistent timestamp, the request is rejected rather than issued. Throughput limits and the details of the generation scheme are covered on the [Limitations](./limitations.md) and [Serial number generator](./serial-number-generator.md) pages.
 
 Immediately after the serial number is issued, ILM captures the timestamp value itself (`genTime`), so both are sampled from the same instant.
 
-### 8. Building the data to be signed
+### Signing (steps 14–19)
 
-Assembling the final token takes two round-trips to the Signature Formatting Provider — a pluggable component that knows how to build the token's internal structure. In this first round-trip, ILM sends the connector everything it has gathered so far: the hash, nonce, policy identifier, extensions, serial number, timestamp, accuracy, certificate chain, and signature algorithm. The connector assembles the exact byte sequence that needs to be signed — including the piece that cryptographically ties the token to the specific signing certificate — and hands those bytes back. See [Timestamp Formatting Connector](./timestamp-formatting-connector.md) for how this two-step exchange works.
+Building the token takes three steps. ILM first asks the Signature Formatting Provider — a pluggable component that knows how to build the token's internal structure — to assemble the exact bytes to be signed. It sends those bytes to the configured cryptographic token to be signed with the profile's managed key (the key never leaves the token — ILM only receives the signature back). It then asks the provider to assemble the finished, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature before returning it; if that check fails, the request is rejected even though signing succeeded. See [Timestamp Formatting Connector](./timestamp-formatting-connector.md) for the two-round-trip calling convention.
 
-### 9. Signing
+### Signing record (steps 20–21)
 
-ILM sends those bytes to the configured cryptographic token and asks it to sign them with the profile's managed key. The key itself never leaves the token — ILM only ever receives the resulting signature.
+Depending on the profile's configuration, ILM writes a record of what it just signed. This never blocks or fails the response to the caller — if writing the record fails, it's logged, but the caller still gets their token. The available write modes trade durability against latency; see [Signing records](../signing-records.md) for the modes, the record's contents, how to retrieve them, and how long they're kept.
 
-### 10. Assembling the final token
-
-In the second round-trip to the Signature Formatting Provider, ILM sends back the signed bytes together with the signature, and the connector assembles the complete, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature against the signing certificate before returning it — if that check fails, the request is rejected even though signing itself succeeded.
-
-### 11. Signing record
-
-Depending on the profile's configuration, ILM writes a record of what it just signed. This never blocks or fails the response to the caller — if writing the record fails, it's logged, but the caller still gets their token. Three write modes are available, trading off durability against latency:
-
-- **Immediate** — written synchronously, before the response goes out.
-- **Deferred, durable** — staged first, then written asynchronously; nothing is lost if ILM restarts.
-- **Best effort** — queued in memory; can be dropped if the queue is overwhelmed.
-
-See [Signing records](../signing-records.md) for the record's contents, how to retrieve them, and how long they're kept.
-
-### 12. Response
+### Response (step 22)
 
 ILM packages the result — either the granted token or a rejection — into the response format the timestamping standard expects, and returns it. Note that this response always comes back as a successful HTTP call; whether the timestamp was actually granted or rejected is indicated inside the response body, not by the HTTP status.
 
-As in step 2, an authorization failure and a "profile doesn't exist" failure look identical to the caller.
+As during profile lookup, an authorization failure and a "profile doesn't exist" failure look identical to the caller.
 
 ---
 
