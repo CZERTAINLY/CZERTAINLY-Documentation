@@ -1,5 +1,5 @@
 ---
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # Standards and Compliance
@@ -31,7 +31,7 @@ The Regulation distinguishes two assurance levels:
 
 ILM supports both. A Signing Profile issues a qualified time-stamp token when the
 qualified status is requested (the `qualifiedTimestamp` flag), which causes the
-[Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) to add the
+[Timestamp Formatting Connector](./timestamp-formatting-connector.md) to add the
 `qcStatements` extension required by ETSI EN 319 422; otherwise it issues a standard
 RFC 3161 token. See the [Overview](./overview.md) for the workflow/scheme taxonomy.
 
@@ -39,7 +39,7 @@ RFC 3161 token. See the [Overview](./overview.md) for the workflow/scheme taxono
 
 | eIDAS Art. 42(1) requirement | ILM mechanism | Documented on |
 |---|---|---|
-| (a) binds date and time to data so the data cannot be changed undetectably | The message imprint (hash) is carried in the `TSTInfo` and protected by the CMS signature (RFC 3161, RFC 5652) | [Request flow](./timestamping-flow.md), [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) |
+| (a) binds date and time to data so the data cannot be changed undetectably | The message imprint (hash) is carried in the `TSTInfo` and protected by the CMS signature (RFC 3161, RFC 5652) | [Request flow](./timestamping-flow.md), [Timestamp Formatting Connector](./timestamp-formatting-connector.md) |
 | (b) based on an accurate time source linked to UTC | Time Quality Monitor polls NTP/UTC sources (SNTP, RFC 4330) and gates issuance against an accuracy/drift policy (ETSI EN 319 421) | [Time Quality Monitor](./time-quality-monitor.md), [Time Quality Configuration](./time-quality-configuration.md) |
 | (c) signed with an advanced electronic signature/seal of the QTSP | The token is signed with the TSA's managed key on a cryptographic token, using a certificate carrying the `id-kp-timeStamping` EKU (RFC 5280) | [Request flow](./timestamping-flow.md) §6, §9 |
 
@@ -74,7 +74,7 @@ covers it in depth.
 |---|---|---|---|
 | Time-source accuracy linked to UTC; clock calibration within a stated tolerance | ETSI EN 319 421 (time-source requirements); eIDAS Art. 42(1)(b) | Time Quality Monitor evaluates NTP offset against `maxClockDrift`; issuance gated on **OK** status; `accuracy` embedded in `TSTInfo.Accuracy` | [Time Quality Monitor](./time-quality-monitor.md), [Time Quality Configuration](./time-quality-configuration.md) |
 | Each time-stamp token carries a unique serial number | ETSI EN 319 421; RFC 3161 §2.4.2; RFC 5280 (160-bit limit) | Coordination-free 64-bit generator producing structurally unique, monotonic serials within the 160-bit field | [Request flow](./timestamping-flow.md) §7, [Limitations](./limitations.md) |
-| Qualified time-stamp token profile | ETSI EN 319 422; eIDAS Art. 42 | `qcStatements` extension with `esi4-qtstStatement-1` injected for qualified requests, authoritative over client extensions | [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) |
+| Qualified time-stamp token profile | ETSI EN 319 422; eIDAS Art. 42 | `qcStatements` extension with `esi4-qtstStatement-1` injected for qualified requests, authoritative over client extensions | [Timestamp Formatting Connector](./timestamp-formatting-connector.md) |
 | TSA signing certificate eligible for time-stamping | RFC 5280 (`id-kp-timeStamping` EKU); ETSI EN 319 412 | Signing-certificate eligibility check (EKU, key usage, validity) for the configured qualification level | [Request flow](./timestamping-flow.md) §6 |
 | Permitted cryptographic algorithms | ETSI TS 119 312 | `allowedDigestAlgorithms` request validation; configured signature algorithm | [Request flow](./timestamping-flow.md) §3, §9 |
 | Event logging and record retention | ETSI EN 319 421 (records of operation) | Signing records with configurable persistence and retention | [Signing Records](../signing-records.md) |
@@ -85,5 +85,5 @@ covers it in depth.
 
 - [Timestamping Overview](./overview.md) — workflow/scheme taxonomy and component architecture
 - [Timestamping Request Flow](./timestamping-flow.md) — where each standard is applied in the request path
-- [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) — qualified time-stamp `qcStatements`
+- [Timestamp Formatting Connector](./timestamp-formatting-connector.md) — qualified time-stamp `qcStatements`
 - [Time Quality Configuration](./time-quality-configuration.md) — accuracy and drift parameters

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 ---
 
 # Timestamping request flow
@@ -29,7 +29,7 @@ participant "TSP & Signing\nProfiles" as Profiles
 participant "Time Quality\nRegister" as TQ
 participant "Certificate\nValidator" as Cert
 participant "Serial Number\nGenerator" as Serial
-participant "Signature Formatting\nConnector" as Fmt
+participant "Signature Formatting\nProvider" as Fmt
 participant "Cryptographic\nToken" as Token
 participant "Signing Record" as Rec
 
@@ -117,7 +117,7 @@ Immediately after the serial number is issued, ILM captures the timestamp value 
 
 ### 8. Building the data to be signed
 
-Assembling the final token takes two round-trips to the Timestamping Format Provider — a pluggable component that knows how to build the token's internal structure. In this first round-trip, ILM sends the connector everything it has gathered so far: the hash, nonce, policy identifier, extensions, serial number, timestamp, accuracy, certificate chain, and signature algorithm. The connector assembles the exact byte sequence that needs to be signed — including the piece that cryptographically ties the token to the specific signing certificate — and hands those bytes back. See [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) for how this two-step exchange works.
+Assembling the final token takes two round-trips to the Signature Formatting Provider — a pluggable component that knows how to build the token's internal structure. In this first round-trip, ILM sends the connector everything it has gathered so far: the hash, nonce, policy identifier, extensions, serial number, timestamp, accuracy, certificate chain, and signature algorithm. The connector assembles the exact byte sequence that needs to be signed — including the piece that cryptographically ties the token to the specific signing certificate — and hands those bytes back. See [Timestamp Formatting Connector](./timestamp-formatting-connector.md) for how this two-step exchange works.
 
 ### 9. Signing
 
@@ -125,7 +125,7 @@ ILM sends those bytes to the configured cryptographic token and asks it to sign 
 
 ### 10. Assembling the final token
 
-In the second round-trip to the formatting connector, ILM sends back the signed bytes together with the signature, and the connector assembles the complete, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature against the signing certificate before returning it — if that check fails, the request is rejected even though signing itself succeeded.
+In the second round-trip to the Signature Formatting Provider, ILM sends back the signed bytes together with the signature, and the connector assembles the complete, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature against the signing certificate before returning it — if that check fails, the request is rejected even though signing itself succeeded.
 
 ### 11. Signing record
 
@@ -159,7 +159,7 @@ As in step 2, an authorization failure and a "profile doesn't exist" failure loo
 | Certificate validation | Certificate not eligible for time-stamping | Rejection: system failure |
 | Serial number | Clock jumped backwards more than 100 ms | Rejection: time not available |
 | Serial number | Ran out of numbers within one clock tick | Rejection: system failure |
-| Formatting connector | Communication error, either round-trip | Rejection: system failure |
+| Signature Formatting Provider | Communication error, either round-trip | Rejection: system failure |
 | Token signature verification | Verification failed | Rejection: system failure |
 | Signing record | Write failed | Not surfaced — the token was already granted |
 
@@ -179,5 +179,5 @@ Pages that expand on topics touched here:
 - [Authentication & authorization](./authentication-authorization.md) — credential types, cache, secret mapping
 - [Signing records](../signing-records.md) — schema, retrieval, retention
 - [Time quality monitor](./time-quality-monitor.md) — how clock accuracy is measured and reported
-- [Timestamping Format Provider](/docs/certificate-key/connectors/provider-interfaces/timestamping-format-provider) — connector operation and the two-round-trip calling convention
+- [Timestamp Formatting Connector](./timestamp-formatting-connector.md) — connector operation and the two-round-trip calling convention
 - [Limitations](./limitations.md) — serial number throughput and overflow
