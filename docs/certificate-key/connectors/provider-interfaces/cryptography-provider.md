@@ -52,6 +52,7 @@ Every Key that is created is stored in the inventory of cryptographic keys. Inve
 The following diagram shows the relationship between Token, Token Profile, and Keys in the inventory.
 
 ```plantuml
+@startuml
 scale 3/4
 top to bottom direction
 
@@ -101,6 +102,7 @@ k1 <-u- tp1
 k2 <-u- tp1
 k3 <-u- tp2
 k4 <-u- tp3
+@enduml
 ```
 
 ## Processes
