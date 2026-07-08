@@ -1,7 +1,13 @@
 // Validate a rendered PlantUML SVG: reject PlantUML error images and geometrically degenerate output.
 
-// PlantUML renders a distinctive error image containing this title text.
-const ERROR_MARKER = /Syntax Error\??|An error has occurred/i;
+/**
+ * Detect PlantUML's error image by its distinctive signature rather than a bare substring.
+ * @param {string} svg
+ */
+function isPlantumlErrorImage(svg) {
+    return (/Syntax Error\?/.test(svg) && /\[From string \(line \d+\)/.test(svg)) ||
+        /An error has occurred/.test(svg);
+}
 
 /** @param {string} svg */
 export function parseSvgViewBox(svg) {
@@ -20,7 +26,7 @@ export function verifyRender(svg, opts = {}) {
     if (errored) {
         return {ok: false, reason: 'server returned a non-200 response for this diagram'};
     }
-    if (ERROR_MARKER.test(svg)) {
+    if (isPlantumlErrorImage(svg)) {
         return {ok: false, reason: 'PlantUML error image detected'};
     }
 

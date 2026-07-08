@@ -14,13 +14,15 @@ yarn start                  # Dev server at http://localhost:3000
 yarn build                  # Production build to ./build (requires ~8GB memory: NODE_OPTIONS="--max_old_space_size=8192")
 yarn serve                  # Serve production build locally
 yarn clear                  # Clear Docusaurus cache
-yarn render-diagrams        # Render all PlantUML diagrams to static/img/plantuml/ (runs automatically before start/build)
+yarn render-diagrams        # Render all PlantUML diagrams to static/img/plantuml/ (also runs automatically on start/build)
 yarn test                   # Run unit tests (node --test)
 ```
 
-> **Prerequisite:** `yarn start` and `yarn build` render all PlantUML diagrams at build time (via the `prestart`/`prebuild` hooks)
-> through a pinned `plantuml-server` Docker image, so a running **Docker daemon is required**. To render against an already-running
-> server instead, set `PLANTUML_SERVER_URL` (e.g. `PLANTUML_SERVER_URL=http://127.0.0.1:8080 yarn build`).
+> **Prerequisite:** `yarn start` and `yarn build` render all PlantUML diagrams at build time through a pinned
+> `plantuml-server` Docker image, so a running **Docker daemon is required**. `yarn build` renders up-front via the
+> `prebuild` hook; `yarn start` renders via the `plantumlRenderPlugin` Docusaurus lifecycle plugin, which also
+> re-renders diagrams live as docs change during dev. To render against an already-running server instead, set
+> `PLANTUML_SERVER_URL` (e.g. `PLANTUML_SERVER_URL=http://127.0.0.1:8080 yarn build`).
 
 The build fetches 30+ OpenAPI specs from `https://api.otilm.com/` and renders them via Redocusaurus — it is slow and network-dependent but still worth it.
 

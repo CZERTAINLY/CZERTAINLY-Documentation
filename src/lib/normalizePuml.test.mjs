@@ -20,3 +20,15 @@ test('rejects an !include directive', () => {
 test('rejects an !includeurl directive', () => {
     assert.throws(() => normalizePuml('@startuml\n!includeurl http://evil/x\n@enduml'), /include/i);
 });
+test('rejects an !include_once directive', () => {
+    assert.throws(() => normalizePuml('@startuml\n!include_once /etc/passwd\n@enduml'), /include/i);
+});
+test('rejects an !import directive', () => {
+    assert.throws(() => normalizePuml('@startuml\n!import http://evil/x.puml\n@enduml'), /include/i);
+});
+test('rejects a !theme … from <url> directive', () => {
+    assert.throws(() => normalizePuml('@startuml\n!theme mytheme from http://evil\n@enduml'), /include/i);
+});
+test('allows a local !theme without a from clause', () => {
+    assert.doesNotThrow(() => normalizePuml('@startuml\n!theme spacelab\na -> b\n@enduml'));
+});

@@ -1,10 +1,10 @@
 // Normalize a PlantUML source block: ensure a matching @start/@end pair and reject !include-family directives.
 
 /**
- * Reject any !include-family directive.
+ * Reject any !include/!import/!theme…from directive that could pull in external content.
  * This blocklist is defense-in-depth only — `PLANTUML_SECURITY_PROFILE=SANDBOX` profile is in use.
  */
-const INCLUDE_RE = /^[ \t]*!include(url|sub|def)?\b/im;
+const INCLUDE_RE = /^[ \t]*!(include(url|sub|def|_once|_many)?|import|theme\b[^\n]*\bfrom)\b/im;
 
 /**
  * Ensure a PlantUML source has a matching @start<type>/@end<type> pair.

@@ -20,8 +20,19 @@ test('zero-dimension viewBox fails', () => {
 test('missing viewBox fails', () => {
     assert.equal(verifyRender('<svg></svg>').ok, false);
 });
-test('PlantUML error image fails', () => {
-    assert.equal(verifyRender('<svg viewBox="0 0 300 100"><text>Syntax Error?</text></svg>').ok, false);
+test('PlantUML syntax-error image fails', () => {
+    // Real syntax-error images pair "Syntax Error?" with a "[From string (line N)]" footer.
+    const svg = '<svg viewBox="0 0 300 100"><text>[From string (line 2) ]</text>' +
+        '<text>Syntax Error? (Assumed diagram type: sequence)</text></svg>';
+    assert.equal(verifyRender(svg).ok, false);
+});
+test('PlantUML runtime-error page fails', () => {
+    assert.equal(verifyRender('<svg viewBox="0 0 300 100"><text>An error has occurred</text></svg>').ok, false);
+});
+test('a valid diagram that merely mentions "Syntax Error" passes', () => {
+    // No "[From string (line N)]" footer — this is diagram content, not PlantUML's error image.
+    const svg = '<svg viewBox="0 0 601 352"><text>Return: Syntax Error?</text></svg>';
+    assert.deepEqual(verifyRender(svg), {ok: true});
 });
 test('non-200 response (errored flag) fails', () => {
     assert.equal(verifyRender('<svg viewBox="0 0 601 352"></svg>', {errored: true}).ok, false);
