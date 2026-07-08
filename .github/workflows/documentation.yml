@@ -18,6 +18,22 @@ jobs:
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 24.x
+      - name: Cache PlantUML server image
+        id: puml-image
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.cache/plantuml/image.tar
+          key: plantuml-server-sha256-5b9968b8723e03ef585396b257127337ca5f91e58ccbffc88f085bd649a717dc
+      - name: Load or pull PlantUML server image
+        run: |
+          IMG='plantuml/plantuml-server@sha256:5b9968b8723e03ef585396b257127337ca5f91e58ccbffc88f085bd649a717dc'
+          if [ -f ~/.cache/plantuml/image.tar ]; then
+            docker load -i ~/.cache/plantuml/image.tar
+          else
+            docker pull "$IMG"
+            mkdir -p ~/.cache/plantuml
+            docker save "$IMG" -o ~/.cache/plantuml/image.tar
+          fi
       - name: Test build
         env:
           NODE_OPTIONS: "--max_old_space_size=8192"
@@ -46,6 +62,22 @@ jobs:
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 24.x
+      - name: Cache PlantUML server image
+        id: puml-image
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.cache/plantuml/image.tar
+          key: plantuml-server-sha256-5b9968b8723e03ef585396b257127337ca5f91e58ccbffc88f085bd649a717dc
+      - name: Load or pull PlantUML server image
+        run: |
+          IMG='plantuml/plantuml-server@sha256:5b9968b8723e03ef585396b257127337ca5f91e58ccbffc88f085bd649a717dc'
+          if [ -f ~/.cache/plantuml/image.tar ]; then
+            docker load -i ~/.cache/plantuml/image.tar
+          else
+            docker pull "$IMG"
+            mkdir -p ~/.cache/plantuml
+            docker save "$IMG" -o ~/.cache/plantuml/image.tar
+          fi
       - name: Build website
         env:
           NODE_OPTIONS: "--max_old_space_size=8192"

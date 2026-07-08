@@ -110,13 +110,7 @@ const config = {
                 prefix: '%'
               },
             ],
-            [
-              remarkSimplePlantumlPlugin,
-              {
-                baseUrl: "https://www.plantuml.com/plantuml/svg",
-                type: "svg"
-              }
-            ],
+            remarkSimplePlantumlPlugin,
           ],
         },
         theme: {

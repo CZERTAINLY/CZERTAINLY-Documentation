@@ -115,3 +115,11 @@ html[data-theme='dark'] .discord-icon::before {
   justify-content: center;
   width: 100%,
 }
+
+/*
+ * Build-time-rendered PlantUML diagrams are embedded as <img src="/img/plantuml/…">.
+ * Preserve their natural dimension (overflowing the column when wider).
+ */
+img[src^="/img/plantuml/"] {
+  max-width: none;
+}
