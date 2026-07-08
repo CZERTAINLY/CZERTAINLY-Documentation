@@ -27,7 +27,7 @@ The Timestamp Formatting Connector is configured through environment variables.
 
 | Variable | Default | Description |
 |---|---|---|
-| `PORT` | `8080` | HTTP server port the connector listens on. |
+| `PORT` | `8080` / `8070` | HTTP server port the connector listens on. The container image defaults to `8080`; running the jar directly defaults to `8070`. |
 
 ## Attributes
 

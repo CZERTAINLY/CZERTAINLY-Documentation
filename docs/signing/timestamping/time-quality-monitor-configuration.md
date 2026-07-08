@@ -201,6 +201,10 @@ ILM must be configured to connect to the same broker and use matching routing ke
 
 All variables use the same naming convention as TQM — where both sides share a variable, the default values match, and both must be set to the same value if overridden.
 
+### Enabling the integration
+
+Time quality messaging is off by default on the ILM side — Core won't consume the clock-accuracy data TQM publishes until you turn it on with `MESSAGING_TIME_QUALITY_ENABLED=true`. Enabling this flag is separate from deploying TQM itself; running the monitor without also setting this flag leaves ILM silently ignoring everything TQM reports.
+
 ### Message routing
 
 | Variable | Default | Description |

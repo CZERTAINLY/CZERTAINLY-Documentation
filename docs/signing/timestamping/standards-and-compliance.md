@@ -57,6 +57,7 @@ RFC 3161 token. See the [Overview](./overview.md) for the workflow/scheme taxono
 | IETF RFC 3161 | Internet X.509 PKI Time-Stamp Protocol (TSP) | `TimeStampReq` / `TimeStampResp`, `TSTInfo`, status/failure codes |
 | IETF RFC 5816 | ESSCertIDv2 Update for RFC 3161 | `SigningCertificateV2` signed attribute (carrying `ESSCertIDv2`) binding the TSA certificate |
 | IETF RFC 5652 | Cryptographic Message Syntax (CMS) | `TimeStampToken` as CMS `SignedData`; `SignedAttributes` |
+| IETF RFC 6211 | CMS Algorithm Protection Attribute | `id-aa-CMSAlgorithmProtection` signed attribute binding the digest and signature algorithms |
 | IETF RFC 5280 | Internet X.509 PKI Certificate and CRL Profile | 160-bit serial-number limit; `id-kp-timeStamping` extended key usage (OID `1.3.6.1.5.5.7.3.8`) |
 | IETF RFC 4330 | Simple Network Time Protocol (SNTP) Version 4 | Time Quality Monitor NTP polling |
 

@@ -28,11 +28,13 @@ rectangle "TSP Profile" #E8E8E8
 rectangle "Time Quality Configuration" #E8E8E8
 rectangle "Signature Formatting Connector"
 rectangle "Certificate"
+rectangle "Token"
 
 "Signing Profile" -[dashed]-> "TSP Profile" : exposes signing profile\nto RFC 3161 compatible clients\n(timestamping only)
 "Signing Profile" -[dashed]-> "Time Quality Configuration" : defines required clock accuracy\n(timestamping only)
 "Signing Profile" --> "Signature Formatting Connector" : formats the signature
 "Signing Profile" --> "Certificate" : TSA signing certificate
+"Certificate" --> "Token" : signing key held in
 
 @enduml
 ```
@@ -49,7 +51,7 @@ A Signing Profile is configured across several tabs. The tabs shown depend on th
 |---|---|---|
 | **Name** | Yes | Unique identifier for the profile. Appears in the profile list and is used as part of the signing URL. |
 | **Description** | No | Free-text description of the profile. |
-| **Signing Workflow Type** | Yes | The type of signing operation this profile performs. Currently only Timestamping is available; Human Signing and Raw Signing are planned. The selected workflow determines which additional tabs are shown. |
+| **Signing Workflow Type** | Yes | The type of signing operation this profile performs. Currently only Timestamping is available; Content Signing and Raw Signing are planned. The selected workflow determines which additional tabs are shown. |
 
 ### Signing Scheme
 

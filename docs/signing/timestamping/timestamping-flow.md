@@ -89,7 +89,7 @@ ILM checks the request against rules set on the `Signing Profile`:
 
 ### Profile resolution (step 6)
 
-ILM loads everything the profile points to — the signing certificate and its chain, the key, and the connector that will format the token. None of this is cached; it's fetched fresh on every request. If no time quality configuration is set on the profile, ILM falls back to using its own system clock, which is always treated as accurate.
+ILM loads everything the profile points to — the signing certificate and its chain, the key, and the connector that will format the token. These lookups are served through short-lived, per-instance caches rather than hitting the database on every request — see [Caching](../../certificate-key/concept-design/architecture/caching.md). If no time quality configuration is set on the profile, ILM falls back to using its own system clock, which is always treated as accurate.
 
 ### Time quality check (steps 7–8)
 
@@ -141,7 +141,6 @@ As during profile lookup, an authorization failure and a "profile doesn't exist"
 | Time quality | Clock accuracy not confirmed | Rejection: time not available |
 | Certificate validation | Certificate not eligible for time-stamping | Rejection: system failure |
 | Serial number | Clock jumped backwards more than 100 ms | Rejection: time not available |
-| Serial number | Ran out of numbers within one clock tick | Rejection: system failure |
 | Timestamp Formatting Connector | Communication error, either round-trip | Rejection: system failure |
 | Token signature verification | Verification failed | Rejection: system failure |
 | Signing record | Write failed | Not surfaced — the token was already granted |
