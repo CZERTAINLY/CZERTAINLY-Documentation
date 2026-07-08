@@ -24,6 +24,7 @@ The following represents the certificate issuance process:
     ref over Issuer, Server
         Poll and resolve the Certificate status
     end ref
+    @enduml
 ```
 
 ### Certificate renewal
@@ -56,6 +57,7 @@ The following represents the certificate renewal process:
     ref over Issuer, Server
         Poll and resolve the Certificate status
     end ref
+    @enduml
 ```
 
 ## Certificate polling process
@@ -94,4 +96,5 @@ The following represents the certificate polling process:
         Issuer -> Issuer : Write annotations with the certificate UUID to Certificate resource
         Issuer -> Issuer : Write issued certificate
     end
+    @enduml
 ```

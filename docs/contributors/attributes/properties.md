@@ -68,4 +68,5 @@ The following diagram represents the Properties model inherited from the `BaseAt
     BaseAttributeProperties <-- InfoAttributeProperties : extends
     BaseAttributeProperties <-- CustomAttributeProperties : extends
     BaseAttributeProperties <-- MetadataAttributeProperties : extends
+@enduml
 ```
