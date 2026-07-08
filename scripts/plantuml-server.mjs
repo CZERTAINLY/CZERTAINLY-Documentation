@@ -1,8 +1,8 @@
-// :TODO: one-line header explaining what this script does.
+// Manage the pinned plantuml-server Docker container lifecycle.
 
 import {spawnSync} from 'node:child_process';
 
-// :TODO: which version it corresponds to?
+// plantuml-server v1.2026.6 (tag: jetty), pinned by digest for reproducible renders.
 export const DOCKER_IMAGE = 'plantuml/plantuml-server@sha256:5b9968b8723e03ef585396b257127337ca5f91e58ccbffc88f085bd649a717dc';
 
 // A tiny pre-encoded diagram ("Bob -> Alice : hello") used only to probe readiness.
@@ -72,8 +72,24 @@ export async function startServer() {
 
     const cid = run.stdout.trim();
 
-    const stop = async () => {
+    // Stop the docker container on SIGINT+SIGTERM.
+    const signals = /** @type {const} */ (['SIGINT', 'SIGTERM']);
+    const signalNumber = {SIGINT: 2, SIGTERM: 15};
+    let stopped = false;
+    const dockerStop = () => {
+        if (stopped) return;
+        stopped = true;
         spawnSync('docker', ['stop', cid], {encoding: 'utf8'});
+    };
+    const onSignal = (signal) => {
+        dockerStop();
+        process.exit(128 + signalNumber[signal]);
+    };
+    for (const s of signals) process.on(s, onSignal);
+
+    const stop = async () => {
+        for (const s of signals) process.off(s, onSignal);
+        dockerStop();
     };
 
     try {

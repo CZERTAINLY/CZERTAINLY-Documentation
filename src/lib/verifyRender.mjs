@@ -1,4 +1,4 @@
-//:TODO: one-line header explaining what this script does.
+// Validate a rendered PlantUML SVG: reject PlantUML error images and geometrically degenerate output.
 
 // PlantUML renders a distinctive error image containing this title text.
 const ERROR_MARKER = /Syntax Error\??|An error has occurred/i;

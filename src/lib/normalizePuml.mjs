@@ -1,4 +1,4 @@
-// :TODO: Header describing on one-line what this script does.
+// Normalize a PlantUML source block: ensure a matching @start/@end pair and reject !include-family directives.
 
 /**
  * Reject any !include-family directive.

@@ -1,4 +1,4 @@
-// :TODO: one-line header what this script does.
+// Render every plantuml marker in docs/ to a content-hashed statically rendered SVG.
 
 import {mkdirSync, readFileSync, writeFileSync, readdirSync, existsSync, unlinkSync} from 'node:fs';
 import {readFile, readdir} from 'node:fs/promises';
@@ -106,7 +106,7 @@ async function mapPool(items, limit, fn) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /**
- * Fetch one SVG. Retries only connection errors.
+ * Fetch one SVG. Retries connection errors and transient 5xx responses (fresh server start).
  * @returns {Promise<{status:number, svg:string}>}
  */
 async function fetchSvg(baseUrl, encoded, {retries = 5} = {}) {
@@ -114,6 +114,12 @@ async function fetchSvg(baseUrl, encoded, {retries = 5} = {}) {
     for (let attempt = 0; ; attempt++) {
         try {
             const res = await fetch(`${baseUrl}/svg/${encoded}`);
+            if (res.status >= 500 && attempt < retries) {
+                await res.arrayBuffer(); // drain body so the connection can be reused
+                await sleep(delay);
+                delay = Math.min(delay * 2, 2000);
+                continue;
+            }
             return {status: res.status, svg: await res.text()};
         } catch (err) {
             if (attempt >= retries) throw err;
