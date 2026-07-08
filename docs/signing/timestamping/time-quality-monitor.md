@@ -108,6 +108,8 @@ note over TQM : Applies updated configuration\nto the affected monitors
 
 On startup, TQM opens a receiver for the config-snapshot flow and immediately publishes a config request. ILM responds with a snapshot of all active `Time Quality Configurations`. If no snapshot arrives, TQM re-publishes the config request at `BROKER_REQUEST_TIMEOUT` intervals. Once a snapshot is received, TQM begins monitoring each configuration and publishing results. When a `Time Quality Configuration` is created, updated, or removed in ILM, ILM pushes a new config snapshot without waiting for a request — TQM applies it immediately.
 
+The AMQP message contract for these flows can be found here: [Messaging API - Time Quality](/api/messaging-time-quality/).
+
 ---
 
 ## NTP evaluation

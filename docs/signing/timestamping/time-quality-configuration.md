@@ -53,3 +53,5 @@ The [Time Quality Monitor](./time-quality-monitor.md) page describes how the mon
 
 - [Time Quality Monitor](./time-quality-monitor.md) — how the monitor evaluates these parameters and reports status
 - [Signing Profile](/docs/signing/signing-profile) — how a profile associates a Time Quality Configuration
+
+The OpenAPI specification for managing `Time Quality Configurations` can be found here: [Core API - Time Quality Configuration](/api/core-time-quality-configuration/).

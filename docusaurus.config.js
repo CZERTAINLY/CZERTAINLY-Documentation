@@ -265,6 +265,11 @@ const config = {
             route: '/api/core-secret/',
           },
           {
+            id: 'core-time-quality-configuration',
+            spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-core-time-quality-configuration.yaml',
+            route: '/api/core-time-quality-configuration/',
+          },
+          {
             id: 'core-token',
             spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-core-token.yaml',
             route: '/api/core-token/',
@@ -273,6 +278,11 @@ const config = {
             id: 'core-token-profile',
             spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-core-token-profile.yaml',
             route: '/api/core-token-profile/',
+          },
+          {
+            id: 'core-tsp-profile',
+            spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-core-tsp-profile.yaml',
+            route: '/api/core-tsp-profile/',
           },
           {
             id: 'core-vault-profile',
@@ -340,6 +350,12 @@ const config = {
             id: 'connector-secret-provider',
             spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-connector-secret-provider.yaml',
             route: '/api/connector-secret-provider/',
+          },
+
+          {
+            id: 'messaging-time-quality',
+            spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-messaging-time-quality.yaml',
+            route: '/api/messaging-time-quality/',
           },
 
           {
@@ -511,12 +527,20 @@ const config = {
                   to: '/api/core-secret/',
                 },
                 {
+                  label: 'Time Quality Configuration',
+                  to: '/api/core-time-quality-configuration/',
+                },
+                {
                   label: 'Token',
                   to: '/api/core-token/',
                 },
                 {
                   label: 'Token Profile',
                   to: '/api/core-token-profile/',
+                },
+                {
+                  label: 'TSP Profile',
+                  to: '/api/core-tsp-profile/',
                 },
                 {
                   label: 'Vault',
@@ -577,6 +601,11 @@ const config = {
                   to: '/api/connector-secret-provider/',
                 },
               ],
+            },
+            {
+              label: 'Messaging API',
+              position: 'left',
+              to: '/api/messaging-time-quality/',
             },
             {
               label: 'Protocol API',
