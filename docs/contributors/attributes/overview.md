@@ -75,12 +75,14 @@ Each implementation of `Attribute` type consists of the following building block
 - `AttributeCallback` - callback that is used to get the `Attribute` content when it depends on other factors
 
 ```plantuml
+@startuml
 package Attribute {
     object AttributeProperties
     object AttributeContent
     object AttributeConstraint
     object AttributeCallback
 }
+@enduml
 ```
 
 The building blocks for each particular `Attribute` type are described in [Attributes](./attributes.mdx) section.

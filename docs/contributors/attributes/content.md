@@ -792,6 +792,7 @@ The following diagram represents the content model inherited from the `Attribute
     ResourceObjectContentData <-- ResourceSimpleContentData : extends
     ResourceObjectContentData <-- ResourceCertificateContentData : extends
     ResourceObjectContentData <-- ResourceSecretContentData : extends
+@enduml
 ```
 
 :::info[Version-specific content types]
