@@ -28,3 +28,5 @@ An implementation may expose configurable attributes that control optional conte
 | Connector | Workflow | Output |
 |---|---|---|
 | [Timestamp Formatting Connector](../../../signing/timestamping/timestamp-formatting-connector.md) | Timestamping | RFC 3161 Time-Stamp Tokens |
+
+The OpenAPI specification of the Signature Formatting Provider can be found here: [Connector API - Signature Formatting Provider](/api/connector-signature-formatting-provider/).

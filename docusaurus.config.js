@@ -1,7 +1,7 @@
 const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 
-const apiVersion = '2.18.0';
+const apiVersion = '2.19.0';
 const chartVersion = '2.18.0';
 const cscVersion = '1.7.0';
 
@@ -265,6 +265,16 @@ const config = {
             route: '/api/core-secret/',
           },
           {
+            id: 'core-signing-profile',
+            spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-core-signing-profile.yaml',
+            route: '/api/core-signing-profile/',
+          },
+          {
+            id: 'core-signing-record',
+            spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-core-signing-record.yaml',
+            route: '/api/core-signing-record/',
+          },
+          {
             id: 'core-time-quality-configuration',
             spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-core-time-quality-configuration.yaml',
             route: '/api/core-time-quality-configuration/',
@@ -351,6 +361,11 @@ const config = {
             spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-connector-secret-provider.yaml',
             route: '/api/connector-secret-provider/',
           },
+          {
+            id: 'connector-signature-formatting-provider',
+            spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-connector-signature-formatting-provider.yaml',
+            route: '/api/connector-signature-formatting-provider/',
+          },
 
           {
             id: 'messaging-time-quality',
@@ -372,6 +387,11 @@ const config = {
             id: 'protocol-scep',
             spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-protocol-scep.yaml',
             route: '/api/protocol-scep/',
+          },
+          {
+            id: 'protocol-tsp',
+            spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-protocol-tsp.yaml',
+            route: '/api/protocol-tsp/',
           },
           {
             id: 'csc-component',
@@ -527,6 +547,14 @@ const config = {
                   to: '/api/core-secret/',
                 },
                 {
+                  label: 'Signing Profile',
+                  to: '/api/core-signing-profile/',
+                },
+                {
+                  label: 'Signing Record',
+                  to: '/api/core-signing-record/',
+                },
+                {
                   label: 'Time Quality Configuration',
                   to: '/api/core-time-quality-configuration/',
                 },
@@ -600,6 +628,10 @@ const config = {
                   label: 'Secret Provider',
                   to: '/api/connector-secret-provider/',
                 },
+                {
+                  label: 'Signature Formatting Provider',
+                  to: '/api/connector-signature-formatting-provider/',
+                },
               ],
             },
             {
@@ -622,6 +654,10 @@ const config = {
                 {
                   label: 'SCEP',
                   to: '/api/protocol-scep/',
+                },
+                {
+                  label: 'TSP',
+                  to: '/api/protocol-tsp/',
                 },
               ],
             },

@@ -22,7 +22,7 @@ ILM addresses this through the **Time Quality Monitor (TQM)**, a component that 
 
 In the general signing flow clients call the ILM API directly. Timestamping additionally supports the **Time-Stamp Protocol (TSP)** defined in RFC 3161. This allows standard TSA clients — PDF signing libraries, document management systems, and archival tools — to request timestamps without any ILM-specific integration.
 
-The TSP protocol is configured through a [TSP Profile](./tsp-profile.md), which can be linked to a `Signing Profile` to expose the RFC 3161 protocol.
+The TSP protocol is configured through a [TSP Profile](./tsp-profile.md), which can be linked to a `Signing Profile` to expose the RFC 3161 protocol. The OpenAPI specification of the endpoint can be found here: [Protocol API - TSP](/api/protocol-tsp/).
 
 ---
 
