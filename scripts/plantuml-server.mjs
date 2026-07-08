@@ -122,6 +122,7 @@ async function waitReady(baseUrl, {timeoutMs = 60000} = {}) {
             }
 
             lastErr = `HTTP ${res.status}`;
+            await res.body?.cancel();
         } catch (e) {
             lastErr = e.message;
         }
