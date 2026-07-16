@@ -26,6 +26,10 @@ The following interfaces are mandatory for each Connector NG:
 | [Attributes](attributes-interface.md#connector-ng) | `GET /.../{operation}/attributes` | Per-operation attribute definitions without a separate validation endpoint                 |
 | [Metrics](metrics-interface.md)                    | `GET /v1/metrics`                 | Prometheus/OpenMetrics metrics for observability                                           |
 
+NG connectors that resolve dynamic attribute content also implement the **Attributes v2 API**
+(`connector.common.v2`, `/v2/attributes`) — a definition registry plus a stateless `dependsOn` callback
+surface. See [NG Connector Attribute Callbacks (Attributes v2 API)](../../../contributors/attributes/ng-callbacks.mdx).
+
 Error handling across all Connector NG interfaces follows the [Error Handling](../error-handling.md) specification.
 
 ## Legacy Connectors

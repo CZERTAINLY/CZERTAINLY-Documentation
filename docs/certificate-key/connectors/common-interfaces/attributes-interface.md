@@ -18,6 +18,13 @@ In Connector NG, the `Attributes` interface is **consolidated and per-operation*
 
 There is no separate `/validate` endpoint — attribute validation is the responsibility of the `Core` based on the attribute definitions returned by the connector. Validation should be also part of operation at connector side but Core cannot enforce that behavior.
 
+:::info[Per-operation listing vs the Attributes v2 API]
+This per-operation `/attributes` listing (which attributes an operation needs) is distinct from the
+**Attributes v2 API** (`connector.common.v2`, `/v2/attributes`) — a definition registry plus a stateless
+`dependsOn` callback surface that resolves _dynamic_ attribute content for NG (stateless) connectors. See
+[NG Connector Attribute Callbacks (Attributes v2 API)](../../../contributors/attributes/ng-callbacks.mdx).
+:::
+
 ### Endpoint pattern
 
 Each connector endpoint that supports attributes exposes `/attributes` as a sub-resource:
