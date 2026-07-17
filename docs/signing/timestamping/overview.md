@@ -46,7 +46,7 @@ component "Cryptography Provider" as Token #E1F5E0
 component "Time Quality\nMonitor (TQM)" as TQM #E1F5E0
 collections "NTP Servers" as NTP #F7F7F7
 
-Client -[#1573B5]-> Core : TSP (other protocols planned)
+Client -[#1573B5]-> Core : TSP
 Core -[#1573B5]-> Formatter : format timestamp token
 Core -[#1573B5]-> Token : sign
 Core <-[#1573B5]-> TQM : time quality

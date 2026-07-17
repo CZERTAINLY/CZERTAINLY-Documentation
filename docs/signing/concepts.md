@@ -62,11 +62,7 @@ Signing in ILM is configured primarily through the [Signing Profile](./signing-p
 
 A **workflow** defines the type of signing operation ILM performs.
 
-**Timestamping** — Issues RFC 3161 Time-Stamp Tokens. The input is a message imprint (hash) from the client; the output is a signed token that cryptographically binds that hash to a trusted point in time. This is the only workflow available today.
-
-**Content Signing** *(✗ planned)* — Signs a document or data payload, producing a structured signature that includes the signed content or a reference to it. Not yet available.
-
-**Raw Signing** *(✗ planned)* — Returns a raw cryptographic signature over the supplied bytes, with no additional structure imposed. Intended for use cases that need to control the signed structure themselves. Not yet available.
+**Timestamping** — Issues RFC 3161 Time-Stamp Tokens. The input is a message imprint (hash) from the client; the output is a signed token that cryptographically binds that hash to a trusted point in time. Timestamping is the currently available workflow.
 
 ---
 
@@ -74,11 +70,7 @@ A **workflow** defines the type of signing operation ILM performs.
 
 A **scheme** defines how the signing key is held and used within a workflow.
 
-**Managed · Static Key** — ILM Core holds a long-lived [key](/docs/certificate-key/concept-design/core-components/key) and reuses it for every signing operation on the profile. The key is managed centrally and never leaves the HSM or token. This is the only scheme available today.
-
-**Managed · One-Time Key** *(✗ planned)* — ILM Core generates a fresh key pair for each signing operation, uses it once, and then retires it. This eliminates the risk of key reuse across operations. Not yet available.
-
-**Delegated** *(✗ planned)* — The signing operation is handed off to an external signing service rather than performed by ILM Core directly. ILM Core coordinates the request but does not hold or operate the key. Not yet available.
+**Managed · Static Key** — ILM Core uses a long-lived [key](/docs/certificate-key/concept-design/core-components/key) for every signing operation on the profile. The key is managed centrally and never leaves the HSM or token. This is the currently available scheme.
 
 ---
 
@@ -88,12 +80,10 @@ A Signing Profile is the central configuration object for a signing operation. I
 
 ---
 
-## Availability today
+## Available configuration
 
-Only one workflow–scheme combination is currently available. The matrix below shows what is planned:
+ILM currently supports the following workflow and scheme combination:
 
-| Workflow ↓ / Scheme → | Managed · Static Key | Managed · One-Time Key | Delegated |
-|-----------------------|----------------------|------------------------|-----------|
-| **Timestamping**      | ✓ available          | ✗ planned              | ✗ planned |
-| **Content Signing**   | ✗ planned            | ✗ planned              | ✗ planned |
-| **Raw Signing**       | ✗ planned            | ✗ planned              | ✗ planned |
+| Workflow | Scheme |
+|---|---|
+| **Timestamping** | **Managed · Static Key** |

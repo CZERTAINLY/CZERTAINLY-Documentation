@@ -30,7 +30,7 @@ In addition, the recording policy controls four optional payload fields:
 
 | Toggle | Description |
 |---|---|
-| Request Metadata | Stores contextual information about the signing request. The exact fields depend on the signing workflow type. For example, the timestamping workflow records: the signing profile name and version, the serial number assigned to the timestamp, the hash algorithm, the policy OID, and the nonce. More fields may be added in future releases. |
+| Request Metadata | Stores contextual information about the signing request. The exact fields depend on the signing workflow type. For example, the timestamping workflow records: the signing profile name and version, the serial number assigned to the timestamp, the hash algorithm, the policy OID, and the nonce. |
 | Signature | Stores the produced signature. |
 | Signed Document | Stores the full signed document. |
 | Data to Be Signed (DTBS) | Stores the raw data that was submitted for signing. |

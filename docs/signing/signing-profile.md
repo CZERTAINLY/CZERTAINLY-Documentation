@@ -47,11 +47,11 @@ A Signing Profile is configured across several tabs. The tabs shown depend on th
 
 ### General
 
-| Field | Required | Description |
-|---|---|---|
-| **Name** | Yes | Unique identifier for the profile. Appears in the profile list and is used as part of the signing URL. |
-| **Description** | No | Free-text description of the profile. |
-| **Signing Workflow Type** | Yes | The type of signing operation this profile performs. Currently only Timestamping is available; Content Signing and Raw Signing are planned. The selected workflow determines which additional tabs are shown. |
+| Field | Required | Description                                                                                                                                                                    |
+|---|---|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Name** | Yes | Unique identifier for the profile. Appears in the profile list and is used as part of the signing URL.                                                                         |
+| **Description** | No | Free-text description of the profile.                                                                                                                                          |
+| **Signing Workflow Type** | Yes | The type of signing operation this profile performs. Currently, Timestamping is the only available workflow. The selected workflow determines which additional tabs are shown. |
 
 ### Signing Scheme
 
