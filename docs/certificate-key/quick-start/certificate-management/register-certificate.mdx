@@ -35,7 +35,7 @@ You do not choose the variant. The platform picks it based on the capabilities o
 
 ## Registration states
 
-The certificate appears in the inventory in the `Pending registration` state. When the registration completes, it becomes `Registered`. See [Certificate](../../concept-design/core-components/certificate.md) for the full state model.
+The certificate appears in the inventory in the `Pending Registration` state. When the registration completes, it becomes `Registered`. See [Certificate](../../concept-design/core-components/certificate.md) for the full state model.
 
 The registration itself has an authorization state, shown in the **Registration** widget of the certificate detail. The widget shows the rows `State`, `Expires`, and `Failed attempts`. The state is one of:
 
@@ -101,7 +101,7 @@ The response carries the pre-registered certificate's `uuid`:
 To complete the registration, call the issue operation on the pre-registered certificate:
 
 ```
-POST /v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/issue
+POST /api/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/issue
 ```
 
 The body carries the CSR (`request`) or the platform key selection (`tokenProfileUuid`/`keyUuid` with `csrAttributes`), the signature attributes, and the challenge as `authorizationSecret`.

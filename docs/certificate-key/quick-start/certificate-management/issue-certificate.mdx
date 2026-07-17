@@ -14,7 +14,7 @@ This page covers immediate issuance — the **Issue now** request type. The Add 
 
 ## Issue new certificate using the API
 
-New `Certificate` can be issued using the `Client Operations` API. There may be some `Attributes` associated with the issuance of the `Certificate`. These `Attributes` represents requirements by some certification authority technology. We can get the list of `Attributes` for issuing of the `Certificate` using the following request:
+New `Certificate` can be issued using the `Client Operations` API. There may be some `Attributes` associated with the issuance of the `Certificate`. These `Attributes` represent requirements of some certification authority technology. We can get the list of `Attributes` for issuing of the `Certificate` using the following request:
 ```bash
 curl -X GET \
   --cacert [ca-cert] \
@@ -22,7 +22,7 @@ curl -X GET \
   --cert-type [type] \
   -H "Accept: application/json" \
   https://[domain]:[port]/api/v2/operations/authorities/e045a12a-e114-45ed-90b8-bac7e750e803/raProfiles/166b5cf52-63f2-11ec-90d6-0242ac120003/attributes/issue
-  #https://[domain]:[port]/api/v2/operations//authorities/{authorityUuid}/raProfiles/{raProfileUuid}/attributes/issue
+  #https://[domain]:[port]/api/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/attributes/issue
 ```
 
 This returns the list of applicable attributes to issue `Certificate` using the `RA Profile` service, such as:
