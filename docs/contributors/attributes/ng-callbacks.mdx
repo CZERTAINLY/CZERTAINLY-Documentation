@@ -65,7 +65,7 @@ version ride the request body as `Core`-stamped context, never the path.
 | Endpoint | Purpose |
 |----------|---------|
 | `GET /v2/attributes` | Full definition-registry dump → `AttributeDefinitionsDto`. |
-| `GET /v2/attributes?uuids=…` | Batch lookup by UUID (repeat the parameter per UUID); returns the found-only subset, same DTO. |
+| `GET /v2/attributes?uuids=…` | Batch lookup by UUID — repeat the parameter per UUID, e.g. `?uuids=e8ae4f6b-…&uuids=1c0f…`; returns the found-only subset, same DTO. |
 | `GET /v2/attributes/{uuid}` | Single definition read; `404 ATTRIBUTE_DEFINITION_NOT_FOUND` if unknown. |
 | `POST /v2/attributes/callback` | The standard callback surface — resolves dynamic content for one attribute. |
 
@@ -99,6 +99,11 @@ Declaration rules (enforced by the platform at definition ingestion):
 - `dependsOn` is **not allowed on `RESOURCE`** attributes.
 - An **empty (non-null) list means "fire once when the form opens"** — the callback depends on no other
   field (a scope-only dropdown that reads only the parent scope). This is the *fire-on-mount* case.
+
+:::note[Annotated examples]
+The JSON examples below carry `//` and `/* … */` annotations for explanation. These are not valid JSON —
+strip the comments before copying a payload.
+:::
 
 ```json
 {
