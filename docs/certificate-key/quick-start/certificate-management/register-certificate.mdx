@@ -1,0 +1,114 @@
+---
+sidebar_position: 10
+---
+
+# Register Certificate
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
+
+Pre-registration splits certificate issuance in two. You register the certificate's identity now and issue it later. No key or CSR exists yet.
+
+This is different from [issuing a certificate](./issue-certificate.mdx). Issuance needs a CSR or a platform key up front. Pre-registration needs neither — only the identity, described by the [request attributes](../../concept-design/core-components/request-attribute.md) of the selected `RA Profile`, and a challenge secret that authorizes the later completion.
+
+## Registration variants
+
+Pre-registration comes in two variants:
+
+- **Connector-backed** — the `Authority`'s connector supports registration. The identity is pre-registered at the upstream CA.
+- **Platform-level** — the connector does not support registration, or the authority has no connector. The certificate is pre-registered inside the platform only, with no CA call. It does not imply a CA-side end-entity exists.
+
+You do not choose the variant. The platform picks it based on the capabilities of the `Authority`'s connector.
+
+## Register a certificate using the web interface
+
+1. Click **Certificates** in the left menu
+2. Click **Add Certificate** (plus symbol <span style={{color: '#1473b5',}}><FontAwesomeIcon icon={faPlus} /></span>)
+3. Select the request type **Pre-register** — register a certificate to be issued later using a challenge secret
+4. Select the `RA Profile`
+5. Fill the **Request Attributes** tab — these values are the identity of the future certificate
+6. Enter the **Challenge** — the authorization secret that gates completion. It must be 12–255 printable ASCII characters. You choose it; the platform never generates one.
+7. Set the **Issuance window (optional)** — the deadline for completing the registration. When omitted, the [platform default](#platform-defaults) applies.
+8. Fill the **Custom Attributes** tab as usual
+9. Click **Create**
+
+## Registration states
+
+The certificate appears in the inventory in the `Pending registration` state. When the registration completes, it becomes `Registered`. See [Certificate](../../concept-design/core-components/certificate.md) for the full state model.
+
+The registration itself has an authorization state, shown in the **Registration** widget of the certificate detail. The widget shows the rows `State`, `Expires`, and `Failed attempts`. The state is one of:
+
+- **Active** — the challenge gates issue.
+- **Expired** — the issuance window has passed.
+- **Locked** — locked after too many failed challenge attempts.
+- **Closed** — behaves as unregistered.
+
+## Complete the registration
+
+1. Click **Certificates** in the left menu and open the `Registered` certificate
+2. Click **Complete** (check symbol <span style={{color: '#1473b5',}}><FontAwesomeIcon icon={faCheck} /></span>). The action is enabled only while the registration is Active and the issuance window has not elapsed; otherwise the disabled button's tooltip explains why.
+3. In the **Complete Certificate Registration** dialog, enter the **Challenge**
+4. Choose the **Key Source**:
+    - **Upload CSR** — upload a certificate signing request (CSR file)
+    - **Existing Key** — select the **Token Profile** and the **Key**, fill the resolved **Request Attributes**, and fill the **Signature Attributes**
+5. Click **Complete**
+
+The identity from the registration is preserved. Completion runs through the standard issue flow.
+
+:::note
+Renew and rekey against an active registration are rejected. Completion must go through issue with the challenge.
+:::
+
+## Register a certificate using the API
+
+Pre-register a certificate using the `Client Operations` API. Provide the identity via `csrAttributes` OR the flat `subjectDn`/`subjectAltName`/`extensions` fields — never both. Add the challenge as `authorizationSecret` and, optionally, the completion deadline as `expiresAt`:
+
+```bash
+curl -X POST \
+  --cacert [ca-cert] \
+  --cert [client-cert] \
+  --cert-type [type] \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  --data '
+  {
+    "csrAttributes": [
+      {
+        "name": "commonName",
+        "content": [
+          {
+            "value": "server01.example.com"
+          }
+        ]
+      }
+    ],
+    "authorizationSecret": "correct-horse-battery-staple",
+    "expiresAt": "2026-08-01T12:00:00Z"
+  }' \
+  https://[domain]:[port]/api/v2/operations/authorities/e045a12a-e114-45ed-90b8-bac7e750e803/raProfiles/166b5cf52-63f2-11ec-90d6-0242ac120003/certificates/register
+  #https://[domain]:[port]/api/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/register
+```
+
+The response carries the pre-registered certificate's `uuid`:
+
+```json
+{
+  "uuid": "9c1f0a7e-52d3-4b1a-8f6e-2d7c30a41b95"
+}
+```
+
+To complete the registration, call the issue operation on the pre-registered certificate:
+
+```
+POST /v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/issue
+```
+
+The body carries the CSR (`request`) or the platform key selection (`tokenProfileUuid`/`keyUuid` with `csrAttributes`), the signature attributes, and the challenge as `authorizationSecret`.
+
+## Platform defaults
+
+Two platform settings provide the registration defaults. You edit them in [platform settings](../../settings/platform.md#registration), on the **Certificates** tab in the **Registration** section:
+
+- **Default Issuance Window (days)** — applied when a pre-registration omits an explicit expiry.
+- **Max Failed Attempts** — maximum failed challenge-verification attempts before the registration authorization locks.

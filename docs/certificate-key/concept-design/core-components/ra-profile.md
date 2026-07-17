@@ -48,3 +48,38 @@ The following steps illustrate the process of requesting the certificate through
 | **Validation Enabled**                | Enable or disable validation of certificates associated with the RA Profile                                                                                         | `disabled`    |
 | **Validation Frequency**              | Validation frequency of certificates associated with the RA Profile specified in days                                                                               | Everyday      |
 | **Expiring Threshold**                | How many days before expiration should validation status of certificates associated with the RA Profile change to `Expiring`                                        | 30 days       |
+
+## Request attributes
+
+`RA Profile` defines the request attributes of its certificate service — what the requester fills in on the request form and where each value lands in the issued certificate. If you are new to request attributes, read the [Request Attribute](./request-attribute.md) concept first.
+
+Each `RA Profile` can author its own **static set** of request attributes. You author it on the **Request Attributes** tab of the `RA Profile` create or edit dialog; the tab becomes available once an `Authority` is selected.
+
+The static set is combined with the set supplied by the `Authority`'s connector according to the profile's merge mode:
+
+- **Static only** — only the request attributes configured on the profile are used; connector-supplied attributes are ignored.
+- **Connector only** — only the connector-supplied request attributes are used; the attributes configured on the profile are ignored.
+- **Merge** — the attributes configured on the profile are combined with the connector-supplied attributes into a single set; on a conflict the connector definition wins. This is the default.
+
+When the combination yields no definitions, the [platform default set](../../settings/request-attributes.md) applies as the terminal fallback.
+
+**Value-source bindings** attach a value source (free input, static list, or connector callback) onto a connector-supplied attribute by reference — attribute UUID, or name as a fallback. Bindings are applied after the sets are combined, and each binding may target an attribute at most once.
+
+The outcome of this resolution is the profile's **resolved request-attribute set**. It is what certificate request forms render for the profile.
+
+## External CSR validation
+
+When a client supplies its own CSR (an external CSR), the `RA Profile` validates it against the resolved request-attribute set. Two modes exist:
+
+- **Strict** — non-compliant external CSRs are rejected.
+- **Lenient** — non-compliant external CSRs are accepted; violations become warnings.
+
+Validation checks:
+
+- every required mapped attribute has a matching subject component, SAN entry, or extension in the CSR
+- matched values satisfy the attribute's value constraints
+- in strict mode additionally a whitelist pass: anything present in the CSR — a subject component, SAN type, or extension — that is not covered by the resolved set is a violation
+
+The mode is inherited along a chain: the profile's own setting, then the platform default, then **lenient** as the final fallback.
+
+To configure it in the web interface, open the profile detail and switch to the **Validation** tab. The **Request Validation** widget shows the effective mode. Click **Edit Request Validation Settings**; the switch **Use Platform Request Validation Settings** controls whether the profile follows the platform default or sets its own mode.

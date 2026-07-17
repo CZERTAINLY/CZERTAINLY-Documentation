@@ -37,6 +37,8 @@ Certificate can be in following states:
 | `Pending Approval` | The `Certificate` action is waiting to be approved.                                                               | When certificate action needs to be approved.                                                                                                                                      |
 | `Pending Issue`    | The `Certificate` issuance has been accepted but cannot be completed synchronously and is waiting to be finalised. | When the certification authority accepts an issue or renew request but cannot complete it synchronously (see [Asynchronous operations](#asynchronous-operations)).                  |
 | `Pending Revoke`   | The `Certificate` revocation has been accepted but cannot be completed synchronously and is waiting to be confirmed. | When the certification authority accepts a revoke request but cannot complete it synchronously.                                                                                     |
+| `Pending Registration` | The `Certificate` pre-registration has been submitted and is waiting to be completed.                          | When a registration request is submitted and cannot be completed synchronously (certification authority approval or asynchronous completion).                                       |
+| `Registered`       | The `Certificate` is pre-registered and awaiting issue.                                                           | When the pre-registration completes.<br/>When approval for completing the registration is rejected and the pre-registered certificate is restored.                                 |
 | `Rejected`         | The `Certificate` issuance approval request was rejected.                                                         | When approval for certificate issue action was rejected or expired.                                                                                                                |
 | `Failed`           | The `Certificate` request issuance failed or the parked issuance was cancelled.                                   | When certificate fails to be issued by authority caused by error or invalid request, or when an operator cancels a `Pending Issue`.                                                |
 | `Issued`           | The `Certificate` is issued.                                                                                      | Initial state in case certificate is uploaded or discovered.<br />When certificate is successfully issued.<br/>When certificate revocation failed state returns back to `Issued`.<br/>When an operator cancels a `Pending Revoke`. |
@@ -51,16 +53,24 @@ hide empty description
 state "Pending Approval" as PendingApproval
 state "Pending Issue" as PendingIssue
 state "Pending Revoke" as PendingRevoke
+state "Pending Registration" as PendingRegistration
 
   [*] --> Requested
   [*] --> Issued
   Requested --> Failed
   Requested --> PendingApproval
   Requested --> PendingIssue
+  Requested --> PendingRegistration
   Requested --> Issued
+  PendingRegistration --> Registered
+  PendingRegistration --> Failed
+  Registered --> PendingIssue : complete
+  Registered --> PendingApproval
+  Registered --> Failed
   PendingApproval --> Rejected
   PendingApproval --> PendingIssue
   PendingApproval --> PendingRevoke
+  PendingApproval --> Registered : approval rejected
   PendingApproval --> Issued
   PendingApproval --> Revoked
   PendingIssue --> Issued : finalise issue
@@ -76,6 +86,8 @@ state "Pending Revoke" as PendingRevoke
   Revoked --> [*]
 @enduml
 ```
+
+A pre-registered certificate additionally carries a registration authorization with its own state — `Active`, `Expired`, `Locked`, or `Closed` — that gates completion of the registration. See [Register Certificate](../../quick-start/certificate-management/register-certificate.mdx).
 
 ### Asynchronous operations
 

@@ -27,3 +27,12 @@ Certificate settings contains configuration of certificate validation behaviour 
 | **Validation Enabled**   | Enable or disable validation of certificates                                                  | `enabled`     |
 | **Validation Frequency** | Validation frequency of certificates specified in days                                        | Everyday      |
 | **Expiring Threshold**   | How many days before expiration should validation status of certificates change to `Expiring` | 30 days       |
+
+### Registration
+
+The **Registration** section of the Certificates tab holds the platform defaults for [certificate pre-registration](../quick-start/certificate-management/register-certificate.mdx):
+
+| Name                                | Description                                                                                     | Default Value |
+|-------------------------------------|-------------------------------------------------------------------------------------------------|---------------|
+| **Default Issuance Window (days)**  | Default issuance window in days, applied when a pre-registration omits an explicit expiry       | 7 days        |
+| **Max Failed Attempts**             | Maximum failed challenge-verification attempts before the registration authorization locks     | 5             |

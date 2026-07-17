@@ -1,0 +1,85 @@
+---
+sidebar_position: 12
+---
+
+# Request Attributes
+
+A request attribute turns a regular attribute into a declaration of certificate content. It is a [`DataAttributeV3`](https://github.com/OmniTrustILM/interfaces/blob/main/src/main/java/com/otilm/api/model/common/attribute/v3/DataAttributeV3.java) that carries a `fieldMapping`. The presence of the mapping is the sole marker: an attribute without a `fieldMapping` behaves exactly as before, so existing definitions keep working unchanged. The optional `valueSource` is orthogonal — it declares how the value is obtained, not where it lands.
+
+For the concept — why request attributes exist and how the platform resolves the effective set — see [Request Attribute](../../certificate-key/concept-design/core-components/request-attribute.md). For the connector wire contract, see [Structured Certificate Request Content](../../certificate-key/connectors/provider-interfaces/request-attributes-structured.md). The model classes can be found in the [Interfaces repository](https://github.com/OmniTrustILM/interfaces/tree/main/src/main/java/com/otilm/api/model/common/attribute/v3/mapping).
+
+## `fieldMapping`
+
+The `fieldMapping` declares which certificate (or other object) fields the attribute's value projects into. It has two properties, both required:
+
+- **`objectType`** — the object type this mapping applies to. Only `x509Certificate` is built today. The codes `sshCertificate`, `key`, and `secret` are reserved — the model stays open for other object types.
+- **`fields`** — one or more target fields. The mapping is 1-to-many: a single attribute value can project into several fields at once, for example the subject `CN` and a DNS SAN entry.
+
+## Mapped fields
+
+Each entry in `fields` is a `MappedField`, polymorphic on `fieldType`. Three properties are common to all field types:
+
+- **`fieldType`** — the discriminator: `rdn`, `san`, or `extension`.
+- **`order`** — ordering index among fields of the same type, ascending. Use it to render multi-component subjects in a defined order.
+- **`source`** — provenance of the value when a client CSR and platform-supplied values both offer the field: `csr` (the CSR value wins), `platform` (the platform value wins), or `csrThenPlatform` (the CSR value wins when present; otherwise the platform value applies).
+
+The three field types:
+
+- **`rdn`** — maps the value to a subject DN component. Carries `rdn` — a short code (for example `CN`) or a dotted-decimal OID, resolved through the [OID registry](../../certificate-key/settings/oid.md).
+- **`san`** — maps the value to a Subject Alternative Name entry. Carries `generalNameType`. When the type is `otherName`, it also carries `otherNameOid` and `otherNameValueEncoding`, because different OtherName OIDs carry differently typed values.
+- **`extension`** — maps the value to an X.509 extension. Carries `extensionOid` (dotted-decimal) and `criticalOverridable` — whether the requester may override the extension's default criticality.
+
+## `valueSource`
+
+Orthogonal to the mapping, `valueSource` declares how the platform resolves the attribute's content. Its `kind` is one of:
+
+- **`none`** — free input; the requester types any value.
+- **`staticList`** — the requester picks from a fixed list defined with the attribute.
+- **`connectorCallback`** — the values come from a connector callback at request time.
+
+The model also defines dependency `params` that scope the source by other attributes' values. They are stored but not evaluated yet — do not rely on them.
+
+## Example
+
+A "Server FQDN" request attribute. One value projects into both the subject `CN` and a DNS SAN entry:
+
+```json
+{
+  "uuid": "c7a8f8f0-f8f8-4f8f-8f8f-f8f8f8f8f8f8",
+  "name": "serverFqdn",
+  "type": "data",
+  "version": 3,
+  "schemaVersion": "v3",
+  "contentType": "string",
+  "description": "Fully qualified domain name of the server",
+  "properties": {
+    "label": "Server FQDN",
+    "required": true,
+    "readOnly": false,
+    "visible": true,
+    "list": false,
+    "multiSelect": false,
+    "group": "Certificate Identity"
+  },
+  "fieldMapping": {
+    "objectType": "x509Certificate",
+    "fields": [
+      {
+        "fieldType": "rdn",
+        "rdn": "CN",
+        "order": 1,
+        "source": "csrThenPlatform"
+      },
+      {
+        "fieldType": "san",
+        "generalNameType": "dns",
+        "order": 1,
+        "source": "csrThenPlatform"
+      }
+    ]
+  },
+  "valueSource": {
+    "kind": "none"
+  }
+}
+```
