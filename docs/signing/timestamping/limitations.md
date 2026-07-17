@@ -26,6 +26,6 @@ For the full description of the serial-number generator — bit layout, clock-re
 
 ## Deletion protection
 
-A `Signing Profile` binds a number of other resources — its TSA signing certificate, `Token Profile`, `RA Profile`, delegated-signer and signature-formatting connectors, `Time Quality Configuration`, and `TSP Profile` (see the [entity-relationship diagram on the Signing Profile page](/docs/signing/signing-profile#relationships)). While any of these is still referenced, the platform **will not let it be deleted**, so a profile can never be left pointing at something that no longer exists.
+A `Signing Profile` binds a number of other resources — such as its TSA signing certificate, the signature-formatting connector, and its `TSP Profile`. The [entity-relationship diagram on the Signing Profile page](/docs/signing/signing-profile#relationships) shows those that apply to the currently available timestamping workflow. While any of these is still referenced, the platform **will not let it be deleted**, so a profile can never be left pointing at something that no longer exists.
 
 To retire one of these resources, first update or delete every Signing Profile (version) that references it, then delete the resource. To delete the Signing Profile itself, first make sure no TSP Profile names it as its default and no signing records exist against any of its versions.
