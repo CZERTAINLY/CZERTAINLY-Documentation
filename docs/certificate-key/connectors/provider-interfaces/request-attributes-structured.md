@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1.6
+sidebar_position: 3
 ---
 
 # Structured Certificate Request Content

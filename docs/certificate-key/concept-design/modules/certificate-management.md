@@ -33,7 +33,7 @@ With defined `RA Profile`, the `Client` will need only the following data to req
 
 - `Connector Attributes` for issuing, if needed by the `Connector` implementation
 
-Every issuance request is shaped by request attributes. When the request is created from an existing key, the platform builds the full request — subject, subject alternative names, and extensions — from the friendly attribute values the requester provides. When an external CSR is supplied, it is validated against the resolved request-attribute set of the [`RA Profile`](../core-components/ra-profile.md), in strict or lenient mode. See [`Request Attribute`](../core-components/request-attribute.md) for details.
+Every issuance request is shaped by request attributes. From an existing key, the platform builds the request content from the attribute values the requester provides. An external CSR is instead [validated](../core-components/ra-profile.md#external-csr-validation) against the profile's resolved request-attribute set.
 
 In case of RA profile has associated `Compliance Profile`, compliance check will be first run on certificate request. If certificate request compliance check fails, certificate is `Rejected`, otherwise certificate issuance will proceed.
 
@@ -41,7 +41,7 @@ Upon successful issuing of the `Certificate`, it will be parsed, validated, and 
 
 ### Registration \{#registerCert}
 
-A `Certificate` can be pre-registered before any key or CSR exists. The platform records the certificate's identity — given as request-attribute values — and the certificate is issued later. When the `Authority`'s connector supports registration, the identity is pre-registered at the upstream CA; otherwise the certificate is pre-registered at the platform level only, with no CA call. Completion is gated by a challenge secret chosen at registration and by an issuance window — the deadline for completing the registration. Completion itself runs through the standard [issue flow](#issueCert). See the [Register Certificate](../../quick-start/certificate-management/register-certificate.mdx) quick start and the [certificate states](../core-components/certificate.md) for details.
+A `Certificate` can be pre-registered before any key or CSR exists. The platform records the certificate's identity — given as request-attribute values — and the certificate is issued later. Completing the registration requires a challenge secret and runs through the standard [issue flow](#issueCert). See the [Register Certificate](../../quick-start/certificate-management/register-certificate.mdx) quick start for the full flow and the [certificate states](../core-components/certificate.md) for the state model.
 
 ### Revocation \{#revokeCert}
 

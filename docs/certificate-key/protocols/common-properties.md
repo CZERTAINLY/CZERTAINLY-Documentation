@@ -28,20 +28,9 @@ Default associations can be set during **profile creation** or modified later wh
 
 ## Request attribute validation
 
-When a client enrolls with a CSR over a protocol, the platform validates the CSR against the [request attributes](../concept-design/core-components/request-attribute.md) of the `RA Profile` that serves the request — its [resolved request-attribute set](../concept-design/core-components/ra-profile.md#request-attributes). The outcome depends on the profile's [validation mode](../concept-design/core-components/ra-profile.md#external-csr-validation):
+When a client enrolls with a CSR over a protocol, the platform validates the CSR against the [resolved request-attribute set](../concept-design/core-components/ra-profile.md#request-attributes) of the `RA Profile` that serves the request. What is checked, and what the strict and lenient modes mean, is described in [External CSR validation](../concept-design/core-components/ra-profile.md#external-csr-validation). The platform never rewrites the request. It either accepts or rejects it.
 
-- **Strict** — a non-compliant CSR is rejected with the protocol's native error.
-- **Lenient** — the CSR is accepted and violations are logged as warnings.
-
-The platform never rewrites the request. It either accepts or rejects it.
-
-Validation checks that:
-
-- every required mapped attribute is present in the CSR
-- matched values satisfy the attribute's value constraints
-- in strict mode additionally a whitelist pass: anything in the CSR that is not covered by the resolved set is a violation
-
-Each protocol reports a rejection with its own native error:
+In lenient mode, violations are logged as warnings and the CSR is accepted. In strict mode, each protocol rejects a non-compliant CSR with its own native error:
 
 | Protocol | Validated operation                       | Rejection error               |
 |----------|-------------------------------------------|-------------------------------|

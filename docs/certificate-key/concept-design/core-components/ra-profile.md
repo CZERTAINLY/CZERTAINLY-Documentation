@@ -55,17 +55,7 @@ The following steps illustrate the process of requesting the certificate through
 
 Each `RA Profile` can author its own **static set** of request attributes. You author it on the **Request Attributes** tab of the `RA Profile` create or edit dialog; the tab becomes available once an `Authority` is selected.
 
-The static set is combined with the set supplied by the `Authority`'s connector according to the profile's merge mode:
-
-- **Static only** — only the request attributes configured on the profile are used; connector-supplied attributes are ignored.
-- **Connector only** — only the connector-supplied request attributes are used; the attributes configured on the profile are ignored.
-- **Merge** — the attributes configured on the profile are combined with the connector-supplied attributes into a single set; on a conflict the connector definition wins. This is the default.
-
-When the combination yields no definitions, the [platform default set](../../settings/request-attributes.md) applies as the terminal fallback.
-
-**Value-source bindings** attach a value source (free input, static list, or connector callback) onto a connector-supplied attribute by reference — attribute UUID, or name as a fallback. Bindings are applied after the sets are combined, and each binding may target an attribute at most once.
-
-The outcome of this resolution is the profile's **resolved request-attribute set**. It is what certificate request forms render for the profile.
+The profile's **merge mode** controls how the static set combines with the set supplied by the `Authority`'s connector. The profile can also attach **value-source bindings** onto connector-supplied attributes. The outcome of this resolution is the profile's **resolved request-attribute set** — what certificate request forms render for the profile. The merge modes and the resolution steps are described in [Where request-attribute sets come from](./request-attribute.md#where-request-attribute-sets-come-from).
 
 ## External CSR validation
 

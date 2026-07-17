@@ -19,18 +19,12 @@ The same definitions apply everywhere. They work the same whether the platform b
 A field mapping declares one or more target fields in the certificate:
 
 - **RDN (subject)** — a component of the certificate subject name. The RDN is identified by its code (for example `CN`) or its dotted-decimal OID, resolved through the [OID registry](../../settings/oid.md). Each mapping carries an ordering index, so multi-component subjects render in a defined order, and the same RDN type can appear more than once (multi-valued subjects).
-- **Subject Alternative Name** — a typed SAN entry: `dNSName`, `rfc822Name`, `iPAddress`, `uniformResourceIdentifier`, `otherName`, `directoryName`, or `registeredID`. SAN is a first-class target — it is never duplicated as a certificate extension.
+- **Subject Alternative Name** — a typed SAN entry, such as a DNS name or an email address. SAN is a first-class target — it is never duplicated as a certificate extension.
 - **Certificate extension** — an X.509 extension identified by its OID from the [OID registry](../../settings/oid.md). The registry entry provides the default criticality and the value encoding used to turn the string value into the extension value. The definition can allow the requester to override the criticality.
 
 One attribute can map to several fields at once. A single "Server FQDN" value can land in both the subject `CN` and a `dNSName` SAN entry.
 
-## Value provenance
-
-A client CSR and platform-supplied attribute values can both offer a value for the same field. Each mapped field therefore declares where its value comes from:
-
-- **CSR** — the value is taken from the client CSR.
-- **Platform** — the value is taken from the platform-supplied attribute value.
-- **CSR, falling back to Platform** — the CSR value wins when present; otherwise the platform value applies.
+A mapped field also declares whose value wins when both a client CSR and platform-supplied attribute values offer it: the CSR value, the platform value, or the CSR value with the platform value as a fallback.
 
 ## Value sources
 
@@ -40,7 +34,7 @@ Orthogonal to the mapping, a definition can declare how the requester's value is
 - **Static list** — the requester picks from a fixed list of values defined with the attribute.
 - **Connector callback** — the values are provided by a connector callback at request time.
 
-Value-source bindings let an `RA Profile` attach a value source to a connector-supplied attribute by reference — attribute UUID, or name as a fallback. This is useful when the connector defines the attribute but you want to constrain what the requester can enter. See [Request attributes on the RA Profile](./ra-profile.md#request-attributes).
+Value-source bindings let an `RA Profile` attach a value source to a connector-supplied attribute by reference — attribute UUID, or name as a fallback. This is useful when the connector defines the attribute but you want to constrain what the requester can enter. Bindings are applied after the sets are combined, and each binding may target an attribute at most once. See [Request attributes on the RA Profile](./ra-profile.md#request-attributes).
 
 ## Where request-attribute sets come from
 
