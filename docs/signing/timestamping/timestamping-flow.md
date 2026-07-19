@@ -114,7 +114,7 @@ Immediately after the serial number is issued, ILM captures the timestamp value 
 
 ### Signing (steps 14–19)
 
-Building the token takes three steps. ILM first asks the `Timestamp Formatting Connector` — the component that knows how to build the token's internal structure — to assemble the exact bytes to be signed. It sends those bytes to the configured cryptographic token to be signed with the profile's managed key (the key never leaves the token — ILM only receives the signature back). It then asks the connector to assemble the finished, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature before returning it; if that check fails, the request is rejected even though signing succeeded. See [Timestamp Formatting Connector](./timestamp-formatting-connector.md) for the two-round-trip calling convention.
+Building the token takes three steps. ILM first asks the `Timestamp Formatting Connector` — the component that knows how to build the token's internal structure — to assemble the exact bytes to be signed. It sends those bytes to the configured cryptographic token to be signed with the profile's managed key (the key never leaves the token — ILM only receives the signature back). It then asks the connector to assemble the finished, standards-compliant timestamp token. If the profile is configured to verify its own output, ILM checks the finished token's signature before returning it; if that check fails, the request is rejected even though signing succeeded. See [Timestamp Formatting Connector](./timestamp-formatting-connector.md) for its user-configurable token content.
 
 ### Signing record (steps 20–21)
 
@@ -161,5 +161,5 @@ Pages that expand on topics touched here:
 - [Authentication & authorization](./authentication-authorization.md) — credential types, cache, secret mapping
 - [Signing records](../signing-records.md) — schema, retrieval, retention
 - [Time quality monitor](./time-quality-monitor.md) — how clock accuracy is measured and reported
-- [Timestamp Formatting Connector](./timestamp-formatting-connector.md) — connector operation and the two-round-trip calling convention
+- [Timestamp Formatting Connector](./timestamp-formatting-connector.md) — connector selection and configurable timestamp token content
 - [Limitations](./limitations.md) — serial number throughput and overflow
