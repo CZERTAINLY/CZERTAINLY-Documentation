@@ -2,113 +2,11 @@
 sidebar_position: 5
 ---
 
-# Time Quality Monitor
+# Time quality evaluation
 
-The Time Quality Monitor (TQM) continuously evaluates whether the system clock meets the accuracy requirements for issuing RFC 3161 timestamp tokens. It queries the configured NTP servers on behalf of each Time Quality Configuration, applies the configured thresholds, and reports the outcome — **OK** or **DEGRADED** — back to ILM. This is how ILM satisfies the time-source accuracy requirements of ETSI EN 319 421 and eIDAS Art. 42(1)(b) for qualified time stamps.
+The Time Quality Monitor (TQM) evaluates whether the system clock meets the accuracy requirements for issuing RFC 3161 timestamp tokens. ILM provides the active `Time Quality Configurations` to TQM, which evaluates the configured NTP sources and reports an **OK** or **DEGRADED** result to ILM.
 
-To configure time quality evaluation requirements, see [Time Quality Configuration](./time-quality-configuration.md). For deployment and environment configuration, see the [Time Quality Monitor repository](https://github.com/OmniTrustILM/time-quality-monitor).
-
----
-
-## Deploying the Time Quality Monitor
-
-TQM runs as a separate container or process that must be co-located with ILM:
-
-- **Kubernetes** — deploy TQM as an additional container in the same pod as ILM.
-- **Virtual machine** — run TQM as a process or container on the same machine as ILM.
-
-TQM and ILM do not connect to each other directly. All communication goes through a message broker (RabbitMQ or Azure Service Bus) using the AMQP 1.0 protocol, so neither component has a hard runtime dependency on the other. See [Message flows](#message-flows) for the communication protocol and the [Time Quality Monitor repository](https://github.com/OmniTrustILM/time-quality-monitor) for broker-specific setup.
-
-```plantuml
-@startuml
-skinparam ArrowColor #1573B5
-skinparam ComponentBorderColor #1573B5
-skinparam CollectionsBorderColor #1573B5
-skinparam NodeBorderColor #1573B5
-skinparam defaultFontName sans-serif
-skinparam componentStyle rectangle
-skinparam shadowing false
-
-node "Deployment unit" {
-  component "ILM" as ILM #E1F5E0
-  component "Time Quality\nMonitor (TQM)" as TQM #E1F5E0
-}
-queue "Message broker" as Broker #F7F7F7
-collections "NTP servers\n(internet / local)" as NTP #F7F7F7
-
-ILM <-[#1573B5]-> Broker : AMQP
-TQM <-[#1573B5]-> Broker : AMQP
-TQM -[#1573B5]-> NTP : UDP / NTP
-@enduml
-```
-
-### Health endpoint
-
-TQM exposes a single HTTP endpoint for container health checks:
-
-```
-GET /health
-```
-
-The endpoint listens on `LISTEN_PORT` (default `8080`) and returns HTTP `200` when TQM is running and connected to the message broker, or a non-2xx status when the broker connection is unavailable. Use it for both liveness and readiness probes in your container orchestration platform.
-
----
-
-## Message flows
-
-TQM and ILM exchange messages through three flows carried over a single shared exchange or topic. The table below describes each flow; for deployment details about the broker constructs that implement them, see the [Time Quality Monitor repository](https://github.com/OmniTrustILM/time-quality-monitor).
-
-| Flow | Direction | Purpose |
-|---|---|---|
-| Config request | TQM → ILM | TQM requests a snapshot of all active `Time Quality Configurations`. Re-sent at `BROKER_REQUEST_TIMEOUT` intervals until a snapshot arrives. |
-| Config snapshot | ILM → TQM | ILM delivers the full set of active `Time Quality Configurations`. TQM begins monitoring each configuration on receipt. |
-| Results | TQM → ILM | TQM publishes the outcome (**OK** / **DEGRADED**) of each NTP check cycle, per configuration. |
-
-The sequence below shows how these flows are exchanged at startup and during steady-state operation:
-
-```plantuml
-@startuml
-skinparam SequenceArrowColor #1573B5
-skinparam ParticipantBorderColor #1573B5
-skinparam ParticipantBackgroundColor #E1F5E0
-skinparam SequenceLifeLineBorderColor #1573B5
-skinparam defaultFontName sans-serif
-skinparam shadowing false
-
-participant "ILM" as ILM
-participant "Message broker" as Broker
-participant "Time Quality\nMonitor (TQM)" as TQM
-
-== Startup ==
-
-TQM -> Broker : Config request
-Broker -> ILM : Config request
-
-ILM -> Broker : Config snapshot
-Broker -> TQM : Config snapshot
-
-note over TQM : Begins monitoring per\nTime Quality Configuration
-
-== Steady state (per configuration, repeating) ==
-
-loop every NTPCheckInterval
-  TQM -> TQM : Query NTP servers
-  TQM -> Broker : Result (OK / DEGRADED)
-  Broker -> ILM : Result
-end
-
-== Configuration change ==
-
-ILM -> Broker : Config snapshot
-Broker -> TQM : Config snapshot
-
-note over TQM : Applies updated configuration\nto the affected monitors
-@enduml
-```
-
-On startup, TQM opens a receiver for the config-snapshot flow and immediately publishes a config request. ILM responds with a snapshot of all active `Time Quality Configurations`. If no snapshot arrives, TQM re-publishes the config request at `BROKER_REQUEST_TIMEOUT` intervals. Once a snapshot is received, TQM begins monitoring each configuration and publishing results. When a `Time Quality Configuration` is created, updated, or removed in ILM, ILM pushes a new config snapshot without waiting for a request — TQM applies it immediately.
-
-The AMQP message contract for these flows can be found here: [Messaging API - Time Quality](/api/messaging-time-quality/).
+ILM uses the result to determine whether a `Signing Profile` associated with a `Time Quality Configuration` can issue timestamp tokens. To define the evaluation requirements, see [Time Quality Configuration](./time-quality-configuration.md).
 
 ---
 
@@ -174,6 +72,16 @@ endif
 
 ---
 
-## Configuration and deployment
+## How the result affects timestamping
 
-TQM is configured entirely through environment variables, and the message broker must be provisioned with the exchange or topic and the queues that the [message flows](#message-flows) use. For deployment and environment configuration, see the [Time Quality Monitor repository](https://github.com/OmniTrustILM/time-quality-monitor).
+ILM applies the latest time quality result to each `Signing Profile` associated with the evaluated `Time Quality Configuration`:
+
+- When the result is **OK**, timestamp issuance proceeds normally.
+- When the result is **DEGRADED**, the profile does not issue timestamp tokens.
+- When no `Time Quality Configuration` is associated with the profile, time quality enforcement is not applied.
+
+## Related pages
+
+- [Time Quality Configuration](./time-quality-configuration.md) — define NTP sources and evaluation requirements
+- [Troubleshooting](./troubleshooting.md) — diagnose timestamp requests rejected because time is unavailable
+- [Time Quality Monitor repository](https://github.com/OmniTrustILM/time-quality-monitor) — deployment, health checks, messaging, and environment configuration
