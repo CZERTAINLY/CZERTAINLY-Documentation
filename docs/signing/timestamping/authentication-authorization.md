@@ -18,11 +18,13 @@ Authentication for timestamping is configured on the `TSP Profile`. For a descri
 
 The priority order is fixed:
 
-1. **Client certificate** — detected when the configured certificate header (default: `ssl-client-cert`) is present
+1. **Client certificate** — detected when the configured client certificate header is present
 2. **Bearer token** — detected when the `Authorization` header begins with `Bearer `
 3. **Basic password** — detected when the `Authorization` header begins with `Basic `
 
 When multiple methods are present in a request, the first one in the priority order above takes precedence.
+
+The client certificate header name is controlled by the `auth.header.certificate` deployment parameter. See [Configurable parameters](../../certificate-key/installation-guide/deployment/deployment-helm/configurable-parameters.md) for its current default and configuration.
 
 ---
 

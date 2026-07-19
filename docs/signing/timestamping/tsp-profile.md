@@ -61,7 +61,7 @@ When creating or editing a `TSP Profile`, you choose which authentication method
 
 | Method | Transport | Credential |
 |---|---|---|
-| **Client Certificate** | Mutual-TLS; the client certificate arrives in the `ssl-client-cert` header | X.509 certificate |
+| **Client Certificate** | Mutual TLS; the client certificate arrives in the configured client certificate header | X.509 certificate |
 | **Bearer Token** | `Authorization: Bearer` header | JWT |
 | **Basic Authentication** | `Authorization: Basic` header | Username and password |
 
