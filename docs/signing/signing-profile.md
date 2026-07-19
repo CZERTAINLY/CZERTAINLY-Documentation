@@ -112,5 +112,3 @@ Once all references and records are cleared, the profile can be deleted.
 - [Signing Records](./signing-records.md) — record structure, retrieval, and retention
 - [Timestamping Request Flow](./timestamping/timestamping-flow.md) — how a profile is resolved and used per request
 - [Limitations](./timestamping/limitations.md) — dependent-resource deletion behaviour
-
-The OpenAPI specification for managing `Signing Profiles` can be found here: [Core API - Signing Profile](/api/core-signing-profile/).
