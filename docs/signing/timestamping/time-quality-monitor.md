@@ -6,7 +6,7 @@ sidebar_position: 5
 
 The Time Quality Monitor (TQM) continuously evaluates whether the system clock meets the accuracy requirements for issuing RFC 3161 timestamp tokens. It queries the configured NTP servers on behalf of each Time Quality Configuration, applies the configured thresholds, and reports the outcome — **OK** or **DEGRADED** — back to ILM. This is how ILM satisfies the time-source accuracy requirements of ETSI EN 319 421 and eIDAS Art. 42(1)(b) for qualified time stamps.
 
-To configure time quality evaluation requirements, see [Time Quality Configuration](./time-quality-configuration.md). To provision the broker and set TQM's environment variables, see [Time Quality Monitor configuration](./time-quality-monitor-configuration.md).
+To configure time quality evaluation requirements, see [Time Quality Configuration](./time-quality-configuration.md). For deployment and environment configuration, see the [Time Quality Monitor repository](https://github.com/OmniTrustILM/time-quality-monitor).
 
 ---
 
@@ -17,7 +17,7 @@ TQM runs as a separate container or process that must be co-located with ILM:
 - **Kubernetes** — deploy TQM as an additional container in the same pod as ILM.
 - **Virtual machine** — run TQM as a process or container on the same machine as ILM.
 
-TQM and ILM do not connect to each other directly. All communication goes through a message broker (RabbitMQ or Azure Service Bus) using the AMQP 1.0 protocol, so neither component has a hard runtime dependency on the other. See [Message flows](#message-flows) for the communication protocol and [Broker configuration](./time-quality-monitor-configuration.md#broker-configuration) for broker-specific setup.
+TQM and ILM do not connect to each other directly. All communication goes through a message broker (RabbitMQ or Azure Service Bus) using the AMQP 1.0 protocol, so neither component has a hard runtime dependency on the other. See [Message flows](#message-flows) for the communication protocol and the [Time Quality Monitor repository](https://github.com/OmniTrustILM/time-quality-monitor) for broker-specific setup.
 
 ```plantuml
 @startuml
@@ -56,7 +56,7 @@ The endpoint listens on `LISTEN_PORT` (default `8080`) and returns HTTP `200` wh
 
 ## Message flows
 
-TQM and ILM exchange messages through three flows carried over a single shared exchange or topic. The table below describes each flow; for the broker constructs that implement them, see [Broker configuration](./time-quality-monitor-configuration.md#broker-configuration).
+TQM and ILM exchange messages through three flows carried over a single shared exchange or topic. The table below describes each flow; for deployment details about the broker constructs that implement them, see the [Time Quality Monitor repository](https://github.com/OmniTrustILM/time-quality-monitor).
 
 | Flow | Direction | Purpose |
 |---|---|---|
@@ -176,4 +176,4 @@ endif
 
 ## Configuration and deployment
 
-TQM is configured entirely through environment variables, and the message broker must be provisioned with the exchange or topic and the queues that the [message flows](#message-flows) use. Both are covered on the [Time Quality Monitor configuration](./time-quality-monitor-configuration.md) page.
+TQM is configured entirely through environment variables, and the message broker must be provisioned with the exchange or topic and the queues that the [message flows](#message-flows) use. For deployment and environment configuration, see the [Time Quality Monitor repository](https://github.com/OmniTrustILM/time-quality-monitor).
