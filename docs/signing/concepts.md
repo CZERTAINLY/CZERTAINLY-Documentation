@@ -49,7 +49,7 @@ Core -[#1573B5,dashed]-> TQC : workflow-specific
 **Signature Formatting Provider** assembles the correct data structures before and after ILM Core performs the cryptographic operation. The specific connector implementation depends on the workflow — see the workflow-specific section for details.
 
 :::note
-Each workflow may introduce additional components beyond the ones shown here. For example, timestamping adds a Time Quality Monitor that continuously verifies clock accuracy. See the workflow-specific documentation for the full picture.
+Workflow-specific capabilities are documented separately. Timestamping, for example, includes clock-accuracy enforcement. See the workflow-specific documentation for details.
 :::
 
 ---

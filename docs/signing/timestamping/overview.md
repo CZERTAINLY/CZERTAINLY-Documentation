@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Timestamping overview
 
-ILM timestamping builds on the same infrastructure as general signing — `Signing Profile`, `Signing Record`, and `Cryptography Provider`. It adds two things you will not find in any other workflow: a Time Quality Monitor that continuously verifies clock accuracy, and a `TSP Profile` that exposes the `Signing Profile` as an RFC 3161 endpoint.
+ILM timestamping builds on the same infrastructure as general signing. It adds clock-accuracy enforcement and an RFC 3161 endpoint for requesting timestamp tokens.
 
 If you are new to ILM signing, read [Concepts](/docs/signing/concepts) first, then return here to understand what timestamping adds on top.
 
@@ -16,7 +16,7 @@ If you are new to ILM signing, read [Concepts](/docs/signing/concepts) first, th
 
 In other signing workflows the accuracy of ILM's system clock affects only audit log timestamps, not the validity of the signature itself. Timestamping is different: the binding between a document hash and a point in time is the entire purpose of a timestamp token, so the issuing clock must demonstrably be within a known accuracy bound.
 
-ILM addresses this through the **Time Quality Monitor (TQM)**, a component that continuously polls NTP servers and reports the current clock accuracy back to ILM. A `Signing Profile` can reference a [Time Quality Configuration](./time-quality-configuration.md) that sets an accuracy threshold; if TQM reports that the clock is outside that threshold, ILM refuses to issue the token. This enforcement is opt-in — a `Signing Profile` with no Time Quality Configuration skips the check entirely.
+ILM can enforce [time quality requirements](./time-quality-configuration.md) before issuing a token. When this enforcement is configured, ILM evaluates the current clock accuracy against those requirements and rejects the request when they are not met. Without configured time quality requirements, ILM issues tokens without this additional check.
 
 ### TSP protocol exposure
 
