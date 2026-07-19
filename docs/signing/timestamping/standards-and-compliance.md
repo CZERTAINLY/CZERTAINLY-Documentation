@@ -4,7 +4,7 @@ sidebar_position: 10
 
 # Standards and compliance
 
-ILM-native timestamping is built to the standards that govern electronic time-stamping in
+ILM timestamping is built to the standards that govern electronic time-stamping in
 the European Union and the wider PKI ecosystem. If you need to know which standards ILM
 follows, start here. This page lists the normative references ILM implements and maps each
 requirement — especially those that matter to a Qualified Trust Service Provider (QTSP) —

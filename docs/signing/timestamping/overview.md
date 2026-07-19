@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Timestamping overview
 
-ILM-native timestamping builds on the same infrastructure as general signing — `Signing Profile`, `Signing Record`, and `Cryptography Provider`. It adds two things you will not find in any other workflow: a Time Quality Monitor that continuously verifies clock accuracy, and a `TSP Profile` that exposes the `Signing Profile` as an RFC 3161 endpoint.
+ILM timestamping builds on the same infrastructure as general signing — `Signing Profile`, `Signing Record`, and `Cryptography Provider`. It adds two things you will not find in any other workflow: a Time Quality Monitor that continuously verifies clock accuracy, and a `TSP Profile` that exposes the `Signing Profile` as an RFC 3161 endpoint.
 
 If you are new to ILM signing, read [Concepts](/docs/signing/concepts) first, then return here to understand what timestamping adds on top.
 

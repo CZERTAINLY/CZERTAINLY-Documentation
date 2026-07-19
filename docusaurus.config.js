@@ -79,7 +79,7 @@ const config = {
           // SignServer (legacy) docs moved from /docs/signing/* to /docs/signserver/*.
           // For each new /docs/signserver/* route, register its old /docs/signing/* path
           // as a redirect source — EXCEPT 'introduction', whose old path is now the live
-          // ILM-native signing landing page (a redirect there would collide and be wrong).
+          // ILM signing landing page (a redirect there would collide and be wrong).
           if (existingPath.startsWith('/docs/signserver/')) {
             const oldPath = existingPath.replace('/docs/signserver/', '/docs/signing/');
             if (oldPath === '/docs/signing/introduction') {

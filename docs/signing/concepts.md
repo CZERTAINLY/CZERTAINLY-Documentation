@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Concepts
 
-ILM-native signing is the platform's built-in digital signing capability — a self-contained solution with no external dependency such as SignServer. It builds on the same infrastructure and configuration you already have in place.
+ILM signing is the platform's built-in digital signing capability — a self-contained solution with no external dependency such as SignServer. It builds on the same infrastructure and configuration you already have in place.
 
 ILM supports standard signing workflows and, for EU deployments, **qualified electronic signatures and timestamps** under eIDAS and the **ETSI EN 319 42x** family. For a full breakdown of which standards apply and how each maps to an ILM mechanism, see the standards and compliance page for the relevant workflow.
 
@@ -16,7 +16,7 @@ If you are already using the SignServer-based implementation, it continues to be
 
 ## Components
 
-ILM-native signing is built around a small set of collaborating components. You send your request to ILM Core — Core takes care of the rest, coordinating with the connectors on your behalf.
+ILM signing is built around a small set of collaborating components. You send your request to ILM Core — Core takes care of the rest, coordinating with the connectors on your behalf.
 
 ```plantuml
 @startuml
