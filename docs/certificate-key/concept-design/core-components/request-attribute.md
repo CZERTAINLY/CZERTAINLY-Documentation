@@ -26,57 +26,14 @@ One attribute can map to several fields at once. A single "Server FQDN" value ca
 
 A mapped field also declares whose value wins when both a client CSR and platform-supplied attribute values offer it: the CSR value, the platform value, or the CSR value with the platform value as a fallback.
 
-## Value sources
-
-Orthogonal to the mapping, a definition can declare how the requester's value is obtained:
-
-- **Free input** — the requester types any value.
-- **Static list** — the requester picks from a fixed list of values defined with the attribute.
-- **Connector callback** — the values are provided by a connector callback at request time.
-
-Value-source bindings let an `RA Profile` attach a value source to a connector-supplied attribute by reference — attribute UUID, or name as a fallback. This is useful when the connector defines the attribute but you want to constrain what the requester can enter. Bindings are applied after the sets are combined, and each binding may target an attribute at most once. See [Request attributes on the RA Profile](./ra-profile.md#request-attributes).
-
 ## Where request-attribute sets come from
 
-Request-attribute definitions have three sources:
+Request-attribute definitions have two sources:
 
-- the **static set** authored on the [`RA Profile`](./ra-profile.md)
-- the **connector-supplied set** provided by the `Authority`'s connector
+- the **static set** authored on an [`RA Profile`](./ra-profile.md)
 - the **platform default set** managed in [platform settings](../../settings/request-attributes.md)
 
-For a given `RA Profile`, the platform resolves them into one effective set:
-
-1. Load the profile's static set.
-2. Load the connector-supplied set. It is empty when the merge mode is **Static only**, or when the `Authority` has no connector.
-3. Combine both per the profile's merge mode:
-   - **Static only** — use only the static set; ignore the connector-supplied set.
-   - **Connector only** — use only the connector-supplied set; ignore the static set.
-   - **Merge** — union of both; on a conflict the connector definition wins and the static set contributes only what the connector did not supply. This is the default.
-4. If the combined set is empty, the platform default set applies — the terminal fallback.
-5. Apply the profile's value-source bindings onto matching definitions.
-
-```plantuml
-@startuml
-start
-:Load the RA Profile static set;
-:Load the connector-supplied set;
-switch (Merge mode?)
-case (Static only)
-  :Keep the static set only;
-case (Connector only)
-  :Keep the connector-supplied set only;
-case (Merge)
-  :Union of both sets;
-  note right: connector wins on conflict
-endswitch
-if (Combined set empty?) then (yes)
-  :Use the platform default set;
-endif
-:Apply value-source bindings;
-:Resolved request-attribute set;
-stop
-@enduml
-```
+For a given `RA Profile`, the effective set is the profile's static set, or the platform default set when the profile authored none.
 
 ## Where the resolved set is used
 
