@@ -55,8 +55,6 @@ The following steps illustrate the process of requesting the certificate through
 
 Each `RA Profile` can author its own **static set** of request attributes. You author it on the **Request Attributes** tab of the `RA Profile` create or edit dialog; the tab becomes available once an `Authority` is selected.
 
-The profile's **merge mode** controls how the static set combines with the set supplied by the `Authority`'s connector. The profile can also attach **value-source bindings** onto connector-supplied attributes. The outcome of this resolution is the profile's **resolved request-attribute set** — what certificate request forms render for the profile. The merge modes and the resolution steps are described in [Where request-attribute sets come from](./request-attribute.md#where-request-attribute-sets-come-from).
-
 ## External CSR validation
 
 When a client supplies its own CSR (an external CSR), the `RA Profile` validates it against the resolved request-attribute set. Two modes exist:
@@ -66,7 +64,7 @@ When a client supplies its own CSR (an external CSR), the `RA Profile` validates
 
 Validation checks:
 
-- every required mapped attribute has a matching subject component, SAN entry, or extension in the CSR
+- every mapped field of a required attribute has a matching subject component, SAN entry, or extension in the CSR
 - matched values satisfy the attribute's value constraints
 - in strict mode additionally a whitelist pass: anything present in the CSR — a subject component, SAN type, or extension — that is not covered by the resolved set is a violation
 
