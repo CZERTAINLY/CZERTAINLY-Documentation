@@ -53,7 +53,7 @@ The following steps illustrate the process of requesting the certificate through
 
 `RA Profile` defines the request attributes of its certificate service — what the requester fills in on the request form and where each value lands in the issued certificate. If you are new to request attributes, read the [Request Attribute](./request-attribute.md) concept first.
 
-Each `RA Profile` can author its own **static set** of request attributes. You author it on the **Request Attributes** tab of the `RA Profile` create or edit dialog; the tab becomes available once an `Authority` is selected.
+Each `RA Profile` can author its own **static set** of request attributes — see [Configure request attributes](../../quick-start/certificate-management/create-ra-profile.mdx#configure-request-attributes) for the authoring walkthrough.
 
 ## External CSR validation
 
@@ -70,4 +70,4 @@ Validation checks:
 
 The mode is inherited along a chain: the profile's own setting, then the platform default, then **lenient** as the final fallback.
 
-To configure it in the web interface, open the profile detail and switch to the **Validation** tab. The **Request Validation** widget shows the effective mode. Click **Edit Request Validation Settings**; the switch **Use Platform Request Validation Settings** controls whether the profile follows the platform default or sets its own mode.
+Configuration is per profile, in the web interface or API — see [Configure external CSR validation](../../quick-start/certificate-management/create-ra-profile.mdx#configure-external-csr-validation).
