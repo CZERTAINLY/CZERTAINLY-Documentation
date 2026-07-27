@@ -27,7 +27,7 @@ Registering an OID in the `Certificate Extension` category makes that extension 
 
 A `Certificate Extension` entry has two properties:
 
-- **Default Critical** — whether the extension is marked critical by default when placed in a certificate. A request attribute mapping may allow the requester to override this default.
+- **Default Critical** — whether the extension is marked critical by default when placed in a certificate.
 - **Value Encoding** — how the attribute's string value is encoded into the extension's DER value.
 
 The following encodings are available:
@@ -44,7 +44,7 @@ Keep the following rules in mind:
 
 - Each extension OID may appear only once in a certificate request.
 - Never supply the Subject Alternative Name as extension OID `2.5.29.17`. SAN has its own mapping target.
-- An extension OID that is not registered still works. The extension then defaults to non-critical and its value is treated as Base64-encoded DER.
+- Registration is required for mapping: a request attribute definition that references an unregistered extension OID is rejected when saved. Should the registry entry be deleted afterwards, requests still work — the extension then falls back to non-critical and its value is treated as Base64-encoded DER.
 
 To register a certificate extension in the UI:
 
@@ -60,4 +60,4 @@ The `OID` and category cannot be changed after creation.
 
 The built-in **System OIDs** cover the common RDN attribute types (such as `CN`, `O`, `OU`, or `C`) and the common extended-key-usage purposes (such as server authentication, client authentication, or code signing).
 
-There are no built-in `Certificate Extension` entries. All extension OIDs are registered by you as **Custom OIDs**.
+There are no built-in `Certificate Extension` entries. All extension OIDs are registered by users as **Custom OIDs**.
