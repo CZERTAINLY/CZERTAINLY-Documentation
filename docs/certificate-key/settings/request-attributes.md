@@ -8,9 +8,9 @@ Request attributes define what a requester fills in on a certificate request for
 
 ## Platform default request-attribute set
 
-The platform holds one default request-attribute set. It is the terminal fallback: it applies only when the resolution for an [`RA Profile`](../concept-design/core-components/ra-profile.md#request-attributes) yields no definitions — the profile authored no static set and its connector supplies none.
+The platform holds one default request-attribute set. It is the terminal fallback: it applies only when the resolution for an [`RA Profile`](../concept-design/core-components/ra-profile.md#request-attributes) yields no definitions — the profile authored no static set.
 
-To manage it, navigate to **Settings** → **Platform** → **Request Attributes** tab. The **Default Request Attributes** widget offers the same authoring editor as the `RA Profile` dialog, with two differences: there is no merge mode and there are no value-source bindings — neither applies at the platform level. Changes are saved automatically.
+To manage it, navigate to **Settings** → **Platform** → **Request Attributes** tab. The **Default Request Attributes** widget offers the same authoring editor as the `RA Profile` dialog. Changes are saved automatically.
 
 When the default set has never been edited, a built-in seed applies. It consists of six subject attributes: Common Name, Organizational Unit, Organization, Locality, State, and Country.
 
