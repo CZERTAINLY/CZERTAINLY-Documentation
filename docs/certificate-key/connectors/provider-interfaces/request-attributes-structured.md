@@ -11,25 +11,25 @@ This page describes the wire contract for the typed certificate request content 
 The certificate identity travels to the connector in one of two forms:
 
 - **Flat fields** — `subjectDn` (a DN string), `subjectAltName` (RFC 5280 textual form), and `extensions` (entries of OID, criticality, and a Base64 DER value). v2 connectors receive these, and so do v3 connectors that do not advertise the `certificateRequestStructured` flag.
-- **Structured content** — the typed `requestContent` object described below. A v3 connector advertising `certificateRequestStructured` receives this instead.
+- **Structured content** — the typed request content described below. A v3 connector advertising `certificateRequestStructured` receives this instead.
 
 Both forms are rendered from the same content. For a non-structured connector, the platform renders the flat fields from the structured content — and **fails the request closed** when the content cannot be represented flat. When both forms are present on a request, the structured form is authoritative.
 
-## The `requestContent` object
+## The Request Content
 
-`requestContent` is polymorphic on `certificateType`. The only type today is X.509 (`"certificateType": "X.509"`), carried by `X509RequestContent`:
+The request content is polymorphic on certificate type; the only type today is X.509. It carries three lists:
 
-- **`subject`** — ordered subject DN components. Each entry has a `type` — a short code (for example `CN`) or a dotted-decimal OID, resolved through the [OID registry](../../settings/oid.md) — and a `value`.
-- **`subjectAltNames`** — typed Subject Alternative Name entries. Each entry has a `type` (`dns`, `email`, `ip`, `uri`, `otherName`, `directoryName`, or `registeredId`) and a `value`. An `otherName` entry also carries `otherNameOid` and `valueEncoding`, because different OtherName OIDs carry differently typed values.
-- **`extensions`** — requested X.509 extensions, excluding SAN. Each entry has an `oid`, a `critical` flag, an `encoding`, and a `value` — a string whose interpretation is declared by `encoding`.
+- **Subject** — ordered subject DN components. Each entry has a type — a short code (for example `CN`) or a dotted-decimal OID, resolved through the [OID registry](../../settings/oid.md) — and a value.
+- **Subject Alternative Names** — typed SAN entries. Each entry has a type (`dns`, `email`, `ip`, `uri`, `otherName`, `directoryName`, or `registeredId`) and a value. An `otherName` entry additionally carries its OID and a value encoding, because different OtherName OIDs carry differently typed values.
+- **Extensions** — requested X.509 extensions, excluding SAN. Each entry has an OID, a criticality flag, an encoding, and a value — a string whose interpretation is declared by the encoding.
 
 Three invariants hold:
 
-- SAN is never duplicated in `extensions`. SAN entries appear only in `subjectAltNames`.
+- SAN is never duplicated as an extension. SAN entries appear only in the subject alternative names list.
 - At least one of the three lists is present.
-- The raw CSR remains authoritative for the public key and the proof of possession. `requestContent` carries the decoded identity intent alongside it.
+- The raw CSR remains authoritative for the public key and the proof of possession. The structured content carries the decoded identity intent alongside it.
 
-Example `requestContent` on an issue request:
+Example structured content on an issue request:
 
 ```json
 {
@@ -55,7 +55,7 @@ Example `requestContent` on an issue request:
 
 ## Where it rides
 
-`requestContent` is an optional field on three v3 operations:
+The structured content is an optional part of three v3 operations:
 
 - **Issue** — when present, it is the authoritative source of subject identity and extensions for the issuance. Otherwise the identity comes from the submitted CSR.
 - **Renew** — when present, it is authoritative for the renewal. Otherwise the identity derives from the existing certificate (serial number and issuer DN).
