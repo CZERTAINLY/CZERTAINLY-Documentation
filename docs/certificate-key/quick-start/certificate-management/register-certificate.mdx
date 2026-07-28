@@ -49,9 +49,7 @@ The registration itself has an authorization state, shown in the **Registration*
 1. Click **Certificates** in the left menu and open the `Registered` certificate
 2. Click **Complete** (check symbol <span style={{color: '#1473b5',}}><FontAwesomeIcon icon={faCheck} /></span>). The action is enabled only while the registration is Active and the issuance window has not elapsed; otherwise the disabled button's tooltip explains why.
 3. In the **Complete Certificate Registration** dialog, enter the **Challenge**
-4. Choose the **Key Source**:
-    - **Upload CSR** — upload a certificate signing request (CSR file)
-    - **Existing Key** — select the **Token Profile** and the **Key**, fill the resolved **Request Attributes**, and fill the **Signature Attributes**
+4. Upload the **CSR** — a certificate signing request for the key pair that will back the certificate. Completing a registration always requires a CSR; issuing from a platform key is not supported for registered certificates.
 5. Click **Complete**
 
 The identity from the registration is preserved. Completion runs through the standard issue flow.
@@ -104,7 +102,7 @@ To complete the registration, call the issue operation on the pre-registered cer
 POST /api/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/issue
 ```
 
-The body carries the CSR (`request`) or the platform key selection (`tokenProfileUuid`/`keyUuid` with `csrAttributes`), the signature attributes, and the challenge as `authorizationSecret`.
+The body carries the CSR (`request`) and the challenge as `authorizationSecret`. A CSR is required — the platform-key selection (`tokenProfileUuid`/`keyUuid`) is not supported when completing a registered certificate.
 
 ## Platform defaults
 
