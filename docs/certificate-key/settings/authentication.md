@@ -21,14 +21,16 @@ When a user authenticates with an OAuth 2.0 provider (browser session or `Author
 - If the provider setting `usernameClaim` is set, that claim is used.
 - Otherwise the `username` claim is used.
 
-The claim value must be present as a non-empty string in the token claims (access token, ID token, or User Info response). There is no fallback to any other claim: if the effective claim is missing, authentication fails. The resolved value is the username under which the user is identified, and — when automatic registration is enabled (`createUnknownUsers`) — created; roles from the token's `roles` claim are registered automatically when `createUnknownRoles` is enabled.
+The effective claim must be present as a non-empty string in the token claims (access token, ID token, or User Info response). There is no fallback: if the claim is missing, authentication fails.
+
+The resolved claim value is the username under which the user is identified. When automatic registration is enabled (`createUnknownUsers`), the user is created with this username. Additionally, roles from the token's `roles` claim are registered automatically when `createUnknownRoles` is enabled.
 
 :::info[Identity providers without a username claim]
 Some identity providers, for example Microsoft Entra ID, do not issue a `username` claim and provide `preferred_username` instead. For these providers, set `usernameClaim` to `preferred_username` in the [OAuth2 provider settings](/api/core-other#tag/Settings/operation/updateOAuth2ProviderSettings).
 :::
 
 :::warning[Changing the username claim of an existing provider]
-The resolved username is the user's identity. Changing `usernameClaim` (or switching identity providers) changes the resolved usernames of existing users; the platform does not rename accounts automatically. Audit existing usernames for collisions and rename affected users before changing this setting.
+The resolved username is the user's identity. Changing `usernameClaim` (or switching identity providers) changes the username resolved from tokens for existing users, but the platform does not rename accounts automatically. Existing users may no longer match on login if their new resolved username differs from their account name. Audit existing usernames for collisions and rename affected users before changing this setting.
 :::
 
-Issuer URLs must be unique across configured OAuth 2.0 providers — the provider is selected by the token's `iss` claim, and an ambiguous match rejects authentication.
+Issuer URLs must be unique across configured OAuth 2.0 providers — the provider is selected by the token's `iss` claim. If multiple providers share the same issuer URL, authentication is rejected.
