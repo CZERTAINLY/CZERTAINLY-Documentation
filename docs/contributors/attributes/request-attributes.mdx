@@ -20,14 +20,14 @@ The `fieldMapping` declares which certificate (or other object) fields the attri
 Each entry in `fields` is a `MappedField`, polymorphic on `fieldType`. Three properties are common to all field types:
 
 - **`fieldType`** — the discriminator: `rdn`, `san`, or `extension`.
-- **`order`** — ordering index among fields of the same type, ascending. Use it to render multi-component subjects in a defined order.
-- **`source`** — provenance of the value when a client CSR and platform-supplied values both offer the field: `csr` (the CSR value wins), `platform` (the platform value wins), or `csrThenPlatform` (the CSR value wins when present; otherwise the platform value applies).
+- **`order`** — ordering index among fields of the same type, ascending. It orders the fields *within this definition's mapping*; across definitions, the subject follows the order the definitions appear in the resolved set.
+- **`source`** — the intended provenance of the value when a client CSR and platform-supplied values both offer the field: `csr`, `platform`, or `csrThenPlatform` (CSR first, platform as fallback). Reserved — stored but not evaluated yet; do not rely on it.
 
 The three field types:
 
 - **`rdn`** — maps the value to a subject DN component. Carries `rdn` — a short code (for example `CN`) or a dotted-decimal OID, resolved through the [OID registry](../../certificate-key/settings/oid.md).
 - **`san`** — maps the value to a Subject Alternative Name entry. Carries `generalNameType`. When the type is `otherName`, it also carries `otherNameOid` and `otherNameValueEncoding`, because different OtherName OIDs carry differently typed values.
-- **`extension`** — maps the value to an X.509 extension. Carries `extensionOid` (dotted-decimal) and `criticalOverridable` — whether the requester may override the extension's default criticality.
+- **`extension`** — maps the value to an X.509 extension. Carries `extensionOid` (dotted-decimal; must be registered in the [OID registry](../../certificate-key/settings/oid.md)) and `criticalOverridable` — whether the requester may override the extension's default criticality. `criticalOverridable` is reserved — stored but not evaluated yet; criticality always follows the registry's default.
 
 ## `valueSource`
 
@@ -66,14 +66,12 @@ A "Server FQDN" request attribute. One value projects into both the subject `CN`
       {
         "fieldType": "rdn",
         "rdn": "CN",
-        "order": 1,
-        "source": "csrThenPlatform"
+        "order": 1
       },
       {
         "fieldType": "san",
         "generalNameType": "dns",
-        "order": 1,
-        "source": "csrThenPlatform"
+        "order": 1
       }
     ]
   },

@@ -37,7 +37,7 @@ Compared to v3, the v2 interface:
 
 - receives the certificate identity only as the flat fields — `subjectDn`, `subjectAltName`, and `extensions` — never the structured `requestContent`. See [Two forms on the wire](./request-attributes-structured.md#two-forms-on-the-wire).
 - does not support certificate pre-registration or identity override.
-- has no capability flags. Asynchronous parking is signalled purely by the `202` response; a connector that does not track operation state answers a status poll with `404 Not Found`, which the platform treats as "polling not supported for this operation".
+- has no capability flags. Asynchronous parking is still signalled by the `202` response, and the dedicated v2 cancel endpoints work — but the platform never polls a v2 connector for completion; status polling exists only in v3. A parked v2 operation is finalised by the operator: Finalise Issue, Confirm Revoke, or Cancel Pending.
 
 ## Specification and example
 
