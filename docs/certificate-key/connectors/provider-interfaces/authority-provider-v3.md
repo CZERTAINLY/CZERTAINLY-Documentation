@@ -127,7 +127,7 @@ end
 A cancel targets an in-flight operation. The connector returns one of three outcomes:
 
 - **Aborted** (`204`) — the connector aborted the operation.
-- **Not tracked** (`404`, or `422` with a not-tracked error code) — the connector does not (or no longer) tracks the operation: already finalised externally, or a stateless implementation.
+- **Not tracked** (`404`, or `422` with a not-tracked error code) — the connector does not (or no longer) track the operation: already finalised externally, or a stateless implementation.
 - **Refused** (`422` with a point-of-no-return error code) — the CA cannot abort the operation.
 
 The connector reports the outcome; the platform decides the resulting certificate state.

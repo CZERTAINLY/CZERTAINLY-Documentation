@@ -182,7 +182,7 @@ A failure at any step (a rejected challenge, a connector or CA error, a rejected
 
 Some certification authorities cannot complete `issue`, `renew`, `revoke`, or `register` synchronously — for example, manual or air-gapped CAs, CAs that process requests in batches, or authorities where the operation is performed by a human operator out-of-band. In these cases the operation is **parked** and the certificate moves to `Pending Issue`, `Pending Revoke`, or `Pending Registration` until it is finalised. There is no platform-level "offline" or "external" flag on `Authority`, `RA Profile`, or anywhere else — behaviour is determined entirely by the certificate state.
 
-An asynchronously-accepted **registration** is finalised by status polling on authorities that support asynchronous status polling: the platform polls the authority and, on completion, moves the placeholder to `Registered` (or to `Failed`). If the authority accepts the registration asynchronously but polling is not available, the placeholder is left in `Pending Registration` for out-of-band completion. The operator finalise actions below apply to `Pending Issue` and `Pending Revoke`.
+An asynchronously-accepted **registration** is finalised by status polling on authorities that support asynchronous status polling: the platform polls the authority and, on completion, moves the placeholder to `Registered` (or to `Failed`). If the authority accepts the registration asynchronously but polling is not available, the placeholder is left in `Pending Registration` for out-of-band completion. The operator-driven finalisation actions below apply to `Pending Issue` and `Pending Revoke`.
 
 #### Finalising a parked operation
 
