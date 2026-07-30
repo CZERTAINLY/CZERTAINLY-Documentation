@@ -17,7 +17,7 @@ guide covers the legacy `ms-adcs-connector`, which reaches the CA host through *
 
 The NG connector removes that remoting layer entirely:
 
-| | Legacy `ms-adcs-connector` | NG connector |
+| Aspect | Legacy `ms-adcs-connector` | NG connector |
 | --- | --- | --- |
 | Transport to the CA | WinRM + PSPKI remoting | MS-WCCE over COM/DCOM |
 | Remote PowerShell required | Yes | No |
