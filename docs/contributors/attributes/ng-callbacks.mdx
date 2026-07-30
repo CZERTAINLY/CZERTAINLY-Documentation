@@ -413,6 +413,111 @@ A `GROUP`-attribute callback sets the `attributes` arm instead of `content`, ret
 definitions to inject at runtime (each a `BaseAttribute`). For large `content` results, set `totalItems`
 and honour the request's `pagination`.
 
+## Implementing it with the go-sdk
+
+The [go-sdk](https://github.com/OmniTrustILM/go-sdk) ships the Attributes v2 surface as
+`connector/provider/attributes/v2`: you declare a static registry of definitions — each an attribute plus
+an optional callback resolver — and `NewHandler` builds the `GET /v2/attributes*` and
+`POST /v2/attributes/callback` routes. It **self-validates the registry at startup and fails fast**, so
+the conformance rules above (unique UUIDs, every `dependsOn` attribute dispatchable) are enforced before
+the connector serves.
+
+```go
+import (
+	mdl "github.com/OmniTrustILM/go-sdk/connector/model/attributes/v2"
+	attributes "github.com/OmniTrustILM/go-sdk/connector/provider/attributes/v2"
+	"github.com/OmniTrustILM/go-sdk/connector/shared"
+)
+```
+
+Declare the dynamic dropdown from the worked example — a `data_certificateTemplate` that depends on the
+in-form `profile` field:
+
+```go
+const templateAttrUUID = "e8ae4f6b-2c1a-4d3e-9f70-1a2b3c4d5e6f"
+
+func templateDropdown() mdl.BaseAttributeDto {
+	d := mdl.NewDataAttributeV3(
+		templateAttrUUID, "data_certificateTemplate", 3,
+		mdl.ATTRIBUTETYPE_DATA, mdl.ATTRIBUTECONTENTTYPE_STRING,
+		*mdl.NewDataAttributeProperties("Certificate Template",
+			true /* visible */, true /* required */, false /* readOnly */,
+			true /* list */, false /* multiSelect */, false /* extensibleList */),
+		mdl.ATTRIBUTEVERSION_V3,
+	)
+	// dependsOn marks this an Attributes v2 (NG) callback attribute.
+	// Use []string{} for a fire-on-mount, scope-only dropdown.
+	d.AttributeCallback = &mdl.AttributeCallback{DependsOn: []string{"profile"}}
+	w := mdl.DataAttributeV3AsBaseAttributeDtoV3(d)
+	return mdl.BaseAttributeDtoV3AsBaseAttributeDto(&w)
+}
+```
+
+Implement the resolver — read the parent authority blob from `contextAttributes` and the `profile` value
+from `currentAttributes`, then return the options in the content arm. `ContentResponse` sets exactly one
+arm for you:
+
+```go
+func resolveTemplates(ctx context.Context, req *mdl.AttributeCallbackRequestDto) (*mdl.AttributeCallbackResponseDto, error) {
+	// contextAttributes: Core-injected scope chain (walk to scope "authorities");
+	// credentials are already expanded inline.
+	authorityBlob := req.ContextAttributes
+
+	// currentAttributes: only the dependsOn-named form values, matched by name.
+	profile, ok := firstString(req.CurrentAttributes, "profile")
+	if !ok {
+		return attributes.ContentResponse(nil, nil), nil // no profile yet → zero options
+	}
+
+	options := queryUpstreamTemplates(authorityBlob, profile) // your connector's logic
+	return attributes.ContentResponse(options, nil), nil
+}
+
+func option(label, value string) mdl.BaseAttributeContentDtoV3 {
+	c := mdl.StringAttributeContentV3{
+		Reference:   &label, // shown in the dropdown
+		Data:        value,  // submitted value
+		ContentType: mdl.ATTRIBUTECONTENTTYPE_STRING,
+	}
+	return mdl.StringAttributeContentV3AsBaseAttributeContentDtoV3(&c)
+}
+
+func firstString(attrs []mdl.RequestAttribute, name string) (string, bool) {
+	for _, a := range attrs {
+		if v3 := a.RequestAttributeV3; v3 != nil && v3.Name == name && len(v3.Content) > 0 {
+			if s := v3.Content[0].StringAttributeContentV3; s != nil {
+				return s.Data, true
+			}
+		}
+	}
+	return "", false
+}
+```
+
+Register the handler alongside the connector's functional interface — `NewHandler` returns an error if the
+registry is inconsistent, so a misconfigured connector never starts:
+
+```go
+h, err := attributes.NewHandler(connectorVersion, []attributes.Definition{
+	{Attribute: templateDropdown(), Callback: resolveTemplates}, // dynamic (has dependsOn)
+	// {Attribute: staticCaName()},                              // static: nil Callback
+})
+if err != nil {
+	return err // e.g. a dependsOn naming an attribute the registry doesn't contain
+}
+
+c, err := shared.New(shared.Register(functionalHandler), shared.Register(h))
+// serve c.Handler() on your http.Server
+```
+
+:::note[Functional interfaces that mount the surface inline]
+An authority provider **v3** connector mounts `GET/POST /v2/attributes*` on its own provider (implementing
+`ListDefinitions` / `GetDefinition` / `Callback`) rather than adding a second `attributes.NewHandler` —
+`http.ServeMux` rejects duplicate routes. Use `attributes.NewHandler` for interfaces that do not already
+expose the surface. See the runnable
+[`authority-v3` example](https://github.com/OmniTrustILM/go-sdk/tree/main/connector/examples/authority-v3).
+:::
+
 ## How it works
 
 ### NG callback dispatch
