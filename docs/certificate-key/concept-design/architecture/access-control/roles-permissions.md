@@ -20,7 +20,7 @@ The following system roles are defined:
 |------------------------------|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `superadmin`                 | no                 | Highest level of privilege in the platform. `superadmin` has the full permissions in the platform. Should be used as initial user and for the breaking glass in case of exceptional situation. |
 | `admin`                      | no                 | `admin` has the full permissions in the platform, manages users and roles, performs system configuration and administration.                                                                   |
-| `auditor`                    | no                 | Read-only oversight. Holds every read action on every resource and no action that changes anything. See [Auditor role](#auditor-role).                                                          |
+| `auditor`                    | no                 | Read-only oversight. Holds the read actions of every resource, apart from those returning stored secret material, and no action that changes anything. See [Auditor role](#auditor-role).       |
 | `acme`                       | yes                | Internal role that is allowed to manage certificates and related operations that are needed as part of the [ACME](../../../protocols/acme/overview.md) protocol.                               |
 | `scep`                       | yes                | Internal role that is allowed to manage certificates and related operations that are needed as part of the [SCEP](../../../protocols/scep/overview.md) protocol.                               |
 | `cmp`                        | yes                | Internal role that is allowed to manage certificates and related operations that are needed as part of the [CMP](../../../protocols/cmp/overview.md) protocol.                                 |
@@ -37,7 +37,7 @@ Further restrictions apply to roles paired with a system user; see [System users
 
 ## Auditor role
 
-`auditor` holds every read action on every resource and no action that changes anything. It is intended for oversight — auditors, security reviewers, support — so that read access can be granted with one role instead of a permission set assembled by hand, which drifts behind the platform as resources are added.
+`auditor` holds the read actions of every resource — apart from the two below, which return stored secret material — and no action that changes anything. It is intended for oversight — auditors, security reviewers, support — so that read access can be granted with one role instead of a permission set assembled by hand, which drifts behind the platform as resources are added.
 
 Its permissions are not maintained by hand and are not seeded once. On every startup the platform derives them from the actions it discovers in the code, so a resource or action added in a later release is covered by the role as soon as it exists.
 
