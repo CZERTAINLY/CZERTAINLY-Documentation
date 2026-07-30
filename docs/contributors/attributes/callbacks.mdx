@@ -722,16 +722,10 @@ c, err := shared.New(shared.Register(functionalHandler), shared.Register(h))
 
 ### How it works
 
-Two end-to-end flows: a callback firing when the form changes, and how `Core` resolves a definition it has
-not cached. The sequence diagrams below illustrate each.
+Two flows, recapped visually — a callback firing when a dependency changes, and how `Core` resolves a
+definition it has not cached.
 
 #### Attributes v2 callback dispatch
-
-When a field the callback `dependsOn` changes — or the form opens for a fire-on-mount callback — `Core`
-resolves the route scope chain (`contextAttributes`) and expands every reference inline, authorizing each
-object per the calling user and failing closed. It then `POST`s the envelope to `/v2/attributes/callback`.
-The connector dispatches internally on `attributeUuid`, reaches its upstream system, and returns exactly
-one response arm (`content` or `attributes`); `Core` renders the resolved content back to the frontend.
 
 ```plantuml
 @startuml
@@ -748,12 +742,6 @@ autonumber
 ```
 
 #### Definition resolution with cache-miss
-
-`Core` first uses its stored definition (keyed by connector + name). On a miss it fetches only the missing
-UUIDs from the connector (`GET /v2/attributes?uuids=…`) and ingests them by name; any UUID still
-unresolved fails the caller with `422 VALIDATION_FAILED`. Separately, if the connector answers a dispatch
-with `ATTRIBUTE_DEFINITION_NOT_FOUND`, `Core` refreshes that connector's registry once and retries — the
-one case a full registry refetch is allowed.
 
 ```plantuml
 @startuml
