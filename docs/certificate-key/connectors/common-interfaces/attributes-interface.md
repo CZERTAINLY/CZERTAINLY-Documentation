@@ -23,7 +23,7 @@ This per-operation `/attributes` listing (which attributes an operation needs) i
 **Attributes v2 API** — the `/v2/attributes` surface in the `connector.common.v2` common-interface package
 (the versioned namespace of cross-cutting NG interfaces) — a definition registry plus a stateless
 `dependsOn` callback surface that resolves _dynamic_ attribute content for NG (stateless) connectors. See
-[NG Connector Attribute Callbacks (Attributes v2 API)](../../../contributors/attributes/ng-callbacks.mdx).
+[Attribute Callbacks — Attributes v2 model](../../../contributors/attributes/callbacks.mdx#attributes-v2-callback-model).
 :::
 
 ### Endpoint pattern
