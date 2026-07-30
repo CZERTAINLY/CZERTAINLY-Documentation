@@ -4,8 +4,9 @@ sidebar_position: 10
 
 # NG Connector Attribute Callbacks (Attributes v2 API)
 
-The **Attributes v2 API** is a common interface — part of the `connector.common.v2` family, alongside
-Info, Health, and Metrics — that every NG connector implements. It gives NG connectors a **stateless**
+The **Attributes v2 API** is a common interface — part of the `connector.common.v2` family (the versioned
+interface namespace grouping the cross-cutting NG common interfaces: Info, Health, Metrics, and
+Attributes) — that every NG connector implements. It gives NG connectors a **stateless**
 way to resolve dynamic attribute content (dropdown options, runtime-injected groups) without hand-written
 callback URLs, `from`/`to`/`targets` mappings, or per-connector database state.
 

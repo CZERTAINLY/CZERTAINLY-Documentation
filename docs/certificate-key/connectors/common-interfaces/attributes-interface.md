@@ -20,7 +20,8 @@ There is no separate `/validate` endpoint — attribute validation is the respon
 
 :::info[Per-operation listing vs the Attributes v2 API]
 This per-operation `/attributes` listing (which attributes an operation needs) is distinct from the
-**Attributes v2 API** (`connector.common.v2`, `/v2/attributes`) — a definition registry plus a stateless
+**Attributes v2 API** — the `/v2/attributes` surface in the `connector.common.v2` common-interface package
+(the versioned namespace of cross-cutting NG interfaces) — a definition registry plus a stateless
 `dependsOn` callback surface that resolves _dynamic_ attribute content for NG (stateless) connectors. See
 [NG Connector Attribute Callbacks (Attributes v2 API)](../../../contributors/attributes/ng-callbacks.mdx).
 :::
