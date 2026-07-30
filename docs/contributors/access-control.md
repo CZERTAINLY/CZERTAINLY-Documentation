@@ -14,7 +14,7 @@ For more information about the definition of authorization policies, refer to [A
 
 | Access Control Enum | Reference                                                                                                                                             |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Resources**       | [Resource enum](https://github.com/OmniTrustILM/core/blob/main/src/main/java/com/otilm/core/model/auth/Resource.java)                 |
+| **Resources**       | [Resource enum](https://github.com/OmniTrustILM/interfaces/blob/main/src/main/java/com/otilm/api/model/core/auth/Resource.java)                 |
 | **Actions**         | [ResourceAction enum](https://github.com/OmniTrustILM/interfaces/blob/main/src/main/java/com/otilm/core/model/auth/ResourceAction.java) |
 
 The list of available actions for particular resources is dynamically constructed by the `Core` service based on the `@ExternalAuthorization` annotation. Continue reading to get more details.
@@ -77,7 +77,7 @@ Authorization mechanism itself is driven by [Spring framework](https://docs.spri
 For example, voter responsible for evaluating `method` policies extracts parameters of annotation of method that is being accessed and constructs input to include in request to OPA evaluation. Based on response from `OPA` service, result can be `ACCESS_GRANTED` or `ACCESS_DENIED`.
 
 `@ExternalAuthorization` annotation has parameters to define two pairs of `Resource` and `ResourceAction`. One is for the resource that is being accessed and the second for parent resource. Both can be evaluated simultaneously to authorize access to resources in hierarchical dependency.
-Resource and action names are codes for enums defined in `Core` service.
+Resource and action names are codes for enums defined in the `interfaces` library shared by the services.
 
 Specifying the parent resource/action is optional and its usage depends on the context, if method requires authorization for more resources. Typically, you can use evaluation of permissions together with parent resource when input of your method are two resources that are hierarchically related (e.g., concept of principal and dependent entities in DB).
 But in case access to other resource is in separate corresponding service method, permissions for that resource can be evaluated separately in its own context (service).
@@ -156,6 +156,14 @@ When `Core` service starts, it collects all `@ExternalAuthorization` annotation 
 
 This way, `Core` and `Auth` services are in sync and permissions can refer to all resources and actions that are actually used and require authorization.
 
+The synchronization is authoritative, not additive: `Auth` service also **removes** any action that is absent from the map it receives, and the role permissions referring to it go with it.
+
+:::danger[Do not run mixed `Core` versions against one `Auth` service]
+Each instance submits the resources and actions its own build knows about. An older `Core` starting against a shared `Auth` service therefore deletes the actions introduced by a newer one, together with every permission granting them. Re-upgrading recreates the actions but not the permissions, which have to be granted again.
+:::
+
+The same startup pass also rebuilds the permissions of the [`auditor`](../certificate-key/concept-design/architecture/access-control/roles-permissions.md#auditor-role) system role, deriving them from the access type of each discovered action. That is why a newly added read action needs no further step to be covered by the role, and why classifying an action incorrectly is a permission change rather than a cosmetic one.
+
 ## `@AuthEndpoint` annotation
 
 In addition, you can mark resources to allow adding permissions on object access level. It can be achieved by annotating listing endpoint in the corresponding **controller** that can be used to list objects. The [annotation `@AuthEndpoint`](https://github.com/OmniTrustILM/core/blob/main/src/main/java/com/otilm/core/auth/AuthEndpoint.java) is used to set object listing endpoint path for a resource which can be later used in permissions editor to dynamically retrieve available objects of that resource.
@@ -179,7 +187,8 @@ Entity and DTO that is returned from listing endpoint which is representing reso
 
 Finally, when you need to extend set of available resources and / or actions that can be used within platform access control, you need to do the following:
 - add new items to `enums` specified in [Resources and actions](#resources-and-actions)
-- classify every new action with an `AccessType`, which the `ResourceAction` constructor requires. `READ` makes the action available to roles that must not be able to change anything, so use `WRITE` for anything that mutates state, has side effects in a system the platform calls, or exercises platform key material, and `SENSITIVE_READ` for a read that discloses stored secret material. When in doubt use `WRITE` — a read-only role can be widened deliberately later, whereas a wrong `READ` grants a write silently
+- classify every new action with an `AccessType`, which the `ResourceAction` constructor requires. `READ` makes the action available to roles that must not be able to change anything, so use `WRITE` for anything that mutates state, has side effects in a system the platform calls, or exercises platform key material, and `SENSITIVE_READ` for a read that discloses stored secret material. `NOT_GRANTABLE` is reserved for the `NONE` and `ANY` markers, which are never stored as a permission. When in doubt use `WRITE` — a read-only role can be widened deliberately later, whereas a wrong `READ` grants a write silently. The classification decides what the [`auditor`](../certificate-key/concept-design/architecture/access-control/roles-permissions.md#action-access-types) role receives on the next startup
+- when deciding elsewhere in the code whether an action may be granted to a read-only role, call `ResourceAction.isGrantableToReadOnlyRole()` rather than comparing `AccessType` values. `!= WRITE` looks equivalent and is not: it admits `SENSITIVE_READ`, and it admits the `NOT_GRANTABLE` markers, which `Auth` service rejects as unknown actions
 - annotate corresponding object listing endpoint with annotation [`@AuthEndpoint`](#authendpoint-annotation) to allow setting permissions on objects access level
 - make sure that entity and response objects from listing endpoint contain `name` property
 - implement methods with proper [`@ExternalAuthorization`](#externalauthorization-annotation) annotation properties
