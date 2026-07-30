@@ -2,23 +2,21 @@
 sidebar_position: 10
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # NG Connector Attribute Callbacks (Attributes v2 API)
 
 The **Attributes v2 API** is a common interface — part of the `connector.common.v2` family, alongside
 Info, Health, and Metrics — that every NG connector implements. It gives NG connectors a **stateless**
 way to resolve dynamic attribute content (dropdown options, runtime-injected groups) without hand-written
-callback URLs, `from`/`to`/`target` mappings, or per-connector database state.
+callback URLs, `from`/`to`/`targets` mappings, or per-connector database state.
 
 It has two halves:
 
 - A **standard callback surface** — a connector declares a callback as just `dependsOn` (the attributes
   whose values it consumes) and implements a single `POST /v2/attributes/callback` endpoint. `Core`
   dispatches a typed envelope; the connector dispatches internally on the attribute.
-- A **definition registry** — a UUID-keyed source of truth (`GET /v2/attributes`) that lets `Core`
-  resolve any unknown or never-listed attribute definition on demand, instead of re-listing whole schemas.
+- A **definition registry** — the connector's authoritative set of attribute definitions, addressable by
+  UUID (`GET /v2/attributes`), that lets `Core` resolve any unknown or never-listed attribute definition on
+  demand, instead of re-listing whole schemas.
 
 :::warning[Read first — three independent version axes]
 A bare "v2"/"v3" in this area is ambiguous. **"Attributes v2 API" is version 2 of the common
@@ -158,7 +156,7 @@ wire shape used by authority-v3 operation requests.
 
 ```json
 {
-  "connectorInterface": "authorityProvider",   // <-- Core-stamped from /v2/info; connector does not supply it
+  "connectorInterface": "authority",   // <-- Core-stamped from /v2/info; connector does not supply it
   "interfaceVersion": "v3",                     // <-- functional provider interface version (a separate axis)
   "attributeUuid": "e8ae4f6b-…",                // <-- dispatch key; matches the connector's registry
   "attributeName": "data_certificateTemplate",
@@ -204,7 +202,9 @@ User-typed secrets flow frontend → `Core` → connector on first delivery; sto
 connector **only** via `Core`-side expansion. **No callback response toward the frontend may carry secret
 content.** A connector must never echo an expanded secret back in its `content`/`attributes` response.
 This binding rule on the connector — backed by its startup registry self-validation — is the primary
-guarantee; a `Core`-side defensive output mask is planned but not yet a shipped guarantee.
+guarantee. `Core` additionally enforces it fail-closed on ingest: a callback response carrying
+secret-bearing content is **rejected** (`OutboundSecretLeakException`), not masked — the violation
+surfaces rather than being silently stripped.
 :::
 
 ## The callback response
@@ -244,7 +244,7 @@ system fails — it returns an `application/problem+json` error following the NG
 
 The registry (`GET /v2/attributes`, returning an
 [`AttributeDefinitionsDto`](https://github.com/OmniTrustILM/interfaces/blob/main/src/main/java/com/otilm/api/model/client/connector/v2/attribute/AttributeDefinitionsDto.java))
-is the connector's UUID-keyed source of truth for attribute definitions.
+is the connector's authoritative set of attribute definitions, addressable by UUID.
 
 | Property           | Type                    | Short description                                                       | Required                                     |
 |--------------------|-------------------------|------------------------------------------------------------------------|----------------------------------------------|
@@ -267,19 +267,19 @@ stored definition (Core, keyed by connector + name)
        └─ still unresolved → 422 VALIDATION_FAILED to the caller, naming the unresolved UUID(s)
 ```
 
-`Core` never re-lists a whole schema on the NG path. If the connector answers a resolution with
-`ATTRIBUTE_DEFINITION_NOT_FOUND` (a `CONNECTOR`-general error, HTTP `404`, non-retryable), `Core` refreshes
-that connector's registry **once** and retries. This cache-miss path is what lets `Core` resolve
-definitions it has never listed — API-only clients, never-materialised `GROUP` children, metadata
-referenced by content mapping.
+On the NG path `Core` does not re-derive definitions by re-listing per-operation schemas (the legacy
+UI-flow behaviour); the resolution ladder above fetches only the missing UUIDs. The **one** exception is a
+connector-signalled `ATTRIBUTE_DEFINITION_NOT_FOUND` (a `CONNECTOR`-general error, HTTP `404`,
+non-retryable): `Core` then refreshes that connector's **whole registry once** and retries. This
+cache-miss path is what lets `Core` resolve definitions it has never listed — API-only clients,
+never-materialised `GROUP` children, metadata referenced by content mapping.
 
 :::info[Staleness — planned]
 Correctness today rests on the **cache-miss path** above plus the existing **manual connector
 reconnect/reload** (which forces a full re-fetch and covers connector upgrades). Automatic
-**build-version staleness detection** (auto-refetching when `connectorVersion` changes), **orphan/drift
-cleanup** of definitions a connector stops emitting, and a `Core`-side **defensive output mask** are
-**planned as a fast-follow and are not yet available**. The registry already carries `connectorVersion`
-so the signal is ready.
+**build-version staleness detection** (auto-refetching when `connectorVersion` changes) and
+**orphan/drift cleanup** of definitions a connector stops emitting are **planned as a fast-follow and
+are not yet available**. The registry already carries `connectorVersion` so the signal is ready.
 :::
 
 ## Conformance and startup self-validation
@@ -355,7 +355,7 @@ authority provider v3 connector. It reads only the parent authority's connection
 
 ```json
 {
-  "connectorInterface": "authorityProvider",
+  "connectorInterface": "authority",
   "interfaceVersion": "v3",
   "attributeUuid": "e8ae4f6b-…",
   "attributeName": "data_certificateTemplate",
