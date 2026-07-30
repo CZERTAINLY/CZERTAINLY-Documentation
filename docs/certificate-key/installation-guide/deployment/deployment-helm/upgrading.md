@@ -39,14 +39,11 @@ No system role is affected — `acme`, `scep` and `cmp` never held these grants,
 Review each custom role under *Users & Roles* and grant the actions it needs. A role that never performed the operations above needs no change.
 :::
 
-### Role assignment restrictions
+### Role assignment is validated
 
-Assigning roles is now validated, so requests that were previously accepted may be refused:
+Assigning roles and editing role membership are now checked, so requests that were previously accepted may be refused — in particular granting `superadmin` or `admin`, and any change to a role paired with a system user. Scripts and integrations that manage roles may need adjusting.
 
-- a role granting **all resources** (`superadmin`, `admin`) can only be assigned by a user who already holds all resources;
-- a role paired with a [system user](../../../concept-design/architecture/access-control/users.md#system-users) accepts no other members, and its system user cannot be detached from it;
-- a system user holds only its own role and cannot be added to another;
-- a system user cannot be enabled or disabled.
+For the rules themselves, see [Roles and Permissions](../../../concept-design/architecture/access-control/roles-permissions.md#system-roles) and [System users](../../../concept-design/architecture/access-control/users.md#system-users).
 
 ### Do not share one Auth service between different Core versions
 
