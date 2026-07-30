@@ -22,4 +22,6 @@ The platform also holds the default strictness for validating external CSRs:
 - The platform default is currently editable only through the platform settings API, not in the web interface.
 - When the platform default is not set either, the final fallback is **lenient**.
 
+Setting **strict** as the platform default is rarely appropriate: every profile without a deliberately authored request-attribute set would reject CSRs carrying SAN entries or extensions — see the [strict-mode warning](../concept-design/core-components/ra-profile.md#external-csr-validation).
+
 See [External CSR validation](../concept-design/core-components/ra-profile.md#external-csr-validation) for what strict and lenient mean.

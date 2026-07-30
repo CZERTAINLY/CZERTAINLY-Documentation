@@ -8,7 +8,7 @@ Object Identifiers (`OIDs`) are a standardized mechanism for uniquely naming any
 
 In **X.509 certificates**, OIDs are widely used to identify various objects and attributes. Since OIDs are numerical, they often need to be translated into human-readable names for easier interpretation.
 
-The most commonly used OIDs are typically predefined as **System OIDs**. To extend the repository, additional **Custom OIDs** can be registered to define new identifiers beyond the default set. These custom definitions allow the translation of OIDs into human-readable names outside of the predefined System OIDs.
+The commonly used RDN attribute types, extended-key-usage purposes, and certificate extensions are predefined as **System OIDs** (see [System OIDs](#system-oids)). To extend the repository, additional **Custom OIDs** can be registered to define new identifiers beyond the default set. These custom definitions allow the translation of OIDs into human-readable names outside of the predefined System OIDs.
 
 Custom OIDs can be managed using the [Custom OID Management API](/api/core-other#tag/Custom-OID-Management).
 
@@ -46,6 +46,12 @@ Keep the following rules in mind:
 - Never supply the Subject Alternative Name as extension OID `2.5.29.17`. SAN has its own mapping target.
 - Registration is required for mapping: a request attribute definition that references an unregistered extension OID is rejected when saved. Should the registry entry be deleted afterwards, requests still work — the extension then falls back to non-critical and its value is treated as Base64-encoded DER.
 
+### Windows / ADCS enrolment
+
+Windows autoenrolment and NDES/SCEP clients emit the Microsoft certificate-template extensions `1.3.6.1.4.1.311.20.2` (Certificate Template Name) and `1.3.6.1.4.1.311.21.7` (Certificate Template Information). Being vendor extensions, they are not built in — register them as Custom OIDs (non-critical, `DER` encoding) so requests carrying them pass strict validation.
+
+Note the value is advisory in this setup: the ADCS connectors read past and drop the client's copy of the extension, and the template is injected by the connector itself — so a request-attribute mapping to these OIDs *admits* the extension rather than controlling which template is used.
+
 To register a certificate extension in the UI:
 
 1. Go to `Settings` → `Custom OIDs` and open `Create Custom OID`.
@@ -58,6 +64,8 @@ The `OID` and category cannot be changed after creation.
 
 ## System OIDs
 
-The built-in **System OIDs** cover the common RDN attribute types (such as `CN`, `O`, `OU`, or `C`) and the common extended-key-usage purposes (such as server authentication, client authentication, or code signing).
+The built-in **System OIDs** cover the common RDN attribute types (such as `CN`, `O`, `OU`, or `C`), the common extended-key-usage purposes (such as server authentication, client authentication, or code signing), and the common standards-track certificate extensions (such as Extended Key Usage, Key Usage, or Basic Constraints), each with its default criticality and value encoding. The current list can be retrieved with the [Custom OID Management API](/api/core-other#tag/Custom-OID-Management): `GET /v1/oids/system`, optionally filtered by category.
 
-There are no built-in `Certificate Extension` entries. All extension OIDs are registered by users as **Custom OIDs**.
+System OIDs are reserved: creating a Custom OID with one of these values is rejected. A custom entry that already existed before the built-in was introduced (for example, registered before a platform upgrade) **shadows** the built-in — the custom entry wins and the built-in defaults do not apply; the platform logs a recurring warning for such entries. Delete the custom entry to fall back to the built-in definition.
+
+Extensions that appear only in *issued* certificates (set by the CA, never requested) and vendor-specific extensions are deliberately not built in; the latter remain registrable as [Custom certificate extensions](#custom-certificate-extensions).

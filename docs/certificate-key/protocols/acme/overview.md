@@ -50,6 +50,7 @@ The platform performs various validations on the end point including the followi
 - Availability of the `ACME Profile` or `RA Profile`
 - Status of the `ACME Profile` or `RA Profile`
 - If both `ACME Profile` and `RA Profile` are available and enabled
+- Validation of the finalize CSR against the `RA Profile`'s request attributes — see [Request attribute validation](../common-properties.md#request-attribute-validation)
 :::
 
 The `ACME Profile` that has no configuration of default `RA Profile` is usually bound to one or multiple `RA Profiles`. In this case the `ACME Profile` configuration consist of consistent attributes that are used by ACME clients. 
