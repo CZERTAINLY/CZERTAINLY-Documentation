@@ -25,7 +25,7 @@ The following `Connectors` are officially available:
 | HashiCorp Vault Connector      | <span class="badge">Authority Provider</span>    | <span class="badge">HVault</span>                                                                          |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">HVault</span>                                                                          |
 |                                | <span class="badge">Secret Provider</span>       |                                                                                                            |
-| OTPKI Connector                | <span class="badge">Authority Provider</span>    |                                                                           |
+| OTPKI Connector                | <span class="badge">Authority Provider</span>    |                                                                                                            |
 | Keystore Entity Provider       | <span class="badge">Entity Provider</span>       | <span class="badge">Keystore</span>                                                                        |
 | PyADCS Connector               | <span class="badge">Authority Provider</span>    | <span class="badge">PyADCS-WinRM</span>                                                                    |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">PyADCS-WinRM</span>                                                                    |

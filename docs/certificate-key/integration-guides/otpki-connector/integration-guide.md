@@ -62,6 +62,7 @@ When you create an RA profile in ILM you pick an end-entity profile first; ILM t
 The end-entity profile also has to:
 
 - **permit API enrollment** for the connector's client — the connector always enrolls over OTPKI's API. If the profile does not allow programmatic enrollment, issuance fails with an `enrollment request data is invalid` error.
+- **let the connector supply the login id** rather than auto-generating it — the connector derives each end entity's login id from the RA profile's Login ID strategy and creates the end entity under that name.
 - **accept a supplied end-entity password** rather than forcing an auto-generated one — the connector sets a password for each end entity it creates.
 
 ## Allow network access
@@ -93,12 +94,14 @@ With OTPKI prepared, connect it in ILM.
 
 3. Create one or more **RA Profiles** against the authority. Select the **End Entity Profile** first, then the **Certificate Profile** and **Certificate Authority** (ILM populates these from the selected end-entity profile), and choose a **Login ID strategy** that decides how each OTPKI end entity is named:
 
-   | Login ID strategy | Meaning                                                        |
-   |-------------------|----------------------------------------------------------------|
-   | From CN           | Use the CN from the certificate request.                       |
-   | From DN attribute | Use a specific subject DN attribute.                           |
-   | Custom            | Always use the same configured value.                          |
-   | Random            | Generate a unique value for each certificate.                  |
+   | Login ID strategy          | Meaning                                                                                    |
+   |----------------------------|--------------------------------------------------------------------------------------------|
+   | Login ID from CN           | Use the CN from the certificate request.                                                   |
+   | Login ID from DN attribute | Use a specific subject DN attribute; picking it reveals a **Login ID DN attribute** field. |
+   | Custom login ID            | Always use the same configured value; picking it reveals a **Login ID custom value** field. |
+   | Random login ID            | Generate a unique value for each certificate.                                              |
+
+   Optionally set a **Username prefix** and **Username postfix** — they wrap whichever login id the strategy produces. The resulting login id must be 3–64 characters long.
 
 For the general authority and RA-profile flow in ILM, see [Create an authority](../../quick-start/certificate-management/create-authority.mdx) and [Create an RA profile](../../quick-start/certificate-management/create-ra-profile.mdx).
 
@@ -114,8 +117,9 @@ If issuance fails with `enrollment request data is invalid`, the selected end-en
 
 The following are known constraints of the OTPKI integration:
 
-| Constraint                                                             | Note                                                                                          |
-|-----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| Issuance, registration, and revocation cannot be cancelled            | OTPKI has no cancel operation, so cancel requests are rejected.                                |
-| CRMF requests require a **Custom** or **Random** Login ID strategy     | The subject cannot be read from an opaque CRMF body, so the login id cannot be derived from the CN or a DN attribute. |
-| Renewal requires a CSR                                                 | CSR-less or key-reuse renewal is not supported.                                                |
+| Constraint                                                                        | Note                                                                                                                       |
+|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| Issuance, registration, and revocation cannot be cancelled                        | OTPKI has no cancel operation, so cancel requests are rejected.                                                           |
+| CRMF requests require a **Custom login ID** or **Random login ID** strategy        | The subject cannot be read from an opaque CRMF body, so the login ID cannot be derived from the CN or a DN attribute.     |
+| Renewal requires a CSR                                                            | CSR-less or key-reuse renewal is not supported.                                                                          |
+| Derived login ID must be 3–64 characters                                          | The Username prefix, derived value, and postfix together must stay within OTPKI's login-ID length limits, or issuance fails. |
