@@ -8,8 +8,6 @@ Never downgrade the platform version, as it may cause data loss or other issues.
 
 :::info[Upgrade vs Install]
 Platform can be installed from scratch anytime when you have a backup of your database and configuration. New installation through the Helm chart will deploy new environment connecting to the same database. You can install multiple instances of the platform in different clusters and infrastructures with the same database.
-
-Instances sharing a database must run the **same** platform version. Each `Core` instance synchronizes the resources and actions its own build knows about to `Auth` service, and an older instance removes the ones a newer one added, together with the permissions granting them.
 :::
 
 The following contains important information and instructions about upgrading Helm charts.
@@ -18,42 +16,90 @@ Upgrading Helm chart is done by running the `helm upgrade` command. The command 
 
 ## To 2.19.0
 
-This release adds the [`auditor`](../../../concept-design/architecture/access-control/roles-permissions.md#auditor-role) system role and tightens authorization on several operations that could previously be performed with a read permission. `helm upgrade` needs no special handling, but **custom roles may lose access** until the actions below are granted.
+### Additional connector sub-charts
 
-### Permissions to grant after upgrade
+The following sub-charts were added to support additional connectors as optional components:
+- OT PKI Connector
+- Timestamp Formatting Connector
 
-Four operations now require an action that was not previously checked. Roles that could perform them will receive `403` until the action is granted.
+Both are disabled by default, so no action is required for existing deployments. When you enable a new connector during upgrade, you need to register the connector manually in the platform:
+```yaml
+otpkiConnector:
+  enabled: false
+timestampFormattingConnector:
+  enabled: false
+```
 
-| Operation                                                                        | Action now required        | Previously sufficed                            |
-|----------------------------------------------------------------------------------|----------------------------|------------------------------------------------|
-| Pre-registering a certificate                                                     | `certificates` `register`  | `raProfiles` `detail` + `authorities` `detail`  |
-| Renaming a key item                                                               | `cryptographicKeys` `update` | `cryptographicKeys` `detail`                  |
-| Associating triggers — the trigger associations endpoint, creating a discovery with triggers, and updating event settings | `triggers` `update`        | `triggers` `detail`                            |
-| Completing a registered certificate without presenting a registration challenge    | `certificates` `create`    | `raProfiles` `detail` + `authorities` `detail`  |
+### RabbitMQ virtual host and exchange rename
 
-`certificates` `register` is a new action, so no existing role can hold it.
+The default RabbitMQ virtual host has changed from `czertainly` to `/` (the RabbitMQ default), and the exchange names have changed from `czertainly`/`czertainly-proxy` to `ilm`/`ilm-proxy`.
 
-No system role is affected — `acme`, `scep` and `cmp` never held these grants, and `superadmin` and `admin` allow all resources, which is evaluated before any individual action. Only roles defined in your deployment need attention.
+| Parameter                  | Old default        | New default |
+|----------------------------|--------------------|-------------|
+| `messaging.virtualHost`    | `czertainly`       | `/`         |
+| `bootstrap.exchange`       | `czertainly`       | `ilm`       |
+| `bootstrap.proxy.exchange` | `czertainly-proxy` | `ilm-proxy` |
 
-:::note[Where to check]
-Review each custom role under *Users & Roles* and grant the actions it needs. A role that never performed the operations above needs no change.
-:::
+#### Fresh installation
 
-### Role assignment is validated
+No manual steps are required. The new virtual host and exchanges are created automatically by `provisioning-rabbitmq` on first startup.
 
-Assigning roles and editing role membership are now checked, so requests that were previously accepted may be refused — in particular granting `superadmin` or `admin`, and any change to a role paired with a system user. Scripts and integrations that manage roles may need adjusting.
+#### Upgrade from a previous version
 
-For the rules themselves, see [Roles and Permissions](../../../concept-design/architecture/access-control/roles-permissions.md#system-roles) and [System users](../../../concept-design/architecture/access-control/users.md#system-users).
+After `helm upgrade`, `provisioning-rabbitmq` will create the new exchanges and queues on the `/` vhost automatically. The old `czertainly` vhost and its queues remain in RabbitMQ untouched — they are orphaned but not deleted.
 
-### Do not share one Auth service between different Core versions
+**What to do with the old `czertainly` vhost:**
 
-:::danger[Mixed versions delete permissions]
-Each `Core` instance submits the resources and actions its own build knows about to `Auth` service on startup, and `Auth` service removes any action absent from that list along with every permission granting it.
+| Situation                                    | Action                                                                                                                                                                                         |
+|----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| No messages in queues / messages can be lost | Delete the `czertainly` vhost from the RabbitMQ management UI after confirming the upgrade is stable.                                                                                          |
+| Messages must be preserved                   | Follow the drain procedure below before upgrading.                                                                                                                                             |
+| You cannot migrate yet                       | Override `messaging.virtualHost` back to `czertainly` and exchange names back to `czertainly`/`czertainly-proxy` in your values to keep using the old topology until you are ready to migrate. |
 
-An older `Core` starting against a shared `Auth` service therefore deletes the actions introduced by this release — including `certificates` `register` — and the grants for them. Re-upgrading recreates the actions but **not** the permissions, which have to be granted again.
+##### Drain procedure
 
-Upgrade every instance sharing an `Auth` service together, and do not roll one back on its own.
-:::
+Stop new messages from entering the system by scaling down the API gateway:
+
+```bash
+kubectl scale deployment api-gateway-deployment --replicas=0 --namespace <your-namespace>
+```
+
+Then wait for critical queues to drain using the following script (adjust `RABBIT_HOST`, `AUTH`, and `QUEUES` to match your environment):
+
+```bash
+#!/bin/bash
+RABBIT_HOST="localhost"
+RABBIT_PORT="15672"
+AUTH="admin:admin"
+VHOST="czertainly"
+QUEUES=("core.audit-logs")
+
+echo "Waiting for queues to drain on vhost '$VHOST'..."
+
+while true; do
+  TOTAL=0
+  for QUEUE in "${QUEUES[@]}"; do
+    COUNT=$(curl -s -u "$AUTH" \
+      "http://$RABBIT_HOST:$RABBIT_PORT/api/queues/$(printf '%s' "$VHOST" | sed 's|/|%2F|g')/$QUEUE" \
+      | grep -o '"messages":[0-9]*' | head -1 | cut -d: -f2)
+    COUNT=${COUNT:-0}
+    echo "  $QUEUE: $COUNT messages"
+    TOTAL=$((TOTAL + COUNT))
+  done
+
+  echo "Total remaining: $TOTAL"
+
+  if [ "$TOTAL" -eq 0 ]; then
+    echo "All queues drained. Safe to upgrade."
+    exit 0
+  fi
+
+  sleep 5
+done
+```
+
+Once the script exits, run `helm upgrade` as usual. The API gateway will be restored automatically as part of the upgrade.
+
 
 ## To 2.18.0
 
@@ -511,10 +557,11 @@ Container registry and image pull secrets can be also configured globally for th
 global:
   image:
     # registry name
-    registry: "hub.omnitrustregistry.com"
+    registry: "harbor.ilm.online"
     # array of secret names
     pullSecrets:
-      - registry-credentials
+      - harbor-registry-credentials
+      - dockerhub-registry-credentials
 ```
 
 ### Additional connector sub-charts
