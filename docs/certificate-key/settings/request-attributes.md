@@ -19,7 +19,7 @@ When the default set has never been edited, a built-in seed applies. It consists
 The platform also holds the default strictness for validating external CSRs:
 
 - Every `RA Profile` that does not set its own validation mode inherits the platform default.
-- The platform default is currently editable only through the platform settings API, not in the web interface.
+- The platform default is a **Strict**/**Lenient** control on the **Settings** → **Platform** → **Request Attributes** tab (saved automatically), and is also editable through the platform settings API.
 - When the platform default is not set either, the final fallback is **lenient**.
 
 Setting **strict** as the platform default is rarely appropriate: every profile without a deliberately authored request-attribute set would reject CSRs carrying SAN entries or extensions — see the [strict-mode warning](../concept-design/core-components/ra-profile.md#external-csr-validation).

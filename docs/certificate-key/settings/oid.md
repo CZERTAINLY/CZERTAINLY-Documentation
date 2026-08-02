@@ -50,7 +50,7 @@ Keep the following rules in mind:
 
 Windows autoenrolment and NDES/SCEP clients emit the Microsoft certificate-template extensions `1.3.6.1.4.1.311.20.2` (Certificate Template Name) and `1.3.6.1.4.1.311.21.7` (Certificate Template Information). Being vendor extensions, they are not built in — register them as Custom OIDs (non-critical, `DER` encoding) so requests carrying them pass strict validation.
 
-Note the value is advisory in this setup: the ADCS connectors read past and drop the client's copy of the extension, and the template is injected by the connector itself — so a request-attribute mapping to these OIDs *admits* the extension rather than controlling which template is used.
+Note the value is advisory in this setup: the ADCS connector injects the certificate template itself, as a request attribute derived from the RA profile — so a request-attribute mapping to these OIDs *admits* the extension rather than controlling which template is used.
 
 To register a certificate extension in the UI:
 

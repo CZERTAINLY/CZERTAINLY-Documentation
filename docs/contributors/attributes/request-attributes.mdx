@@ -35,6 +35,7 @@ Orthogonal to the mapping, `valueSource` declares how the platform resolves the 
 
 - **`none`** — free input; the requester types any value.
 - **`staticList`** — the requester picks from a fixed list defined with the attribute.
+- **`connectorCallback`** — the list of values is supplied dynamically by a connector callback. Defined in the model but not offered in the authoring UI, which exposes only free input and static list.
 
 The model also defines dependency `params` that scope the source by other attributes' values. They are stored but not evaluated yet — do not rely on them.
 

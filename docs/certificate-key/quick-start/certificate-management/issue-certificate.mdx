@@ -10,7 +10,7 @@ import { faUpload} from '@fortawesome/free-solid-svg-icons'
 
 The `RA Profile` serves as a single point of the particular certificate management service. The `RA Profile` is used to perform operations on top of the certificates.
 
-This page covers immediate issuance — the **Issue now** request type. The Add Certificate form also offers **Pre-register**, which registers a certificate to be issued later using a challenge secret. See [Register Certificate](./register-certificate.mdx) for that flow.
+This page covers immediate issuance — the **Request now** request type. The Add Certificate form also offers **Pre-register**, which registers a certificate to be issued later using a challenge secret. See [Register Certificate](./register-certificate.mdx) for that flow.
 
 ## Issue new certificate using the API
 
@@ -46,7 +46,7 @@ curl -X POST \
   --data '
   {
     "request": "MIICzTCCAbcCAQAwWjFYMAgGA1UEAwwBeDANBgkqhkiG9w0BCQETADAHBgNVBAsTADAHBgNVBAoTADAHBgNVBAkTADAHBgNVBAcTADAHBgNVBAgTADAHBgNVBBETADAHBgNVBAYTADCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANJ2sKsyNhQWrF3QTgJnL9GO8g4WEiJjlY6Cp6Q5dhUrjv6i2m0pL9uFovopbXkPCW8UuDda5ws79PRhRHEPhuPwdTy/UMXLYoiTnjAYP5jalp4UQ/di7tT5BBUxPPzGAMNWVw0IEKlgJnw67xqYP3nbY9u3LEcbBxfAadLR7RVQNJebyRVXLIWstWGMtuVoDcT+I8pdoLEuSlJE2RXiyPXZSvlm8m2qs5912zNbrA3Mi8b/jU/H+lbS5RZ/sphIhrgWpBH4nq8g95VYwcBNhhmcpyUDeeLDHhWpJwlx8p+g+At6u/PMnEvPfnlQ9MZaFTc6PWTKtGAE+lv0803TZjUCAwEAAaAwMC4GCSqGSIb3DQEJDjEhMB8wHQYDVR0OBBYEFEWyex+1M1ZaTYBL0ERQAnBSnld2MAsGCSqGSIb3DQEBCwOCAQEAWO1hjH5f0BPOnR0zmmmf8riNQGwTs+/ySCn5oMQjzoyNDHOB95ZdhYih7UM5u5LKJxEvrX2AJxeAttYsCZhjwkmUutzg6cWqhmpKTHVeRWpqD00u/FBy6hpUdhRCi4FEYIXTkjFnMzrp+M7bQmjuDKgFVO4NMwophKCJoJifh8JE1Fz2jmO/mixLyUAgFIAuC1Odxakx6wyQnwfwX3Xi2zQtHC/bTH2u8XqpPD+epWUqKK5P02vk2kPq2y6e1BpNl6vdvS6Qy73/qX34vIfwf3guJhp99oESmW4TkR3ccT1Dbv9JJCZoyvJ6RSUi+skz4IGQ6YqVDoRp+qREpW+Dlw==",
-    "issueAttributes": []
+    "attributes": []
   }' \
   https://[domain]:[port]/api/v2/operations/authorities/e045a12a-e114-45ed-90b8-bac7e750e803/raProfiles/166b5cf52-63f2-11ec-90d6-0242ac120003/certificates
   #https://[domain]:[port]/api/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates
@@ -76,7 +76,7 @@ Select the correct `RA Profile` and issue a new `Certificate`:
 
 1. Click **Certificates** in the left menu
 2. Click **Add Certificate** (plus symbol <span style={{color: '#1473b5',}}><FontAwesomeIcon icon={faPlus} /></span>)
-3. Keep the request type **Issue now** — the certificate request is submitted to the authority immediately
+3. Keep the request type **Request now** — the certificate request is submitted to the authority immediately
 4. Select the `RA Profile`: `ADCS-WebServer`
 5. Choose the **Key Source**:
     - **External** — upload your own certificate request (CSR file)
