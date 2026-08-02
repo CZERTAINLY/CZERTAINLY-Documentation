@@ -74,15 +74,17 @@ Public MSI properties used above:
 | `SERVICEACCOUNT` | `NT AUTHORITY\NetworkService` | Service identity - see [Choose a service identity](#choose-a-service-identity) above. |
 | `SERVICEPASSWORD` | *(empty)* | Only for the domain-user case; leave empty for gMSA/sMSA and built-in accounts. |
 | `LISTENPORT` | `8443` | Listen port. |
+| `LISTENURL` | `http://+:[LISTENPORT]` | Full bind URL. Defaults to plain HTTP on `LISTENPORT`; set an `https://…` URL to terminate TLS directly - see [Serving over HTTPS](#serving-over-https). |
 | `ADDFIREWALLRULE` | *(off)* | Set to exactly `1` to add an inbound TCP firewall rule for `LISTENPORT`, scoped to the domain network profile only. |
 
 The install registers a Windows Service named **`msadcs-ng-connector`**, started automatically and
 configured to restart on crash. The MSI install is blocked with a clear message if the RSAT AD CS
 management tools are absent (see [Host prerequisites](#host-prerequisites) above).
 
-Full operator-facing configuration (listen URL/TLS, timeouts, inbound authentication, and the
-other operational settings under `Adcs:*`) is out of scope for this guide - see the connector's own
-operator deployment guide for that detail.
+Serving the connector over HTTPS is covered in [Serving over HTTPS](#serving-over-https) below. The
+remaining operator-facing configuration (timeouts, inbound authentication, and the other operational
+settings under `Adcs:*`) is out of scope for this guide - see the connector's own operator deployment
+guide for that detail.
 
 Uninstall via Add/Remove Programs, or:
 
@@ -108,13 +110,67 @@ install, so prefer a gMSA/sMSA (passwordless) identity where policy allows it. `
 defaults to `msadcs-ng-connector`, the same name the MSI registers. `Uninstall-Service.ps1` removes
 it.
 
+## Serving over HTTPS
+
+By default the connector listens on plain **HTTP** (`LISTENPORT`), which is the normal topology: TLS
+terminates at the load balancer or reverse proxy in front of the fleet, and each instance speaks
+plain HTTP behind it. When a host must terminate TLS itself - Core reaching it directly, or no
+TLS-terminating proxy available - the connector does so with native ASP.NET Core Kestrel. There is
+no connector-specific TLS key; it is standard Kestrel configuration.
+
+**1. Bind an `https://` URL at install time** with `LISTENURL`:
+
+```powershell
+# MSI:
+msiexec /i OmniTrust.Ilm.MsAdcs.Connector.msi LISTENURL="https://+:8443" LISTENPORT=8443 SERVICEACCOUNT="CORP\svc-adcs$" /qn
+
+# Install-Service.ps1:
+.\Install-Service.ps1 -ServiceAccount 'CORP\svc-adcs$' -ListenUrl 'https://+:8443' -BinaryPath 'C:\path\to\OmniTrust.Ilm.MsAdcs.Api.exe'
+```
+
+**2. Supply the certificate** via native Kestrel config in the upgrade-safe
+`%ProgramData%\OmniTrust\MsAdcsNgConnector\appsettings.json` - either the machine store (recommended,
+passwordless) or a PFX file.
+
+(a) Machine store (certificate already imported into `LocalMachine\My`):
+
+```json
+{ "Kestrel": { "Certificates": { "Default": {
+  "Subject": "connector.example.com", "Store": "My", "Location": "LocalMachine", "AllowInvalid": false
+} } } }
+```
+
+(b) PFX file + password:
+
+```json
+{ "Kestrel": { "Certificates": { "Default": {
+  "Path": "C:\\ProgramData\\OmniTrust\\MsAdcsNgConnector\\connector.pfx", "Password": "..."
+} } } }
+```
+
+Key points:
+
+- The service **account must be able to read the certificate's private key** (store route:
+  `certlm.msc` → the certificate → *All Tasks* → *Manage Private Keys* → grant *Read* to the service
+  account; PFX route: grant read access on the `.pfx` file).
+- Kestrel selects the store certificate by `Subject` - there is no thumbprint selector - so keep the
+  subject unambiguous in `LocalMachine\My`.
+- The PFX route stores a password in `appsettings.json`; restrict that file's ACL and prefer the
+  store route where possible.
+- If you enable the optional firewall rule, set `LISTENPORT` to the same port as the `https`
+  `LISTENURL` so the rule opens the port Kestrel is actually bound to.
+
+For the full operator reference (every TLS option and caveat), see the connector's
+[operator deployment guide](https://github.com/OmniTrustILM/ms-adcs-ng-connector/blob/main/docs/deployment.md#kestrel--tls-binding).
+
 ## Verify
 
 ```powershell
 Invoke-WebRequest http://localhost:8443/v2/health
 ```
 
-Expect HTTP 200. If it isn't, confirm the RSAT AD CS management tools are installed and that the
+Expect HTTP 200. If you configured [direct HTTPS](#serving-over-https), use the `https://` URL and
+port instead. If it isn't 200, confirm the RSAT AD CS management tools are installed and that the
 service identity holds the permissions in [Permissions](./permissions.md).
 
 ## Upgrade
