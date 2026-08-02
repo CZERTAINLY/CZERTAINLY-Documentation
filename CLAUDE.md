@@ -17,7 +17,8 @@ yarn clear                  # Clear Docusaurus cache
 yarn render-diagrams        # Render all PlantUML diagrams to static/img/plantuml/ (also runs automatically on start/build)
 yarn fetch-api-specs        # Download the OpenAPI documents (also runs automatically on start/build)
 yarn copy-scalar-runtime    # Vendor the Scalar bundle (also runs automatically on start/build)
-yarn verify-api-build       # Check ./build actually contains every API page, document and the runtime
+yarn verify-api-build       # Check ./build has every API page, document and runtime, and that links resolve
+yarn update-api-anchors     # Rewrite diagram operation links to the fragments Scalar serves
 yarn test                   # Run unit tests (node --test)
 yarn coverage               # Unit tests with coverage thresholds enforced
 ```
@@ -99,6 +100,24 @@ is what keeps the build cheap — but it also means a mistake surfaces as a blan
 rather than a build error. `yarn verify-api-build` is the guard: it checks that every one of the 48
 pages, every document and the runtime actually landed in `build/`. Note that `onBrokenLinks` cannot
 do this job — `%API_BASE_URL%` expands to an absolute URL, which Docusaurus treats as external.
+
+**Linking to an operation.** Diagrams link into the API reference with PlantUML's `[[…]]` syntax and
+a `skinparam topurl https://docs.otilm.com/api/` base. Scalar addresses an operation by tag, method
+and path, so a link looks like:
+
+```
+Client -> Core [[core-authority#tag/authority-management/POST/v1/authorities]]: Add Authority
+```
+
+Two details matter. There is **no slash** between the id and the `#` — `topurl` already ends in `/`,
+and the site publishes `/api/core-authority`, so the slashed form is a 404. And the fragment is the
+tag slug plus method plus path, not Redoc's `operation/<operationId>`; the tag slug lowercases,
+hyphenates spaces and *drops* punctuation (`Statistics/Dashboard` becomes `statisticsdashboard`).
+
+Don't hand-write these. Write the link however you like against an operationId and run
+`yarn update-api-anchors`, which derives the correct fragment from the downloaded document and
+rewrites the link in place. `yarn verify-api-build` fails when a link names an operation that no
+longer exists, so an API release that renames one is caught rather than silently dead.
 
 The reference is deliberately read-only, matching Redoc: Scalar's API client, "Test Request", the
 Developer Tools bar, the AI agent and telemetry are all disabled in `src/lib/scalarConfig.mjs`.

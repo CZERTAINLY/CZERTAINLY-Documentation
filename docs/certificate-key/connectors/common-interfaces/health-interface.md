@@ -208,7 +208,7 @@ The following diagrams represents the requests and communication flow.
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client->>Core [[core-connector/#tag/Connector-Management-API/operation/checkHealth]]: Check Health of a Connector
+        Client->>Core [[core-connector#tag/connector-management/GET/v1/connectors/{uuid}/health]]: Check Health of a Connector
         Core->>Connector: Health check
         Note over Core,Connector: Get status information of the Connector and its services
         Connector-->>Core: Return status

@@ -32,12 +32,12 @@ The following processes are associated with the Compliance Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-connector/#tag/Connector-Management/operation/createConnector]]: Create a new Connector
-        Core -> Connector [[connector-compliance-provider/#tag/Info/operation/listSupportedFunctions]]: List supported functions of the connector
+        Client -> Core [[core-connector#tag/connector-management/POST/v1/connectors]]: Create a new Connector
+        Core -> Connector [[connector-compliance-provider#tag/connector-info/GET/v1]]: List supported functions of the connector
         Connector --> Core: Function Group and Kind
-        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules/operation/getRules]]: Get list of rules
+        Core -> Connector [[connector-compliance-provider#tag/compliance-rules/GET/v1/complianceProvider/{kind}/rules]]: Get list of rules
         Connector --> Core: List Compliance Rules
-        Core -> Connector [[connector-compliance-provider/#tag/Compliance-Rules/operation/getGroups]]: Get list of groups
+        Core -> Connector [[connector-compliance-provider#tag/compliance-rules/GET/v1/complianceProvider/{kind}/groups]]: Get list of groups
         Connector --> Core: List Compliance Groups
         Core -> Core: Store Rules and Groups
         Core -> Client: Return Connector UUID
@@ -50,12 +50,12 @@ The following processes are associated with the Compliance Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-certificate/#tag/Certificate-Inventory/operation/checkCompliance]]: Initiate Certificate Compliance Check
+        Client -> Core [[core-certificate#tag/certificate-inventory/POST/v1/certificates/compliance]]: Initiate Certificate Compliance Check
         Core --> Client: Return Async response
         Core -> Core: Get Compliance Profile of the Certificate
         Core -> Core: Frame requests to the Compliance Providers
         loop for each Compliance Provider
-            Core -> Connector [[connector-compliance-provider/#tag/Compliance/operation/checkCompliance]]: Check certificate compliance
+            Core -> Connector [[connector-compliance-provider#tag/compliance/POST/v1/complianceProvider/{kind}/compliance]]: Check certificate compliance
             Connector --> Connector: Evaluate each rule
             Connector --> Core: Return Compliance Check Result
         end

@@ -31,14 +31,14 @@ The following processes are associated with the Discovery Provider and managemen
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-discovery/#tag/Discovery-Management/operation/createDiscovery]]: Create Discovery
+        Client -> Core [[core-discovery#tag/discovery-management/POST/v1/discoveries]]: Create Discovery
         note over Client: Create Discovery with specific Attributes from Connector
         Core->Core: Check existence of Connector
         Core -> Core: Check existence of Discovery  with same name
-        Core -> Connector [[connector-discovery-provider/#tag/Attributes/operation/validateAttributes]]: Validate Attributes
+        Core -> Connector [[connector-discovery-provider#tag/connector-attributes/POST/v1/{functionalGroup}/{kind}/attributes/validate]]: Validate Attributes
         Connector --> Core: Result of attribute validation
         |||
-        Core -> Connector [[connector-discovery-provider/#tag/Discovery/operation/discoverCertificate]]: Initiate certificate Discovery
+        Core -> Connector [[connector-discovery-provider#tag/discovery/POST/v1/discoveryProvider/discover]]: Initiate certificate Discovery
         Connector --> Core: Return discovery triggered async response
         Core --> Client: Return discovery UUID
         Connector -> Devices : Discover Certificates
@@ -46,7 +46,7 @@ The following processes are associated with the Discovery Provider and managemen
         Connector -> Connector: Store discovered certificates
         note over Core, Connector: Certificates retrieval phase
         loop till all certificates are retrieved
-            Core --> Connector [[connector-discovery-provider/#tag/Discovery/operation/getDiscovery]]: List of Certificates request
+            Core --> Connector [[connector-discovery-provider#tag/discovery/POST/v1/discoveryProvider/discover/{uuid}]]: List of Certificates request
             Connector --> Core: Certificates with pagination details
         end
         Core -> Core: Store Certificates
@@ -60,7 +60,7 @@ The following processes are associated with the Discovery Provider and managemen
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-discovery/#tag/Discovery-Management/operation/getDiscovery]]: Discovery Details
+        Client -> Core [[core-discovery#tag/discovery-management/GET/v1/discoveries/{uuid}]]: Discovery Details
         Core -> Core: Formulate Discovery details
         Core -> Client: Return Discovery details
     @enduml
@@ -73,8 +73,8 @@ The following processes are associated with the Discovery Provider and managemen
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-discovery/#tag/Discovery-Management/operation/deleteDiscovery]]: Remove Discovery
-        Core -> Connector [[connector-discovery-provider/#tag/Discovery/operation/deleteDiscovery]]: Delete Discovery
+        Client -> Core [[core-discovery#tag/discovery-management/DELETE/v1/discoveries/{uuid}]]: Remove Discovery
+        Core -> Connector [[connector-discovery-provider#tag/discovery/DELETE/v1/discoveryProvider/discover/{uuid}]]: Delete Discovery
         Connector --> Core: Discovery removed
         Core -> Core : Remove Discovery
         Core --> Client: Discovery reference removed

@@ -113,7 +113,7 @@ Because each `Connector` defines its own specific `Attributes`, we need to get i
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client->>Core [[core-connector/#tag/Connector-Management-API/operation/getAttributes]]: Get Attributes from a Connector
+        Client->>Core [[core-connector#tag/connector-management/GET/v1/connectors/{uuid}/attributes/{functionGroup}/{kind}]]: Get Attributes from a Connector
         Core->>Connector: List available Attributes
         Connector-->>Core: Return Attributes
         Core-->>Client: Return Attributes
@@ -132,7 +132,7 @@ The following example is creating `Credential` object. The same approach can be 
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client->>Core [[core-credential/#tag/Credential-Management-API/operation/createCredential]]: Add Credential
+        Client->>Core [[core-credential#tag/credential-management/POST/v1/credentials]]: Add Credential
         Note over Client,Core: Add Credential with specific Attributes
         Core->>Core: Check existence of Connector and Credential
         Core->>Connector: Validate Attributes

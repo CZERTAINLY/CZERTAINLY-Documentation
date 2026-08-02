@@ -13,7 +13,7 @@ The Secret Provider is a provider interface responsible for fetching and managin
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-vault/#tag/Vault-Instance-Management/operation/createVaultInstance]]: Add Vault Instance
+        Client -> Core [[core-vault#tag/vault-instance-management/POST/v1/vaults]]: Add Vault Instance
         Core->Core: Check existence of Connector and Vault by Name
         Core -> Connector : Get Vault Attributes
         Connector --> Core: Vault Attributes
@@ -35,14 +35,14 @@ The Secret Provider is a provider interface responsible for fetching and managin
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-secret/#tag/Secret-Management/operation/createSecret]]: Create new Secret
-        Core -> Connector [[connector-secret-provider/#tag/Secret-Management/operation/getSecretAttributes]]: Get Secret Attributes
+        Client -> Core [[core-secret#tag/secret-management/POST/v1/vaults/{vaultUuid}/vaultProfiles/{vaultProfileUuid}/secrets]]: Create new Secret
+        Core -> Connector [[connector-secret-provider#tag/secret-management/GET/v1/secretProvider/secrets/{secretType}/attributes]]: Get Secret Attributes
         Connector --> Core: Secret Attributes
         Core -> Core : Validate Secret Attributes
-        Core -> Connector [[connector-secret-provider/#tag/Vault-Management/operation/listVaultAttributes]]: Get Vault Attributes
+        Core -> Connector [[connector-secret-provider#tag/vault-management/GET/v1/secretProvider/vaults/attributes]]: Get Vault Attributes
         Connector --> Core: Vault Attributes
         Core -> Core : Validate Vault Attributes
-        Core -> Connector [[connector-secret-provider/#tag/Secret-Management/operation/createSecret]]: Create new Secret
+        Core -> Connector [[connector-secret-provider#tag/secret-management/POST/v1/secretProvider/secrets]]: Create new Secret
         Connector -> Connector: Create new Secret
         note over Connector
         The secret is created within a Vault
@@ -60,19 +60,19 @@ The Secret Provider is a provider interface responsible for fetching and managin
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-secret/#tag/Secret-Management/operation/updateSecret]]: Update Secret
+        Client -> Core [[core-secret#tag/secret-management/PUT/v1/secrets/{uuid}]]: Update Secret
         Core -> Core : Check if the content of secret has changed
         Core -> Core : Create new Secret Version
         note right Core
         Repeat for each connector containing the secret
         end note
-        Core -> Connector [[connector-secret-provider/#tag/Secret-Management/operation/getSecretAttributes]]: Get Secret Attributes
+        Core -> Connector [[connector-secret-provider#tag/secret-management/GET/v1/secretProvider/secrets/{secretType}/attributes]]: Get Secret Attributes
         Connector --> Core: Secret Attributes
         Core -> Core : Validate Secret Attributes
-        Core -> Connector [[connector-secret-provider/#tag/Vault-Management/operation/listVaultAttributes]]: Get Vault Attributes
+        Core -> Connector [[connector-secret-provider#tag/vault-management/GET/v1/secretProvider/vaults/attributes]]: Get Vault Attributes
         Connector --> Core: Vault Attributes
         Core -> Core : Validate Vault Attributes
-        Core -> Connector [[connector-secret-provider/#tag/Secret-Management/operation/updateSecret]]: Update Secret
+        Core -> Connector [[connector-secret-provider#tag/secret-management/PUT/v1/secretProvider/secrets]]: Update Secret
         Connector -> Connector: Update Secret
         note over Connector
         The secret is updated within a Vault
@@ -90,17 +90,17 @@ The Secret Provider is a provider interface responsible for fetching and managin
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-secret/#tag/Secret-Management/operation/deleteSecret]]: Delete Secret
+        Client -> Core [[core-secret#tag/secret-management/DELETE/v1/secrets/{uuid}]]: Delete Secret
         note right Core
         Repeat for each connector containing the secret
         end note
-        Core -> Connector [[connector-secret-provider/#tag/Secret-Management/operation/getSecretAttributes]]: Get Secret Attributes
+        Core -> Connector [[connector-secret-provider#tag/secret-management/GET/v1/secretProvider/secrets/{secretType}/attributes]]: Get Secret Attributes
         Connector --> Core: Secret Attributes
         Core -> Core : Validate Secret Attributes
-        Core -> Connector [[connector-secret-provider/#tag/Vault-Management/operation/listVaultAttributes]]: Get Vault Attributes
+        Core -> Connector [[connector-secret-provider#tag/vault-management/GET/v1/secretProvider/vaults/attributes]]: Get Vault Attributes
         Connector --> Core: Vault Attributes
         Core -> Core : Validate Vault Attributes
-        Core -> Connector [[connector-secret-provider/#tag/Secret-Management/operation/deleteSecret]]: Delete Secret
+        Core -> Connector [[connector-secret-provider#tag/secret-management/DELETE/v1/secretProvider/secrets]]: Delete Secret
         Connector -> Connector: Delete Secret
         note over Connector
         The secret is deleted in a Vault
@@ -117,14 +117,14 @@ The Secret Provider is a provider interface responsible for fetching and managin
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-secret/#tag/Secret-Management/operation/getSecretContent]]: Get Secret Content
-        Core -> Connector [[connector-secret-provider/#tag/Secret-Management/operation/getSecretAttributes]]: Get Secret Attributes
+        Client -> Core [[core-secret#tag/secret-management/GET/v1/secrets/{uuid}/content]]: Get Secret Content
+        Core -> Connector [[connector-secret-provider#tag/secret-management/GET/v1/secretProvider/secrets/{secretType}/attributes]]: Get Secret Attributes
         Connector --> Core: Secret Attributes
         Core -> Core : Validate Secret Attributes
-        Core -> Connector [[connector-secret-provider/#tag/Vault-Management/operation/listVaultAttributes]]: Get Vault Attributes
+        Core -> Connector [[connector-secret-provider#tag/vault-management/GET/v1/secretProvider/vaults/attributes]]: Get Vault Attributes
         Connector --> Core: Vault Attributes
         Core -> Core : Validate Vault Attributes
-        Core -> Connector [[connector-secret-provider/#tag/Secret-Management/operation/getSecretContent]]: Get Secret Content
+        Core -> Connector [[connector-secret-provider#tag/secret-management/POST/v1/secretProvider/secrets/content]]: Get Secret Content
         Connector --> Core: Return Secret Content
         Core --> Client: Return Secret Content
     @enduml

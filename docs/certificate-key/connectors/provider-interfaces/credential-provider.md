@@ -26,10 +26,10 @@ The following processes are associated with the Credential Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client->Core [[core-credential/#tag/Credential-Management/operation/createCredential]]: Add Credential
+        Client->Core [[core-credential#tag/credential-management/POST/v1/credentials]]: Add Credential
         Note over Client,Core: Add Credential with specific Attributes based on the implementation
         Core->Core: Check existence of Connector and Credential
-        Core->Connector [[connector-credential-provider/#tag/Attributes/operation/validateAttributes]]: Validate attributes
+        Core->Connector [[connector-credential-provider#tag/connector-attributes/POST/v1/{functionalGroup}/{kind}/attributes/validate]]: Validate attributes
         Connector-->Core: Return validation result
         Core->Core: Store Credential
         Core-->Client: Return Credential UUID
@@ -42,7 +42,7 @@ The following processes are associated with the Credential Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client->Core [[core-credential/#tag/Credential-Management/operation/getCredential]]: Details of a Credentials
+        Client->Core [[core-credential#tag/credential-management/GET/v1/credentials/{uuid}]]: Details of a Credentials
         Core->Core: Process secrets
         Note right of Core: Secrets are securely processed before the Credential is returned
         Core-->Client: Return Credential details
@@ -55,9 +55,9 @@ The following processes are associated with the Credential Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client->Core [[core-credential/#tag/Credential-Management/operation/editCredential]]: Update Credential
+        Client->Core [[core-credential#tag/credential-management/PUT/v1/credentials/{uuid}]]: Update Credential
         Core->Core: Check existence of Connector and Credential
-        Core->Connector [[connector-credential-provider/#tag/Attributes/operation/validateAttributes]]: Validate attributes
+        Core->Connector [[connector-credential-provider#tag/connector-attributes/POST/v1/{functionalGroup}/{kind}/attributes/validate]]: Validate attributes
         Connector-->Core: Return validation result
         Core->Core: Update Credential
         Core-->Client: Return updated Credential
@@ -70,7 +70,7 @@ The following processes are associated with the Credential Provider and manageme
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client->Core [[core-credential/#tag/Credential-Management/operation/deleteCredential]]: Remove Credential
+        Client->Core [[core-credential#tag/credential-management/DELETE/v1/credentials/{uuid}]]: Remove Credential
         Core->Core: Check if the Credential can be removed
         Core->Core: Remove Credential
         Core-->Client: Return result
@@ -84,8 +84,8 @@ The following processes are associated with the Credential Provider and manageme
     autonumber
     skinparam topurl https://docs.otilm.com/api/
         alt enable/disable
-            Client->Core [[core-credential/#tag/Credential-Management/operation/enableCredential]]: Enable Credential
-            Client->Core [[core-credential/#tag/Credential-Management/operation/disableCredential]]: Disable Credential
+            Client->Core [[core-credential#tag/credential-management/PATCH/v1/credentials/{uuid}/enable]]: Enable Credential
+            Client->Core [[core-credential#tag/credential-management/PATCH/v1/credentials/{uuid}/disable]]: Disable Credential
         end
         Core->Core: Check if the Credential state can be changed
         Core->Core: Change Credential state

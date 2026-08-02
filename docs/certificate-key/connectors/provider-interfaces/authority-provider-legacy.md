@@ -40,11 +40,11 @@ The following processes are associated with the Authority Provider Legacy and ma
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management/operation/createAuthorityInstance]]: Add Authority Instance
+        Client -> Core [[core-authority#tag/authority-management/POST/v1/authorities]]: Add Authority Instance
         Core->Core: Check existence of Connector and Authority
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management/operation/createAuthorityInstance]]: Create Authority instance
+        Core -> Connector [[connector-authority-provider-v2#tag/authority-management/POST/v1/authorityProvider/authorities]]: Create Authority instance
         Connector -> Connector: Validation of connection to CA
         note right of Connector: Connection to the CA with the attributes is validated
         Connector --> Core: Return Authority Instance response
@@ -59,8 +59,8 @@ The following processes are associated with the Authority Provider Legacy and ma
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management/operation/getAuthorityInstance]]: Details of an Authority instance
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management/operation/getAuthorityInstance]]: Get an Authority instance
+        Client -> Core [[core-authority#tag/authority-management/GET/v1/authorities/{uuid}]]: Details of an Authority instance
+        Core -> Connector [[connector-authority-provider-v2#tag/authority-management/GET/v1/authorityProvider/authorities/{uuid}]]: Get an Authority instance
         note right of Core: Details of the Authority instance is processed and combined with Authority Instance Reference from core
         Connector --> Core: Return Authority details
         Core -> Client: Return Authority details
@@ -73,10 +73,10 @@ The following processes are associated with the Authority Provider Legacy and ma
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management/operation/editAuthorityInstance]]: Update Authority instance
+        Client -> Core [[core-authority#tag/authority-management/PUT/v1/authorities/{uuid}]]: Update Authority instance
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management/operation/updateAuthorityInstance]]: Update Authority instance
+        Core -> Connector [[connector-authority-provider-v2#tag/authority-management/POST/v1/authorityProvider/authorities/{uuid}]]: Update Authority instance
         Connector -> Connector: Validation of connection to CA and update
         note right of Connector: Connection to the CA with the attributes is validated
         Connector --> Core: Return Authority Instance response
@@ -93,9 +93,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management/operation/deleteAuthorityInstance]]: Remove Authority instance
+        Client -> Core [[core-authority#tag/authority-management/DELETE/v1/authorities/{uuid}]]: Remove Authority instance
         Core -> Core : Check dependencies
-        Core -> Connector [[connector-authority-provider-v2/#tag/Authority-Management/operation/removeAuthorityInstance]]: Remove Authority instance
+        Core -> Connector [[connector-authority-provider-v2#tag/authority-management/DELETE/v1/authorityProvider/authorities/{uuid}]]: Remove Authority instance
         Connector --> Core: Return Authority Instance deletion response
         Core -> Core : Delete Authority Instance Reference
         Core --> Client: Return deletion status
@@ -110,9 +110,9 @@ The below diagram shows the sequence of messages that are exchanged between the 
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations/operation/issueCertificate_1]]: Issue Certificate
+        Client -> Core [[core-client-operations#tag/legacy-client-operations/POST/v1/operations/{raProfileName}/certificate/issue]]: Issue Certificate
         note over Client,Core: Issue Certificate with required Attributes and RA Profile data
-        Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management/operation/issueCertificate]]: Issue Certificate
+        Core -> Connector [[connector-authority-provider-legacy#tag/certificate-management/POST/v1/authorityProvider/authorities/{uuid}/endEntityProfiles/{endEntityProfileName}/certificates/issue]]: Issue Certificate
         Connector -> CA: Issue Certificate
         CA --> Connector: Return Certificate
         Connector --> Core: Return Certificate response
@@ -132,8 +132,8 @@ Renewal of the certificate is not supported by the Authority Provider Legacy.
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/Legacy-Client-Operations/operation/revokeCertificate_1]]: Revoke Certificate
-        Core -> Connector [[connector-authority-provider-legacy/#tag/Certificate-Management/operation/revokeCertificate]]: Revoke Certificate
+        Client -> Core [[core-client-operations#tag/legacy-client-operations/POST/v1/operations/{raProfileName}/certificate/revoke]]: Revoke Certificate
+        Core -> Connector [[connector-authority-provider-legacy#tag/certificate-management/POST/v1/authorityProvider/authorities/{uuid}/endEntityProfiles/{endEntityProfileName}/certificates/revoke]]: Revoke Certificate
         Connector -> CA: Revoke Certificate
         CA --> Connector: Return Certificate Revocation status
         Connector --> Core: Return Certificate revocation response

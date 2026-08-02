@@ -113,8 +113,8 @@ The `Core` uses the `/v2/connectors/connect` and `/v2/connectors/{uuid}/reconnec
     autonumber
     skinparam topurl https://docs.otilm.com/api/
         alt requests
-            Client->>Core [[core-connector/#tag/Connector-Management-v2/operation/connectV2]]: Connect to Connector (v2)
-            Client->>Core [[core-connector/#tag/Connector-Management-v2/operation/reconnectV2]]: Reconnect to Connector (v2)
+            Client->>Core [[core-connector#tag/connector-management-v2/POST/v2/connectors/connect]]: Connect to Connector (v2)
+            Client->>Core [[core-connector#tag/connector-management-v2/POST/v2/connectors/{uuid}/reconnect]]: Reconnect to Connector (v2)
         end
         Core->>Connector: GET /v2/info
         Note over Core,Connector: Retrieve connector identity and interfaces
@@ -152,12 +152,12 @@ The following diagrams represents the requests and communication flow.
     autonumber
     skinparam topurl https://docs.otilm.com/api/
         alt requests
-            Client->>Core [[core-connector/#tag/Connector-Management-API/operation/connect]]: Connect to a Connector
+            Client->>Core [[core-connector#tag/connector-management/PUT/v1/connectors/connect]]: Connect to a Connector
             Note over Client,Core: Connect to the Connector on specified URL and authentication method
-            Client->>Core [[core-connector/#tag/Connector-Management-API/operation/getConnector]]: Get details of a Connector
-            Client->>Core [[core-connector/#tag/Connector-Management-API/operation/editConnector]]: Edit a Connector
+            Client->>Core [[core-connector#tag/connector-management/GET/v1/connectors/{uuid}]]: Get details of a Connector
+            Client->>Core [[core-connector#tag/connector-management/PUT/v1/connectors/{uuid}]]: Edit a Connector
             Note over Client,Core: Update Connector
-            Client->>Core [[core-connector/#tag/Connector-Management-API/operation/reconnect]]: Reconnect to a Connector
+            Client->>Core [[core-connector#tag/connector-management/PUT/v1/connectors/{uuid}/reconnect]]: Reconnect to a Connector
         end
         Core->>Connector: List supported functions of the connector
         Note over Core,Connector: Get information about the Connector
@@ -175,7 +175,7 @@ The registration of the `Connector` may be executed by any external entity.
     @startuml
     autonumber
     skinparam topurl https://docs.otilm.com/api/
-        Connector->>Core [[core-connector/#tag/Connector-Registration-API/operation/register]]: Register a Connector
+        Connector->>Core [[core-connector#tag/connector-registration/POST/v1/connector/register]]: Register a Connector
         Core->>Connector: List supported functions of the connector
         Note over Core,Connector: Get information about the Connector
         Connector-->>Core: List of supported Function Groups, Kinds, and EndPoints
