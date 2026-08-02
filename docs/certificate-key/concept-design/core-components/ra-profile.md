@@ -70,6 +70,8 @@ Validation checks:
 
 :::warning[Strict mode needs a deliberately authored set]
 The whitelist runs against the resolved request-attribute set. With no authored set, the platform default applies — six subject (RDN) attributes that map no SAN types and no extensions — so **Strict** rejects any CSR carrying a SAN entry or an extension. In particular, ACME enrollment always fails, because ACME CSRs carry a `dNSName` SAN. Enable strict mode only on profiles whose authored set covers the SAN types and extensions your clients send; otherwise use **Lenient**.
+
+Extensions that clients commonly place in a CSR — Extended Key Usage, Key Usage, Basic Constraints — are [built in to the OID registry](../../settings/oid.md#built-in-certificate-extensions), so admitting them is a matter of mapping an attribute to them; no Custom OID entry is needed. Vendor-specific extensions, such as the [Microsoft certificate-template OIDs](../../settings/oid.md#windows--adcs-enrolment) sent by Windows autoenrolment, must be registered first.
 :::
 
 The mode is inherited along a chain: the profile's own setting, then the platform default, then **lenient** as the final fallback.
