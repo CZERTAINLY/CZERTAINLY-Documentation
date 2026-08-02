@@ -36,7 +36,7 @@ The NG connector needs a **domain-joined Windows Server** host, on the same doma
 domain) as the CA(s) it talks to, with the **RSAT AD CS management tools** ("Active Directory
 Certificate Services Tools" Windows feature) installed. It ships as a self-contained `win-x64`
 executable, so no separate .NET runtime install is required. See
-[Deployment](./installation.md) for the exact host checklist.
+[Deployment](./deployment.md) for the exact host checklist.
 
 ## How it fits
 
@@ -52,7 +52,7 @@ Core  -->  MS ADCS NG connector (Windows Service)  -->  MS-WCCE (COM/DCOM)  --> 
 
 This guide covers only what is specific to the NG connector:
 
-- [Deployment](./installation.md) - host prerequisites, the service identity, and confirming the
+- [Deployment](./deployment.md) - host prerequisites, the service identity, and confirming the
   connector is reachable. Install/upgrade mechanics live in the connector's operator deployment guide.
 - [Permissions](./permissions.md) - the service logon right, CA permissions, and the DCOM/RPC
   firewall access the connector's identity needs to run.

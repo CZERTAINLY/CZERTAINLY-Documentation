@@ -14,7 +14,7 @@ connector's COM/DCOM transport.
 
 ## Service logon right
 
-Whichever identity you chose in [Deployment](./installation.md#service-identity), it
+Whichever identity you chose in [Deployment](./deployment.md#service-identity), it
 must hold the **"Log on as a service"** right (`SeServiceLogonRight`) on the connector host.
 
 - For a gMSA, sMSA, or domain user, the connector's installer grants this right automatically - no
