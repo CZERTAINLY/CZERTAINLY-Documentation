@@ -115,6 +115,24 @@ html[data-theme='dark'] .scalar-card.dark-mode {
   display: none !important;
 }
 
+/*
+ * Scalar clamps the description beside a response code, a parameter or a schema property to one
+ * line and clips it with an ellipsis, so a narrow column turns "Forbidden" into "Forbidd…" and
+ * "Internal Server Error" into "Internal Server Err…". These descriptions are short and are the
+ * only label the row carries, so let them wrap instead of hiding characters.
+ *
+ * Scalar's rule is `.scalar-app .truncate`. Its stylesheet is injected by the bundle at runtime and
+ * therefore lands after this one, so an equally specific selector would lose the tie — hence
+ * matching both classes on the reference root.
+ */
+.scalar-app.scalar-api-reference .markdown-summary {
+  display: block;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  -webkit-line-clamp: unset;
+}
+
 .scalarApiReferenceError {
   margin: 0 auto;
   max-width: var(--ifm-container-width);
