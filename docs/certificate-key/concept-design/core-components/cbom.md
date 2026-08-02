@@ -4,7 +4,7 @@ sidebar_position: 23
 
 # CBOM
 
-`CBOM` (Cryptographic Bill of Materials) is a standardized inventory of cryptographic assets based on the [CycloneDX](https://cyclonedx.org) specification. The Platform supports [CycloneDX v1.6](https://cyclonedx.org/docs/1.6/json/) and provides inventory, management, and visualization of CBOM documents containing cryptographic assets such as certificates, keys, algorithms, protocols, and secrets.
+`CBOM` (Cryptographic Bill of Materials) is a standardized inventory of cryptographic assets based on the [CycloneDX](https://cyclonedx.org) specification. The Platform supports [CycloneDX v1.6](https://cyclonedx.org/docs/1.6/json/) and [v1.7](https://cyclonedx.org/docs/1.7/json/) and provides inventory, management, and visualization of CBOM documents containing cryptographic assets such as certificates, keys, algorithms, protocols, and secrets.
 
 ## CBOM Properties
 
@@ -24,6 +24,18 @@ Each `CBOM` document in the Platform is tracked with the following properties:
 | Total Assets | Total number of all cryptographic assets |
 
 Multiple versions of the same `CBOM` (identified by serial number) are tracked, allowing historical comparison of cryptographic asset changes over time.
+
+## Specification versions
+
+Both CycloneDX v1.6 and v1.7 are accepted. The `Spec Version` property records which specification a stored document conforms to, so an inventory can contain a mixture of both.
+
+v1.7 is additive for cryptographic assets: it introduces a registry of algorithm families and elliptic curves, typed relationships between crypto assets, and richer certificate metadata. A v1.6 document therefore remains valid and does not need to be regenerated.
+
+Producers choose the version they emit. [CBOM Lens](https://github.com/OmniTrustILM/cbom-lens) emits v1.6 by default and v1.7 when `cbom.version` is set to `"1.7"` in its configuration.
+
+:::note
+A producer that declares the specification version in the `Content-Type` media type, for example `application/vnd.cyclonedx+json; version=1.7`, must declare the same version the document itself carries in `specVersion`. The CBOM Repository rejects a mismatch with `HTTP 400`, even when the document is otherwise valid. Omitting the parameter is allowed, in which case the version is taken from the document.
+:::
 
 ## CBOM Sources
 
@@ -103,5 +115,6 @@ core --> user: CBOM detail
 ## See Also
 
 - [CycloneDX v1.6 specification](https://cyclonedx.org/docs/1.6/json/)
+- [CycloneDX v1.7 specification](https://cyclonedx.org/docs/1.7/json/)
 - [Certificate](certificate.md)
 - [Key](key.md)
