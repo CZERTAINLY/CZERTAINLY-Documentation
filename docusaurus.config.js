@@ -72,6 +72,7 @@ const config = {
           { to: '/docs/certificate-key/integration-guides/adfs/configure-ilm', from: '/docs/certificate-key/integration-guides/adfs/configure-czertainly' },
           { to: '/docs/certificate-key/integration-guides/intune/authorize-ilm', from: '/docs/certificate-key/integration-guides/intune/authorize-czertainly' },
           { to: '/docs/certificate-key/integration-guides/keycloak/theme', from: '/docs/certificate-key/integration-guides/keycloak/czertainly-theme' },
+          { to: '/docs/certificate-key/integration-guides/ms-adcs-ng-connector/deployment', from: '/docs/certificate-key/integration-guides/ms-adcs-ng-connector/installation' },
         ],
         createRedirects: function (existingPath) {
           // do not redirect root
