@@ -7,6 +7,7 @@ const cscVersion = '1.7.0';
 
 import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin.mjs';
 import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin.mjs';
+import plantumlRenderPlugin from './src/plugins/plantumlRenderPlugin.mjs';
 
 
 /** @type {import('@docusaurus/types').Config} */
@@ -36,6 +37,7 @@ const config = {
   //     './src/plugins/test'
   // ],
   plugins: [
+    plantumlRenderPlugin,
     [
       "docusaurus-plugin-remote-content",
       {
@@ -65,6 +67,11 @@ const config = {
             to: '/docs',
             from: '/test',
           },
+          { to: '/docs/certificate-key/integration-guides/cert-manager-issuer/create-issuer', from: '/docs/certificate-key/integration-guides/cert-manager-issuer/create-czertainly-issuer' },
+          { to: '/docs/certificate-key/integration-guides/cert-manager-issuer/install-issuer', from: '/docs/certificate-key/integration-guides/cert-manager-issuer/install-czertainly-issuer' },
+          { to: '/docs/certificate-key/integration-guides/adfs/configure-ilm', from: '/docs/certificate-key/integration-guides/adfs/configure-czertainly' },
+          { to: '/docs/certificate-key/integration-guides/intune/authorize-ilm', from: '/docs/certificate-key/integration-guides/intune/authorize-czertainly' },
+          { to: '/docs/certificate-key/integration-guides/keycloak/theme', from: '/docs/certificate-key/integration-guides/keycloak/czertainly-theme' },
         ],
         createRedirects: function (existingPath) {
           // do not redirect root
@@ -105,13 +112,7 @@ const config = {
                 prefix: '%'
               },
             ],
-            [
-              remarkSimplePlantumlPlugin,
-              {
-                baseUrl: "https://www.plantuml.com/plantuml/svg",
-                type: "svg"
-              }
-            ],
+            remarkSimplePlantumlPlugin,
           ],
         },
         theme: {
@@ -657,7 +658,7 @@ const config = {
           appId: '9LVBEQBLSX',
           // Public API key: it is safe to commit it
           apiKey: 'e5c6094c457339acfcd8114bef0f509a',
-          indexName: 'czertainly',
+          indexName: 'ilm',
           // Optional: see doc section below
           contextualSearch: true,
         },

@@ -64,7 +64,7 @@ In both cases the certificate is not added to the inventory.
 Ignore-trigger rejections are recorded in the **Certificate Uploaded** event history together with the matching ignore trigger, so administrators can see that an upload was rejected. The event history does not retain the rejected certificate's own details. To identify the specific certificate, use one of:
 
 - The [audit logs](../../../logging/audit-logs.md), with verbose audit logging enabled in the [logging settings](../../../settings/logging.md).
-- The notification message produced by the configured notification profile for this event. The notification carries the event's [`CertificateEventData`](https://github.com/OmniTrustILM/interfaces/blob/main/src/main/java/com/czertainly/api/model/common/events/data/CertificateEventData.java) payload, which identifies the certificate but does not include the complete certificate.
+- The notification message produced by the configured notification profile for this event. The notification carries the event's [`CertificateEventData`](https://github.com/OmniTrustILM/interfaces/blob/main/src/main/java/com/otilm/api/model/common/events/data/CertificateEventData.java) payload, which identifies the certificate but does not include the complete certificate.
 
 Duplicate rejections are detected before the **Certificate Uploaded** event fires and are therefore not recorded in its event history; the duplicate is reported by the upload request itself.
 
