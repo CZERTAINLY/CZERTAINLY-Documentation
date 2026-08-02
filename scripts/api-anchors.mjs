@@ -7,7 +7,7 @@ import {existsSync, readFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {parse as parseYaml} from 'yaml';
-import {buildOperationAnchors} from '../src/lib/scalarAnchors.mjs';
+import {buildOperationAnchors, buildDocumentAnchors} from '../src/lib/scalarAnchors.mjs';
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), '../..');
 
@@ -34,9 +34,20 @@ export function loadApiAnchors({catalog, specDir = SPEC_DIR}) {
 }
 
 /**
- * Every fragment a document actually offers, for checking a link still resolves.
- * @param {Record<string, string>} operationAnchors
+ * Every fragment each published document offers — tag sections and operations alike — for
+ * checking that a link still resolves.
+ *
+ * @param {object} options
+ * @param {Array<{id: string, version: string}>} options.catalog
+ * @param {string} [options.specDir]
+ * @returns {Record<string, Set<string>>} id -> fragments
  */
-export function anchorSet(operationAnchors) {
-    return new Set(Object.values(operationAnchors));
+export function loadApiAnchorSets({catalog, specDir = SPEC_DIR}) {
+    return Object.fromEntries(catalog.map(({id, version}) => {
+        const file = path.join(specDir, version, `${id}.yaml`);
+        if (!existsSync(file)) {
+            throw new Error(`no downloaded document for ${id}; run "yarn fetch-api-specs" first`);
+        }
+        return [id, buildDocumentAnchors(parseYaml(readFileSync(file, 'utf8')))];
+    }));
 }

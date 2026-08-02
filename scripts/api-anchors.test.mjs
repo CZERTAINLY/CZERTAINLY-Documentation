@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtempSync, mkdirSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {loadApiAnchors, anchorSet} from './api-anchors.mjs';
+import {loadApiAnchors, loadApiAnchorSets} from './api-anchors.mjs';
 
 const DOCUMENT = `
 openapi: 3.1.0
@@ -55,9 +55,11 @@ test('fails with a usable instruction when a document has not been downloaded', 
     );
 });
 
-test('collects the fragments a document offers', () => {
-    assert.deepEqual(
-        anchorSet({a: 'tag/t/GET/v1/a', b: 'tag/t/POST/v1/b'}),
-        new Set(['tag/t/GET/v1/a', 'tag/t/POST/v1/b']),
-    );
+test('collects every fragment a document offers, tags as well as operations', () => {
+    const specDir = specDirWith({'2.19.0/core-authority.yaml': DOCUMENT});
+    const sets = loadApiAnchorSets({catalog: [{id: 'core-authority', version: '2.19.0'}], specDir});
+
+    assert.equal(sets['core-authority'].has('tag/authority-management'), true);
+    assert.equal(sets['core-authority'].has('tag/authority-management/POST/v1/authorities'), true);
+    assert.equal(sets['core-authority'].has('tag/nope'), false);
 });

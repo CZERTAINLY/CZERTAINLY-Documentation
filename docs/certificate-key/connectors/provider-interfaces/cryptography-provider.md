@@ -117,7 +117,7 @@ The following processes are associated with the Cryptography Provider and manage
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-token#tag/token-instance-management/POST/v1/tokens]]: Add Token instance
         Core->Core: Check existence of Connector and Token
         Core -> Connector : Validate Attributes
@@ -140,7 +140,7 @@ The following processes are associated with the Cryptography Provider and manage
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-token#tag/token-instance-management/GET/v1/tokens/{uuid}]]: Details of Token instance
         Core -> Connector [[connector-cryptography-provider#tag/token-management/GET/v1/cryptographyProvider/tokens/{uuid}]]: Get Token instance
         Connector --> Core: Return Token instance details
@@ -159,7 +159,7 @@ The following processes are associated with the Cryptography Provider and manage
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-token#tag/token-instance-management/PUT/v1/tokens/{uuid}]]: Update Token instance
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
@@ -183,7 +183,7 @@ When the `Token` is removed, it does not necessarily mean that it was removed fr
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-token#tag/token-instance-management/DELETE/v1/tokens/{uuid}]]: Remove Token instance
         Core -> Core : Check dependencies
         Core -> Connector [[connector-cryptography-provider#tag/token-management/DELETE/v1/cryptographyProvider/tokens/{uuid}]]: Remove Token instance
@@ -201,7 +201,7 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-token#tag/token-instance-management/PATCH/v1/tokens/{uuid}]]: Get Token instance status
         Core->Core: Check existence of the Token instance
         Core -> Connector [[connector-cryptography-provider#tag/token-management/GET/v1/cryptographyProvider/tokens/{uuid}/status]]: Request Token instance status
@@ -224,7 +224,7 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-token#tag/token-instance-management/PATCH/v1/tokens/{uuid}/activate]]: Activate Token instance
         Core->Core: Check existence of the Token instance
         Core -> Connector [[connector-cryptography-provider#tag/token-management/POST/v1/cryptographyProvider/tokens/{uuid}/activate/attributes/validate]]: Validate activation Attributes
@@ -242,7 +242,7 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-token#tag/token-instance-management/PATCH/v1/tokens/{uuid}/deactivate]]: Deactivate Token instance
         Core->Core: Check existence of the Token instance
         Core -> Connector : Validate deactivation Attributes
@@ -264,7 +264,7 @@ Following are supported processes for key management operations.
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-key#tag/cryptographic-key-management/POST/v1/tokens/{tokenInstanceUuid}/tokenProfiles/{tokenProfileUuid}/keys/{type}]]: Create new Key
         Core -> Core: Validate Token instance
         Core -> Connector [[connector-cryptography-provider#tag/key-management/POST/v1/cryptographyProvider/tokens/{uuid}/keys/pair/attributes/validate]]: Validate create Key Attributes
@@ -288,7 +288,7 @@ Following are supported processes for key management operations.
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-key#tag/cryptographic-key-management/PATCH/v1/keys/{uuid}/destroy]]: Destroy Key
         Core -> Core: Get Key Attributes
         note over Core: Attributes that are required for the Key destruction
@@ -319,7 +319,7 @@ The following processes are associated with the operations that are performed wi
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-cryptographic-operations#tag/cryptographic-operations-controller/POST/v1/operations/tokens/{tokenInstanceUuid}/tokenProfiles/{tokenProfileUuid}/keys/{uuid}/items/{keyItemUuid}/encrypt]]: Encrypt data
         Core -> Connector [[connector-cryptography-provider#tag/cryptographic-operations/POST/v1/cryptographyProvider/tokens/{uuid}/keys/{keyUuid}/encrypt]]: Encrypt data with Key
         Connector -> Connector: Apply encryption with the Key on data 
@@ -339,7 +339,7 @@ The following processes are associated with the operations that are performed wi
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-cryptographic-operations#tag/cryptographic-operations-controller/POST/v1/operations/tokens/{tokenInstanceUuid}/tokenProfiles/{tokenProfileUuid}/keys/{uuid}/items/{keyItemUuid}/decrypt]]: Decrypt data
         Core -> Connector [[connector-cryptography-provider#tag/cryptographic-operations/POST/v1/cryptographyProvider/tokens/{uuid}/keys/{keyUuid}/decrypt]]: Decrypt data with Key
         Connector -> Connector: Apply decryption with the Key on data 
@@ -359,7 +359,7 @@ The following processes are associated with the operations that are performed wi
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-cryptographic-operations#tag/cryptographic-operations-controller/POST/v1/operations/tokens/{tokenInstanceUuid}/tokenProfiles/{tokenProfileUuid}/keys/{uuid}/items/{keyItemUuid}/sign]]: Sign data
         Core -> Connector [[connector-cryptography-provider#tag/cryptographic-operations/POST/v1/cryptographyProvider/tokens/{uuid}/keys/{keyUuid}/sign]]: Sign data with Key
         Connector -> Connector: Apply signing with the Key on data 
@@ -379,7 +379,7 @@ The following processes are associated with the operations that are performed wi
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-cryptographic-operations#tag/cryptographic-operations-controller/POST/v1/operations/tokens/{tokenInstanceUuid}/tokenProfiles/{tokenProfileUuid}/keys/{uuid}/items/{keyItemUuid}/verify]]: Verify data
         Core -> Connector [[connector-cryptography-provider#tag/cryptographic-operations/POST/v1/cryptographyProvider/tokens/{uuid}/keys/{keyUuid}/verify]]: Verify data with Key
         Connector -> Connector: Apply verifying with the Key on data 
@@ -399,7 +399,7 @@ The following processes are associated with the operations that are performed wi
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-cryptographic-operations#tag/cryptographic-operations-controller/POST/v1/operations/tokens/{tokenInstanceUuid}/random]]: Generate random data
         Core -> Core: Validate Token instance
         Core -> Connector [[connector-cryptography-provider#tag/cryptographic-operations/POST/v1/cryptographyProvider/tokens/{uuid}/keys/random/attributes/validate]]: Validate random generator Attributes
@@ -418,8 +418,8 @@ The following processes are associated with the operations that are performed wi
 ## Specification and example
 
 The Cryptography Provider implements [Common Interfaces](../common-interfaces/overview.md) and the following additional interfaces:
-- [Token Management](/api/connector-cryptography-provider/#tag/Token-Management)
-- [Key Management](/api/connector-cryptography-provider/#tag/Key-Management)
-- [Cryptographic Operations](/api/connector-cryptography-provider/#tag/Cryptographic-Operations)
+- [Token Management](/api/connector-cryptography-provider#tag/token-management)
+- [Key Management](/api/connector-cryptography-provider#tag/key-management)
+- [Cryptographic Operations](/api/connector-cryptography-provider#tag/cryptographic-operations)
 
-The OpenAPI specification of the Cryptography Provider can be found here: [Connector API - Cryptography Provider](/api/connector-cryptography-provider/).
+The OpenAPI specification of the Cryptography Provider can be found here: [Connector API - Cryptography Provider](/api/connector-cryptography-provider).

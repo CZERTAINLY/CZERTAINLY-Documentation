@@ -30,7 +30,7 @@ The following processes are associated with the Notification Provider and manage
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl %API_BASE_URL
+    skinparam topurl /api/
         Client -> Core [[core-notification#tag/external-notification-management/POST/v1/notificationInstances]]: Add Notification
         Core->Core: Check existence of Connector and Notification
         Core -> Connector : Validate Attributes
@@ -49,7 +49,7 @@ The following processes are associated with the Notification Provider and manage
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl %API_BASE_URL
+    skinparam topurl /api/
         Client -> Core [[core-notification#tag/external-notification-management/GET/v1/notificationInstances/{uuid}]]: Get details of Notification
         Core -> Connector [[connector-notification-provider#tag/notification-instances-management/GET/v1/notificationProvider/notifications/{uuid}]]: Get Notification
         note right of Core: Details of the Notification is processed and combined with Notification reference from core
@@ -63,7 +63,7 @@ The following processes are associated with the Notification Provider and manage
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl %API_BASE_URL
+    skinparam topurl /api/
         Client -> Core [[core-notification#tag/external-notification-management/PUT/v1/notificationInstances/{uuid}]]: Update Notification
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attributes validation
@@ -81,7 +81,7 @@ The following processes are associated with the Notification Provider and manage
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl %API_BASE_URL
+    skinparam topurl /api/
         Client -> Core [[core-notification#tag/external-notification-management/DELETE/v1/notificationInstances/{uuid}]]: Remove Notification
         Core -> Core : Check dependencies
         Core -> Connector [[connector-notification-provider#tag/notification-instances-management/DELETE/v1/notificationProvider/notifications/{uuid}]]: Remove Notification
@@ -98,7 +98,7 @@ Once the notification should be sent to the recipient(s), the `Notification` obj
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl %API_BASE_URL
+    skinparam topurl /api/
         Core -> Core: Notification service
         Core -> Connector [[connector-notification-provider#tag/notification-instances-management/POST/v1/notificationProvider/notifications/{uuid}/notify]]: Send notification request
         Connector -> Connector: Process notification
@@ -110,6 +110,6 @@ Once the notification should be sent to the recipient(s), the `Notification` obj
 ## Specification and example
 
 The Notification Provider implements [Common Interfaces](../common-interfaces/overview.md) and the following additional interfaces:
-- [Notification Instances Management](/api/connector-notification-provider/#tag/Notification-instances-Management)
+- [Notification Instances Management](/api/connector-notification-provider#tag/notification-instances-management)
 
-The OpenAPI specification of the Notification Provider can be found here: [Connector API - Notification Provider](/api/connector-notification-provider/).
+The OpenAPI specification of the Notification Provider can be found here: [Connector API - Notification Provider](/api/connector-notification-provider).

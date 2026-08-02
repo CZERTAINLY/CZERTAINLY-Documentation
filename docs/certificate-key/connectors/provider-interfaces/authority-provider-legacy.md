@@ -39,7 +39,7 @@ The following processes are associated with the Authority Provider Legacy and ma
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-authority#tag/authority-management/POST/v1/authorities]]: Add Authority Instance
         Core->Core: Check existence of Connector and Authority
         Core -> Connector : Validate Attributes
@@ -58,7 +58,7 @@ The following processes are associated with the Authority Provider Legacy and ma
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-authority#tag/authority-management/GET/v1/authorities/{uuid}]]: Details of an Authority instance
         Core -> Connector [[connector-authority-provider-v2#tag/authority-management/GET/v1/authorityProvider/authorities/{uuid}]]: Get an Authority instance
         note right of Core: Details of the Authority instance is processed and combined with Authority Instance Reference from core
@@ -72,7 +72,7 @@ The following processes are associated with the Authority Provider Legacy and ma
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-authority#tag/authority-management/PUT/v1/authorities/{uuid}]]: Update Authority instance
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
@@ -92,7 +92,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-authority#tag/authority-management/DELETE/v1/authorities/{uuid}]]: Remove Authority instance
         Core -> Core : Check dependencies
         Core -> Connector [[connector-authority-provider-v2#tag/authority-management/DELETE/v1/authorityProvider/authorities/{uuid}]]: Remove Authority instance
@@ -109,7 +109,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/legacy-client-operations/POST/v1/operations/{raProfileName}/certificate/issue]]: Issue Certificate
         note over Client,Core: Issue Certificate with required Attributes and RA Profile data
         Core -> Connector [[connector-authority-provider-legacy#tag/certificate-management/POST/v1/authorityProvider/authorities/{uuid}/endEntityProfiles/{endEntityProfileName}/certificates/issue]]: Issue Certificate
@@ -131,7 +131,7 @@ Renewal of the certificate is not supported by the Authority Provider Legacy.
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/legacy-client-operations/POST/v1/operations/{raProfileName}/certificate/revoke]]: Revoke Certificate
         Core -> Connector [[connector-authority-provider-legacy#tag/certificate-management/POST/v1/authorityProvider/authorities/{uuid}/endEntityProfiles/{endEntityProfileName}/certificates/revoke]]: Revoke Certificate
         Connector -> CA: Revoke Certificate
@@ -145,9 +145,9 @@ Renewal of the certificate is not supported by the Authority Provider Legacy.
 ## Specification and example
 
 The Authority Provider Legacy implements [Common Interfaces](../common-interfaces/overview.md) and the following additional interfaces:
-- [Authority Management](/api/connector-authority-provider-legacy/#tag/Authority-Management)
-- [Certificate Management](/api/connector-authority-provider-legacy/#tag/Certificate-Management)
-- [End Entity Profiles](/api/connector-authority-provider-legacy/#tag/End-Entity-Profiles)
-- [End Entity Management](/api/connector-authority-provider-legacy/#tag/End-Entity-Management)
+- [Authority Management](/api/connector-authority-provider-legacy#tag/authority-management)
+- [Certificate Management](/api/connector-authority-provider-legacy#tag/certificate-management)
+- [End Entity Profiles](/api/connector-authority-provider-legacy#tag/end-entity-profiles)
+- [End Entity Management](/api/connector-authority-provider-legacy#tag/end-entity-management)
 
-The OpenAPI specification of the Authority Provider Legacy can be found here: [Connector API - Authority Provider Legacy](/api/connector-authority-provider-legacy/).
+The OpenAPI specification of the Authority Provider Legacy can be found here: [Connector API - Authority Provider Legacy](/api/connector-authority-provider-legacy).

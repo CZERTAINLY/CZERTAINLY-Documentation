@@ -31,7 +31,7 @@ The following processes are associated with the Compliance Provider and manageme
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-connector#tag/connector-management/POST/v1/connectors]]: Create a new Connector
         Core -> Connector [[connector-compliance-provider#tag/connector-info/GET/v1]]: List supported functions of the connector
         Connector --> Core: Function Group and Kind
@@ -49,7 +49,7 @@ The following processes are associated with the Compliance Provider and manageme
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-certificate#tag/certificate-inventory/POST/v1/certificates/compliance]]: Initiate Certificate Compliance Check
         Core --> Client: Return Async response
         Core -> Core: Get Compliance Profile of the Certificate
@@ -71,7 +71,7 @@ When a request is made to check the compliance of the `Certificate`, the `Core` 
 ## Specification and example
 
 The Compliance Provider implements [Common Interfaces](../common-interfaces/overview.md) and the following additional interfaces:
-- [Compliance Rules](/api/connector-compliance-provider/#tag/Compliance-Rules)
-- [Compliance](/api/connector-compliance-provider/#tag/Compliance)
+- [Compliance Rules](/api/connector-compliance-provider#tag/compliance-rules)
+- [Compliance](/api/connector-compliance-provider#tag/compliance)
 
-The OpenAPI specification of the Compliance Provider can be found here: [Connector API - Compliance Provider](/api/connector-compliance-provider/).
+The OpenAPI specification of the Compliance Provider can be found here: [Connector API - Compliance Provider](/api/connector-compliance-provider).

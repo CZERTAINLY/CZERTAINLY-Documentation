@@ -12,7 +12,7 @@ The Secret Provider is a provider interface responsible for fetching and managin
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-vault#tag/vault-instance-management/POST/v1/vaults]]: Add Vault Instance
         Core->Core: Check existence of Connector and Vault by Name
         Core -> Connector : Get Vault Attributes
@@ -34,7 +34,7 @@ The Secret Provider is a provider interface responsible for fetching and managin
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-secret#tag/secret-management/POST/v1/vaults/{vaultUuid}/vaultProfiles/{vaultProfileUuid}/secrets]]: Create new Secret
         Core -> Connector [[connector-secret-provider#tag/secret-management/GET/v1/secretProvider/secrets/{secretType}/attributes]]: Get Secret Attributes
         Connector --> Core: Secret Attributes
@@ -59,7 +59,7 @@ The Secret Provider is a provider interface responsible for fetching and managin
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-secret#tag/secret-management/PUT/v1/secrets/{uuid}]]: Update Secret
         Core -> Core : Check if the content of secret has changed
         Core -> Core : Create new Secret Version
@@ -89,7 +89,7 @@ The Secret Provider is a provider interface responsible for fetching and managin
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-secret#tag/secret-management/DELETE/v1/secrets/{uuid}]]: Delete Secret
         note right Core
         Repeat for each connector containing the secret
@@ -116,7 +116,7 @@ The Secret Provider is a provider interface responsible for fetching and managin
     @startuml
     autonumber
     skinparam maxMessageSize 200
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-secret#tag/secret-management/GET/v1/secrets/{uuid}/content]]: Get Secret Content
         Core -> Connector [[connector-secret-provider#tag/secret-management/GET/v1/secretProvider/secrets/{secretType}/attributes]]: Get Secret Attributes
         Connector --> Core: Secret Attributes
@@ -133,7 +133,7 @@ The Secret Provider is a provider interface responsible for fetching and managin
 ## Specification and example
 
 The Secret Provider implements [Common Interfaces](../common-interfaces/overview.md) and the following additional interfaces:
-- [Secret Management](/api/connector-secret-provider/#tag/Secret-Management)
-- [Vault Management](/api/connector-secret-provider/#tag/Vault-Management)
+- [Secret Management](/api/connector-secret-provider#tag/secret-management)
+- [Vault Management](/api/connector-secret-provider#tag/vault-management)
 
-The OpenAPI specification of the Secret Provider can be found here: [Connector API - Secret Provider](/api/connector-secret-provider/).
+The OpenAPI specification of the Secret Provider can be found here: [Connector API - Secret Provider](/api/connector-secret-provider).

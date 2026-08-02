@@ -1,9 +1,11 @@
 // Find the API references that documentation links to.
 //
-// Markdown links written as /api/<id> are checked by Docusaurus' own broken-link handling, but two
-// forms escape it: PlantUML diagram links, which end up inside a rendered SVG, and the
-// %API_BASE_URL% placeholder, which expands to an absolute URL that Docusaurus treats as external.
-// Collecting them here lets the build check them against the catalog instead.
+// Docusaurus' broken-link handling checks that a markdown link to /api/<id> resolves to a route,
+// and nothing more. It does not see PlantUML diagram links, which end up inside a rendered SVG, and
+// it never checks fragments — so a link can point at a page that exists and still land nowhere.
+// Collecting every form here lets the build check the ids and the fragments itself.
+
+import {tagAnchor} from './scalarAnchors.mjs';
 
 const PLANTUML_LINK = /\[\[([A-Za-z0-9-]+)\/?#/g;
 const PLACEHOLDER_LINK = /%API_BASE_URL%([a-z0-9-]+)/g;
@@ -24,18 +26,55 @@ export function extractApiReferenceIds(text) {
     return [...ids];
 }
 
-/** Diagram link written against Redoc's scheme: [[<id>/#tag/<Tag>/operation/<operationId>]] */
-const LEGACY_OPERATION_LINK = /\[\[([A-Za-z0-9-]+)\/#tag\/[^/\]]+\/operation\/([^\]]+)]]/g;
-/** A link that already names a Scalar fragment but keeps the slash before it. */
-const SLASHED_OPERATION_LINK = /\[\[([A-Za-z0-9-]+)\/#(tag\/[^\]]+)]]/g;
+/**
+ * Diagram link: [[<id>#<fragment>]], optionally with a stray slash before the "#".
+ *
+ * The slash has to go. Diagrams set `topurl` to `/api/`, so `[[core-auth/#…]]` requested
+ * `/api/core-auth/#…`, and the site publishes `/api/core-auth` without a trailing slash — the
+ * slashed form is a 404.
+ */
+const DIAGRAM_ANCHOR_LINK = /\[\[([A-Za-z0-9-]+)\/?#([^\]]+)]]/g;
+/** Markdown link with a fragment: [text](/api/<id>#<fragment>), slash before "#" optional. */
+const MARKDOWN_ANCHOR_LINK = /]\(\/api\/([A-Za-z0-9-]+)\/?#([^)]+)\)/g;
+/**
+ * Markdown link to a whole reference: [text](/api/<id>/).
+ *
+ * The trailing slash is the same 404 the diagram links had — the site publishes `/api/<id>`.
+ */
+const MARKDOWN_PAGE_LINK = /]\(\/api\/([A-Za-z0-9-]+)\/\)/g;
+
+/** Redoc addressed an operation by id, with or without a leading tag segment. */
+const REDOC_OPERATION_ANCHOR = /^(?:tag\/[^/]+\/)?operation\/(.+)$/;
+/** A whole tag section, in either Redoc's casing or Scalar's slug. */
+const TAG_ONLY_ANCHOR = /^tag\/([^/]+)$/;
 
 /**
- * Rewrite diagram operation links to the form Scalar serves.
+ * Translate one fragment into the form Scalar serves.
+ * @returns {{anchor: string} | {unresolved: string}} the operationId, when it cannot be resolved
+ */
+function normalizeAnchor(id, anchor, anchorsById) {
+    const operation = anchor.match(REDOC_OPERATION_ANCHOR);
+    if (operation) {
+        const operationId = operation[1];
+        const resolved = anchorsById[id]?.[operationId];
+        return resolved ? {anchor: resolved} : {unresolved: operationId};
+    }
+
+    const tagOnly = anchor.match(TAG_ONLY_ANCHOR);
+    if (tagOnly) {
+        // Slugifying is idempotent, so an already-converted anchor passes through unchanged.
+        return {anchor: tagAnchor(tagOnly[1])};
+    }
+
+    // Already Scalar's tag/method/path form.
+    return {anchor};
+}
+
+/**
+ * Rewrite API links to the fragments Scalar serves.
  *
- * Two things are corrected. The fragment moves from Redoc's operationId scheme to Scalar's
- * tag/method/path scheme, and the slash before it is dropped: diagrams set `topurl` to
- * `.../api/`, so `[[core-auth/#…]]` produced `.../api/core-auth/#…`, and the site publishes
- * `/api/core-auth` without a trailing slash — the slashed form is a 404.
+ * Covers both syntaxes documentation uses — PlantUML `[[…]]` diagram links and ordinary markdown
+ * links — and both fragment kinds, a whole tag section and a single operation.
  *
  * Links are converted in place rather than translated during the build: the PlantUML pipeline
  * hashes diagram source to name its rendered SVG, and the remark plugin and the renderer must see
@@ -49,27 +88,98 @@ export function rewriteLegacyOperationLinks(text, anchorsById) {
     const unresolved = [];
     let rewritten = 0;
 
-    let next = text.replace(LEGACY_OPERATION_LINK, (whole, id, operationId) => {
-        const anchor = anchorsById[id]?.[operationId];
-        if (!anchor) {
-            unresolved.push({id, operationId});
+    /** @param {(id: string, anchor: string) => string} format */
+    const convert = (whole, id, anchor, format) => {
+        const result = normalizeAnchor(id, anchor, anchorsById);
+        if (result.unresolved) {
+            unresolved.push({id, operationId: result.unresolved});
             return whole;
         }
-        rewritten += 1;
-        return `[[${id}#${anchor}]]`;
-    });
+        const next = format(id, result.anchor);
+        if (next !== whole) rewritten += 1;
+        return next;
+    };
 
-    next = next.replace(SLASHED_OPERATION_LINK, (whole, id, anchor) => {
-        // A leftover Redoc-style fragment is one the pass above could not resolve. Leave it exactly
-        // as written so it stays visible as something to fix.
-        if (anchor.includes('/operation/')) {
-            return whole;
-        }
+    let next = text.replace(DIAGRAM_ANCHOR_LINK, (whole, id, anchor) =>
+        convert(whole, id, anchor, (i, a) => `[[${i}#${a}]]`));
+
+    next = next.replace(MARKDOWN_ANCHOR_LINK, (whole, id, anchor) =>
+        convert(whole, id, anchor, (i, a) => `](/api/${i}#${a})`));
+
+    next = next.replace(MARKDOWN_PAGE_LINK, (whole, id) => {
         rewritten += 1;
-        return `[[${id}#${anchor}]]`;
+        return `](/api/${id})`;
     });
 
     return {text: next, rewritten, unresolved};
+}
+
+/** Every API link on a page, in either syntax. */
+const ANY_API_LINK = /(?:\[\[([A-Za-z0-9-]+)(\/?)#([^\]]+)]]|]\(\/api\/([A-Za-z0-9-]+)(\/?)(?:#([^)]+))?\))/g;
+
+/**
+ * @typedef {object} ApiLink
+ * @property {string} id API the link points at
+ * @property {string|null} anchor fragment, without the "#", or null for a whole-reference link
+ * @property {boolean} trailingSlash whether the id is followed by a slash, which the site 404s on
+ */
+
+/**
+ * Every API link a page contains, however it was written.
+ * @param {string} text @returns {ApiLink[]}
+ */
+export function extractApiLinks(text) {
+    return [...text.matchAll(ANY_API_LINK)].map((m) => {
+        const [, diagramId, diagramSlash, diagramAnchor, mdId, mdSlash, mdAnchor] = m;
+        return diagramId
+            ? {id: diagramId, anchor: diagramAnchor, trailingSlash: diagramSlash === '/'}
+            : {id: mdId, anchor: mdAnchor ?? null, trailingSlash: mdSlash === '/'};
+    });
+}
+
+/**
+ * Links whose fragment does not exist in the document, or whose URL shape the site 404s on.
+ *
+ * @param {Array<{file: string, text: string}>} pages
+ * @param {Record<string, Set<string>>} anchorsById id -> every fragment that document offers
+ * @returns {Array<{file: string, id: string, anchor: string|null, reason: string}>}
+ */
+export function findBrokenApiLinks(pages, anchorsById) {
+    return pages.flatMap(({file, text}) =>
+        extractApiLinks(text).flatMap((link) => {
+            const known = anchorsById[link.id];
+            if (!known) return [];   // unknown ids are reported by findUnknownApiReferences
+            if (link.trailingSlash) {
+                return [{...link, file, reason: 'trailing slash — /api/<id>/ is a 404'}];
+            }
+            if (link.anchor && !known.has(link.anchor)) {
+                return [{...link, file, reason: 'fragment does not exist in the document'}];
+            }
+            return [];
+        }));
+}
+
+/** The base a diagram must prefix its [[…]] links with. */
+export const DIAGRAM_TOP_URL = '/api/';
+
+const TOP_URL = /skinparam\s+topurl\s+(\S+)/g;
+
+/**
+ * Diagram bases that are not the site-relative one.
+ *
+ * A diagram's links are only as portable as its `topurl`. An absolute
+ * `https://docs.otilm.com/api/` sends a reader on localhost or a preview build to production, and
+ * `%API_BASE_URL%` is never expanded here at all — the renderer reads raw markdown, so the remark
+ * replacement that handles page content does not apply.
+ *
+ * @param {Array<{file: string, text: string}>} pages
+ * @returns {Array<{file: string, topUrl: string}>}
+ */
+export function findNonRelativeDiagramBases(pages) {
+    return pages.flatMap(({file, text}) =>
+        [...text.matchAll(TOP_URL)]
+            .filter(([, topUrl]) => topUrl !== DIAGRAM_TOP_URL)
+            .map(([, topUrl]) => ({file, topUrl})));
 }
 
 /**

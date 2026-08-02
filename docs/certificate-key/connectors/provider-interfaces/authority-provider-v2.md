@@ -32,7 +32,7 @@ The following processes are associated with the Authority Provider v2 and manage
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-authority#tag/authority-management/POST/v1/authorities]]: Add Authority Instance
         Core->Core: Check existence of Connector and Authority
         Core -> Connector : Validate Attributes
@@ -51,7 +51,7 @@ The following processes are associated with the Authority Provider v2 and manage
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-authority#tag/authority-management/GET/v1/authorities/{uuid}]]: Details of an Authority instance
         Core -> Connector [[connector-authority-provider-v2#tag/authority-management/GET/v1/authorityProvider/authorities/{uuid}]]: Get an Authority instance
         note right of Core: Details of the Authority instance is processed and combined with Authority Instance Reference from core
@@ -65,7 +65,7 @@ The following processes are associated with the Authority Provider v2 and manage
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-authority#tag/authority-management/PUT/v1/authorities/{uuid}]]: Update Authority instance
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
@@ -85,7 +85,7 @@ The below diagram shows the sequence of messages that are exchanged between the 
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-authority#tag/authority-management/DELETE/v1/authorities/{uuid}]]: Remove Authority instance
         Core -> Core : Check dependencies
         Core -> Connector [[connector-authority-provider-v2#tag/authority-management/DELETE/v1/authorityProvider/authorities/{uuid}]]: Remove Authority instance
@@ -103,7 +103,7 @@ Sections below represents the list of processes involved in managing the certifi
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/client-operations-v2/POST/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates]]: Issue Certificate
         Core -> Connector [[connector-authority-provider-v2#tag/certificate-management/POST/v2/authorityProvider/authorities/{uuid}/certificates/issue/attributes/validate]]: Validate Attributes
         Connector --> Core: Result of Attribute validation
@@ -122,7 +122,7 @@ Sections below represents the list of processes involved in managing the certifi
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/client-operations-v2/POST/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/renew]]: Renew Certificate
         Core -> Core: Get Attributes from parent Certificate
         note right Core: Attributes for renewal are taken from parent Certificate
@@ -141,7 +141,7 @@ Sections below represents the list of processes involved in managing the certifi
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/client-operations-v2/POST/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/revoke]]: Revoke Certificate
         Core -> Connector [[connector-authority-provider-v2#tag/certificate-management/POST/v2/authorityProvider/authorities/{uuid}/certificates/revoke/attributes/validate]]: Validate Attributes
         Connector --> Core: Result of Attribute validation
@@ -200,7 +200,7 @@ Sync-only connectors are never asked: Core only invokes these four endpoints aga
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/client-operations-v2/POST/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates]]: Issue Certificate
         Core -> Connector [[connector-authority-provider-v2#tag/certificate-management/POST/v2/authorityProvider/authorities/{uuid}/certificates/issue]]: Issue Certificate
         Connector -> CA: Submit issue request
@@ -219,7 +219,7 @@ The same flow applies to `renewCertificate` — the new certificate ends in `Pen
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/client-operations-v2/POST/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/revoke]]: Revoke Certificate
         Core -> Connector [[connector-authority-provider-v2#tag/certificate-management/POST/v2/authorityProvider/authorities/{uuid}/certificates/revoke]]: Revoke Certificate
         Connector -> CA: Submit revoke request
@@ -240,7 +240,7 @@ When an operator uploads the externally-issued certificate, Core verifies the up
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/client-operations-v2/POST/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/issue/finalize]]: Manual Finalise Issue
         Core -> Core : Validate upload (public key match)
         Core -> Connector [[connector-authority-provider-v2#tag/certificate-management/POST/v2/authorityProvider/authorities/{uuid}/certificates/identify]]: Identify Certificate
@@ -258,7 +258,7 @@ Used when the revocation has been completed externally and the operator confirms
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/client-operations-v2/POST/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/revoke/confirm]]: Manual Confirm Revoke
         Core -> Core : Apply preserved revoke attributes
         Core -> Core : Destroy key if requested
@@ -274,7 +274,7 @@ Used when the parked operation is no longer wanted. Core dispatches to the appro
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-client-operations#tag/client-operations-v2/POST/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates/{certificateUuid}/cancel]]: Cancel Pending Operation
         alt state is Pending Issue
             Core -> Connector [[connector-authority-provider-v2#tag/certificate-management/POST/v2/authorityProvider/authorities/{uuid}/certificates/issue/cancel]]: Cancel Issue
@@ -306,7 +306,7 @@ The escape hatch from a stuck pending state is **Cancel parked operation**.
 ## Specification and example
 
 The Authority Provider v2 implements [Common Interfaces](../common-interfaces/overview.md) and the following additional interfaces:
-- [Authority Management](/api/connector-authority-provider-v2/#tag/Authority-Management)
-- [Certificate Management](/api/connector-authority-provider-v2/#tag/Certificate-Management)
+- [Authority Management](/api/connector-authority-provider-v2#tag/authority-management)
+- [Certificate Management](/api/connector-authority-provider-v2#tag/certificate-management)
 
-The OpenAPI specification of the Authority Provider v2 can be found here: [Connector API - Authority Provider v2](/api/connector-authority-provider-v2/).
+The OpenAPI specification of the Authority Provider v2 can be found here: [Connector API - Authority Provider v2](/api/connector-authority-provider-v2).

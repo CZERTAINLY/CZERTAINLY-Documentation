@@ -32,6 +32,32 @@ export function operationAnchor(tag, method, path) {
     return `tag/${slugify(tag)}/${method.toUpperCase()}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
+/** Fragment for a tag section, without the leading "#". @param {string} tag */
+export function tagAnchor(tag) {
+    return `tag/${slugify(tag)}`;
+}
+
+/**
+ * Every fragment a document offers: one per tag section and one per operation.
+ * @param {Record<string, any>} document parsed OpenAPI document
+ * @returns {Set<string>}
+ */
+export function buildDocumentAnchors(document) {
+    const anchors = new Set(Object.values(buildOperationAnchors(document)));
+
+    for (const pathItem of Object.values(document?.paths ?? {})) {
+        if (!pathItem || typeof pathItem !== 'object') continue;
+        for (const [method, operation] of Object.entries(pathItem)) {
+            if (!HTTP_METHODS.has(method.toLowerCase())) continue;
+            for (const tag of operation?.tags ?? []) {
+                if (typeof tag === 'string') anchors.add(tagAnchor(tag));
+            }
+        }
+    }
+
+    return anchors;
+}
+
 /**
  * Map every operationId in a document to its Scalar fragment.
  *

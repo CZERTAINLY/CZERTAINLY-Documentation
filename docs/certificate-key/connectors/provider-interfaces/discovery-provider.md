@@ -30,7 +30,7 @@ The following processes are associated with the Discovery Provider and managemen
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-discovery#tag/discovery-management/POST/v1/discoveries]]: Create Discovery
         note over Client: Create Discovery with specific Attributes from Connector
         Core->Core: Check existence of Connector
@@ -59,7 +59,7 @@ The following processes are associated with the Discovery Provider and managemen
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-discovery#tag/discovery-management/GET/v1/discoveries/{uuid}]]: Discovery Details
         Core -> Core: Formulate Discovery details
         Core -> Client: Return Discovery details
@@ -72,7 +72,7 @@ The following processes are associated with the Discovery Provider and managemen
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-discovery#tag/discovery-management/DELETE/v1/discoveries/{uuid}]]: Remove Discovery
         Core -> Connector [[connector-discovery-provider#tag/discovery/DELETE/v1/discoveryProvider/discover/{uuid}]]: Delete Discovery
         Connector --> Core: Discovery removed
@@ -84,6 +84,6 @@ The following processes are associated with the Discovery Provider and managemen
 ## Specification and example
 
 The Discovery Provider implements [Common Interfaces](../common-interfaces/overview.md) and the following additional interfaces:
-- [Discovery](/api/connector-discovery-provider/#tag/Discovery)
+- [Discovery](/api/connector-discovery-provider#tag/discovery)
 
-The OpenAPI specification of the Discovery Provider can be found here: [Connector API - Discovery Provider](/api/connector-discovery-provider/).
+The OpenAPI specification of the Discovery Provider can be found here: [Connector API - Discovery Provider](/api/connector-discovery-provider).

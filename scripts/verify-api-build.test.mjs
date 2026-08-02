@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtempSync, mkdirSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {findMissingApiArtifacts, findStaleOperationLinks} from './verify-api-build.mjs';
+import {findMissingApiArtifacts} from './verify-api-build.mjs';
 import {findUnknownApiReferences} from '../src/lib/apiLinks.mjs';
 
 const CATALOG = [
@@ -87,36 +87,7 @@ test('reports every missing artifact, not just the first', () => {
     assert.equal(missing.length, 5);
 });
 
-test('accepts a diagram link whose operation still exists', () => {
-    const pages = [{file: 'a.md', text: '[[core-auth/#tag/auth/POST/v1/login]]'}];
-    const anchors = {'core-auth': {login: 'tag/auth/POST/v1/login'}};
-    assert.deepEqual(findStaleOperationLinks(pages, anchors), []);
-});
-
-test('catches a diagram link whose operation moved or was renamed', () => {
-    const pages = [{file: 'a.md', text: '[[core-auth/#tag/auth/POST/v1/old-path]]'}];
-    const anchors = {'core-auth': {login: 'tag/auth/POST/v1/login'}};
-    assert.deepEqual(findStaleOperationLinks(pages, anchors), [
-        {file: 'a.md', id: 'core-auth', anchor: 'tag/auth/POST/v1/old-path'},
-    ]);
-});
-
-test('leaves links to unknown APIs to the catalog check, not the anchor check', () => {
-    const pages = [{file: 'a.md', text: '[[not-an-api/#tag/x/GET/v1/y]]'}];
-    assert.deepEqual(findStaleOperationLinks(pages, {'core-auth': {}}), []);
-});
-
 test('reports a mis-cased API id rather than skipping it silently', () => {
-    const pages = [{file: 'a.md', text: '[[core-Entity/#tag/entity/GET/v1/entities]]'}];
+    const pages = [{file: 'a.md', text: '[[core-Entity#tag/entity/GET/v1/entities]]'}];
     assert.deepEqual(findUnknownApiReferences(pages, ['core-entity']), [{file: 'a.md', id: 'core-Entity'}]);
-});
-
-test('checks every page, reporting each stale link', () => {
-    const pages = [
-        {file: 'a.md', text: '[[core-auth/#tag/auth/GET/v1/gone]]'},
-        {file: 'b.md', text: '[[core-auth/#tag/auth/POST/v1/login]]'},
-        {file: 'c.md', text: '[[core-auth/#tag/auth/PUT/v1/also-gone]]'},
-    ];
-    const stale = findStaleOperationLinks(pages, {'core-auth': {login: 'tag/auth/POST/v1/login'}});
-    assert.deepEqual(stale.map((s) => s.file), ['a.md', 'c.md']);
 });

@@ -10,7 +10,7 @@ In **X.509 certificates**, OIDs are widely used to identify various objects and 
 
 The commonly used RDN attribute types, extended-key-usage purposes, and certificate extensions are predefined as **System OIDs** (see [System OIDs](#system-oids)). To extend the repository, additional **Custom OIDs** can be registered to define new identifiers beyond the default set. These custom definitions allow the translation of OIDs into human-readable names outside of the predefined System OIDs.
 
-Custom OIDs can be managed using the [Custom OID Management API](/api/core-other#tag/Custom-OID-Management).
+Custom OIDs can be managed using the [Custom OID Management API](/api/core-other#tag/custom-oid-management).
 
 ## Categories
 
@@ -66,7 +66,7 @@ The `OID` and category cannot be changed after creation.
 
 The built-in **System OIDs** cover the common RDN attribute types (such as `CN`, `O`, `OU`, or `C`), the common extended-key-usage purposes (such as server authentication, client authentication, or code signing), and the common standards-track [certificate extensions](#built-in-certificate-extensions).
 
-The set is defined by the [`SystemOid`](https://github.com/OmniTrustILM/interfaces/blob/main/src/main/java/com/otilm/api/model/core/oid/SystemOid.java) enum. For a running platform, retrieve it with the [Custom OID Management API](/api/core-other#tag/Custom-OID-Management): `GET /v1/oids/system`, optionally filtered by category — for example `?category=certificateExtension` or `?category=rdnAttributeType`. RDN entries come back with their code and alternative codes, certificate extensions with their default criticality and value encoding.
+The set is defined by the [`SystemOid`](https://github.com/OmniTrustILM/interfaces/blob/main/src/main/java/com/otilm/api/model/core/oid/SystemOid.java) enum. For a running platform, retrieve it with the [Custom OID Management API](/api/core-other#tag/custom-oid-management): `GET /v1/oids/system`, optionally filtered by category — for example `?category=certificateExtension` or `?category=rdnAttributeType`. RDN entries come back with their code and alternative codes, certificate extensions with their default criticality and value encoding.
 
 System OIDs are reserved: creating a Custom OID with one of these values is rejected. A custom entry that already existed before the built-in was introduced (for example, registered before a platform upgrade) **shadows** the built-in — the custom entry wins and the built-in defaults do not apply; the platform logs a recurring warning for such entries. Delete the custom entry to fall back to the built-in definition.
 

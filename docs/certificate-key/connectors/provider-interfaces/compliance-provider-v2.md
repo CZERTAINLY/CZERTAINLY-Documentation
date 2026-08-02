@@ -42,7 +42,7 @@ The following processes are associated with the Compliance Provider and manageme
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-compliance-v2#tag/compliance-profile-management-v2/GET/v2/complianceProfiles/groups]]: Get Compliance Groups from provider
         Core -> Core: Determine API version of selected compliance provider
         Core -> Connector [[connector-compliance-provider-v2#tag/compliance-rules/GET/v2/complianceProvider/{kind}/groups]]: Request to retrieve groups from provider
@@ -61,7 +61,7 @@ The following processes are associated with the Compliance Provider and manageme
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-compliance-v2#tag/compliance-profile-management-v2/GET/v2/complianceProfiles/{uuid}]]: Get detail of Compliance Profile
         Core -> Core: Retrieve Compliance Profile and its associated rules and groups
         Core -> Connector [[connector-compliance-provider-v2#tag/compliance-rules/POST/v2/complianceProvider/{kind}/rules]]: Construct batch request to retrieve rules and groups from provider
@@ -77,7 +77,7 @@ The following processes are associated with the Compliance Provider and manageme
 ```plantuml
     @startuml
     autonumber
-    skinparam topurl https://docs.otilm.com/api/
+    skinparam topurl /api/
         Client -> Core [[core-compliance-v2#tag/compliance-management-v2/POST/v2/compliance/{resource}/{objectUuid}]]: Initiate Compliance Check
         Core --> Client: Return Async response
         Core -> Core: Get Compliance Profile of the object
@@ -103,7 +103,7 @@ After all compliance rules are evaluated, the `Core` then computes the overall c
 ## Specification and example
 
 The Compliance Provider implements [Common Interfaces](../common-interfaces/overview.md) and the following additional interfaces:
-- [Compliance Rules](/api/connector-compliance-provider-v2/#tag/Compliance-Rules)
-- [Compliance](/api/connector-compliance-provider-v2/#tag/Compliance)
+- [Compliance Rules](/api/connector-compliance-provider-v2#tag/compliance-rules)
+- [Compliance](/api/connector-compliance-provider-v2#tag/compliance)
 
-The OpenAPI specification of the Compliance Provider can be found here: [Connector API - Compliance Provider v2](/api/connector-compliance-provider-v2/).
+The OpenAPI specification of the Compliance Provider can be found here: [Connector API - Compliance Provider v2](/api/connector-compliance-provider-v2).

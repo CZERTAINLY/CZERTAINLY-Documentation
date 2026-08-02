@@ -101,23 +101,37 @@ rather than a build error. `yarn verify-api-build` is the guard: it checks that 
 pages, every document and the runtime actually landed in `build/`. Note that `onBrokenLinks` cannot
 do this job — `%API_BASE_URL%` expands to an absolute URL, which Docusaurus treats as external.
 
-**Linking to an operation.** Diagrams link into the API reference with PlantUML's `[[…]]` syntax and
-a `skinparam topurl https://docs.otilm.com/api/` base. Scalar addresses an operation by tag, method
-and path, so a link looks like:
+### Linking to the API reference
+
+Two syntaxes are in use, and both must follow the same three rules:
 
 ```
-Client -> Core [[core-authority#tag/authority-management/POST/v1/authorities]]: Add Authority
+[Update OAuth2 provider settings](/api/core-other#tag/settings/PUT/v1/settings/authentication/oauth2Providers/{providerName})
+
+skinparam topurl /api/
+    Client -> Core [[core-authority#tag/authority-management/POST/v1/authorities]]: Add Authority
 ```
 
-Two details matter. There is **no slash** between the id and the `#` — `topurl` already ends in `/`,
-and the site publishes `/api/core-authority`, so the slashed form is a 404. And the fragment is the
-tag slug plus method plus path, not Redoc's `operation/<operationId>`; the tag slug lowercases,
-hyphenates spaces and *drops* punctuation (`Statistics/Dashboard` becomes `statisticsdashboard`).
+1. **No trailing slash after the id.** The site publishes `/api/core-other`; `/api/core-other/` is a
+   404. This applies to plain page links too — `](/api/core-auth/)` is broken, `](/api/core-auth)`
+   is not.
+2. **Diagrams use `skinparam topurl /api/`**, never an absolute URL and never `%API_BASE_URL%`. The
+   base has to be site-relative or the link drags a reader on localhost over to production; and the
+   placeholder is never expanded in a diagram, because `render-diagrams.mjs` reads raw markdown and
+   the remark replacement only touches page content.
+3. **Fragments are Scalar's**, `tag/<tag-slug>/<METHOD>/<path>`, not Redoc's
+   `operation/<operationId>`. The tag slug lowercases, hyphenates spaces and *drops* punctuation
+   (`Statistics/Dashboard` becomes `statisticsdashboard`). A whole tag section is just `tag/<slug>`.
 
-Don't hand-write these. Write the link however you like against an operationId and run
-`yarn update-api-anchors`, which derives the correct fragment from the downloaded document and
-rewrites the link in place. `yarn verify-api-build` fails when a link names an operation that no
-longer exists, so an API release that renames one is caught rather than silently dead.
+Don't hand-write a fragment. Write the link against an operationId in either syntax and run
+`yarn update-api-anchors`; it derives the right fragment from the downloaded document, fixes the
+trailing slash, and is idempotent.
+
+`yarn verify-api-build` enforces all three: it fails on a trailing slash, on a non-relative diagram
+base, on an id the catalog does not publish, and on a fragment the document does not offer. So an
+API release that renames or moves an operation breaks the build instead of leaving a dead link.
+Docusaurus' own `onBrokenLinks` cannot do this — it never checks fragments, and it cannot see inside
+a rendered diagram at all.
 
 The reference is deliberately read-only, matching Redoc: Scalar's API client, "Test Request", the
 Developer Tools bar, the AI agent and telemetry are all disabled in `src/lib/scalarConfig.mjs`.

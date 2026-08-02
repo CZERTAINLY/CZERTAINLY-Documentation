@@ -10,15 +10,19 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {apiCatalog} from '../src/data/apiCatalog.mjs';
 import {resolveApiCatalog} from '../src/lib/apiCatalog.mjs';
-import {findUnknownApiReferences} from '../src/lib/apiLinks.mjs';
+import {
+    findUnknownApiReferences,
+    findNonRelativeDiagramBases,
+    findBrokenApiLinks,
+    DIAGRAM_TOP_URL,
+} from '../src/lib/apiLinks.mjs';
 import {apiVersion, cscVersion} from '../src/data/versions.mjs';
 import {resolveScalarPackage, RUNTIME_DIR_NAME} from './copy-scalar-runtime.mjs';
-import {loadApiAnchors, anchorSet} from './api-anchors.mjs';
+import {loadApiAnchorSets} from './api-anchors.mjs';
 import {collectDocPages} from './doc-pages.mjs';
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), '../..');
 const BUILD_DIR = path.join(ROOT, 'build');
-const OPERATION_LINK = /\[\[([A-Za-z0-9-]+)\/?#(tag\/[^\]]+)]]/g;
 
 /** @param {string} buildDir @param {string} route */
 function pageExists(buildDir, route) {
@@ -48,27 +52,6 @@ export function findMissingApiArtifacts({buildDir, catalog, runtimeSrc}) {
     return missing;
 }
 
-/**
- * Diagram links that name an operation the document no longer offers.
- *
- * These sit inside rendered SVGs, so nothing else would notice when an API release renames or
- * moves an operation and the link quietly stops landing anywhere useful.
- *
- * @param {Array<{file: string, text: string}>} pages
- * @param {Record<string, Record<string, string>>} anchorsById
- * @returns {Array<{file: string, id: string, anchor: string}>}
- */
-export function findStaleOperationLinks(pages, anchorsById) {
-    const valid = new Map(
-        Object.entries(anchorsById).map(([id, anchors]) => [id, anchorSet(anchors)]),
-    );
-
-    return pages.flatMap(({file, text}) =>
-        [...text.matchAll(OPERATION_LINK)]
-            .filter(([, id, anchor]) => valid.has(id) && !valid.get(id).has(anchor))
-            .map(([, id, anchor]) => ({file, id, anchor})));
-}
-
 /** Check the build in ./build, throwing if anything the API reference needs is absent. */
 export function verifyApiBuild({buildDir = BUILD_DIR} = {}) {
     const catalog = resolveApiCatalog(apiCatalog, {apiVersion, cscVersion});
@@ -90,11 +73,22 @@ export function verifyApiBuild({buildDir = BUILD_DIR} = {}) {
         throw new Error(`${unknown.length} documentation link(s) point at an unpublished API:\n  ${detail}`);
     }
 
-    const stale = findStaleOperationLinks(pages, loadApiAnchors({catalog}));
-    if (stale.length) {
-        const detail = stale.map(({file, id, anchor}) => `${file} -> /api/${id}#${anchor}`).join('\n  ');
+    const pinned = findNonRelativeDiagramBases(pages);
+    if (pinned.length) {
+        const detail = pinned.map(({file, topUrl}) => `${file} -> ${topUrl}`).join('\n  ');
         throw new Error(
-            `${stale.length} documentation link(s) name an operation that no longer exists; ` +
+            `${pinned.length} diagram(s) do not use "skinparam topurl ${DIAGRAM_TOP_URL}", so their ` +
+            `links would leave the site being viewed:\n  ${detail}`,
+        );
+    }
+
+    const broken = findBrokenApiLinks(pages, loadApiAnchorSets({catalog}));
+    if (broken.length) {
+        const detail = broken
+            .map(({file, id, anchor, reason}) => `${file} -> /api/${id}${anchor ? `#${anchor}` : ''}  (${reason})`)
+            .join('\n  ');
+        throw new Error(
+            `${broken.length} documentation link(s) would not reach what they name; ` +
             `run "yarn update-api-anchors":\n  ${detail}`,
         );
     }
