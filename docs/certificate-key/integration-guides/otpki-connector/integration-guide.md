@@ -26,14 +26,14 @@ The connector authenticates to OTPKI with an OAuth2 access token and calls OTPKI
 
 The sections below give the OTPKI-side steps. They follow the OTPKI administration console; for background on each screen, see the [OTPKI documentation](https://docs.otpki.com/).
 
-## Create the OAuth2 client and map it to an OTPKI identity
+## Set up the OAuth2 client
 
 The connector authenticates using the OAuth2 **client credentials** grant against the token endpoint of the identity provider OTPKI uses — a Keycloak realm in the standard deployment, for example `https://<otpki-host>/kc/realms/otpki/protocol/openid-connect/token`.
 
 1. In that identity provider, create a **confidential client** for the connector and enable the **client credentials** (service-account) grant. Note its **client id** and **client secret** — you store these in ILM. If the provider requires a **scope** or **audience** on the token, note them too; otherwise leave them unset. The client-creation mechanics match ILM's own Keycloak setup — see [Create Realm and Client](../keycloak/create-realm.md#create-oidc-client) (for the connector, turn on the client credentials grant rather than the login redirect flow, and add an audience mapper as in [Configure the dedicated scope](../keycloak/create-realm.md#configure-the-dedicated-scope) if OTPKI expects an audience).
 2. Make sure the client's token maps to an **OTPKI identity** (a user) that OTPKI can resolve from the token. OTPKI links a token to a user through its `sub`/`iss` claims and can assign roles from a `roles` claim — see [Identity Providers](https://docs.otpki.com/docs/operations/administration/identity/identity-providers/) and [Users](https://docs.otpki.com/docs/operations/administration/identity/users/). That identity must hold the role created in the next step (either let OTPKI create it from the token's claims, or pre-create the user and assign the role).
 
-## Grant the connector's identity the required permissions
+## Grant permissions
 
 Create a role for the connector and grant it exactly the resource/action permissions it uses — nothing more.
 
@@ -53,7 +53,7 @@ Create a role for the connector and grant it exactly the resource/action permiss
 
 The connector never deletes OTPKI objects and never manages roles or users, so grant it no **Delete** or administration permissions.
 
-## Configure a CA, certificate profile, and end-entity profile
+## Configure the CA and profiles
 
 The connector issues through an OTPKI **end-entity profile**, which ties a **certificate profile** (the template) to a **certificate authority**. Make sure all three exist and are linked:
 
