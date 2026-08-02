@@ -36,7 +36,8 @@ The following `Connectors` are officially available:
 
 [Connector NG](./common-interfaces/overview.md#connector-ng) connectors describe their capabilities through versioned interfaces rather than Function Groups and Kinds. The following Connector NG connectors are officially available:
 
-| Connector Name                   | Interface                                                                                                    |
-|-----------------------------------|---------------------------------------------------------------------------------------------------------------|
-| [OTPKI Connector](../integration-guides/otpki-connector/overview.md) | [Authority Provider v3](./provider-interfaces/authority-provider-v3.md) |
+| Connector Name                                                                                 | Interface                                                                               |
+|------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| [OTPKI Connector](../integration-guides/otpki-connector/overview.md)                           | [Authority Provider v3](./provider-interfaces/authority-provider-v3.md)                 |
+| [MS ADCS NG Connector](../integration-guides/ms-adcs-ng-connector/overview.md)                 | [Authority Provider v3](./provider-interfaces/authority-provider-v3.md)                 |
 | [Timestamp Formatting Connector](../../signing/timestamping/timestamp-formatting-connector.md) | [Signature Formatting Provider](./provider-interfaces/signature-formatting-provider.md) |
