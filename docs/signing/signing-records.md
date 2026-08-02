@@ -269,3 +269,9 @@ The following gauges apply to `Deferred Durable` mode and give a real-time view 
 | `signing_record.outbox.depth` | Number of outbox rows waiting to be drained into the database. A steadily rising value means the drainer is falling behind. |
 | `signing_record.outbox.lag_seconds` | Age of the oldest undrained outbox row in seconds. Rising lag is the clearest early signal of a backlog building up. |
 | `signing_record.outbox.poisoned` | Rows that have exceeded the poison threshold and will no longer be retried. Any non-zero value means records have been permanently abandoned and requires investigation — check the outbox table's `lastError` column for the cause. |
+
+---
+
+## Related pages
+
+[Core API - Signing Record](/api/core-signing-record/) — The OpenAPI specification for retrieving `Signing Records`
