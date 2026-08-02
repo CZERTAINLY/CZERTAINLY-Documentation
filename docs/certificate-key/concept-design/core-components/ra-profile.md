@@ -48,3 +48,30 @@ The following steps illustrate the process of requesting the certificate through
 | **Validation Enabled**                | Enable or disable validation of certificates associated with the RA Profile                                                                                         | `disabled`    |
 | **Validation Frequency**              | Validation frequency of certificates associated with the RA Profile specified in days                                                                               | Everyday      |
 | **Expiring Threshold**                | How many days before expiration should validation status of certificates associated with the RA Profile change to `Expiring`                                        | 30 days       |
+
+## Request attributes
+
+`RA Profile` defines the request attributes of its certificate service — what the requester fills in on the request form and where each value lands in the issued certificate. If you are new to request attributes, read the [Request Attribute](./request-attribute.md) concept first.
+
+Each `RA Profile` can author its own **static set** of request attributes — see [Configure request attributes](../../quick-start/certificate-management/create-ra-profile.mdx#configure-request-attributes) for the authoring walkthrough.
+
+## External CSR validation
+
+When a client supplies its own CSR (an external CSR), the `RA Profile` validates it against the resolved request-attribute set. Two modes exist:
+
+- **Strict** — non-compliant external CSRs are rejected.
+- **Lenient** — non-compliant external CSRs are accepted; violations become warnings.
+
+Validation checks:
+
+- every mapped field of a required attribute has a matching subject component, SAN entry, or extension in the CSR
+- matched values satisfy the attribute's value constraints
+- in strict mode additionally a whitelist pass: anything present in the CSR — a subject component, SAN type, or extension — that is not covered by the resolved set is a violation
+
+:::warning[Strict mode needs a deliberately authored set]
+The whitelist runs against the resolved request-attribute set. With no authored set, the platform default applies — six subject (RDN) attributes that map no SAN types and no extensions — so **Strict** rejects any CSR carrying a SAN entry or an extension. In particular, ACME enrollment always fails, because ACME CSRs carry a `dNSName` SAN. Enable strict mode only on profiles whose authored set covers the SAN types and extensions your clients send; otherwise use **Lenient**.
+:::
+
+The mode is inherited along a chain: the profile's own setting, then the platform default, then **lenient** as the final fallback.
+
+Configuration is per profile, in the web interface or API — see [Configure external CSR validation](../../quick-start/certificate-management/create-ra-profile.mdx#configure-external-csr-validation).

@@ -126,3 +126,44 @@ Create `RA Profile` to manage certificates with the specific certificate templat
     - Certification Authority: _your system certificate authority_
 4. Click **Create** 
 5. Click **Enable**  to make RA Profile ready for using, the RA Profile Status would be changed to `Enabled`.  
+
+## Configure request attributes
+
+Request attributes define what the requester fills in on the certificate request form and where each value lands in the issued certificate. This section walks through authoring them; for the why and how they are resolved, see [Request Attribute](../../concept-design/core-components/request-attribute.md).
+
+1. Click **RA Profiles** in the left menu and open the `RA Profile` created above
+2. Click **Edit** to open the **Edit RA Profile** dialog
+3. Switch to the **Request Attributes** tab
+
+:::note
+The **Request Attributes** tab needs an `Authority`. When creating a new `RA Profile`, select an authority first — the dialog tells you: *Select an authority to configure request attributes.*
+:::
+4. In the **Authored attributes** section, click **+ Add request attribute** and fill in the dialog:
+    - **Name** — internal identifier, unique within this set; not shown to the requester
+    - **Label** — the name shown to the requester on the request form
+    - **Description** — optional help text shown to the requester explaining what to enter
+    - **Content type** — the data type of the value the requester provides
+    - **Required**, **List**, **Multi select** — checkboxes controlling how the form field behaves
+5. Pick the **Mapping target** — where the value lands in the certificate:
+    - **RDN (subject)** — a component of the certificate subject name (e.g. CN, O); select the **RDN** below. Careful with the codes: `SN` is **Surname** (`2.5.4.4`), not serial number — the subject **Serial Number** (`SERIALNUMBER`, `2.5.4.5`) is a separate entry, and neither has any relationship to the issued certificate's serial number. A mispick is a valid mapping that no validation will reject.
+    - **Subject Alternative Name** — select the **SAN type** below: `dNSName`, `rfc822Name (email)`, `iPAddress`, `uniformResourceIdentifier`, `otherName`, `directoryName`, or `registeredID`; for `otherName`, also fill **otherName OID** and **otherName value encoding**
+    - **Certificate extension** — select the **Extension** below
+6. Choose the **Value source**:
+    - **Free input** — the requester types any value
+    - **Static list** — the requester picks from a fixed set of values you define below; add them in the **Static list values** section with **Add value** (at least one value, values must be unique)
+7. Click **Save** to add the attribute; repeat for every attribute you need. Use **Edit** and **Remove** on the rows to adjust the set later.
+8. Click **Update** — changes are saved when you click Update
+
+:::info
+The options offered for **RDN** and **Extension** come from the OID registry: built-in system entries plus the entries you register under [Custom OIDs](../../settings/oid.md). The common standards-track extensions are built in; a vendor-specific `Certificate Extension` OID must be registered there before you can map an attribute to it.
+:::
+
+:::note[Validation on save]
+The set is validated when you click **Update**: every attribute must declare a field mapping, mapped attributes must use string or text content, RDN codes and extension OIDs must be known to the OID registry, and an extension OID may appear only once per attribute. Failures are reported per attribute with the reason.
+:::
+
+## Configure external CSR validation
+
+When a client supplies its own CSR, the profile validates it against the resolved request-attribute set in strict or lenient mode — see [External CSR validation](../../concept-design/core-components/ra-profile.md#external-csr-validation) for what the modes mean and what is checked.
+
+To configure it, open the profile detail and switch to the **Validation** tab. The **Request Validation** widget shows the effective mode. Click **Edit Request Validation Settings**; the switch **Use Platform Request Validation Settings** controls whether the profile follows the platform default or sets its own mode.

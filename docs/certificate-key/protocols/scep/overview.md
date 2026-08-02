@@ -102,4 +102,5 @@ The platform performs various validations on the backend including the following
 - Status of the `SCEP Profile` or `RA Profile`
 - If both `SCEP Profile` and `RA Profile` are available and enabled
 - If the `SCEP Profile` has configured default `RA Profile`
+- Validation of the enrollment CSR against the `RA Profile`'s request attributes — see [Request attribute validation](../common-properties.md#request-attribute-validation)
 :::

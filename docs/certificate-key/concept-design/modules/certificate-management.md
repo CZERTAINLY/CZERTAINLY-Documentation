@@ -13,6 +13,7 @@ All the certificate management operations in the platform are achieved through t
 Operations on `Certificate` includes:
 
 - [Issuing](#issueCert)
+- [Registration](#registerCert)
 - [Revocation](#revokeCert)
 - [Renewal](#renewCert)
 - [Rekey](#rekeyCert)
@@ -28,13 +29,19 @@ With defined `RA Profile`, the `Client` will need only the following data to req
   - *external* - CSR (Certificate Signing Request)
   - *existing key pair* - token profile, its key and signature attributes
   - *existing alternative key pair* - optionally, to be used as alternative key pair, along with token profile and signature attributes
-  - `Request Attributes` - attributes for the request, if request is created from existing key(s)
+- [`Request Attributes`](../core-components/request-attribute.md) - values for the request attributes that define the content of the certificate request, resolved per `RA Profile`
 
 - `Connector Attributes` for issuing, if needed by the `Connector` implementation
+
+Every issuance request is shaped by request attributes. From an existing key, the platform builds the request content from the attribute values the requester provides. An external CSR is instead [validated](../core-components/ra-profile.md#external-csr-validation) against the profile's resolved request-attribute set.
 
 In case of RA profile has associated `Compliance Profile`, compliance check will be first run on certificate request. If certificate request compliance check fails, certificate is `Rejected`, otherwise certificate issuance will proceed.
 
 Upon successful issuing of the `Certificate`, it will be parsed, validated, and stored in the `Certificate Inventory`.
+
+### Registration \{#registerCert}
+
+A `Certificate` can be pre-registered before any key or CSR exists. The platform records the certificate's identity — given as request-attribute values — and the certificate is issued later. Completing the registration requires a challenge secret and runs through the standard [issue flow](#issueCert). See the [Register Certificate](../../quick-start/certificate-management/register-certificate.mdx) quick start for the full flow and the [certificate states](../core-components/certificate.md) for the state model.
 
 ### Revocation \{#revokeCert}
 

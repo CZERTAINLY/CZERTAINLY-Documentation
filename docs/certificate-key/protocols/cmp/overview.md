@@ -79,4 +79,5 @@ The platform performs various validations on the backend including the following
 - Status of the `CMP Profile` or `RA Profile`
 - If both `CMP Profile` and `RA Profile` are available and enabled
 - If the `CMP Profile` has configured default `RA Profile`
+- Validation of the `ir`/`cr` request content against the `RA Profile`'s request attributes — see [Request attribute validation](../common-properties.md#request-attribute-validation)
 :::
