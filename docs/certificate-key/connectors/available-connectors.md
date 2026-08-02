@@ -38,4 +38,5 @@ The following `Connectors` are officially available:
 
 | Connector Name                   | Interface                                                                                                    |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------|
+| [OTPKI Connector](../integration-guides/otpki-connector/overview.md) | [Authority Provider v3](./provider-interfaces/authority-provider-v3.md) |
 | [Timestamp Formatting Connector](../../signing/timestamping/timestamp-formatting-connector.md) | [Signature Formatting Provider](./provider-interfaces/signature-formatting-provider.md) |
