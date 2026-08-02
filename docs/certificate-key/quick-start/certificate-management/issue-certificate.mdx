@@ -52,13 +52,15 @@ curl -X POST \
   #https://[domain]:[port]/api/v2/operations/authorities/{authorityUuid}/raProfiles/{raProfileUuid}/certificates
 ```
 
-When the `Certificate` is successfully issued, its content and `uuid` is sent back:
+The issuance request is accepted and queued; it runs asynchronously, so the response returns only the certificate's `uuid` — the `certificateData` field is left empty and the signed certificate is not returned here:
 ```json
 {
-  "certificateData": "-----BEGIN CERTIFICATE-----\nMIIFBjCCAu6gAwIBAgITGAAAAQeBixwpO8+33wAAAAABBzANBgkqhkiG9w0BAQ0F\nADA3MRcwFQYDVQQDDA5EZW1vIE1TIFN1YiBDQTEcMBoGA1UECgwTM0tleSBDb21w\nYW55IHMuci5vLjAeFw0yMjAxMDExNTUwNTlaFw0yNDAxMDExNTUwNTlaMAwxCjAI\nBgNVBAMTAXgwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDSdrCrMjYU\nFqxd0E4CZy/RjvIOFhIiY5WOgqekOXYVK47+otptKS/bhaL6KW15DwlvFLg3WucL\nO/T0YURxD4bj8HU8v1DFy2KIk54wGD+Y2paeFEP3Yu7U+QQVMTz8xgDDVlcNCBCp\nYCZ8Ou8amD9522PbtyxHGwcXwGnS0e0VUDSXm8kVVyyFrLVhjLblaA3E/iPKXaCx\nLkpSRNkV4sj12Ur5ZvJtqrOfddszW6wNzIvG/41Px/pW0uUWf7KYSIa4FqQR+J6v\nIPeVWMHATYYZnKclA3niwx4VqScJcfKfoPgLervzzJxLz355UPTGWhU3Oj1kyrRg\nBPpb9PNN02Y1AgMBAAGjggE0MIIBMDAdBgNVHQ4EFgQURbJ7H7UzVlpNgEvQRFAC\ncFKeV3YwHwYDVR0jBBgwFoAUksK831XFwZOFSQf3rMkdC2gBB1EwTQYDVR0fBEYw\nRDBCoECgPoY8aHR0cDovL2xhYjAyLjNrZXkuY29tcGFueS9jcmxzL2RlbW8vRGVt\nbyUyME1TJTIwU3ViJTIwQ0EuY3JsMFcGCCsGAQUFBwEBBEswSTBHBggrBgEFBQcw\nAYY7aHR0cDovL2xhYjAyLjNrZXkuY29tcGFueS9jYXMvZGVtby9EZW1vJTIwTVMl\nMjBTdWIlMjBDQS5jcnQwIQYJKwYBBAGCNxQCBBQeEgBXAGUAYgBTAGUAcgB2AGUA\ncjAOBgNVHQ8BAf8EBAMCBaAwEwYDVR0lBAwwCgYIKwYBBQUHAwEwDQYJKoZIhvcN\nAQENBQADggIBABxK3LssVzwskrz49wjYb7aJ0au8Kp/nPSfHrFPnm0j49CRrzzIH\nEU9p40QfoRRNgcc91103KupdQXzmaGWunbA2P8YFQPAp+m6KfsDFd6kKWDtdVKHq\ncMdmorvysQqDjswG77NF+RbP0+IyyzZlRZ5A8bx3yWUSozvOmaPI6fWW0Jt+CDoW\neByxhHLSO6LmeMJuR2jAOKIujkmGlc7BlFWeEDXWGJVbeLNq0m6Kd+Aqiqy/v+Xy\nK10BRYZIJopA74i4mCwH9VGHJ8JqnvAYEW4WYR+f+N9CmpetuJaLE+MTI+cC1JJ9\ny9s2Bc+5FoasWfmEBowi6vR/DzFqzq0WVvKvthojbfVBwjLpLd5rTCrbQ97HwvFY\nKNySV5aGZR2pozAq1avFLdDXFIZAOw93BI0JWKq8/YL9J/8+f6mVTGdmO0/Odhhl\nWTtuI4GzglI/3xm2rZZ60dSZvbHPNINp3jPSn2Whpp1GNL0Mj8+TOH7d4sAIC4JO\nJxWGVroN593M6axHOQxTMWydyelEuqdKyJK/CiPWRakZYHGaQ5E5Qu9G9dbDJut7\n07A/TGtwQzxdVhVh7F2KE7dSQ1g/pDn00VIGl7xYJdXShO0n2ICBMM7D/f1doyKy\ntOP1yZSGe5fP9o669TLbPQZBn+GLQ7JghsXxCVu5hUTRKj7V9vR6gGeh\n-----END CERTIFICATE-----",
+  "certificateData": "",
   "uuid": "1a90cc6c-76e0-48cb-a027-e52a84c071c2"
 }
 ```
+
+Poll the certificate detail for that `uuid` until its state becomes `Issued`, then read the signed certificate from the detail response.
 
 ## Upload existing certificate
 

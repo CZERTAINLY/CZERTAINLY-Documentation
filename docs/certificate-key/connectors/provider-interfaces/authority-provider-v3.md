@@ -1,338 +1,183 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Authority Provider v3
 
 ## Overview
 
-Authority Provider v3 is the current interface between the platform and a certification authority connector. A connector implementing it manages `Authority` instances and performs the certificate operations against the upstream CA:
+Authority Provider v3 is the current interface between the `Core` and a certification authority. Like the [v2 interface](./authority-provider-v2.md) it covers certificate **issue**, **renew**, **rekey**, and **revoke**, and adds **pre-registration** — registering an identity with the CA before a CSR exists. It differs from v2 in three ways:
 
-- supplies the attribute definitions for issuing and registering certificates
-- issues a certificate from a certificate signing request, renews it, and revokes it
-- pre-registers a certificate's identity before any key exists
-- identifies externally issued certificates at the CA
-- accepts operations the CA cannot complete synchronously for asynchronous completion — the platform then polls the connector for the result, or cancels the pending operation
+- **Stateless.** There is no authority-instance lifecycle (`createAuthorityInstance` and friends are gone). The authority identity travels in every request.
+- **Capability-driven.** Optional behaviour (pre-registration, status polling, structured requests, identity override) is advertised per connector and enforced by the platform.
+- **Synchronous or asynchronous.** Any operation may complete immediately or be accepted for later completion, which the platform polls to a terminal state.
 
-Compared to [v2](./authority-provider-v2.md), the v3 interface adds:
+The v3 certificate states and transitions (`Pending Registration`, `Registered`, the async `Pending Issue` / `Pending Revoke` states, and their restore paths) are documented on the [Certificate state](../../concept-design/core-components/certificate.md#certificate-state) page; this page describes the connector interface itself and does not repeat the state diagram.
 
-- **Typed request content** — the connector can receive the certificate identity as a structured `requestContent` object instead of only flat string fields. See [Structured Certificate Request Content](./request-attributes-structured.md).
-- **Certificate pre-registration** — the platform can register a certificate's identity at the upstream CA before any CSR exists.
-- **Identity override** — the platform can pass an authoritative identity alongside a forwarded CSR, for the connector to apply per its CA technology.
-- **Capability flags** — every new behavior is gated by a feature flag the connector advertises. A connector that does not advertise a flag is never asked to perform the gated operation.
+## Relationship to Legacy and v2
 
-The platform-side model behind the typed content — request attributes, field mappings, and how the effective set is resolved — is described in [Request Attribute](../../concept-design/core-components/request-attribute.md).
+The `interfaces` repository carries three generations of the authority-provider contract. The platform picks the implementation from the interface version the connector reports for its authority:
+
+| Generation | Wire | Authority identity | Certificate operations |
+|------------|------|--------------------|------------------------|
+| [Legacy](./authority-provider-legacy.md) | `/v1/…` | Stateful authority instance | Issue, renew, revoke |
+| [v2](./authority-provider-v2.md) | `/v2/…` (instance mgmt at `/v1/…`) | Stateful authority instance | Issue, renew, revoke, plus async parking of parked operations |
+| **v3** | `/v3/…` | **Stateless** — attributes in each request | Issue, renew, rekey, revoke, **register**, identify — synchronous or asynchronous |
+
+A connector that reports interface version `v2` is served by the stateful adapter; one that reports `v3` is served by the stateless adapter. A legacy connector uses the separate legacy path. The stateless and stateful models are otherwise independent — a v3 authority has no authority-instance object at all.
 
 ## How it works
 
-Authority Provider v3 provides the ability to communicate with different types and technologies of certification authorities. The platform supports both **synchronous** authorities (the connector returns the issued or revoked certificate immediately) and **asynchronous** authorities (the connector parks the operation and reports back later, or hands the operation off to an operator). The signal between the platform and the connector for the asynchronous case is the HTTP response code on the issue, renew, and revoke calls — see [Asynchronous certificate operations](#asynchronous-certificate-operations) below.
+### Stateless model
 
-## Capability flags
+v3 has **no authority-instance lifecycle**. There is no create, read, update, or delete of an authority instance on the connector — the operations a v3 connector exposes at the authority level are only:
 
-Connectors advertise feature flags. The flags are opt-in: a feature is supported only when the connector explicitly lists it. An absent flag means the feature is not supported. The platform enforces the gate — it never calls a flag-dependent operation on a connector that does not advertise the flag.
+- `listAuthorityAttributes` — the attribute schema shown when an operator sets up an authority.
+- `checkAuthorityConnection` — validate the supplied authority attributes by reaching the CA (a `204` means reachable).
+- `listRaProfileAttributes` — the RA-profile attribute schema, given authority context.
+- `getCrl`, `getCaCertificates` — fetch a CRL (full or delta) and the CA chain.
 
-Four flags gate the v3 authority features:
+Because nothing is stored connector-side, **every** certificate request carries the full context the connector needs to reconstruct the upstream-CA session: two attribute lists, `authorityAttributes` and `raProfileAttributes`. The platform assembles them from the authority and RA-profile configuration on each call (dereferencing any secret or credential references as the system identity) and the connector rebuilds its CA session per request. There is no session or instance handle to keep in sync.
 
-- **`certificateRegistration`** — the connector can pre-register a certificate's identity (subject DN, SAN entries, extensions) at the upstream CA before a CSR exists.
-- **`certificateStatusPolling`** — the platform may poll the connector for completion of asynchronous operations.
-- **`certificateRequestStructured`** — the connector accepts the structured `requestContent` model on register, issue, and renew, instead of only the flat fields. See [Structured Certificate Request Content](./request-attributes-structured.md).
-- **`certificateIdentityOverride`** — the connector applies an authoritative platform-supplied identity to a forwarded CSR per its CA technology (for example an EJBCA end-entity override), without the platform stripping or re-signing the CSR.
+### Capabilities (feature flags)
 
-## Provider objects
+Optional v3 behaviour is gated by capabilities a connector advertises in its interface `features`. These flags are **opt-in and enforced**: if a connector does not advertise a capability, the platform treats it as unsupported and never invokes it.
 
-[`Authority`](../../concept-design/core-components/authority.md) objects are managed in the platform through the Authority Provider v3 implementation.
+| Capability | Code | What it enables |
+|------------|------|-----------------|
+| Certificate registration | `CERTIFICATE_REGISTRATION` | Pre-register an identity with the CA before a CSR exists (the `/register` endpoints). |
+| Certificate status polling | `CERTIFICATE_STATUS_POLLING` | The connector can be polled for asynchronous completion. Without it, the platform will not poll even if the connector accepts an operation with `202`. |
+| Structured certificate request | `CERTIFICATE_REQUEST_STRUCTURED` | The connector accepts the structured request-content model on register / issue / renew. |
+| Certificate identity override | `CERTIFICATE_IDENTITY_OVERRIDE` | The connector applies a platform-supplied identity to a forwarded CSR (e.g. an End Entity override) instead of stripping and re-signing it. |
 
-## `Authority` instance management
+The platform enforces capabilities in depth: the operation is only attempted when the adapter supports it, the authority advertises the flag, and — as a final backstop — the connector may still answer `OPERATION_NOT_SUPPORTED` at runtime.
 
-### Create `Authority` instance
+## Certificate operations
 
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management/operation/createAuthorityInstance]]: Add Authority Instance
-        Core->Core: Check existence of Connector and Authority
-        Core -> Connector : Validate Attributes
-        Connector --> Core: Result of Attribute validation
-        Core -> Connector : Create Authority instance
-        Connector -> Connector: Validation of connection to CA
-        note right of Connector: Connection to the CA with the attributes is validated
-        Connector --> Core: Return Authority Instance response
-        Core -> Core : Store Authority Instance Reference
-        Core --> Client: Return Authority UUID
-    @enduml
-```
+All v3 certificate operations are `POST` requests under `/v3/authorityProvider/certificates`, each carrying `authorityAttributes` + `raProfileAttributes` alongside the operation payload.
 
-### Get `Authority` instance details
+| Operation | Path | Purpose |
+|-----------|------|---------|
+| List issue attributes | `/issue/attributes` | Dynamic attribute schema for issuance. |
+| Issue | `/issue` | Issue a certificate from a CSR. |
+| Renew / rekey | `/renew` | Renew or rekey. Status and cancel reuse the `issue` endpoints. |
+| List revoke attributes | `/revoke/attributes` | Dynamic attribute schema for revocation. |
+| Revoke | `/revoke` | Revoke a certificate. |
+| List register attributes | `/register/attributes` | Dynamic attribute schema for registration. |
+| Register | `/register` | Pre-register an identity (no CSR). |
+| Identify | `/identify` | Identify an uploaded certificate at the CA. |
+| Status | `/issue/status`, `/revoke/status`, `/register/status` | Poll a parked operation. |
+| Cancel | `/issue/cancel`, `/revoke/cancel`, `/register/cancel` | Cancel an in-flight operation. |
 
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management/operation/getAuthorityInstance]]: Details of an Authority instance
-        Core -> Connector : Get an Authority instance
-        note right of Core: Details of the Authority instance is processed and combined with Authority Instance Reference from core
-        Connector --> Core: Return Authority details
-        Core -> Client: Return Authority details
-    @enduml
-```
+Renew and rekey do not have their own status, cancel, or attribute endpoints — they reuse the `issue` ones.
 
-### Update `Authority` instance
+Unlike v2, v3 has **no connector-side attribute validation** round-trip. The platform validates request attributes structurally against the schema returned by the `…/attributes` endpoints; the connector is not asked to re-validate.
 
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management/operation/editAuthorityInstance]]: Update Authority instance
-        Core -> Connector : Validate Attributes
-        Connector --> Core: Result of Attribute validation
-        Core -> Connector : Update Authority instance
-        Connector -> Connector: Validation of connection to CA and update
-        note right of Connector: Connection to the CA with the attributes is validated
-        Connector --> Core: Return Authority Instance response
-        Core -> Core : Update Authority Instance Reference in the database
-        Core --> Client: Return Authority UUID
-    @enduml
-```
+## Synchronous and asynchronous operations
 
-### Delete `Authority` instance
+A v3 connector may complete an operation immediately or accept it for later completion. The signal is the HTTP status on the operation call:
+
+| Operation | Synchronous | Asynchronous |
+|-----------|-------------|--------------|
+| Issue / renew / register | `200 OK` with the result in the body | `202 Accepted` |
+| Revoke | `204 No Content` (or `200 OK` with metadata only) | `202 Accepted` |
+
+When a connector accepts an operation asynchronously, it returns a connector-owned **`meta`** tracking handle in the body. `meta` is a single opaque bag — the platform never interprets it; it stores it against the certificate and replays it verbatim on every subsequent status, cancel, or register-bound issue call. The connector decides what to put in it (an order ID, a transaction reference, multi-field state).
+
+The platform then resolves the operation by **polling** the matching `…/status` endpoint, provided the authority advertises `CERTIFICATE_STATUS_POLLING`. If it does not, the platform does not poll and the operation is completed out-of-band. (The pending certificate states the platform tracks meanwhile are described on the [Certificate state](../../concept-design/core-components/certificate.md#certificate-state) page.)
+
+### Polling
 
 ```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-authority/#tag/Authority-Management/operation/deleteAuthorityInstance]]: Remove Authority instance
-        Core -> Core : Check dependencies
-        Core -> Connector : Remove Authority instance
-        Connector --> Core: Return Authority Instance deletion response
-        Core -> Core : Delete Authority Instance Reference
-        Core --> Client: Return deletion status
-    @enduml
+@startuml
+autonumber
+Core -> Connector : POST /v3/authorityProvider/certificates/issue/status (meta)
+Connector -> CA : Check status
+alt Still processing
+  Connector --> Core : status = inProgress
+else Completed
+  Connector --> Core : status = completed (+ certificateData for issue/renew)
+else Failed
+  Connector --> Core : status = failed (+ reason)
+end
+@enduml
 ```
 
-## `Certificate` management
+The status response reports one of `inProgress`, `completed`, or `failed`. For a completed issue or renew it carries the Base64 certificate; for a completed revoke no payload is needed. A failed status carries a curated `reason` that the platform surfaces to the operator. An `inProgress` result resets the attempt counter, so a genuinely slow CA never times out on the platform side.
 
-### Issue `Certificate`
+### Issue (synchronous or asynchronous)
 
 ```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/issueCertificate]]: Issue Certificate
-        Core -> Connector : Validate Attributes
-        Connector --> Core: Result of Attribute validation
-        Core -> Connector : Issue Certificate
-        Connector -> CA: Issue Certificate
-        CA --> Connector: Return Certificate
-        Connector --> Core: Return Certificate response
-        Core -> Core : Perform Certificate validation
-        Core -> Core : Store Certificate
-        Core --> Client: Return Certificate UUID
-    @enduml
+@startuml
+autonumber
+Core -> Connector : POST /v3/authorityProvider/certificates/issue\n(authorityAttributes, raProfileAttributes, CSR)
+Connector -> CA : Submit issue request
+alt Synchronous
+  CA --> Connector : Certificate
+  Connector --> Core : 200 OK (certificateData, meta)
+else Asynchronous
+  CA --> Connector : Accepted (no certificate yet)
+  Connector --> Core : 202 Accepted (meta)
+end
+@enduml
 ```
 
-### Renew `Certificate`
+### Cancel
+
+A cancel targets an in-flight operation. The connector returns one of three outcomes:
+
+- **Aborted** (`204`) — the connector aborted the operation.
+- **Not tracked** (`404`, or `422` with a not-tracked error code) — the connector does not (or no longer) track the operation: already finalised externally, or a stateless implementation.
+- **Refused** (`422` with a point-of-no-return error code) — the CA cannot abort the operation.
+
+The connector reports the outcome; the platform decides the resulting certificate state.
+
+## Certificate registration (pre-registration)
+
+When an authority advertises `CERTIFICATE_REGISTRATION`, the connector supports **pre-registration** — registering an identity with the CA before any CSR exists. The connector exposes two endpoints for it:
+
+- `/register/attributes` — the attribute schema for registration.
+- `/register` — register an identity. The request carries the registration identity (the subject and, when `CERTIFICATE_REQUEST_STRUCTURED` is advertised, the structured request content) but **no CSR**. Like issue, it completes synchronously (`200`) or asynchronously (`202` with a `meta` handle, resolved through `/register/status` and `/register/cancel`).
+
+Registration returns no certificate — it establishes the identity at the CA. When the certificate is later issued, the connector receives an ordinary `/issue` call that **replays the registration's `meta` handle**, so it can link the issuance to the earlier registration. Accepting that replayed handle is the connector's only obligation at completion; how the platform drives completion (attaching the CSR, verifying any challenge) is on the [Certificate state](../../concept-design/core-components/certificate.md#registration-lifecycle) page.
 
 ```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/renewCertificate]]: Renew Certificate
-        Core -> Core: Get Attributes from parent Certificate
-        note right Core: Attributes for renewal are taken from parent Certificate
-        Core -> Connector : Renew Certificate
-        Connector -> CA: Issue Certificate
-        CA --> Connector: Return Certificate
-        Connector --> Core: Return Certificate response
-        Core -> Core : Perform Certificate validation
-        Core -> Core : Store Certificate to the database
-        Core --> Client: Return Certificate UUID
-    @enduml
+@startuml
+autonumber
+Core -> Connector : POST /v3/authorityProvider/certificates/register\n(identity, no CSR)
+Connector -> CA : Register identity
+alt Synchronous
+  CA --> Connector : Registered
+  Connector --> Core : 200 OK (meta)
+else Asynchronous
+  CA --> Connector : Accepted
+  Connector --> Core : 202 Accepted (meta)
+  note over Core, Connector : Core polls /register/status until completed
+end
+@enduml
 ```
 
-### Revoke `Certificate`
+Two aspects of registration are handled entirely by the platform and do not involve the connector:
 
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/revokeCertificate]]: Revoke Certificate
-        Core -> Connector : Validate Attributes
-        Connector --> Core: Result of Attribute validation
-        Core -> Connector : Revoke Certificate
-        Connector -> CA: Revoke Certificate
-        CA --> Connector: Return Certificate revocation status
-        Connector --> Core: Return Certificate revocation response
-        Core -> Core : Set Certificate status as revoked
-        Core --> Client: Return revocation status
-    @enduml
-```
+- **Platform-level pre-registration** — when an authority does not advertise `CERTIFICATE_REGISTRATION`, the platform registers the identity itself, with no `/register` call.
+- **Authorization secret (challenge)** — an operator may protect a registration with a secret that must be presented again to complete the issuance. It is a control between the operator and the platform; no connector request or response carries it.
 
-### Register `Certificate`
+Both, along with the certificate states through registration and completion, are described on the [Certificate state](../../concept-design/core-components/certificate.md#registration-lifecycle) page.
 
-The register operation pre-registers a certificate's identity at the upstream CA before any key or CSR exists. It is gated by the `certificateRegistration` [capability flag](#capability-flags). When the connector does not advertise the flag, the platform still pre-registers the certificate — at the platform level only, with no connector call.
+## For connector developers
 
-```plantuml
-    @startuml
-    autonumber
-        Client -> Core : Register Certificate
-        Core -> Core : Resolve request-attribute values into the certificate identity
-        Core -> Connector : Register Certificate
-        Connector -> CA: Pre-register identity
-        CA --> Connector: Registration result
-        Connector --> Core: Return registration response
-        Core -> Core : Set Certificate state to Registered
-        Core --> Client: Return Certificate UUID
-    @enduml
-```
+A v3 connector reconstructs the CA session from `authorityAttributes` + `raProfileAttributes` on every call. The **base contract** it must implement is the attribute-list endpoints (`/issue/attributes`, `/revoke/attributes`), `issue`, `renew`, `revoke`, `identify`, and the authority-level `listAuthorityAttributes`, `checkAuthorityConnection`, `listRaProfileAttributes`, `getCrl`, `getCaCertificates`.
 
-The connector registers synchronously, or accepts the registration for asynchronous completion — the certificate then waits in `Pending Registration` and the platform polls for the result when the connector advertises `certificateStatusPolling`. The response semantics are described in [Registration wire](./request-attributes-structured.md#registration-wire).
+**Optional, capability-advertised** behaviour (only used when the corresponding flag is advertised):
 
-Completing a registration is an issue operation: the platform runs the standard [issue flow](#issue-certificate) with the registered identity. When the connector advertises both `certificateRequestStructured` and `certificateIdentityOverride`, the registered identity is passed alongside the CSR as the authoritative identity — see [Identity override](./request-attributes-structured.md#identity-override). For the operator flow, see the [Register Certificate](../../quick-start/certificate-management/register-certificate.mdx) quick start.
+- `CERTIFICATE_REGISTRATION` → implement `/register` and `/register/attributes` (and, if registration can be asynchronous, `/register/status` and `/register/cancel`).
+- `CERTIFICATE_STATUS_POLLING` → implement the `…/status` and `…/cancel` endpoints and honour `202`. Without advertising it, returning `202` will leave the certificate parked with no polling.
+- `CERTIFICATE_REQUEST_STRUCTURED` / `CERTIFICATE_IDENTITY_OVERRIDE` → accept the structured request-content model and apply a platform-supplied identity to a forwarded CSR.
 
-## Asynchronous certificate operations
+**Signalling async:** return `202` with a connector-owned `meta` tracking handle in the body. The platform replays that `meta` on every subsequent status, cancel, and register-bound issue call, and reports completion through the status endpoint as `inProgress` / `completed` / `failed`.
 
-When a certification authority cannot complete `issue`, `renew`, or `revoke` synchronously — for example a manual or air-gapped CA, a CA that processes requests in batches, or an external authority that requires an operator-driven step — the connector **parks** the operation.
+## Specification
 
-### Parking signal
+Authority Provider v3 implements the [Common Interfaces](../common-interfaces/overview.md) plus the v3 Authority Management and Certificate Management interfaces.
 
-The signal is the HTTP response on the issue, renew, and revoke calls:
-
-| Connector response                      | Certificate state transition                                            |
-|-----------------------------------------|--------------------------------------------------------------------------|
-| `200 OK` with the certificate content   | → `Issued` (issue/renew) or `Revoked` (revoke). Synchronous completion.  |
-| `202 Accepted`                          | → `Pending Issue` (issue/renew) or `Pending Revoke` (revoke). Parked.    |
-| Any other status / connector exception  | → `Failed` (or back to `Issued` for revoke).                             |
-
-Either response may carry `meta` — a value **opaque** to the platform. The connector chooses what to put in it (an order ID, a transaction reference, multi-field state); the platform stores it against the certificate and sends it back on later calls for the same operation. The platform does not interpret the value.
-
-There is no platform-level "offline" or "external" classification of authorities, RA profiles, or connectors. Behaviour is driven by certificate state and the connector's response.
-
-### Parked-operation lifecycle
-
-Four operations complete the parked-operation lifecycle: cancel a parked issue, cancel a parked revoke, poll the status of a parked issue, and poll the status of a parked revoke. The operation type is explicit in each call, so the connector knows unambiguously what it is acting on. The platform dispatches by certificate state — a `Pending Issue` certificate routes to the issue operations, a `Pending Revoke` certificate to the revoke operations. Sync-only connectors are never asked: these operations are invoked only for certificates in `Pending Issue` or `Pending Revoke`, which exist only after a `202` response.
-
-**Status polling.** The platform polls only when the connector advertises the `certificateStatusPolling` [capability flag](#capability-flags). A poll reports the operation as in progress, completed, or failed. For a completed issue or renew, the response carries the certificate content and the platform finalises it through the same internal path as a manual upload. For a completed revoke, no payload is needed — the platform finalises the revoke transition. For a failed operation, the connector's reason is surfaced and the certificate moves to `Failed`. The optional `meta` in the response lets the connector refresh the tracked state on each poll.
-
-**Cancel.** The platform treats the connector's response to a cancel as follows:
-
-- **Acknowledged** (`204`) — the platform proceeds with the local state transition.
-- **Not tracked** (`404`) — the operation was already finalised externally, or the implementation is stateless. A soft failure: the result is recorded in event history and the local transition proceeds.
-- **Refused** (`422`, with a reason) — the underlying CA cannot abort the operation. A hard failure: the reason is surfaced to the user and the certificate stays in its pending state.
-- **Server or network error** — a soft failure. The platform records the error and proceeds with the local transition (cancel is user intent).
-
-### Park `Certificate` issue (renew)
-
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/issueCertificate]]: Issue Certificate
-        Core -> Connector : Issue Certificate
-        Connector -> CA: Submit issue request
-        CA --> Connector: Operation accepted (no certificate yet)
-        Connector --> Core: 202 Accepted (+ optional meta)
-        Core -> Core : Store meta
-        Core -> Core : Set Certificate state to Pending Issue
-        Core --> Client: Return Certificate UUID
-    @enduml
-```
-
-The same flow applies to renew — the new certificate ends in `Pending Issue` while the predecessor remains `Issued` until the new certificate is finalised.
-
-### Park `Certificate` revoke
-
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/revokeCertificate]]: Revoke Certificate
-        Core -> Connector : Revoke Certificate
-        Connector -> CA: Submit revoke request
-        CA --> Connector: Operation accepted (not yet revoked)
-        Connector --> Core: 202 Accepted (+ optional meta)
-        Core -> Core : Store meta + preserve destroyKey flag and revoke attributes
-        Core -> Core : Set Certificate state to Pending Revoke
-        Core --> Client: Return revocation status
-    @enduml
-```
-
-The `destroyKey` flag and revoke attributes from the original request are preserved on the certificate and applied when the parked revoke is confirmed.
-
-### Finalise parked issue (manual upload)
-
-When an operator uploads the externally-issued certificate, the platform verifies the upload, asks the connector to identify it, and transitions the certificate to `Issued`.
-
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/manuallyIssueCertificate]]: Manual Finalise Issue
-        Core -> Core : Validate upload (public key match)
-        Core -> Connector : Identify Certificate
-        Connector --> Core : Identification result
-        Core -> Core : Store Certificate, apply custom attributes
-        Core -> Core : Set Certificate state to Issued
-        Core --> Client : Return Certificate detail
-    @enduml
-```
-
-### Confirm parked revoke
-
-Used when the revocation has been completed externally and the operator confirms it in the platform.
-
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/manuallyConfirmRevoke]]: Manual Confirm Revoke
-        Core -> Core : Apply preserved revoke attributes
-        Core -> Core : Destroy key if requested
-        Core -> Core : Set Certificate state to Revoked
-        Core --> Client : Return confirmation
-    @enduml
-```
-
-### Cancel parked operation
-
-Used when the parked operation is no longer wanted. The platform dispatches to the appropriate connector cancel operation based on certificate state.
-
-```plantuml
-    @startuml
-    autonumber
-    skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-client-operations/#tag/v2-Client-Operations/operation/cancelPendingCertificateOperation]]: Cancel Pending Operation
-        alt state is Pending Issue
-            Core -> Connector : Cancel Issue
-        else state is Pending Revoke
-            Core -> Connector : Cancel Revoke
-        end
-        Connector --> Core : Cancel response
-        alt Connector refused (422)
-            Core --> Client : Validation error (state unchanged)
-        else Connector accepted, not tracked, or transient failure
-            Core -> Core : Apply local transition (Failed / Issued)
-            Core --> Client : Return cancellation status
-        end
-    @enduml
-```
-
-### Operations blocked while pending
-
-While a certificate is in `Pending Issue` or `Pending Revoke`, the following client operations return `400 Bad Request`:
-
-- renew
-- rekey
-- revoke (for certificates in `Pending Issue`)
-- re-issue of the same `Requested` certificate
-- switching the RA profile
-
-The escape hatch from a stuck pending state is [Cancel parked operation](#cancel-parked-operation).
-
-## Specification and example
-
-The Authority Provider v3 implements [Common Interfaces](../common-interfaces/overview.md). The wire contract for the typed request content, the identity override, and the registration responses is described in [Structured Certificate Request Content](./request-attributes-structured.md).
-
-:::info[API reference]
-The OpenAPI specification of the Authority Provider v3 will be published with the next platform release. The sequence diagrams above therefore link only the platform's client operations for now.
-:::
+The OpenAPI specification of the Authority Provider v3 is published to the platform API reference with the release that introduces the interface: [Connector API - Authority Provider v3](https://docs.otilm.com/api/connector-authority-provider-v3/).

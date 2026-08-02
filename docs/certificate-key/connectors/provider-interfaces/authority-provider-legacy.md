@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 2
 ---
 
 # Authority Provider Legacy
@@ -21,7 +21,7 @@ The interfaces of the Authority Provider Legacy contain:
 
 Authority Provider Legacy provides the ability to communicate with the EJBCA certification authorities.
 :::warning
-The Authority Provider Legacy interface is designed to work only with the EJBCA. If you are looking to support different technology, consider [Authority Provider v3](authority-provider-v3.md) interface.
+The Authority Provider Legacy interface is designed to work only with the EJBCA. If you are looking to support different technology, consider [Authority Provider v2](authority-provider-v2.md) interface.
 :::
 
 ## Provider objects
