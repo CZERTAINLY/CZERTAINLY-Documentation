@@ -6,8 +6,8 @@ sidebar_position: 2
 
 The connector runs as a Windows Service on a domain-joined Windows Server host. This page covers only
 what the platform integration depends on - host prerequisites, the service identity, and confirming
-the connector is reachable. Installing, upgrading, and TLS/operational configuration are the
-connector's own concern and are documented in its
+the connector is reachable, plus configuring it to serve over HTTPS. Installing, upgrading, and the
+remaining operational configuration are the connector's own concern and are documented in its
 [operator deployment guide](https://github.com/OmniTrustILM/ms-adcs-ng-connector/blob/main/docs/deployment.md).
 
 ## Host prerequisites
@@ -49,6 +49,59 @@ publishes a `SHA256SUMS` file to verify the download - or build it from source. 
 service-identity setup, upgrades, and HTTPS/TLS are all covered in the connector's
 [operator deployment guide](https://github.com/OmniTrustILM/ms-adcs-ng-connector/blob/main/docs/deployment.md).
 
+## Serving over HTTPS
+
+By default the connector listens on plain **HTTP** (`LISTENPORT`), which is the normal topology: TLS
+terminates at the load balancer or reverse proxy in front of the fleet, and each instance speaks
+plain HTTP behind it. When a host must terminate TLS itself - Core reaching it directly, or no
+TLS-terminating proxy available - the connector does so with native ASP.NET Core Kestrel. There is
+no connector-specific TLS key; it is standard Kestrel configuration.
+
+**1. Bind an `https://` URL at install time** with `LISTENURL`:
+
+```powershell
+# MSI:
+msiexec /i OmniTrust.Ilm.MsAdcs.Connector.msi LISTENURL="https://+:8443" LISTENPORT=8443 SERVICEACCOUNT="CORP\svc-adcs$" /qn
+
+# Install-Service.ps1:
+.\Install-Service.ps1 -ServiceAccount 'CORP\svc-adcs$' -ListenUrl 'https://+:8443' -BinaryPath 'C:\path\to\OmniTrust.Ilm.MsAdcs.Api.exe'
+```
+
+**2. Supply the certificate** via native Kestrel config in the upgrade-safe
+`%ProgramData%\OmniTrust\MsAdcsNgConnector\appsettings.json` - either the machine store (recommended,
+passwordless) or a PFX file.
+
+(a) Machine store (certificate already imported into `LocalMachine\My`):
+
+```json
+{ "Kestrel": { "Certificates": { "Default": {
+  "Subject": "connector.example.com", "Store": "My", "Location": "LocalMachine", "AllowInvalid": false
+} } } }
+```
+
+(b) PFX file + password:
+
+```json
+{ "Kestrel": { "Certificates": { "Default": {
+  "Path": "C:\\ProgramData\\OmniTrust\\MsAdcsNgConnector\\connector.pfx", "Password": "..."
+} } } }
+```
+
+Key points:
+
+- The service **account must be able to read the certificate's private key** (store route:
+  `certlm.msc` → the certificate → *All Tasks* → *Manage Private Keys* → grant *Read* to the service
+  account; PFX route: grant read access on the `.pfx` file).
+- Kestrel selects the store certificate by `Subject` - there is no thumbprint selector - so keep the
+  subject unambiguous in `LocalMachine\My`.
+- The PFX route stores a password in `appsettings.json`; restrict that file's ACL and prefer the
+  store route where possible.
+- If you enable the optional firewall rule, set `LISTENPORT` to the same port as the `https`
+  `LISTENURL` so the rule opens the port Kestrel is actually bound to.
+
+For the full operator reference (every TLS option and caveat), see the connector's
+[operator deployment guide](https://github.com/OmniTrustILM/ms-adcs-ng-connector/blob/main/docs/deployment.md#kestrel--tls-binding).
+
 ## Verify
 
 Once the connector is deployed, confirm it answers its health endpoint before registering it in Core:
@@ -57,6 +110,6 @@ Once the connector is deployed, confirm it answers its health endpoint before re
 Invoke-WebRequest http://localhost:8443/v2/health
 ```
 
-Expect HTTP 200 (use the `https://` URL and port if the connector terminates TLS itself). If it isn't
-200, confirm the RSAT AD CS management tools are installed and that the service identity holds the
-permissions in [Permissions](./permissions.md).
+Expect HTTP 200 (use the [`https://` URL](#serving-over-https) and port if the connector terminates
+TLS itself). If it isn't 200, confirm the RSAT AD CS management tools are installed and that the
+service identity holds the permissions in [Permissions](./permissions.md).
