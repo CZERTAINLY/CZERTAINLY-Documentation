@@ -34,5 +34,5 @@ The **Registration** section of the Certificates tab holds the platform defaults
 
 | Name                                | Description                                                                                     | Default Value |
 |-------------------------------------|-------------------------------------------------------------------------------------------------|---------------|
-| **Default Issuance Window (days)**  | Default issuance window in days, applied when a pre-registration omits an explicit expiry       | 7 days        |
+| **Default Issuance Window (days)**  | Default issuance window in days, applied to a challenge-protected pre-registration that omits an explicit expiry | 7 days        |
 | **Max Failed Attempts**             | Maximum failed challenge-verification attempts before the registration authorization locks     | 5             |

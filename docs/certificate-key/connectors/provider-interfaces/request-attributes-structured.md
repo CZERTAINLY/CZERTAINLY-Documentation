@@ -10,10 +10,12 @@ This page describes the wire contract for the typed certificate request content 
 
 The certificate identity travels to the connector in one of two forms:
 
-- **Flat fields** — `subjectDn` (a DN string), `subjectAltName` (RFC 5280 textual form), and `extensions` (entries of OID, criticality, and a Base64 DER value). v2 connectors receive these, and so do v3 connectors that do not advertise the `certificateRequestStructured` flag.
+- **Flat fields** — `subjectDn` (a DN string), `subjectAltName` (RFC 5280 textual form), and `extensions` (entries of OID, criticality, and a Base64 DER value). A v3 connector that does not advertise the `certificateRequestStructured` flag receives the identity this way.
 - **Structured content** — the typed request content described below. A v3 connector advertising `certificateRequestStructured` receives this instead.
 
 Both forms are rendered from the same content. For a non-structured connector, the platform renders the flat fields from the structured content — and **fails the request closed** when the content cannot be represented flat. When both forms are present on a request, the structured form is authoritative.
+
+This is the v3 authority wire. v2 authority connectors have no structured form and no registration operation: their issue and renew requests carry a Base64 CSR (`request`, with a `format` such as `pkcs10`; renew also carries the existing certificate), and the identity comes from that CSR — never from flat subject fields.
 
 ## The Request Content
 
