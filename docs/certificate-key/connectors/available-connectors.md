@@ -25,10 +25,12 @@ The following `Connectors` are officially available:
 | HashiCorp Vault Connector      | <span class="badge">Authority Provider</span>    | <span class="badge">HVault</span>                                                                          |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">HVault</span>                                                                          |
 |                                | <span class="badge">Secret Provider</span>       |                                                                                                            |
-| OTPKI Connector                | <span class="badge">Authority Provider</span>    |                                                                                                            |
+| OTPKI Connector                | <span class="badge">Authority Provider</span>    | —                                                                                                          |
 | Keystore Entity Provider       | <span class="badge">Entity Provider</span>       | <span class="badge">Keystore</span>                                                                        |
 | PyADCS Connector               | <span class="badge">Authority Provider</span>    | <span class="badge">PyADCS-WinRM</span>                                                                    |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">PyADCS-WinRM</span>                                                                    |
 | Network Discovery Provider     | <span class="badge">Discovery Provider</span>    | <span class="badge">IP-Hostname</span>                                                                     |
 | Software Cryptography Provider | <span class="badge">Cryptography Provider</span> | <span class="badge">SOFT</span>                                                                            |
 | X.509 Compliance Provider      | <span class="badge">Compliance Provider</span>   | <span class="badge">x509</span>                                                                            |
+
+— The OTPKI Connector is a v3 stateless connector and advertises no kind.
