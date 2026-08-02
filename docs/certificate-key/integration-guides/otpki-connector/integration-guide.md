@@ -8,9 +8,9 @@ sidebar_position: 1
 This integration guide assumes basic knowledge of ILM [`Connectors`](../../concept-design/architecture/connector.md), [`Authorities`](../../concept-design/core-components/authority.md), and [`RA Profiles`](../../concept-design/core-components/ra-profile.md), and that you already have a running OTPKI installation. It focuses on what has to be configured in OTPKI so that ILM can manage certificates through it, and on how to test the integration.
 :::
 
-ILM manages certificates in OTPKI through the **OTPKI Connector**, an Authority Provider connector. The connector is deployed together with ILM (through the ILM Helm chart or operator), so deploying it is not part of this guide. What you do need to prepare is the OTPKI side: an OAuth2 client the connector can authenticate as, and the certificate authority and templates it issues from.
+[OTPKI](https://docs.otpki.com/) (OmniTrust PKI) is a modern, cloud-native PKI service for operating certificate authorities and managing the full certificate lifecycle through an API-first interface. For installing and operating OTPKI itself, see the [OTPKI documentation](https://docs.otpki.com/).
 
-This document outlines the steps to take in OTPKI before the connector can be configured, how to connect an OTPKI authority in ILM, and how to test the integration.
+The **OTPKI Connector** that ILM uses to manage certificates in OTPKI ships with ILM (through the Helm chart or operator), so deploying it is not part of this guide. This document outlines the steps to take in OTPKI before the connector can be configured, how to connect an OTPKI authority in ILM, and how to test the integration.
 
 :::info[OTPKI installation]
 Installing and operating OTPKI is out of scope of this document. This guide assumes OTPKI is installed, running, and reachable from ILM. Refer to the [OTPKI documentation](https://docs.otpki.com/) for the exact administration steps referenced below.
@@ -30,7 +30,7 @@ The sections below give the OTPKI-side steps. They follow the OTPKI administrati
 
 The connector authenticates using the OAuth2 **client credentials** grant against the token endpoint of the identity provider OTPKI uses — a Keycloak realm in the standard deployment, for example `https://<otpki-host>/kc/realms/otpki/protocol/openid-connect/token`.
 
-1. In that identity provider, create a **confidential client** for the connector with the **client credentials** grant enabled. Note its **client id** and **client secret** — you store these in ILM. If the provider requires a **scope** or **audience** on the token, note them too; otherwise leave them unset.
+1. In that identity provider, create a **confidential client** for the connector and enable the **client credentials** (service-account) grant. Note its **client id** and **client secret** — you store these in ILM. If the provider requires a **scope** or **audience** on the token, note them too; otherwise leave them unset. The client-creation mechanics match ILM's own Keycloak setup — see [Create Realm and Client](../keycloak/create-realm.md#create-oidc-client) (for the connector, turn on the client credentials grant rather than the login redirect flow, and add an audience mapper as in [Configure the dedicated scope](../keycloak/create-realm.md#configure-the-dedicated-scope) if OTPKI expects an audience).
 2. Make sure the client's token maps to an **OTPKI identity** (a user) that OTPKI can resolve from the token. OTPKI links a token to a user through its `sub`/`iss` claims and can assign roles from a `roles` claim — see [Identity Providers](https://docs.otpki.com/docs/operations/administration/identity/identity-providers/) and [Users](https://docs.otpki.com/docs/operations/administration/identity/users/). That identity must hold the role created in the next step (either let OTPKI create it from the token's claims, or pre-create the user and assign the role).
 
 ## Grant the connector's identity the required permissions
@@ -49,7 +49,7 @@ Create a role for the connector and grant it exactly the resource/action permiss
    | Enrollment request    | Create              |
    | Certificate           | Issue, Revoke, Read |
 
-3. Assign the role to the connector's identity — through the user form, or the Permissions screen's **User Assignments** tab.
+3. Assign the role to the connector's identity — through the user form, or the Permissions screen's [**User Assignments**](https://docs.otpki.com/docs/operations/administration/permissions/#user-assignments) tab.
 
 The connector never deletes OTPKI objects and never manages roles or users, so grant it no **Delete** or administration permissions.
 
@@ -67,8 +67,6 @@ The connector issues through an OTPKI **end-entity profile**, which ties a **cer
    See [End Entity Profiles](https://docs.otpki.com/docs/operations/enrollment/end-entity-profiles/).
 
 When you create an RA profile in ILM you pick an end-entity profile first; ILM then offers only the certificate profiles and CAs that the selected end-entity profile allows.
-
-If issuance later fails with an `enrollment request data is invalid` error, the end-entity profile is rejecting the connector's request — most often because it forces an auto-generated login id or password, or does not allow the selected CA or certificate profile. Adjust the profile in OTPKI.
 
 ## Allow network access
 
@@ -116,7 +114,7 @@ For the general authority and RA-profile flow in ILM, see [Create an authority](
 2. Through an RA profile, **issue a test certificate** from a CSR. A successful issuance exercises the whole path — creating the end entity, enrolling, and issuing.
 3. Optionally confirm that **revocation** works and that the **CRL** and **CA certificate** downloads succeed for the selected CA.
 
-If issuance fails with `enrollment request data is invalid`, the selected end-entity profile is rejecting the connector's enrollment — see [Configure a CA, certificate profile, and end-entity profile](#configure-a-ca-certificate-profile-and-end-entity-profile) and adjust the profile in OTPKI.
+If issuance fails with `enrollment request data is invalid`, the selected end-entity profile is rejecting the connector's enrollment — most often because it forces an auto-generated login id or password, or does not allow the selected CA or certificate profile. Adjust the profile in OTPKI.
 
 ## Constraints
 
