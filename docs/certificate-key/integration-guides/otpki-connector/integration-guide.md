@@ -16,7 +16,7 @@ The **OTPKI Connector** that ILM uses to manage certificates in OTPKI ships with
 Installing and operating OTPKI is out of scope of this document. This guide assumes OTPKI is installed, running, and reachable from ILM. Refer to the [OTPKI documentation](https://docs.otpki.com/) for the exact administration steps referenced below.
 :::
 
-## What the connector needs from OTPKI
+## OTPKI prerequisites
 
 The connector authenticates to OTPKI with an OAuth2 access token and calls OTPKI to look up profiles and CAs, create end entities, enroll and issue certificates, download CA certificates and CRLs, and revoke certificates. Before the connector can be configured, prepare the following in OTPKI:
 
