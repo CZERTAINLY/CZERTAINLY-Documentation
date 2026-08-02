@@ -23,7 +23,7 @@ A signing record always carries the following intrinsic fields:
 | Signing profile UUID and version | Which profile (and which exact version) produced the record |
 | Protocol | The signing protocol used |
 | Signing time | When the signing operation was performed |
-| Requested by | UUID and username of the authenticated principal |
+| Requested by | UUID and username of the authenticated principal. Not populated for timestamping records — the TSP caller identity is resolved in the protocol layer and is not carried into the record. |
 | Display name | Human-readable label for the record |
 
 In addition, the recording policy controls four optional payload fields:
@@ -36,6 +36,8 @@ In addition, the recording policy controls four optional payload fields:
 | Data to Be Signed (DTBS) | Stores the raw data that was submitted for signing. |
 
 When recording is enabled but no payload toggle is set, only the intrinsic fields are written.
+
+Which toggles produce content depends on the signing workflow. Timestamping records capture **Request Metadata** and **Signed Document** (the complete timestamp token) only — the signature and the data to be signed are substrings of the token and are recoverable from it, so the **Signature** and **Data to Be Signed (DTBS)** toggles store nothing on the timestamping path.
 
 ---
 
@@ -54,6 +56,12 @@ The **Captured Content** section lets you configure which data is stored with ea
 ### Retention
 
 **Retain Indefinitely** — when checked, records are kept until manually deleted. When unchecked, a **Retention Days** field appears where you specify how many days records are kept before they are automatically purged.
+
+### Delete after retrieval
+
+**Delete After Retrieval** — when enabled, a record is removed once its signed document has been served to a caller, instead of being kept for the retention period. Use it for one-time-evidence policies where a record must not outlive its first retrieval. The record is stamped as retrieved and deleted immediately after the serving transaction commits; a fallback sweep clears any record that was stamped but whose immediate deletion did not complete — see [Retention and cleanup sweeps](#retention-and-cleanup-sweeps) below.
+
+Which retrieval paths stamp a record as served depends on the signing workflow. Timestamping records are not stamped by the signing records API, so this setting has no effect on the timestamping workflow in this release.
 
 ### Persistence mode
 
@@ -79,12 +87,19 @@ However, the record is not immediately visible in the signing records dashboard.
 
 ```plantuml
 @startuml
+skinparam sequence {
+    ArrowColor #1573B5
+    ActorBorderColor #1573B5
+    ParticipantBorderColor #1573B5
+    ParticipantBackgroundColor #E1F5E0
+    NoteBackgroundColor #F7F7F7
+}
 actor User
-participant "ILM" as SS
+participant "Platform" as P
 participant "Dashboard" as D
 
-User -> SS: Signing request
-SS --> User: Signing response\n✔ record saved
+User -> P: Signing request
+P --> User: Signing response\n✔ record saved
 
 note right of User
   Record is persisted and cannot be lost,
@@ -93,7 +108,7 @@ end note
 
 ...
 
-SS --> D: Record becomes visible\n(background process)
+P --> D: Record becomes visible\n(background process)
 @enduml
 ```
 
@@ -124,10 +139,17 @@ Records held in the queue are lost on any process crash, container restart, or a
 
 The queue has a fixed capacity (default: 10 000 records). When the queue is full and a new record arrives, the oldest record in the queue is evicted to make room — the new record is always admitted, but the oldest pending one is silently dropped. This keeps the signing path from ever blocking, but means sustained overload will lose the oldest records first.
 
-You can change this behaviour by switching the backpressure policy to `BLOCK`: the flusher must free up space before the enqueue returns. This adds backpressure to the signing path under load but reduces the number of dropped records. If the wait is interrupted, the record is dropped and counted as a failed intake.
+You can change this behavior by switching the backpressure policy to `BLOCK`: the flusher must free up space before the enqueue returns. This adds backpressure to the signing path under load but reduces the number of dropped records. If the wait is interrupted, the record is dropped and counted as a failed intake.
 
 ```plantuml
 @startuml
+skinparam activity {
+    BackgroundColor #E1F5E0
+    BorderColor #1573B5
+    DiamondBackgroundColor #F7F7F7
+    DiamondBorderColor #1573B5
+}
+skinparam ArrowColor #1573B5
 start
 :Signature created;
 -> Save record;
@@ -164,9 +186,9 @@ Raise `queue-capacity` for bursty high-throughput profiles to absorb spikes with
 
 ---
 
-## Retention
+## Retention and cleanup sweeps
 
-A background retention sweep periodically deletes signing records that have exceeded their configured retention period. Each sweep run processes records in batches — a set number of records per batch, up to a set number of batches per run — so a large backlog is worked through gradually rather than in a single long-running operation. In a clustered ILM deployment, the sweep always runs on exactly one node and never concurrently.
+A background retention sweep periodically deletes signing records that have exceeded their configured retention period. Each sweep run processes records in batches — a set number of records per batch, up to a set number of batches per run — so a large backlog is worked through gradually rather than in a single long-running operation. In a clustered deployment, the sweep always runs on exactly one node and never concurrently.
 
 Records set to retain indefinitely are untouched by the sweep and can only be removed manually.
 
@@ -180,11 +202,19 @@ The sweep can be tuned by setting the corresponding environment variables or upd
 
 The maximum number of records deleted per sweep run equals `batch-size × max-batches-per-sweep` (default: 10 000 per hour).
 
+For profiles with [Delete After Retrieval](#delete-after-retrieval) enabled, a record is normally deleted as soon as its signed document has been served. A separate fallback sweep is the recovery path: it deletes records that are already stamped as retrieved but were not removed at the time — for example when the node stopped between the stamp and the delete. It is tuned under `signing-record.delete-after-retrieval`:
+
+| YAML key | Environment variable | Default | Description |
+|---|---|---|---|
+| `fallback-cron` | `SIGNING_RECORD_DELETE_AFTER_RETRIEVAL_CRON` | `0 0 3 * * *` | Cron schedule of the fallback sweep (daily at 03:00 by default). |
+| `batch-size` | `SIGNING_RECORD_DELETE_AFTER_RETRIEVAL_BATCH_SIZE` | `1000` | Records deleted per database batch. |
+| `max-batches-per-sweep` | `SIGNING_RECORD_DELETE_AFTER_RETRIEVAL_MAX_BATCHES_PER_SWEEP` | `10` | Max batches per sweep run. |
+
 ---
 
 ## Metrics and monitoring
 
-ILM exposes a set of metrics that let you verify signing records are flowing through the system without bottlenecks, and investigate when something goes wrong. The metrics follow a funnel: each record enters at intake, is persisted, and eventually deleted. A healthy system shows intake counts flowing into persist counts with no growing gap between them.
+The platform exposes a set of metrics that let you verify signing records are flowing through the system without bottlenecks, and investigate when something goes wrong. The metrics follow a funnel: each record enters at intake, is persisted, and eventually deleted. A healthy system shows intake counts flowing into persist counts with no growing gap between them.
 
 ### Intake metrics
 
@@ -197,12 +227,12 @@ Intake counts every signing operation that reached the recording subsystem. From
 | Metric | Description |
 |---|---|
 | `signing_record.intake{mode}` | Number of records accepted for processing, labelled by persistence mode. |
-| `signing_record.intake.skipped` | Operations where recording was disabled on the `Signing Profile` — no record was produced. |
+| `signing_record.intake.skipped{mode}` | Operations where recording was disabled on the `Signing Profile` — no record was produced. |
 | `signing_record.intake.failed{mode, reason}` | Records that failed at intake before reaching persistence — for example an interrupted queue enqueue in `BEST_EFFORT` mode. |
 
-`intake{mode}` = `intake.skipped` + `intake.failed{mode}` + `success{mode}`
+`intake{mode}` = `intake.skipped{mode}` + `intake.failed{mode}` + `success{mode}`
 
-`success{mode}` = `intake{mode}` - `intake.skipped` - `intake.failed{mode}`
+`success{mode}` = `intake{mode}` - `intake.skipped{mode}` - `intake.failed{mode}`
 
 ### Persist metrics
 
@@ -211,22 +241,24 @@ Persist counts records that have been saved to their final destination and are v
 | Metric | Description |
 |---|---|
 | `signing_record.persist{mode}` | Records saved to their final destination and visible to the user, labelled by persistence mode. |
-| `signing_record.persist.failed` | Records that failed to be persisted to their final destination. |
+| `signing_record.persist.failed{mode}` | Records that failed to be persisted to their final destination, labelled by persistence mode. |
 | `signing_record.best_effort.evicted` | Records evicted from the best-effort queue because it was full (`DROP_OLDEST` policy). A rising value means the queue is consistently overloaded. |
 | `signing_record.write.duration{mode}` | Time spent writing a record, labelled by persistence mode. Useful for spotting database latency affecting the signing path. |
 
-`persist.success{mode}` = `persist{mode}` - `persist.failed`
+`persist.success{mode}` = `persist{mode}` - `persist.failed{mode}`
 
 ### Deletion metrics
 
+Deletion metrics carry a `type` tag identifying which cleanup path removed the record: `expired` (retention sweep), `after_retrieval` (deleted right after its signed document was served), or `after_retrieval_fallback` (recovery sweep for stamped records whose immediate deletion did not complete).
+
 | Metric | Description |
 |---|---|
-| `signing_record.deleted` | Records deleted by the retention sweep. |
-| `signing_record.sweep` | Total number of retention sweep runs. |
-| `signing_record.sweep.failed` | Retention sweep runs that failed. |
-| `signing_record.delete.failed` | Individual delete operations that failed within a sweep. |
+| `signing_record.deleted{type}` | Records deleted, across all three deletion types. |
+| `signing_record.sweep{type}` | Background sweep runs, for the retention (`expired`) and fallback (`after_retrieval_fallback`) sweeps. |
+| `signing_record.sweep.failed{type}` | Sweep runs that failed, by sweep type. |
+| `signing_record.delete.failed{type}` | Per-record delete failures on the serving path (`type=after_retrieval`); these are what the fallback sweep later clears. |
 
-`sweep.success` = `sweep` - `sweep.failed`
+`sweep.success{type}` = `sweep{type}` - `sweep.failed{type}`
 
 ### Outbox gauges
 

@@ -11,7 +11,7 @@ Documentation site for ILM (Identity Lifecycle Management) — an open-source tr
 ```bash
 yarn install                # Install dependencies
 yarn start                  # Dev server at http://localhost:3000
-yarn build                  # Production build to ./build (requires ~8GB memory: NODE_OPTIONS="--max_old_space_size=8192")
+yarn build                  # Production build to ./build (requires ~10GB memory: NODE_OPTIONS="--max_old_space_size=10240")
 yarn serve                  # Serve production build locally
 yarn clear                  # Clear Docusaurus cache
 yarn render-diagrams        # Render all PlantUML diagrams to static/img/plantuml/ (also runs automatically on start/build)
@@ -26,7 +26,14 @@ yarn test                   # Run unit tests (node --test)
 
 The build fetches 30+ OpenAPI specs from `https://api.otilm.com/` and renders them via Redocusaurus — it is slow and network-dependent but still worth it.
 
-To download remote Helm chart docs:
+**Build memory is dominated by these specs.** Measured on the 2.19.0 tree: the site without any spec peaks at ~1.1 GB and builds in 22 s; with all 48 it peaks at ~9.5 GB and takes ~65 s. That is roughly **175 MB of peak heap per spec**, because Redoc server-renders every API page during static generation. Adding a spec is therefore a build-infrastructure decision, not just a config line.
+
+The heap limit is set in two places that must stay in sync: the `NODE_OPTIONS` above and `.github/workflows/documentation.yml`. When a release adds a section or a spec, run one cold build (`yarn clear && NODE_OPTIONS=--max_old_space_size=<limit> yarn build`) before merging — the failure mode is a `SIGABRT` heap-limit crash that reads like CI infrastructure flakiness. To build on a memory-constrained machine, the only effective lever is publishing fewer specs; page count, redirects, and `DOCUSAURUS_SSR_CONCURRENCY` were each measured and make no meaningful difference.
+
+### Remote Helm docs
+
+`docs/certificate-key/installation-guide/deployment/deployment-helm/{configurable-parameters,overview,troubleshooting,upgrading}.md` are **not authored here**. `docusaurus-plugin-remote-content` downloads them from `OmniTrustILM/helm-charts` at `chartVersion`, so local edits are overwritten on the next download — fix errors upstream in `charts/ilm/docs/` instead.
+
 ```bash
 yarn docusaurus download-remote-helm-docs
 ```
@@ -73,6 +80,17 @@ TSX components used on the homepage and in docs: `HomepageFeatures`, `PlatformMo
 - Use `%API_BASE_URL%` placeholder to reference API documentation URLs
 - PlantUML diagrams: use fenced code blocks with language `plantuml`
 - The `documentation` branch is the main/default branch for this repo
+- Prose uses **US English** (`behavior`, `finalize`, `synchronized`)
+
+### Naming the product
+
+Write **"the platform"**, not the brand name, wherever a functional term works — "the platform validates the request", not "ILM validates the request". A page may name the product once where it genuinely introduces it (a section intro, a GitHub link label); everywhere else the brand name is churn waiting for the next rename. Never coin compound names like "ILM Core" — the component is `Core`. The same applies inside diagrams: participants are `Core`, `Platform`, `Connector`.
+
+### Diagrams
+
+Rendered PlantUML SVGs scale down to the content column (`img[src^="/img/plantuml/"]` in `src/css/custom.css`), so a wide diagram no longer overflows — but it renders small. Keep a diagram under roughly 1000px natural width: wrap long message labels with `\n`, stack multi-word participant names, and split a diagram that outgrows that rather than letting it shrink. To check a diagram's rendered width, run `yarn render-diagrams` and read the `width:` value from its SVG in `static/img/plantuml/`.
+
+Within a diagram, keep message labels consistent with each other and with the page's prose: sentence case for actions (`Validate certificate`, not `validate certificate`), and the same component names the surrounding text uses.
 
 ### Integration Guides
 
@@ -81,7 +99,7 @@ Each integration lives in its own directory under `docs/certificate-key/integrat
 - A `_category_.json` sets the sidebar `label`, an explicit `position` (integrations are ordered by product, not alphabetically), and a `link` of type `doc` pointing at the entry page
 - Multi-page guides use `overview.md` as that entry page, with a step table linking to one page per task; single-page guides use `integration-guide.md`
 - Page order inside the directory comes from `sidebar_position` in the front matter, with the overview at position 1
-- Guides describe what to configure in the third-party product and in ILM. Deploying the connector itself belongs in the installation guide, not here
+- Guides describe what to configure in the third-party product and in the platform. Deploying the connector itself belongs in the installation guide, not here
 - Prefer naming entities and their attributes over navigation paths — product menus change more often than the concepts do
 
 ## CI/CD

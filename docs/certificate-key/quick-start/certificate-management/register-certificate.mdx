@@ -39,15 +39,15 @@ Where the certificate lands depends on the variant. A platform-level registratio
 
 When a challenge was set, the registration carries an authorization state — a challenge-less registration has none — shown in the **Registration** widget of the certificate detail. The widget shows the rows `State`, `Expires`, and `Failed attempts`. The state is one of:
 
-- **Active** — the challenge gates issue.
-- **Expired** — the issuance window has passed.
-- **Locked** — locked after too many failed challenge attempts.
-- **Closed** — behaves as unregistered.
+- `Active` — the challenge gates issue.
+- `Expired` — the issuance window has passed.
+- `Locked` — locked after too many failed challenge attempts.
+- `Closed` — behaves as unregistered.
 
 ## Complete the registration
 
 1. Click **Certificates** in the left menu and open the `Registered` certificate
-2. Click **Complete** (check symbol <span style={{color: '#1473b5',}}><FontAwesomeIcon icon={faCheck} /></span>). The action is enabled only while the registration is Active and the issuance window has not elapsed; otherwise the disabled button's tooltip explains why.
+2. Click **Complete** (check symbol <span style={{color: '#1473b5',}}><FontAwesomeIcon icon={faCheck} /></span>). The action is enabled only while the registration is `Active` and the issuance window has not elapsed; otherwise the disabled button's tooltip explains why.
 3. In the **Complete Certificate Registration** dialog, enter the **Challenge** if the registration set one
 4. Upload the **CSR** — a certificate signing request for the key pair that will back the certificate. Completing a registration always requires a CSR; issuing from a platform key is not supported for registered certificates.
 5. Click **Complete**

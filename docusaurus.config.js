@@ -81,7 +81,7 @@ const config = {
           // SignServer (legacy) docs moved from /docs/signing/* to /docs/signserver/*.
           // For each new /docs/signserver/* route, register its old /docs/signing/* path
           // as a redirect source — EXCEPT 'introduction', whose old path is now the live
-          // ILM signing landing page (a redirect there would collide and be wrong).
+          // native signing landing page (a redirect there would collide and be wrong).
           if (existingPath.startsWith('/docs/signserver/')) {
             const oldPath = existingPath.replace('/docs/signserver/', '/docs/signing/');
             if (oldPath === '/docs/signing/introduction') {
@@ -306,6 +306,11 @@ const config = {
             id: 'connector-authority-provider-v2',
             spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-connector-authority-provider-v2.yaml',
             route: '/api/connector-authority-provider-v2/',
+          },
+          {
+            id: 'connector-authority-provider-v3',
+            spec: 'https://api.otilm.com/'+apiVersion+'/doc-openapi-connector-authority-provider-v3.yaml',
+            route: '/api/connector-authority-provider-v3/',
           },
           {
             id: 'connector-compliance-provider',
@@ -563,6 +568,10 @@ const config = {
                 {
                   label: 'Authority Provider v2',
                   to: '/api/connector-authority-provider-v2/',
+                },
+                {
+                  label: 'Authority Provider v3',
+                  to: '/api/connector-authority-provider-v3/',
                 },
                 {
                   label: 'Compliance Provider',

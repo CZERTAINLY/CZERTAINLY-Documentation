@@ -24,6 +24,11 @@ property of an attribute. The platform supports **two callback models** on that 
 For the `attributeCallback` property on the attribute itself, see [Attributes](attributes.mdx).
 :::
 
+:::note[Annotated examples]
+The JSON examples on this page carry annotations (`//`, `/* … */`, or `<--`) for explanation. These are
+not valid JSON — strip the comments before copying a payload.
+:::
+
 ## Choosing a model
 
 `Core` selects the dispatch path **per callback, by declaration shape** — so a single connector may mix
@@ -338,10 +343,6 @@ Declaration rules (enforced by the platform at definition ingestion):
 - An **empty (non-null) list means "fire once when the form opens"** — the callback depends on no other
   field (a scope-only dropdown that reads only the parent scope). This is the *fire-on-mount* case.
 
-:::note[Annotated examples]
-The JSON examples below carry `//` and `/* … */` annotations for explanation. These are not valid JSON —
-strip the comments before copying a payload.
-:::
 
 ```json
 {
@@ -508,7 +509,7 @@ stored definition (Core, keyed by connector + name)
 ```
 
 On the Attributes v2 path `Core` does not re-derive definitions by re-listing per-operation schemas (the
-legacy UI-flow behaviour); the resolution ladder above fetches only the missing UUIDs. The **one** exception
+legacy UI-flow behavior); the resolution ladder above fetches only the missing UUIDs. The **one** exception
 is a connector-signalled `ATTRIBUTE_DEFINITION_NOT_FOUND` (a `CONNECTOR`-general error, HTTP `404`,
 non-retryable): `Core` then refreshes that connector's **whole registry once** and retries. This
 cache-miss path is what lets `Core` resolve definitions it has never listed — API-only clients,
@@ -676,10 +677,12 @@ func resolveTemplates(ctx context.Context, req *mdl.AttributeCallbackRequestDto)
 	// currentAttributes: only the dependsOn-named form values, matched by name.
 	profile, ok := firstString(req.CurrentAttributes, "profile")
 	if !ok {
-		return attributes.ContentResponse(nil, nil), nil // no profile yet → zero options
+		// no profile yet → explicit empty list ("resolved to zero options"), not null
+		return attributes.ContentResponse([]mdl.BaseAttributeContentDtoV3{}, nil), nil
 	}
 
-	options := queryUpstreamTemplates(authorityBlob, profile) // your connector's logic
+	// your connector's logic — build each entry with option(label, value) below
+	options := queryUpstreamTemplates(authorityBlob, profile)
 	return attributes.ContentResponse(options, nil), nil
 }
 
@@ -731,12 +734,12 @@ definition it has not cached.
 @startuml
 autonumber
     Frontend -> Core : Attribute value changed / form opened
-    Core -> Core : Resolve route scope chain (contextAttributes)
-    Core -> Core : Expand references (scope blobs + currentAttributes)
-    note right of Core: Callback mode — per-object calling-user authorization; fail closed
+    Core -> Core : Resolve route scope chain\n(contextAttributes)
+    Core -> Core : Expand references\n(scope blobs + currentAttributes)
+    note right of Core: Callback mode — per-object\ncalling-user authorization; fail closed
     Core -> Connector : POST /v2/attributes/callback (envelope)
-    Connector -> Connector : Dispatch internally on attributeUuid; reach upstream system
-    Connector --> Core : content OR attributes (exactly one arm)
+    Connector -> Connector : Dispatch internally on attributeUuid;\nreach upstream system
+    Connector --> Core : content OR attributes\n(exactly one arm)
     Core --> Frontend : Resolved attribute content
 @enduml
 ```

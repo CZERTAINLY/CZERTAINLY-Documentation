@@ -9,7 +9,7 @@ sidebar_position: 2
 Authority Provider v3 is the current interface between the `Core` and a certification authority. Like the [v2 interface](./authority-provider-v2.md) it covers certificate **issue**, **renew**, **rekey**, and **revoke**, and adds **pre-registration** — registering an identity with the CA before a CSR exists. It differs from v2 in three ways:
 
 - **Stateless.** There is no authority-instance lifecycle (`createAuthorityInstance` and friends are gone). The authority identity travels in every request.
-- **Capability-driven.** Optional behaviour (pre-registration, status polling, structured requests, identity override) is advertised per connector and enforced by the platform.
+- **Capability-driven.** Optional behavior (pre-registration, status polling, structured requests, identity override) is advertised per connector and enforced by the platform.
 - **Synchronous or asynchronous.** Any operation may complete immediately or be accepted for later completion, which the platform polls to a terminal state.
 
 The v3 certificate states and transitions (`Pending Registration`, `Registered`, the async `Pending Issue` / `Pending Revoke` states, and their restore paths) are documented on the [Certificate state](../../concept-design/core-components/certificate.md#certificate-state) page; this page describes the connector interface itself and does not repeat the state diagram.
@@ -41,14 +41,14 @@ Because nothing is stored connector-side, **every** certificate request carries 
 
 ### Capabilities (feature flags)
 
-Optional v3 behaviour is gated by capabilities a connector advertises in its interface `features`. These flags are **opt-in and enforced**: if a connector does not advertise a capability, the platform treats it as unsupported and never invokes it.
+Optional v3 behavior is gated by capabilities a connector advertises in its interface `features`. These flags are **opt-in and enforced**: if a connector does not advertise a capability, the platform treats it as unsupported and never invokes it.
 
 | Capability | Code | What it enables |
 |------------|------|-----------------|
-| Certificate registration | `CERTIFICATE_REGISTRATION` | Pre-register an identity with the CA before a CSR exists (the `/register` endpoints). |
-| Certificate status polling | `CERTIFICATE_STATUS_POLLING` | The connector can be polled for asynchronous completion. Without it, the platform will not poll even if the connector accepts an operation with `202`. |
-| Structured certificate request | `CERTIFICATE_REQUEST_STRUCTURED` | The connector accepts the structured request-content model on register / issue / renew. |
-| Certificate identity override | `CERTIFICATE_IDENTITY_OVERRIDE` | The connector applies a platform-supplied identity to a forwarded CSR (e.g. an End Entity override) instead of stripping and re-signing it. |
+| Certificate registration | `certificateRegistration` | Pre-register an identity with the CA before a CSR exists (the `/register` endpoints). |
+| Certificate status polling | `certificateStatusPolling` | The connector can be polled for asynchronous completion. Without it, the platform will not poll even if the connector accepts an operation with `202`. |
+| Structured certificate request | `certificateRequestStructured` | The connector accepts the structured request-content model on register / issue / renew. |
+| Certificate identity override | `certificateIdentityOverride` | The connector applies a platform-supplied identity to a forwarded CSR (e.g. an End Entity override) instead of stripping and re-signing it. |
 
 The platform enforces capabilities in depth: the operation is only attempted when the adapter supports it, the authority advertises the flag, and — as a final backstop — the connector may still answer `OPERATION_NOT_SUPPORTED` at runtime.
 
@@ -84,7 +84,7 @@ A v3 connector may complete an operation immediately or accept it for later comp
 
 When a connector accepts an operation asynchronously, it returns a connector-owned **`meta`** tracking handle in the body. `meta` is a single opaque bag — the platform never interprets it; it stores it against the certificate and replays it verbatim on every subsequent status, cancel, or register-bound issue call. The connector decides what to put in it (an order ID, a transaction reference, multi-field state).
 
-The platform then resolves the operation by **polling** the matching `…/status` endpoint, provided the authority advertises `CERTIFICATE_STATUS_POLLING`. If it does not, the platform does not poll and the operation is completed out-of-band. (The pending certificate states the platform tracks meanwhile are described on the [Certificate state](../../concept-design/core-components/certificate.md#certificate-state) page.)
+The platform then resolves the operation by **polling** the matching `…/status` endpoint, provided the authority advertises `certificateStatusPolling`. If it does not, the platform does not poll and the operation is completed out-of-band. (The pending certificate states the platform tracks meanwhile are described on the [Certificate state](../../concept-design/core-components/certificate.md#certificate-state) page.)
 
 ### Polling
 
@@ -127,17 +127,17 @@ end
 A cancel targets an in-flight operation. The connector returns one of three outcomes:
 
 - **Aborted** (`204`) — the connector aborted the operation.
-- **Not tracked** (`404`, or `422` with a not-tracked error code) — the connector does not (or no longer) track the operation: already finalised externally, or a stateless implementation.
+- **Not tracked** (`404`, or `422` with a not-tracked error code) — the connector does not (or no longer) track the operation: already finalized externally, or a stateless implementation.
 - **Refused** (`422` with a point-of-no-return error code) — the CA cannot abort the operation.
 
 The connector reports the outcome; the platform decides the resulting certificate state.
 
 ## Certificate registration (pre-registration)
 
-When an authority advertises `CERTIFICATE_REGISTRATION`, the connector supports **pre-registration** — registering an identity with the CA before any CSR exists. The connector exposes two endpoints for it:
+When an authority advertises `certificateRegistration`, the connector supports **pre-registration** — registering an identity with the CA before any CSR exists. The connector exposes two endpoints for it:
 
 - `/register/attributes` — the attribute schema for registration.
-- `/register` — register an identity. The request carries the registration identity (the subject and, when `CERTIFICATE_REQUEST_STRUCTURED` is advertised, the structured request content) but **no CSR**. Like issue, it completes synchronously (`200`) or asynchronously (`202` with a `meta` handle, resolved through `/register/status` and `/register/cancel`).
+- `/register` — register an identity. The request carries the registration identity (the subject and, when `certificateRequestStructured` is advertised, the structured request content) but **no CSR**. Like issue, it completes synchronously (`200`) or asynchronously (`202` with a `meta` handle, resolved through `/register/status` and `/register/cancel`).
 
 Registration returns no certificate — it establishes the identity at the CA. When the certificate is later issued, the connector receives an ordinary `/issue` call that **replays the registration's `meta` handle**, so it can link the issuance to the earlier registration. Accepting that replayed handle is the connector's only obligation at completion; how the platform drives completion (attaching the CSR, verifying any challenge) is on the [Certificate state](../../concept-design/core-components/certificate.md#registration-lifecycle) page.
 
@@ -159,7 +159,7 @@ end
 
 Two aspects of registration are handled entirely by the platform and do not involve the connector:
 
-- **Platform-level pre-registration** — when an authority does not advertise `CERTIFICATE_REGISTRATION`, the platform registers the identity itself, with no `/register` call.
+- **Platform-level pre-registration** — when an authority does not advertise `certificateRegistration`, the platform registers the identity itself, with no `/register` call.
 - **Authorization secret (challenge)** — an operator may protect a registration with a secret that must be presented again to complete the issuance. It is a control between the operator and the platform; no connector request or response carries it.
 
 Both, along with the certificate states through registration and completion, are described on the [Certificate state](../../concept-design/core-components/certificate.md#registration-lifecycle) page.
@@ -168,11 +168,11 @@ Both, along with the certificate states through registration and completion, are
 
 A v3 connector reconstructs the CA session from `authorityAttributes` + `raProfileAttributes` on every call. The **base contract** it must implement is the attribute-list endpoints (`/issue/attributes`, `/revoke/attributes`), `issue`, `renew`, `revoke`, `identify`, and the authority-level `listAuthorityAttributes`, `checkAuthorityConnection`, `listRaProfileAttributes`, `getCrl`, `getCaCertificates`.
 
-**Optional, capability-advertised** behaviour (only used when the corresponding flag is advertised):
+**Optional, capability-advertised** behavior (only used when the corresponding flag is advertised):
 
-- `CERTIFICATE_REGISTRATION` → implement `/register` and `/register/attributes` (and, if registration can be asynchronous, `/register/status` and `/register/cancel`).
-- `CERTIFICATE_STATUS_POLLING` → implement the `…/status` and `…/cancel` endpoints and honour `202`. Without advertising it, returning `202` will leave the certificate parked with no polling.
-- `CERTIFICATE_REQUEST_STRUCTURED` / `CERTIFICATE_IDENTITY_OVERRIDE` → accept the structured request-content model and apply a platform-supplied identity to a forwarded CSR.
+- `certificateRegistration` → implement `/register` and `/register/attributes` (and, if registration can be asynchronous, `/register/status` and `/register/cancel`).
+- `certificateStatusPolling` → implement the `…/status` and `…/cancel` endpoints and honor `202`. Without advertising it, returning `202` will leave the certificate parked with no polling.
+- `certificateRequestStructured` / `certificateIdentityOverride` → accept the structured request-content model and apply a platform-supplied identity to a forwarded CSR.
 
 **Signalling async:** return `202` with a connector-owned `meta` tracking handle in the body. The platform replays that `meta` on every subsequent status, cancel, and register-bound issue call, and reports completion through the status endpoint as `inProgress` / `completed` / `failed`.
 
@@ -180,4 +180,4 @@ A v3 connector reconstructs the CA session from `authorityAttributes` + `raProfi
 
 Authority Provider v3 implements the [Common Interfaces](../common-interfaces/overview.md) plus the v3 Authority Management and Certificate Management interfaces.
 
-The OpenAPI specification of the Authority Provider v3 is published to the platform API reference with the release that introduces the interface: [Connector API - Authority Provider v3](https://docs.otilm.com/api/connector-authority-provider-v3/).
+The OpenAPI specification of the Authority Provider v3 is published in the platform API reference: [Connector API - Authority Provider v3](/api/connector-authority-provider-v3/).

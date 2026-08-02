@@ -14,7 +14,7 @@ OTPKI accepts an access token only if one of the identity providers registered i
 
 In the identity provider that OTPKI is registered with, create a confidential client for the connector and enable the client credentials grant for it. OTPKI supports any compliant OpenID Connect provider, so the exact steps depend on the product you use.
 
-Note the following values, they are needed when the `Authority` is created in ILM:
+Note the following values, they are needed when the `Authority` is created in the platform:
 
 - the **client ID** and the **client secret**,
 - the **token endpoint** of the provider, for example `https://<otpki-host>/kc/realms/otpki/protocol/openid-connect/token` for a Keycloak realm,
@@ -29,7 +29,7 @@ OTPKI builds the identity of the caller from the claims of the introspected toke
 | `sub`                                | Yes      | The stable identifier of the OTPKI user                                        |
 | `iss`                                | Yes      | The issuer, which must match a registered identity provider                    |
 | `username`, or `preferred_username`  | Yes      | The username of the OTPKI user                                                 |
-| `roles`                              | Yes      | The names of the OTPKI roles assigned to the user                              |
+| `roles`                              | Yes (for permissions) | The names of the OTPKI roles assigned to the user. Unlike the claims above, a missing `roles` claim does not fail authentication — it clears the user's roles instead, see the warning below. |
 
 :::warning[The `roles` claim is not optional]
 OTPKI refreshes the roles of the user from the `roles` claim on every authentication. A role that is assigned by hand to the user is therefore removed again the next time the connector calls OTPKI, and the integration starts failing with permission errors.

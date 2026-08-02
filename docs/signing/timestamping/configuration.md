@@ -9,7 +9,7 @@ Timestamping is configured through a [`Signing Profile`](/docs/signing/signing-p
 | Field | Required | Description |
 |---|---|---|
 | **Signature Formatting Connector** | Yes | The connector responsible for formatting the signature into the RFC 3161 timestamp token structure. See [Timestamp Formatting Connector](./timestamp-formatting-connector.md). |
-| **Qualified Timestamp** | No | When enabled, the issued token carries the qualified electronic time-stamp statement as required by eIDAS and ETSI EN 319 422. Defaults to `false`. |
+| **Qualified Timestamp** | No | When enabled, the issued token carries the qualified electronic time-stamp statement as required by eIDAS and ETSI EN 319 422, and the signing certificate must additionally carry the `QcCompliance` statement (ETSI EN 319 412-5) to be eligible. Defaults to `false`. |
 | **Validate Signature** | No | When enabled, the produced timestamp signature is validated before the token is returned to the caller. Defaults to `false`. |
 | **Time Quality Configuration** | Required when Qualified Timestamp is enabled | Defines the required clock accuracy and related time quality settings. See [Time Quality Configuration](./time-quality-configuration.md). |
 | **Default TSA Policy OID** | No | The OID used when an incoming timestamp request does not specify a policy ID. |

@@ -8,7 +8,7 @@ Common startup and request-time failures across timestamping, with their causes 
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| Startup fails: `IllegalStateException: No usable network address found` | `PLATFORM_INSTANCE_ID` is unset and no non-loopback IP is available | Set `PLATFORM_INSTANCE_ID` to any value 0–65,535 |
+| Startup fails: `No suitable network address found for instance ID` | `PLATFORM_INSTANCE_ID` is unset and no non-loopback IP is available | Set `PLATFORM_INSTANCE_ID` to any value 0–65,535 |
 | Startup fails: `IllegalArgumentException` on `PLATFORM_INSTANCE_ID` | Value is not an integer, or is outside 0–65,535 | Correct the environment variable |
 | TSP requests rejected with a time not available error | Clock moved backward by more than 100 ms | Re-synchronize the system clock via NTP; avoid large manual clock adjustments on a running instance |
 | TSP requests rejected with a time not available error | System clock is set before `2026-02-01T00:00:00Z` | Correct the system clock |

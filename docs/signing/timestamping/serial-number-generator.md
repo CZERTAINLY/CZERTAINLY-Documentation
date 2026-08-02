@@ -6,7 +6,7 @@ sidebar_position: 9
 
 Every RFC 3161 timestamp token must carry a serial number that is unique within the issuing timestamp authority. Uniqueness is a non-repudiation requirement. If two tokens share a serial under the same authority, an auditor or relying party cannot tell them apart, and the integrity guarantee timestamping is designed to provide breaks down. ETSI EN 319 421 requires every TSP to ensure uniqueness across all the timestamp tokens it issues.
 
-ILM generates these serial numbers using a Snowflake-style 64-bit algorithm that produces monotonically increasing, structurally unique identifiers. Serial generation is fast, as it requires no synchronization between nodes when running in a cluster.
+The platform generates these serial numbers using a Snowflake-style 64-bit algorithm that produces monotonically increasing, structurally unique identifiers. Serial generation is fast, as it requires no synchronization between nodes when running in a cluster.
 
 ---
 
@@ -21,7 +21,7 @@ The 64-bit identifier is partitioned into three fields with no sign bit. Bit pos
 | 63–24 | 40 | Timestamp | 10 ms ticks elapsed since the custom epoch `2026-02-01T00:00:00Z`; valid until approximately 2374 |
 | 23–8 | 16 | Instance ID | Lower 16 bits of the container's private IPv4 address, or an explicit value set via `PLATFORM_INSTANCE_ID` |
 | 7–0 | 8 | Sequence counter | Per-tick counter; incremented for each serial issued within the same 10 ms window; resets to 0 on each new tick |
-| — | 64 | Total | Hex-aligned; fits within the 160-bit serial number limit mandated by RFC 5280 and referenced by RFC 3161 |
+| — | 64 | Total | Hex-aligned; stays well within the 160-bit serial-number limit that RFC 5280 defines for certificates and that timestamping deployments conventionally observe |
 
 ### Throughput ceiling
 
@@ -107,7 +107,7 @@ When deploying on Kubernetes, you can use the StatefulSet pod ordinal as `PLATFO
 
 ### Helm chart
 
-The ILM Helm chart handles instance ID assignment automatically when deploying as a StatefulSet. When deploying as a plain `Deployment` (replica count = 1 or manually managed), set `PLATFORM_INSTANCE_ID` explicitly in your chart values.
+The the platform Helm chart handles instance ID assignment automatically when deploying as a StatefulSet. When deploying as a plain `Deployment` (replica count = 1 or manually managed), set `PLATFORM_INSTANCE_ID` explicitly in your chart values.
 
 ---
 
@@ -115,22 +115,22 @@ The ILM Helm chart handles instance ID assignment automatically when deploying a
 
 On startup, the generator logs which instance ID it is using. Check these logs to confirm the derived or configured ID, to verify that no two replicas ended up with the same ID, and to catch warnings about auto-derivation that may not be safe.
 
-When `PLATFORM_INSTANCE_ID` is set explicitly:
+The messages are logged by `SerialNumberConfiguration`. When `PLATFORM_INSTANCE_ID` is set explicitly:
 
 ```text
-INFO  ... SerialNumberConfiguration - Serial number generator initialized with instance ID 5 (from PLATFORM_INSTANCE_ID)
+INFO  ... SerialNumberConfiguration - Instance ID resolved from PLATFORM_INSTANCE_ID environment variable: 5
 ```
 
 When the instance ID was auto-derived from a network address:
 
 ```text
-WARN  ... SerialNumberConfiguration - Serial number generator using IP-derived instance ID 261. Set PLATFORM_INSTANCE_ID explicitly for production deployments to avoid potential collisions.
+WARN  ... SerialNumberConfiguration - Instance ID derived from IP address (last 16 bits): 261 (/16). Collisions are possible in multi-cluster deployments. Set PLATFORM_INSTANCE_ID explicitly for production use.
 ```
 
 When the derived ID came from a network prefix wider than `/16`:
 
 ```text
-WARN  ... SerialNumberConfiguration - Serial number generator using IP-derived instance ID 261, but network prefix is wider than /16. Replicas sharing the same last two IP octets will produce duplicate serials. Set PLATFORM_INSTANCE_ID explicitly.
+WARN  ... SerialNumberConfiguration - Instance ID derived from IP address: 261 (network /14). Pod CIDR wider than /16 — instances in this network can share the same lower 16 bits, risking duplicate certificate serial numbers. Set PLATFORM_INSTANCE_ID explicitly to avoid collisions.
 ```
 
 A startup warning does not prevent the application from running, but must not be ignored in a replicated production environment.

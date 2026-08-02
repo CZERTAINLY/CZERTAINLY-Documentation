@@ -25,13 +25,13 @@ The following system roles are defined:
 | `scep`                       | yes                | Internal role that is allowed to manage certificates and related operations that are needed as part of the [SCEP](../../../protocols/scep/overview.md) protocol.                               |
 | `cmp`                        | yes                | Internal role that is allowed to manage certificates and related operations that are needed as part of the [CMP](../../../protocols/cmp/overview.md) protocol.                                 |
 | `localhost`                  | yes                | Internal role that is allowed to manage authentication and authorization from localhost to enable initial setup and configuration.                                                             |
-| `attribute-content-resolver` | yes                | Internal role used when the platform resolves an authority's own connector, credential and secret references while assembling a request to a connector. Holds only the read actions that resolution needs. |
+| `attribute-content-resolver` | yes                | Internal role used when the platform resolves an authority's own infrastructure references (connector, credential, secret, certificate, authority, entity, location, vault profile) while assembling a request to a connector. Holds read actions on those resources, including the sensitive read that returns secret content — see [Action access types](#action-access-types). |
 
 :::warning
 `superadmin` has the full permission in the platform. Therefore, it is recommended to use the `superadmin` role only if needed, for example, as a break glass functionality.
 :::
 
-A role granting access to all resources — `superadmin` and `admin` — can only be assigned by a user who already holds all resources. So a `superadmin` can grant `superadmin` or `admin`, while an administrator who only manages users cannot grant either. Without this, the permission to manage users would be enough to grant oneself full administration.
+Any role granting access to all resources (`superadmin` and `admin` among them) can only be assigned by a user who already holds all resources. So a `superadmin` can grant `superadmin` or `admin`, while an administrator who only manages users cannot grant either. Without this, the permission to manage users would be enough to grant oneself full administration.
 
 Further restrictions apply to roles paired with a system user; see [System users](users.md#system-users).
 

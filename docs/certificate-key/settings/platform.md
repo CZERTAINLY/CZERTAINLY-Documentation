@@ -9,6 +9,7 @@ Platform settings represent general configuration of the platform.
 Currently there are following platform settings categories:
 - [Util](#util-settings)
 - [Certificates](#certificates-settings)
+- [Request Attributes](request-attributes.md) — stored in the certificates category
 
 ## Util settings
 

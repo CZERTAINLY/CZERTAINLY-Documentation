@@ -41,7 +41,7 @@ Upon successful issuing of the `Certificate`, it will be parsed, validated, and 
 
 ### Registration \{#registerCert}
 
-A `Certificate` can be pre-registered before any key or CSR exists. The platform records the certificate's identity — given as request-attribute values — and the certificate is issued later. Completing the registration requires a challenge secret and runs through the standard [issue flow](#issueCert). See the [Register Certificate](../../quick-start/certificate-management/register-certificate.mdx) quick start for the full flow and the [certificate states](../core-components/certificate.md) for the state model.
+A `Certificate` can be pre-registered before any key or CSR exists. The platform records the certificate's identity — given as request-attribute values — and the certificate is issued later. Completion runs through the standard [issue flow](#issueCert); when the registration was created with a challenge secret, that secret must be presented. See the [Register Certificate](../../quick-start/certificate-management/register-certificate.mdx) quick start for the full flow and the [certificate states](../core-components/certificate.md) for the state model.
 
 ### Revocation \{#revokeCert}
 

@@ -34,10 +34,10 @@ Certificate can be in the following states:
 | Status                 | Description                                                                                                          | Transition                                                                                                                                                                                                                                                                       |
 |------------------------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `Requested`            | The `Certificate` is created (requested) and ready to be issued or registered.                                       | Initial state when a user requests a certificate, or when a pre-registration placeholder is created.                                                                                                                                                                              |
-| `Pending Registration` | The `Certificate` pre-registration has been accepted but is not yet confirmed, and is waiting to be finalised.       | While a pre-registration is carried out — an authority that supports certificate registration accepted it asynchronously, or the platform is setting up the placeholder (see [Registration lifecycle](#registration-lifecycle)).                                                   |
+| `Pending Registration` | The `Certificate` pre-registration has been accepted but is not yet confirmed, and is waiting to be finalized.       | While a pre-registration is carried out — an authority that supports certificate registration accepted it asynchronously, or the platform is setting up the placeholder (see [Registration lifecycle](#registration-lifecycle)).                                                   |
 | `Registered`           | A pre-registration placeholder exists and is awaiting a CSR-driven issuance.                                         | When a pre-registration completes successfully. Also restored here when the approval of a placeholder's issuance is rejected.                                                                                                                                                     |
 | `Pending Approval`     | The `Certificate` action is waiting to be approved.                                                                  | When a certificate action — issue, revoke, or the issuance of a registered placeholder — needs to be approved.                                                                                                                                                                    |
-| `Pending Issue`        | The `Certificate` issuance has been accepted but cannot be completed synchronously and is waiting to be finalised.   | When the certification authority accepts an issue or renew request but cannot complete it synchronously (see [Asynchronous operations](#asynchronous-operations)).                                                                                                                |
+| `Pending Issue`        | The `Certificate` issuance has been accepted but cannot be completed synchronously and is waiting to be finalized.   | When the certification authority accepts an issue or renew request but cannot complete it synchronously (see [Asynchronous operations](#asynchronous-operations)).                                                                                                                |
 | `Pending Revoke`       | The `Certificate` revocation has been accepted but cannot be completed synchronously and is waiting to be confirmed. | When the certification authority accepts a revoke request but cannot complete it synchronously.                                                                                                                                                                                   |
 | `Rejected`             | The `Certificate` request was rejected by an approver or failed a compliance check.                                  | When approval for a certificate action was rejected or expired, or when a request failed the compliance check.                                                                                                                                                                    |
 | `Failed`               | The `Certificate` issuance or registration failed, or the parked issuance was cancelled.                             | When issuance or registration fails at the authority due to an error or invalid request, or when an operator cancels a `Pending Issue`.                                                                                                                                           |
@@ -46,7 +46,7 @@ Certificate can be in the following states:
 
 Certificate state transition diagram is as follows:
 
-> Approval transitions are omitted to simplify the diagram. When a certificate action (issue, revoke, or issuing a registered placeholder) requires approval, it first passes through a **Pending Approval** state. Once approved, it continues along the path shown here. If the approval is rejected (or the action fails), the outcome depends on the action: a rejected issuance ends in **Rejected** or **Failed**, a rejected revocation returns the certificate to **Issued**, and a rejected issuance of a registered placeholder restores it to **Registered**. See the transition table above for the complete set of transitions.
+> Approval transitions are omitted to simplify the diagram. When a certificate action (issue, revoke, or issuing a registered placeholder) requires approval, it first passes through a `Pending Approval` state. Once approved, it continues along the path shown here. If the approval is rejected (or the action fails), the outcome depends on the action: a rejected issuance ends in `Rejected` or `Failed`, a rejected revocation returns the certificate to `Issued`, and a rejected issuance of a registered placeholder restores it to `Registered`. See the transition table above for the complete set of transitions.
 
 ```plantuml
 @startuml
@@ -66,7 +66,7 @@ state "Rejected" as Rejected #FFEBEE
 
 ' forward progress
 Requested -[#2E7D32,bold]-> PendingIssue
-PendingIssue -[#2E7D32,bold]-> Issued : finalise issue
+PendingIssue -[#2E7D32,bold]-> Issued : finalize issue
 Requested -[#2E7D32,bold]-> PendingRegistration
 PendingRegistration -[#2E7D32,bold]-> Registered
 Registered -[#2E7D32,bold]-> PendingIssue
@@ -101,8 +101,8 @@ A pre-registration always moves the placeholder through `Requested → Pending R
 
 There are two registration modes:
 
-- **Connector-backed registration** — for an authority that supports certificate registration, the platform calls the authority's `register` operation. If the authority completes synchronously, the placeholder moves straight to `Registered`. If the authority accepts the registration asynchronously, the placeholder stays in `Pending Registration` and is finalised later by status polling (or is left for out-of-band completion when polling is not available) — see [Asynchronous operations](#asynchronous-operations).
-- **Platform-level pre-registration** — when the authority does not support certificate registration, the placeholder is created and owned entirely by the platform, with no connector `register` call, and reaches `Registered` directly.
+- **Connector-backed registration** — for an authority that supports certificate registration, the platform calls the authority's `register` operation. If the authority completes synchronously, the placeholder reaches `Registered` without an asynchronous wait. If the authority accepts the registration asynchronously, the placeholder stays in `Pending Registration` and is finalized later by status polling (or is left for out-of-band completion when polling is not available) — see [Asynchronous operations](#asynchronous-operations).
+- **Platform-level pre-registration** — when the authority does not support certificate registration, the placeholder is created and owned entirely by the platform, with no connector `register` call, and reaches `Registered` without an asynchronous wait.
 
 **Completing a registered certificate.** A `Registered` placeholder is completed through the issue path:
 
@@ -138,7 +138,7 @@ Operator -> Core : Register identity\n(subject, optional authorization secret)
 opt authorization secret supplied
   Core -> Core : Store challenge (encrypted)
 end
-Core -> Core : Create placeholder\nstate = Pending Registration
+Core -> Core : Create placeholder\n(Requested → Pending Registration)
 alt Connector supports registration
   Core -> Conn : POST /register (identity, no CSR)
   Conn -> CA : Register identity
@@ -148,7 +148,7 @@ alt Connector supports registration
   else Asynchronous (202)
     CA --> Conn : Accepted
     Conn --> Core : 202 Accepted (meta)
-    Core -> Conn : Poll /register/status until completed
+    Core -> Conn : Poll /register/status\nuntil completed
     Conn --> Core : status = completed
   end
 else Platform-level (connector has no registration support)
@@ -160,10 +160,10 @@ Core --> Operator : Registered certificate
 == Issuance completion ==
 Operator -> Core : Issue (CSR + authorization secret)
 opt registration has a challenge
-  Core -> Core : Verify challenge\n(constant-time; lock on repeated failure)
+  Core -> Core : Verify challenge (constant-time;\nlock on repeated failure)
 end
-Core -> Conn : POST /issue (CSR, replayed registration meta)
-Conn -> CA : Issue against the registered identity
+Core -> Conn : POST /issue\n(CSR, replayed registration meta)
+Conn -> CA : Issue against\nthe registered identity
 alt Synchronous (200)
   CA --> Conn : Certificate
   Conn --> Core : 200 OK (certificate)
@@ -180,21 +180,21 @@ A failure at any step (a rejected challenge, a connector or CA error, a rejected
 
 ### Asynchronous operations
 
-Some certification authorities cannot complete `issue`, `renew`, `revoke`, or `register` synchronously — for example, manual or air-gapped CAs, CAs that process requests in batches, or authorities where the operation is performed by a human operator out-of-band. In these cases the operation is **parked** and the certificate moves to `Pending Issue`, `Pending Revoke`, or `Pending Registration` until it is finalised. There is no platform-level "offline" or "external" flag on `Authority`, `RA Profile`, or anywhere else — behaviour is determined entirely by the certificate state.
+Some certification authorities cannot complete `issue`, `renew`, `revoke`, or `register` synchronously — for example, manual or air-gapped CAs, CAs that process requests in batches, or authorities where the operation is performed by a human operator out-of-band. In these cases the operation is **parked** and the certificate moves to `Pending Issue`, `Pending Revoke`, or `Pending Registration` until it is finalized. There is no platform-level "offline" or "external" flag on `Authority`, `RA Profile`, or anywhere else — behavior is determined entirely by the certificate state.
 
-An asynchronously-accepted **registration** is finalised by status polling on authorities that support asynchronous status polling: the platform polls the authority and, on completion, moves the placeholder to `Registered` (or to `Failed`). If the authority accepts the registration asynchronously but polling is not available, the placeholder is left in `Pending Registration` for out-of-band completion. The operator-driven finalisation actions below apply to `Pending Issue` and `Pending Revoke`.
+An asynchronously-accepted **registration** is finalized by status polling on authorities that support asynchronous status polling: the platform polls the authority and, on completion, moves the placeholder to `Registered` (or to `Failed`). If the authority accepts the registration asynchronously but polling is not available, the placeholder is left in `Pending Registration` for out-of-band completion. The operator-driven finalization actions below apply to `Pending Issue` and `Pending Revoke`.
 
-#### Finalising a parked operation
+#### Finalizing a parked operation
 
-Three operator-driven actions move a parked certificate to its terminal state. They are exposed both via the platform UI (inline icon buttons next to the state badge in the certificate inventory and on the certificate detail page) and via the `Core` client API.
+Three operator-driven actions move a parked certificate to its terminal state. They are exposed both in the platform UI — in the certificate inventory and on a certificate's detail — and via the `Core` client API.
 
 | Action             | Applicable state                  | Resulting state                                                            | Description                                                                                                                       |
 |--------------------|-----------------------------------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| **Finalise Issue** | `Pending Issue`                   | `Issued`                                                                   | The operator uploads the externally-issued certificate. The platform validates the upload and stores it against the request.      |
+| **Finalize Issue** | `Pending Issue`                   | `Issued`                                                                   | The operator uploads the externally-issued certificate. The platform validates the upload and stores it against the request.      |
 | **Confirm Revoke** | `Pending Revoke`                  | `Revoked`                                                                  | The operator confirms that the revocation has been completed. The preserved revoke attributes and `destroyKey` flag are applied.  |
 | **Cancel Pending** | `Pending Issue` or `Pending Revoke` | `Failed` (from `Pending Issue`) or `Issued` (from `Pending Revoke`) | The operator aborts the parked operation. An optional `reason` is recorded in the certificate event history.                       |
 
-When `Finalise Issue` is invoked, the uploaded certificate's public key must match the public key of the original request (hard check); the subject DN is a soft check (a mismatch is logged in the event history but does not block the upload).
+When `Finalize Issue` is invoked, the uploaded certificate's public key must match the public key of the original request (hard check); the subject DN is a soft check (a mismatch is logged in the event history but does not block the upload).
 
 When `Cancel Pending` is invoked, the platform also notifies the underlying authority so it can release any state it tracks for the operation. If the authority cannot abort the operation (for example, the underlying CA does not support aborts), the certificate stays in its pending state and the failure reason is surfaced to the operator.
 

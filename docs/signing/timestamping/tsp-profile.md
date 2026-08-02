@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # TSP Profile
 
-A `TSP Profile` is the front gate to the ILM timestamping engine for RFC 3161 clients — it decides who is allowed in and what happens once they are.
+A `TSP Profile` is the front gate to the Timestamping engine for RFC 3161 clients — it decides who is allowed in and what happens once they are.
 
 Each `TSP Profile` configures two things:
 
@@ -19,7 +19,7 @@ To understand how a `TSP Profile` links to a `Signing Profile` — whether you a
 
 An RFC 3161 client can reach the engine through one of two routes:
 
-**TSP Profile route** — the client addresses the `TSP Profile` by name and ILM resolves the request to its default `Signing Profile`:
+**TSP Profile route** — the client addresses the `TSP Profile` by name and the platform resolves the request to its default `Signing Profile`:
 
 ```
 POST /v1/protocols/tsp/{tspProfileName}
@@ -66,22 +66,22 @@ When creating or editing a `TSP Profile`, you choose which authentication method
 | **Basic Authentication** | `Authorization: Basic` header | Username and password |
 
 :::note
-When a timestamp request fails authentication, ILM returns an HTTP `401` response. This is not an in-band TSP response — the client will not receive a `TimeStampResp` with a failure status.
+When a timestamp request fails authentication, the platform returns an HTTP `401` response. This is not an in-band TSP response — the client will not receive a `TimeStampResp` with a failure status.
 :::
 
 ### Basic Authentication
 
-When **Basic Authentication** is enabled, you manage credentials directly on the `TSP Profile` detail page. The **Basic credentials** section lists all configured credentials and provides a **+** button to add a new one. Each credential maps an existing platform user to a username and password of your choice.
+When **Basic Authentication** is enabled, you manage credentials directly on the `TSP Profile` detail. The **Basic credentials** section lists all configured credentials and lets you add new ones. Each credential maps an existing platform user to a username and password of your choice.
 
-When a request arrives, ILM looks up the username from the `Authorization: Basic` header, verifies the password, and assigns the permissions of the timestamp client user to the request. If the password does not match or the username is not found, the request is refused.
+When a request arrives, the platform looks up the username from the `Authorization: Basic` header, verifies the password, and assigns the permissions of the timestamp client user to the request. If the password does not match or the username is not found, the request is refused.
 
 ### Bearer Token
 
-No user mapping is configured on the `TSP Profile` for **Bearer Token** authentication. When a request arrives with an `Authorization: Bearer` header, ILM decodes the JWT and resolves the ILM user from its claims. The trust relationship is between ILM and the identity provider that signed the token. As long as the identity provider is trusted by ILM and a matching user exists in the platform, authentication succeeds without any additional configuration on the `TSP Profile`.
+No user mapping is configured on the `TSP Profile` for **Bearer Token** authentication. When a request arrives with an `Authorization: Bearer` header, the platform decodes the JWT and resolves the platform user from its claims. The trust relationship is between the platform and the identity provider that signed the token. As long as the identity provider is trusted by the platform and a matching user exists in the platform, authentication succeeds without any additional configuration on the `TSP Profile`.
 
 ### Client Certificate
 
-An ILM user can have a client certificate associated with their account. When **Client Certificate** authentication is enabled, that certificate can be used to authenticate timestamp requests directly — no additional mapping is needed on the `TSP Profile` beyond enabling the method.
+An the platform user can have a client certificate associated with their account. When **Client Certificate** authentication is enabled, that certificate can be used to authenticate timestamp requests directly — no additional mapping is needed on the `TSP Profile` beyond enabling the method.
 
 For a full description of how methods are prioritised, how authorization works, and how the 401 challenge is formed, see [Authentication and Authorization](./authentication-authorization.md).
 
@@ -93,7 +93,7 @@ For a full description of how methods are prioritised, how authorization works, 
 - A TSP Profile references at most one **Vault Profile** for secret storage.
 - A TSP Profile owns zero or more basic-credential records (cascade delete: credentials are removed when the TSP Profile is deleted).
 
-See the [entity-relationship diagram on the Signing Profile page](/docs/signing/signing-profile#relationships) for the full cardinality map.
+See the [relationship diagram on the Signing Profile page](/docs/signing/signing-profile#relationships) for how these objects connect.
 
 ---
 
@@ -101,6 +101,6 @@ See the [entity-relationship diagram on the Signing Profile page](/docs/signing/
 
 - [Signing Profile](/docs/signing/signing-profile) — the profile a TSP endpoint resolves to
 - [Authentication and Authorization](./authentication-authorization.md) — credential types, allowed-method enforcement, identity mapping
-- [Timestamping Request Flow](./timestamping-flow.md) — where the TSP Profile sits in the request path
+- [Timestamping request flow](./timestamping-flow.md) — where the TSP Profile sits in the request path
 
 The OpenAPI specification for managing `TSP Profiles` can be found here: [Core API - TSP Profile](/api/core-tsp-profile/).

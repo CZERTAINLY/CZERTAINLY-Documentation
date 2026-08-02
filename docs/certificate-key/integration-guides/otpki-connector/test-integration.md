@@ -40,20 +40,20 @@ Revoke the certificate with a revocation reason, see [Revoke Certificate](../../
 
 Download the certificate chain and the CRL of the certification authority selected on the `RA Profile`.
 
-Both come from OTPKI for that certification authority, and confirm that ILM can build and validate chains for the certificates it manages.
+Both come from OTPKI for that certification authority, and confirm that the platform can build and validate chains for the certificates it manages.
 
 ## 7. Pre-registration
 
 Register a certificate for a subject that has no certificate request yet.
 
-Registration creates a placeholder in ILM and the matching end entity in OTPKI, without issuing anything. The placeholder reaches the `Registered` state, and is completed later through the normal issuance path against that same end entity. See [Registration lifecycle](../../concept-design/core-components/certificate.md#registration-lifecycle).
+Registration creates a placeholder in the platform and the matching end entity in OTPKI, without issuing anything. The placeholder reaches the `Registered` state, and is completed later through the normal issuance path against that same end entity. See [Registration lifecycle](../../concept-design/core-components/certificate.md#registration-lifecycle).
 
 ## 8. Existing certificates
 
-Associate a certificate that the same OTPKI installation issued outside of ILM with the `RA Profile`.
+Associate a certificate that the same OTPKI installation issued outside of the platform with the `RA Profile`.
 
-ILM matches it in OTPKI by its serial number and records the identifier of the issued certificate on it, which lets the certificate be revoked through ILM afterwards.
+The platform matches it in OTPKI by its serial number and records the identifier of the issued certificate on it, which lets the certificate be revoked through the platform afterwards.
 
 :::info
-An associated certificate cannot be renewed through ILM. Renewal enrolls against the end entity that issued the certificate, and matching by serial number does not resolve one. Renew such a certificate in OTPKI, or issue a new one through the `RA Profile`.
+An associated certificate cannot be renewed through the platform. Renewal enrolls against the end entity that issued the certificate, and matching by serial number does not resolve one. Renew such a certificate in OTPKI, or issue a new one through the `RA Profile`.
 :::

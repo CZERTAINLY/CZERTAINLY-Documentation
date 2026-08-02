@@ -4,7 +4,7 @@ sidebar_position: 7
 
 # Timestamp Formatting Connector
 
-The Timestamp Formatting Connector creates RFC 3161 timestamp token structures for ILM timestamping. Select it as the **Signature Formatting Connector** on a `Signing Profile` that uses the **Timestamping** workflow.
+The Timestamp Formatting Connector creates RFC 3161 timestamp token structures for Timestamping. Select it as the **Signature Formatting Connector** on a `Signing Profile` that uses the **Timestamping** workflow.
 
 The connector formats the timestamp token; it does not hold the signing key or perform the cryptographic signing operation. The managed key associated with the `Signing Profile` remains in the configured cryptographic token.
 
@@ -28,7 +28,7 @@ Other timestamp properties—including qualified status, accuracy, policy identi
 
 ## Timestamp extensions
 
-A timestamp token can contain extensions requested by the client and extensions added by ILM. When both sources provide an extension with the same object identifier (OID), the ILM-provided extension takes precedence. A client therefore cannot override or suppress an extension controlled by ILM.
+A timestamp token can contain extensions requested by the client and extensions added by the platform. When both sources provide an extension with the same object identifier (OID), the platform-provided extension takes precedence. A client therefore cannot override or suppress an extension controlled by the platform.
 
 ### Qualified timestamp
 

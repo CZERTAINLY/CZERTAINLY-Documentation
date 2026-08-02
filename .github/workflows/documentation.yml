@@ -22,7 +22,7 @@ jobs:
         uses: ./.github/actions/plantuml
       - name: Test build
         env:
-          NODE_OPTIONS: "--max_old_space_size=8192"
+          NODE_OPTIONS: "--max_old_space_size=10240"
         run: |
           yarn install --frozen-lockfile
           yarn build
@@ -52,7 +52,7 @@ jobs:
         uses: ./.github/actions/plantuml
       - name: Build website
         env:
-          NODE_OPTIONS: "--max_old_space_size=8192"
+          NODE_OPTIONS: "--max_old_space_size=10240"
         run: |
           yarn install --frozen-lockfile
           yarn build

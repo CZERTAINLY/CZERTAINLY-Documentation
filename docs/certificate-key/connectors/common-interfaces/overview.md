@@ -24,10 +24,15 @@ The following interfaces are mandatory for each Connector NG:
 | [Info v2](info-interface.md#connector-ng)          | `GET /v2/info`                    | Connector identity, version, and list of implemented interfaces with versions and features |
 | [Health v2](health-interface.md#connector-ng)      | `GET /v2/health`                  | Health status with Kubernetes liveness and readiness probes                                |
 | [Attributes (per-operation)](attributes-interface.md#connector-ng) | `GET /.../{operation}/attributes` | Per-operation attribute definitions without a separate validation endpoint                 |
-| [Attributes v2 API](../../../contributors/attributes/callbacks.mdx#attributes-v2-callback-model) | `GET /v2/attributes` · `POST /v2/attributes/callback` | Definition registry plus a stateless `dependsOn` callback surface for resolving dynamic attribute content |
 | [Metrics](metrics-interface.md)                    | `GET /v1/metrics`                 | Prometheus/OpenMetrics metrics for observability                                           |
 
-The two Attributes entries are distinct: the **per-operation** listing declares which attributes an
+In addition, a Connector NG that exposes dynamic attribute content implements the **Attributes v2 API** — it is not required for registration:
+
+| Name                                               | Endpoint                          | Short description                                                                          |
+|----------------------------------------------------|-----------------------------------|--------------------------------------------------------------------------------------------|
+| [Attributes v2 API](../../../contributors/attributes/callbacks.mdx#attributes-v2-callback-model) | `GET /v2/attributes` · `POST /v2/attributes/callback` | Definition registry plus a stateless `dependsOn` callback surface for resolving dynamic attribute content |
+
+The two Attributes surfaces are distinct: the **per-operation** listing declares which attributes an
 operation needs, while the **Attributes v2 API** (`connector.common.v2`) is the definition registry plus
 dynamic-content callback surface.
 

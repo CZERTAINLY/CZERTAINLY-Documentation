@@ -55,7 +55,7 @@ Calls to connectors rely on connector routing information that would otherwise b
 
 ## Credential verification cache
 
-TSP requests use HTTP Basic authentication. Verifying a credential is comparatively expensive — it involves a secret lookup and an HMAC computation — so successful verifications are cached to keep the timestamping hot path fast.
+TSP requests use HTTP Basic authentication. Verifying a credential requires computing a fingerprint over the presented username and password and comparing it against the stored one — so successful verifications are cached to keep the timestamping hot path fast.
 
 The cache stores **positive results only**. A failed credential check is never cached; it always goes through the full verification path. The cache key is `HMAC-SHA-256(pepper, secretUuid:password)`, which means the raw password is never stored or recoverable from cache state.
 

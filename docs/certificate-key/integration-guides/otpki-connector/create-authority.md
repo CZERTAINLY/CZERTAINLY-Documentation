@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Create Authority
 
-With OTPKI prepared, connect it to ILM as an [`Authority`](../../concept-design/core-components/authority.md). The `Authority` holds the address of the OTPKI installation and the credentials the connector authenticates with.
+With OTPKI prepared, connect it to the platform as an [`Authority`](../../concept-design/core-components/authority.md). The `Authority` holds the address of the OTPKI installation and the credentials the connector authenticates with.
 
 ## Store the OAuth client credentials
 
@@ -35,7 +35,7 @@ Create an `Authority` that uses the OTPKI Connector, see [Create Authority](../.
 | Retry max backoff (ms)     | No       | Upper bound on the wait time between retries. Default `5000`                                                         |
 
 :::info[TLS trust]
-Use **TLS trust** when the OTPKI server or the identity provider is served by a private certification authority that is not in the trust store of the connector. The certificates selected here are trusted for both connections, so add the issuing CA certificates of whichever of the two endpoints needs them. The attribute lists only certificates in the ILM inventory that are classified as root CA or intermediate CA certificates.
+Use **TLS trust** when the OTPKI server or the identity provider is served by a private certification authority that is not in the trust store of the connector. The certificates selected here are trusted for both connections, so add the issuing CA certificates of whichever of the two endpoints needs them. The attribute lists only certificates in the platform inventory that are classified as root CA or intermediate CA certificates.
 :::
 
 Only read-only calls are retried. Calls that change state in OTPKI, such as creating an end entity or submitting an enrollment, are never retried, so that a timeout cannot result in a duplicate end entity or a duplicate certificate.

@@ -22,7 +22,7 @@ The following system users are defined:
 | `scep`                       | System user for SCEP client operations                                                     |
 | `cmp`                        | System user for CMP client operations                                                      |
 | `localhost`                  | System user for local operations                                                           |
-| `attribute-content-resolver` | System user for resolving an authority's own connector, credential and secret references   |
+| `attribute-content-resolver` | System user for resolving an authority's own infrastructure references when assembling connector requests |
 
 Each is created together with a [system role](roles-permissions.md#system-roles) of the same name, and that pairing is the whole permission boundary of the identity. Because either half of it could be edited to widen the identity or to hand its permissions to an operator, the platform enforces the following:
 

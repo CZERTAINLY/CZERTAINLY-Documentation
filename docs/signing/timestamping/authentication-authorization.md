@@ -4,7 +4,7 @@ sidebar_position: 8
 
 # Authentication and authorization
 
-Before ILM processes a timestamp request, it checks two things: who is making the request (authentication), and whether that user is allowed to perform timestamping using the `TSP Profile`, `Signing Profile`, and other related resources they are targeting (authorization). Both checks happen before any timestamping takes place.
+Before the platform processes a timestamp request, it checks two things: who is making the request (authentication), and whether that user is allowed to perform timestamping using the `TSP Profile`, `Signing Profile`, and other related resources they are targeting (authorization). Both checks happen before any timestamping takes place.
 
 For the full request sequence from HTTP arrival to RFC 3161 response, see [Timestamping request flow](./timestamping-flow.md).
 
@@ -26,6 +26,10 @@ When multiple methods are present in a request, the first one in the priority or
 
 The client certificate header name is controlled by the `auth.header.certificate` deployment parameter. See [Configurable parameters](../../certificate-key/installation-guide/deployment/deployment-helm/configurable-parameters.md) for its current default and configuration.
 
+### Rejection and the 401 challenge
+
+When authentication fails — the presented method is not allowed by the profile, or the credentials do not verify — the platform answers with HTTP 401. If the profile accepts password or bearer-token authentication, the response's `WWW-Authenticate` header advertises those methods to the caller. For a profile that accepts only client certificates, or when no profile could be resolved, there is no client-actionable HTTP challenge, so the header is omitted.
+
 ---
 
 ## Authorization
@@ -35,11 +39,11 @@ Two distinct accounts are involved in a production timestamping setup:
 - **Provisioning operator** — a human administrator who creates and configures `TSP Profiles`, `Signing Profiles`, tokens, and credentials. This account needs broad permissions across many resources.
 - **Timestamping user** — a platform user that TSP clients authenticate as. This can be a real user account, a system account, or a dedicated application account. Either way, it should have only the permissions required to perform timestamping against the specific profiles and keys it is authorized for.
 
-Keeping these two accounts separate is important: the timestamp client user's permission set is the effective security boundary on what a TSP client can timestamp with.
+Keeping these two accounts separate is important: the timestamping user's permission set is the effective security boundary on what a TSP client can timestamp with.
 
 ### Required permissions for timestamping
 
-For a timestamp request to complete successfully, the timestamp client user must have the following permissions:
+For a timestamp request to complete successfully, the timestamping user must have the following permissions:
 
 | Resource | Action | Why |
 |---|---|---|
@@ -52,7 +56,7 @@ For a timestamp request to complete successfully, the timestamp client user must
 
 Grant `TSP Profile`, `Signing Profile`, `Token`, and `Token Profile` permissions to the specific object UUIDs the timestamping user needs — the account should not be able to see or interact with any other objects of those types. `Key` is an exception: it does not support object-scoped grants and must be granted resource-wide.
 
-If a timestamp request is denied, ILM returns an HTTP 200 response with a timestamp response with a failed status.
+If a timestamp request is denied, the platform returns an HTTP 200 response with a timestamp response with a failed status.
 
 For the overall access-control model, see the [Access Control](../../certificate-key/concept-design/architecture/access-control/overview.md) section of the architecture documentation.
 
@@ -60,9 +64,9 @@ For the overall access-control model, see the [Access Control](../../certificate
 
 ## Performance: caching
 
-On a high-throughput endpoint, the same profiles, certificates, keys, and credentials are looked up on every request. Several caches keep this off the database and avoid repeated cryptographic work — including verified **Basic Authentication** credentials and the platform identity resolved for **Client Certificate** and **Bearer Token** requests.
+On a high-throughput endpoint, the same profiles, certificates, keys, and credentials are looked up on every request. Several caches keep this off the database and avoid repeated cryptographic work — including verified **Basic Authentication** credentials and the platform identities resolved for **Client Certificate** and **Bearer Token** requests.
 
-For the caches involved, their bounds, time-to-live, multi-instance behaviour, and invalidation, see [Caching](/docs/certificate-key/concept-design/architecture/caching).
+For the caches involved, their bounds, time-to-live, multi-instance behavior, and invalidation, see [Caching](/docs/certificate-key/concept-design/architecture/caching).
 
 ---
 

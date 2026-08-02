@@ -56,6 +56,7 @@ The Operator Web was merged with the Administrator Web in the version `2.2.0`.
 | Webhook Notification Provider  | `1.0.0`  | `hub.omnitrustregistry.com/ilm/webhook-notification-provider`          |
 | OTPKI Connector                | `1.0.0`  | `hub.omnitrustregistry.com/ilm-private/otpkiconnector`                 |
 | MS ADCS NG Connector           | `1.0.0`  | `hub.omnitrustregistry.com/ilm-private/ms-adcs-ng-connector`           |
+| Timestamp Formatting Connector | `1.0.0`  | `hub.omnitrustregistry.com/ilm-private/timestamp-formatting-connector` |
 
 ## Other
 

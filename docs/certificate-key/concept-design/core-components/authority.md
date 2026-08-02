@@ -26,7 +26,7 @@ The version of the `Authority Provider` interface the `Authority` is created aga
 - Inputs for the `Connector` to determine the CA are captured and stored in the `Authority`.
 - A v3 `Authority` keeps no state on the `Connector` side — the platform stores the `Attributes` and sends them with every operation. A v1 or v2 `Authority` has a counterpart authority instance created in the `Connector` that the platform references.
 
-For more information, refer to [Authority Provider](../../connectors/provider-interfaces/authority-provider-v3.md) description.
+For more information, refer to the [Authority Provider v2](../../connectors/provider-interfaces/authority-provider-v2.md) and [Authority Provider v3](../../connectors/provider-interfaces/authority-provider-v3.md) descriptions.
 
 ### `RA Profile`
 

@@ -55,7 +55,7 @@ Each strategy allows as many certificates as it produces distinct login IDs:
 The subject cannot be read from a certificate request in CRMF format, so an `RA Profile` used for CRMF enrollment must use **Custom login ID** or **Random login ID**. The strategies that derive the login ID from the subject reject a CRMF request.
 :::
 
-The login ID and the end entity are recorded on the certificate when it is issued, and are reused when the certificate is later renewed or revoked through ILM.
+The login ID and the end entity are recorded on the certificate when it is issued, and are reused when the certificate is later renewed or revoked through the platform.
 
 ## Certificate operations
 
