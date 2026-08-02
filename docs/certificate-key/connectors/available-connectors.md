@@ -25,7 +25,6 @@ The following `Connectors` are officially available:
 | HashiCorp Vault Connector      | <span class="badge">Authority Provider</span>    | <span class="badge">HVault</span>                                                                          |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">HVault</span>                                                                          |
 |                                | <span class="badge">Secret Provider</span>       |                                                                                                            |
-| OTPKI Connector                | <span class="badge">Authority Provider</span>    | —                                                                                                          |
 | Keystore Entity Provider       | <span class="badge">Entity Provider</span>       | <span class="badge">Keystore</span>                                                                        |
 | PyADCS Connector               | <span class="badge">Authority Provider</span>    | <span class="badge">PyADCS-WinRM</span>                                                                    |
 |                                | <span class="badge">Discovery Provider</span>    | <span class="badge">PyADCS-WinRM</span>                                                                    |
@@ -33,12 +32,11 @@ The following `Connectors` are officially available:
 | Software Cryptography Provider | <span class="badge">Cryptography Provider</span> | <span class="badge">SOFT</span>                                                                            |
 | X.509 Compliance Provider      | <span class="badge">Compliance Provider</span>   | <span class="badge">x509</span>                                                                            |
 
-— The OTPKI Connector is a v3 stateless connector and advertises no kind.
-
 ## Connector NG
 
 [Connector NG](./common-interfaces/overview.md#connector-ng) connectors describe their capabilities through versioned interfaces rather than Function Groups and Kinds. The following Connector NG connectors are officially available:
 
 | Connector Name                   | Interface                                                                                                    |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------|
+| [OTPKI Connector](../integration-guides/otpki-connector/overview.md) | [Authority Provider v3](./provider-interfaces/authority-provider-v3.md) |
 | [Timestamp Formatting Connector](../../signing/timestamping/timestamp-formatting-connector.md) | [Signature Formatting Provider](./provider-interfaces/signature-formatting-provider.md) |
