@@ -118,7 +118,7 @@ The following processes are associated with the Cryptography Provider and manage
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management/operation/createTokenInstance]]: Add Token instance
+        Client -> Core [[core-token/#tag/Token-Management/operation/createTokenInstance]]: Add Token instance
         Core->Core: Check existence of Connector and Token
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
@@ -141,7 +141,7 @@ The following processes are associated with the Cryptography Provider and manage
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management/operation/getTokenInstance]]: Details of Token instance
+        Client -> Core [[core-token/#tag/Token-Management/operation/getTokenInstance]]: Details of Token instance
         Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/getTokenInstance]]: Get Token instance
         Connector --> Core: Return Token instance details
         note over Core
@@ -160,7 +160,7 @@ The following processes are associated with the Cryptography Provider and manage
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management/operation/updateTokenInstance]]: Update Token instance
+        Client -> Core [[core-token/#tag/Token-Management/operation/updateTokenInstance]]: Update Token instance
         Core -> Connector : Validate Attributes
         Connector --> Core: Result of Attribute validation
         Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/updateTokenInstance]]: Update Token instance
@@ -184,7 +184,7 @@ When the `Token` is removed, it does not necessarily mean that it was removed fr
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management/operation/removeTokenInstance]]: Remove Token instance
+        Client -> Core [[core-token/#tag/Token-Management/operation/removeTokenInstance]]: Remove Token instance
         Core -> Core : Check dependencies
         Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/removeTokenInstance]]: Remove Token instance
         Connector --> Core: Return Token instance removal result
@@ -202,7 +202,7 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management/operation/getTokenInstanceStatus]]: Get Token instance status
+        Client -> Core [[core-token/#tag/Token-Management/operation/getTokenInstanceStatus]]: Get Token instance status
         Core->Core: Check existence of the Token instance
         Core -> Connector [[connector-cryptography-provider/#tag/Token-Management/operation/getTokenInstanceStatus]]: Request Token instance status
         Connector -> Connector: Check Token instance status
@@ -225,7 +225,7 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management/operation/activateTokenInstance]]: Activate Token instance
+        Client -> Core [[core-token/#tag/Token-Management/operation/activateTokenInstance]]: Activate Token instance
         Core->Core: Check existence of the Token instance
         Core -> Connector [[connector-cryptography-provider/#tag/Key-Management/operation/validateTokenInstanceActivationAttributes]]: Validate activation Attributes
         Connector --> Core: Result of activation Attributes validation
@@ -243,7 +243,7 @@ Status of the `Token` can be regularly checked by the platform. See the [list of
     autonumber
     skinparam maxMessageSize 200
     skinparam topurl https://docs.otilm.com/api/
-        Client -> Core [[core-cryptography/#tag/Token-Management/operation/deactivateTokenInstance]]: Deactivate Token instance
+        Client -> Core [[core-token/#tag/Token-Management/operation/deactivateTokenInstance]]: Deactivate Token instance
         Core->Core: Check existence of the Token instance
         Core -> Connector : Validate deactivation Attributes
         Connector --> Core: Result of deactivation Attributes validation
