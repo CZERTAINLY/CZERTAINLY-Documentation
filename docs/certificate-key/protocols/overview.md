@@ -32,3 +32,4 @@ The following protocols are implemented:
 
 All supported protocol profiles share a set of [**Common Protocol Properties**](./common-properties.md) that define consistent behaviors and configuration options across all protocols.
 Understanding these shared properties helps ensure consistent configuration and predictable behavior when managing certificates across different protocols.
+Among them is the [validation of enrollment CSRs](./common-properties.md#request-attribute-validation) against the request attributes of the `RA Profile` that serves the request.

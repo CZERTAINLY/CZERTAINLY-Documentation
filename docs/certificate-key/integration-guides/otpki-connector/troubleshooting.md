@@ -1,0 +1,46 @@
+---
+sidebar_position: 8
+---
+
+# Troubleshooting
+
+## Connection and authentication
+
+| Symptom                                                                    | Cause                                                                                              | Resolution                                                                                                    |
+|----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| The connection check fails before OTPKI is reached                         | The base URL or the token endpoint is wrong, or the network does not allow the connection             | Verify both addresses and the network access described in [Create OAuth Client](./create-oauth-client.md)          |
+| The connection check fails with a TLS error                                | OTPKI or the identity provider is served by a private certification authority                         | Add the issuing CA certificates to the **TLS trust** attribute of the `Authority`                                  |
+| The token is obtained, but OTPKI rejects it                                | No identity provider registered in OTPKI can introspect the token, so the client belongs to a provider OTPKI does not know | Register the provider in OTPKI, or create the client in a provider that is already registered  |
+| The integration worked and later fails with permission errors              | The access token carries no `roles` claim, so OTPKI cleared the roles of the connector user           | Include the role name in the `roles` claim, and check it is present in the introspection response                  |
+| The connector has no permissions from the start                            | The role name in the `roles` claim does not exist in OTPKI, and unknown names are ignored silently    | Check the name against the role created in [Create Role and Permissions](./create-role.md)                         |
+
+## Attributes of the `RA Profile`
+
+| Symptom                                                              | Cause                                                                        | Resolution                                                                    |
+|----------------------------------------------------------------------|--------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| The **End Entity Profile** list is empty                             | OTPKI cannot be reached, or the role lacks **Read** on end entity profiles     | Run the connection check, then review [Create Role and Permissions](./create-role.md) |
+| The **Certificate Profile** or **Certificate Authority** list is empty | The selected end entity profile has no certificate profile or certification authority bound to it, or the role lacks **Read** on them | Complete the binding described in [Configure CA and Profiles](./configure-profiles.md) |
+
+## Certificate issuance
+
+| Symptom                                                    | Cause                                                                                                         | Resolution                                                                        |
+|------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| The end entity already exists                              | The derived login ID is already used by another end entity in OTPKI, which happens on every issuance after the first when the login ID is not unique per certificate | Use **Random login ID**, see [Create RA Profile](./create-ra-profile.md)   |
+| The end entity data is rejected as invalid                 | The certificate profile does not allow the selected certification authority, the login ID does not match the format the end entity profile requires, or the password does not meet the minimum strength | Review the profile configuration in [Configure CA and Profiles](./configure-profiles.md) |
+| The subject of the certificate request lacks the attribute the login ID is derived from | The certificate request has no `CN`, or not the configured DN attribute                       | Correct the certificate request, or change the login ID strategy                       |
+| The derived login ID is outside the allowed length         | The username prefix, the derived value, and the username postfix together are shorter than 3 or longer than 64 bytes | Adjust the prefix, the postfix, or the strategy so that the result stays within the range |
+| A subject alternative name is reported as required         | The end entity profile requires a subject alternative name attribute that has no default value, and the connector supplies none | Make the attribute optional or give it a default, see [Configure CA and Profiles](./configure-profiles.md) |
+| The issued certificate has no subject alternative names    | The certificate profile does not take extensions from the certificate request           | Allow the certificate profile to override extensions from the request                  |
+| A CRMF request is refused                                  | The login ID strategy derives the value from the subject, which a CRMF request does not expose                 | Set the `RA Profile` to **Random login ID**, or to **Custom login ID** for a single certificate |
+| The certificate stays pending and is never issued          | An approval profile applies to the end entity profile, the certificate profile, or the certification authority, and ILM does not collect approved requests automatically | Use profiles without approvals, see [Configure CA and Profiles](./configure-profiles.md) |
+| The end entity in OTPKI has an unexpected login ID         | The end entity profile auto-generates the login ID and replaced the one the connector supplied                 | Turn auto-generation off on the end entity profile                                     |
+
+## Certificate renewal and revocation
+
+| Symptom                                                     | Cause                                                                                | Resolution                                                                |
+|-------------------------------------------------------------|------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| Renewal is refused without a certificate request            | Renewal with the existing key is not supported                                          | Renew with a new certificate request                                          |
+| Renewal is refused right after the certificate was issued   | The end entity has used up the enrollments the end entity profile allows                | Raise the number of allowed requests, or allow renewal before expiration, see [Configure CA and Profiles](./configure-profiles.md) |
+| Renewal of a certificate that was issued outside of ILM fails | Matching by serial number does not resolve the end entity that renewal enrolls against | Renew the certificate in OTPKI, or issue a new one through the `RA Profile`   |
+| Revocation reports that the certificate is unknown          | The certificate was not issued through this `Authority` and was never associated with it | Associate the certificate first, see [Test Integration](./test-integration.md) |
+| An operation cannot be cancelled                            | OTPKI has no cancel operation, so an issuance or a revocation runs to its conclusion    | Wait for the operation to finish, then revoke the certificate if needed       |

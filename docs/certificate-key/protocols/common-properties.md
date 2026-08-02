@@ -25,3 +25,20 @@ These associations may include:
 - **Custom attributes** — Additional metadata or policies applied to issued certificates.
 
 Default associations can be set during **profile creation** or modified later when **editing** the protocol profile.
+
+## Request attribute validation
+
+When a client enrolls with a CSR over a protocol, the platform validates the CSR against the [resolved request-attribute set](../concept-design/core-components/ra-profile.md#request-attributes) of the `RA Profile` that serves the request. What is checked, and what the strict and lenient modes mean, is described in [External CSR validation](../concept-design/core-components/ra-profile.md#external-csr-validation). The platform never rewrites the request. It either accepts or rejects it.
+
+Under strict mode, a rejected extension is reported by its dotted OID only. One recognisable case: very old clients emitting a deprecated X.509 v1/v2 extension OID from the `2.5.29.1`–`2.5.29.8` or `2.5.29.10`–`2.5.29.13` range — rejected like any unmapped extension.
+
+In lenient mode, violations are logged as warnings and the CSR is accepted. In strict mode, each protocol rejects a non-compliant CSR with its own native error:
+
+| Protocol | Validated operation                       | Rejection error               |
+|----------|-------------------------------------------|-------------------------------|
+| ACME     | finalize                                  | problem type `badCSR`         |
+| CMP      | `ir`, `cr`                                | failInfo `badCertTemplate`    |
+| SCEP     | PKCSReq                                   | failInfo `badRequest`         |
+| REST API | certificate issuance with an uploaded CSR | HTTP 422                      |
+
+When the resolved set cannot be computed — for example, the `Authority`'s connector is unavailable — a strict profile fails the request as a server error, not as a policy violation. A lenient profile skips validation.
