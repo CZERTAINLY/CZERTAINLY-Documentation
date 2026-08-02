@@ -8,6 +8,9 @@
 .docusaurus
 .cache-loader
 
+# Build-time-rendered PlantUML diagrams
+/static/img/plantuml/
+
 # Misc
 .DS_Store
 .env.local

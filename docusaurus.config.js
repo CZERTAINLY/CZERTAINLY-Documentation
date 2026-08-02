@@ -7,6 +7,7 @@ const cscVersion = '1.7.0';
 
 import remarkFindReplacePlugin from './src/plugins/remarkFindReplacePlugin.mjs';
 import remarkSimplePlantumlPlugin from './src/plugins/remarkSimplePlantumlPlugin.mjs';
+import plantumlRenderPlugin from './src/plugins/plantumlRenderPlugin.mjs';
 
 
 /** @type {import('@docusaurus/types').Config} */
@@ -36,6 +37,7 @@ const config = {
   //     './src/plugins/test'
   // ],
   plugins: [
+    plantumlRenderPlugin,
     [
       "docusaurus-plugin-remote-content",
       {
@@ -121,13 +123,7 @@ const config = {
                 prefix: '%'
               },
             ],
-            [
-              remarkSimplePlantumlPlugin,
-              {
-                baseUrl: "https://www.plantuml.com/plantuml/svg",
-                type: "svg"
-              }
-            ],
+            remarkSimplePlantumlPlugin,
           ],
         },
         theme: {

@@ -1,0 +1,38 @@
+name: Set up PlantUML rendering
+description: >
+  Restore cached rendered PlantUML SVGs and cache/load the pinned plantuml-server
+  Docker image, so diagram rendering is reused across CI runs.
+
+inputs:
+  image-digest:
+    description: sha256 digest of the pinned plantuml/plantuml-server image
+    default: sha256:5b9968b8723e03ef585396b257127337ca5f91e58ccbffc88f085bd649a717dc
+
+runs:
+  using: composite
+  steps:
+    # Rendered SVGs are content-hashed and gitignored. Restore them so unchanged diagrams are
+    # reused; restore-keys falls back to an older cache so only new/edited diagrams re-render.
+    - name: Cache rendered PlantUML SVGs
+      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+      with:
+        path: static/img/plantuml
+        key: plantuml-svg-${{ inputs.image-digest }}-${{ hashFiles('docs/**/*.md', 'docs/**/*.mdx') }}
+        restore-keys: |
+          plantuml-svg-${{ inputs.image-digest }}-
+    - name: Cache PlantUML server image
+      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+      with:
+        path: ~/.cache/plantuml/image.tar
+        key: plantuml-server-${{ inputs.image-digest }}
+    - name: Load or pull PlantUML server image
+      shell: bash
+      run: |
+        IMG="plantuml/plantuml-server@${{ inputs.image-digest }}"
+        if [ -f ~/.cache/plantuml/image.tar ]; then
+          docker load -i ~/.cache/plantuml/image.tar
+        else
+          docker pull "$IMG"
+          mkdir -p ~/.cache/plantuml
+          docker save "$IMG" -o ~/.cache/plantuml/image.tar
+        fi
