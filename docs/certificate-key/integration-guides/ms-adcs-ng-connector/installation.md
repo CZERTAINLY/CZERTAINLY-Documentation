@@ -40,7 +40,12 @@ permissions described in [Permissions](./permissions.md).
 
 ## Install via MSI (primary)
 
-Build (or obtain) `OmniTrust.Ilm.MsAdcs.Connector.msi`, then install from an elevated prompt.
+Download `msadcs-ng-connector-<version>.msi` from the connector's
+[GitHub release](https://github.com/OmniTrustILM/ms-adcs-ng-connector/releases) - each release also
+publishes a `SHA256SUMS` file to verify the download, and the MSI is Authenticode-signed once release
+signing is configured - or build it from source. Then install from an elevated prompt. The
+`msiexec` commands below use the generic name `OmniTrust.Ilm.MsAdcs.Connector.msi`; substitute the
+filename you actually downloaded.
 
 gMSA/sMSA (recommended):
 
