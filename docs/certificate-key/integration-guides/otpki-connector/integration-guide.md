@@ -10,7 +10,7 @@ This integration guide assumes basic knowledge of ILM [`Connectors`](../../conce
 
 [OTPKI](https://docs.otpki.com/) (OmniTrust PKI) is a modern, cloud-native PKI service for operating certificate authorities and managing the full certificate lifecycle through an API-first interface. For installing and operating OTPKI itself, see the [OTPKI documentation](https://docs.otpki.com/).
 
-The **OTPKI Connector** that ILM uses to manage certificates in OTPKI ships with ILM (through the Helm chart or operator), so deploying it is not part of this guide. This document outlines the steps to take in OTPKI before the connector can be configured, how to connect an OTPKI authority in ILM, and how to test the integration.
+The **OTPKI Connector** that ILM uses to manage certificates in OTPKI ships with ILM (through the Helm chart or operator), so deploying it is not part of this guide. This document outlines the steps to take in OTPKI before the connector can be configured, and how to test the integration. For connecting the prepared OTPKI as an authority in ILM, follow [Create an authority](../../quick-start/certificate-management/create-authority.mdx) and [Create an RA profile](../../quick-start/certificate-management/create-ra-profile.mdx).
 
 :::info[OTPKI installation]
 Installing and operating OTPKI is out of scope of this document. This guide assumes OTPKI is installed, running, and reachable from ILM. Refer to the [OTPKI documentation](https://docs.otpki.com/) for the exact administration steps referenced below.
@@ -76,37 +76,6 @@ Allow the connector (running alongside ILM) to reach OTPKI:
 - the identity provider's **token endpoint**.
 
 If OTPKI or the identity provider is served by a private CA, make that CA trusted — either per authority through the **TLS trust** attribute (below), or for the whole connector through its trusted-certificates bundle.
-
-## Connect OTPKI in ILM
-
-With OTPKI prepared, connect it in ILM.
-
-1. Create a **Basic Authentication** credential that holds the OAuth2 client — its **username** is the OAuth client id and its **password** is the OAuth client secret.
-2. Create an **Authority** that uses the OTPKI Connector and fill in the connection attributes:
-
-   | Attribute      | Required | Description                                                                    |
-   |----------------|----------|--------------------------------------------------------------------------------|
-   | **Base URL**   | Yes      | Address of the OTPKI server, for example `https://otpki.example.com`.            |
-   | **Token URL**  | Yes      | OAuth2 token endpoint that issues access tokens for OTPKI.                       |
-   | **OAuth client** | Yes    | The Basic Authentication credential created above.                              |
-   | **OAuth scope** | No      | Only if your identity provider requires a specific scope.                        |
-   | **OAuth audience** | No   | Only if your identity provider requires a specific audience.                     |
-   | **TLS trust**  | No       | Root or Intermediate CA certificate(s) to trust a private OTPKI endpoint.        |
-
-   The connector authenticates to OTPKI with the OAuth2 bearer token only; there is no mutual TLS. The remaining authority attributes (call deadline and retry settings) can be left at their defaults.
-
-3. Create one or more **RA Profiles** against the authority. Select the **End Entity Profile** first, then the **Certificate Profile** and **Certificate Authority** (ILM populates these from the selected end-entity profile), and choose a **Login ID strategy** that decides how each OTPKI end entity is named:
-
-   | Login ID strategy          | Meaning                                                                                    |
-   |----------------------------|--------------------------------------------------------------------------------------------|
-   | Login ID from CN           | Use the CN from the certificate request.                                                   |
-   | Login ID from DN attribute | Use a specific subject DN attribute; picking it reveals a **Login ID DN attribute** field. |
-   | Custom login ID            | Always use the same configured value; picking it reveals a **Login ID custom value** field. |
-   | Random login ID            | Generate a unique value for each certificate.                                              |
-
-   Optionally set a **Username prefix** and **Username postfix** — they wrap whichever login id the strategy produces. The resulting login id must be 3–64 characters long.
-
-For the general authority and RA-profile flow in ILM, see [Create an authority](../../quick-start/certificate-management/create-authority.mdx) and [Create an RA profile](../../quick-start/certificate-management/create-ra-profile.mdx).
 
 ## Test the integration
 
