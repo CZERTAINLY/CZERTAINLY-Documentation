@@ -14,11 +14,11 @@ connector's COM/DCOM transport.
 
 ## Service logon right
 
-Whichever identity you chose in [Installation](./installation.md#choose-a-service-identity), it
+Whichever identity you chose in [Deployment](./installation.md#service-identity), it
 must hold the **"Log on as a service"** right (`SeServiceLogonRight`) on the connector host.
 
-- For a gMSA, sMSA, or domain user, both installers (the MSI and `Install-Service.ps1`) grant this
-  right automatically - no manual `secpol.msc` step is needed.
+- For a gMSA, sMSA, or domain user, the connector's installer grants this right automatically - no
+  manual `secpol.msc` step is needed.
 - The built-in `NetworkService` and `LocalSystem` accounts already hold it.
 - If a **domain GPO** manages this right for the host, the local grant made by the installer is
   reverted at the next policy refresh. In that case, add the identity to the GPO's "Log on as a
