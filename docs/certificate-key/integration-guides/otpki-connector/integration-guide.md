@@ -13,7 +13,7 @@ This integration guide assumes basic knowledge of ILM [`Connectors`](../../conce
 The **OTPKI Connector** that ILM uses to manage certificates in OTPKI ships with ILM (through the Helm chart or operator), so deploying it is not part of this guide. This document outlines the steps to take in OTPKI before the connector can be configured, and how to test the integration. For connecting the prepared OTPKI as an authority in ILM, create an [`Authority`](../../concept-design/core-components/authority.md) and an [`RA Profile`](../../concept-design/core-components/ra-profile.md) that use the OTPKI Connector.
 
 :::warning[Production hardening]
-The connector derives each end entity's OTPKI password from an HMAC key supplied through `OTPKI_LOGIN_PASSWORD_KEY` (Helm value `otpki.loginPasswordKey`). Left unset — the default — the connector falls back to using the login id itself as the password, which is predictable. Set this key for any production deployment.
+The connector derives each end entity's OTPKI password from an HMAC key supplied through `OTPKI_LOGIN_PASSWORD_KEY` (Helm value `otpki.loginPasswordKey`). Left unset — the default — the connector falls back to using the login ID itself as the password, which is predictable. Set this key for any production deployment.
 :::
 
 :::info[OTPKI installation]
@@ -87,7 +87,7 @@ If OTPKI or the identity provider is served by a private CA, make that CA truste
 2. Through an RA profile, **issue a test certificate** from a CSR. A successful issuance exercises the whole path — creating the end entity, enrolling, and issuing.
 3. Optionally confirm that **revocation** works and that the **CRL** and **CA certificate** downloads succeed for the selected CA.
 
-If issuance fails with `enrollment request data is invalid`, the selected end-entity profile is rejecting the connector's enrollment — most often because it forces an auto-generated login id or password, or does not allow the selected CA or certificate profile. Adjust the profile in OTPKI.
+If issuance fails with `enrollment request data is invalid`, the selected end-entity profile is rejecting the connector's enrollment — most often because it forces an auto-generated login ID or password, or does not allow the selected CA or certificate profile. Adjust the profile in OTPKI.
 
 ## Constraints
 
