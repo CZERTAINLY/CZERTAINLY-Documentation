@@ -16,6 +16,7 @@ The platform offers the following list of operations from the Key Inventory:
 | Create new `Key`       | Create new `Key` from selected `Token Profile` |
 | Change status of `Key` | Enable / disable `Key`                         |
 | Update `Key` usage     | Update key usage of the `Key`                  |
+| Rename `Key` item      | Change the name of an individual key item      |
 | Compromise `Key`       | Mark `Key` as compromised                      |
 | Destroy `Key`          | Destroy the `Key`                              |
 | Delete `Key`           | Removes the `Key` from inventory               |
