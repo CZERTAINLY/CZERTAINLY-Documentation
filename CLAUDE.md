@@ -74,6 +74,16 @@ TSX components used on the homepage and in docs: `HomepageFeatures`, `PlatformMo
 - PlantUML diagrams: use fenced code blocks with language `plantuml`
 - The `documentation` branch is the main/default branch for this repo
 
+### Integration Guides
+
+Each integration lives in its own directory under `docs/certificate-key/integration-guides/<technology>/`:
+
+- A `_category_.json` sets the sidebar `label`, an explicit `position` (integrations are ordered by product, not alphabetically), and a `link` of type `doc` pointing at the entry page
+- Multi-page guides use `overview.md` as that entry page, with a step table linking to one page per task; single-page guides use `integration-guide.md`
+- Page order inside the directory comes from `sidebar_position` in the front matter, with the overview at position 1
+- Guides describe what to configure in the third-party product and in ILM. Deploying the connector itself belongs in the installation guide, not here
+- Prefer naming entities and their attributes over navigation paths — product menus change more often than the concepts do
+
 ## CI/CD
 
 GitHub Actions workflow (`.github/workflows/documentation.yml`):

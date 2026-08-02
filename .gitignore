@@ -37,6 +37,7 @@ target/
 
 # Local planning artifacts (not documentation content)
 /superpowers
+/.superpowers
 
 # draw.io auto-backup temp files
 *.bkp
