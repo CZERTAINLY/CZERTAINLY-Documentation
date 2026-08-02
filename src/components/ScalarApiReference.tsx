@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import Layout from '@theme/Layout';
+import useBrokenLinks from '@docusaurus/useBrokenLinks';
 import {loadScalarRuntime, mountApiReference} from '../lib/scalarRuntime.mjs';
 import '../css/scalar.css';
 
@@ -17,11 +18,20 @@ type ScalarRoute = {
  * once the bundle has loaded. Title and description come from Docusaurus rather than from Scalar's
  * own metadata options, which are applied too late to reach the generated HTML.
  */
-export default function ScalarApiReference({route}: {route: ScalarRoute}): React.JSX.Element {
+export default function ScalarApiReference(
+    {route, anchors = []}: {route: ScalarRoute; anchors?: string[]},
+): React.JSX.Element {
     const container = useRef<HTMLDivElement>(null);
     const [failed, setFailed] = useState(false);
 
     const {title, description, runtimeSrc, configuration} = route;
+
+    // Scalar resolves fragments in the browser, so none of them exist in the server-rendered HTML
+    // that Docusaurus reads when it checks for broken anchors. Declaring them keeps a link into an
+    // operation from being reported as broken. Which fragments are real is checked separately,
+    // against the OpenAPI documents themselves.
+    const brokenLinks = useBrokenLinks();
+    anchors.forEach((anchor) => brokenLinks.collectAnchor(anchor));
 
     useEffect(() => {
         let teardown: (() => void) | undefined;

@@ -130,8 +130,15 @@ trailing slash, and is idempotent.
 `yarn verify-api-build` enforces all three: it fails on a trailing slash, on a non-relative diagram
 base, on an id the catalog does not publish, and on a fragment the document does not offer. So an
 API release that renames or moves an operation breaks the build instead of leaving a dead link.
-Docusaurus' own `onBrokenLinks` cannot do this — it never checks fragments, and it cannot see inside
-a rendered diagram at all.
+Docusaurus checks fragments on markdown links itself, but it cannot see inside a rendered diagram,
+and it only knows the fragments a page declares — which is why both checks exist.
+
+**Why the API pages declare their fragments.** Docusaurus' broken-anchor check reads the fragments
+present in a page's *server-rendered* HTML. Scalar creates them in the browser, so an API page
+appears to have none and every link into an operation would be reported broken. The route component
+therefore calls `useBrokenLinks().collectAnchor()` for each fragment its document actually offers,
+supplied per route by `scalarApiPlugin` from the downloaded document. Only real fragments are
+declared, so a link to an operation that does not exist is still reported.
 
 The reference is deliberately read-only, matching Redoc: Scalar's API client, "Test Request", the
 Developer Tools bar, the AI agent and telemetry are all disabled in `src/lib/scalarConfig.mjs`.

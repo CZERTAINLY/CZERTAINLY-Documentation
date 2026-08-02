@@ -23,8 +23,9 @@ function joinBase(baseUrl, absolutePath) {
  * @param {string} options.runtimeSrc site-absolute path of the Scalar bundle
  * @param {string} options.baseUrl site base URL
  * @param {string} options.component absolute path of the route component
+ * @param {Record<string, Set<string>|string[]>} [options.anchorsById] fragments each document offers
  */
-export function buildApiRoutes({catalog, manifest, runtimeSrc, baseUrl, component}) {
+export function buildApiRoutes({catalog, manifest, runtimeSrc, baseUrl, component, anchorsById = {}}) {
     const documents = manifest?.entries ?? {};
 
     return catalog.map((entry) => {
@@ -32,6 +33,7 @@ export function buildApiRoutes({catalog, manifest, runtimeSrc, baseUrl, componen
         const title = document.title || entry.label;
 
         return {
+            id: entry.id,
             path: joinBase(baseUrl, entry.route),
             component,
             exact: true,
@@ -39,6 +41,9 @@ export function buildApiRoutes({catalog, manifest, runtimeSrc, baseUrl, componen
             description: document.description ?? '',
             runtimeSrc: joinBase(baseUrl, runtimeSrc),
             configuration: buildScalarConfiguration({...entry, title}, {baseUrl}),
+            // Declared to Docusaurus' broken-anchor check. Scalar creates these in the browser, so
+            // they are absent from the server-rendered HTML the check reads.
+            anchors: [...(anchorsById[entry.id] ?? [])],
         };
     });
 }

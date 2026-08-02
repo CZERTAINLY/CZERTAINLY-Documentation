@@ -33,6 +33,7 @@ const OPTIONS = {
     runtimeSrc: '/scalar/standalone-1.64.0.js',
     baseUrl: '/',
     component: '/abs/ScalarApiReference',
+    anchorsById: {'core-certificate': new Set(['tag/certificate-inventory', 'tag/certificate-inventory/GET/v1/certificates'])},
 };
 
 test('registers one exact route per API', () => {
@@ -88,6 +89,18 @@ test('every route prop survives JSON serialization, as Docusaurus requires', () 
         const {component, ...props} = route;
         assert.deepEqual(JSON.parse(JSON.stringify(props)), props);
     }
+});
+
+test('lists the fragments a document offers, for the broken-anchor check', () => {
+    const [certificate, csc] = buildApiRoutes(OPTIONS);
+
+    assert.deepEqual(certificate.anchors,
+        ['tag/certificate-inventory', 'tag/certificate-inventory/GET/v1/certificates']);
+    assert.deepEqual(csc.anchors, []);
+});
+
+test('carries the catalog id, so each anchor list gets its own data file', () => {
+    assert.deepEqual(buildApiRoutes(OPTIONS).map((r) => r.id), ['core-certificate', 'csc-component']);
 });
 
 test('tolerates a manifest with no entries at all', () => {
