@@ -31,13 +31,15 @@ curl -X POST \
   #https://[domain]:[port]/api/v2/operations/authorities/{authorityUuid}/raProfiles{raProfileUuid}/certificates/renew
 ```
 
-When the `Certificate` is successfully renews, its content and `uuid` is sent back in the response:
+The renewal request is accepted and queued; it runs asynchronously, so the response returns only the certificate's `uuid` — the `certificateData` field is left empty and the signed certificate is not returned here:
 ```json
 {
-  "certificateData": "-----BEGIN CERTIFICATE-----\nMIIFBjCCAu6gAwIBAgITGAAAAQp1ch0L5EiisQAAAAABCjANBgkqhkiG9w0BAQ0F\nADA3MRcwFQYDVQQDDA5EZW1vIE1TIFN1YiBDQTEcMBoGA1UECgwTM0tleSBDb21w\nYW55IHMuci5vLjAeFw0yMjAxMDExNjQ2MjNaFw0yNDAxMDExNjQ2MjNaMAwxCjAI\nBgNVBAMTAXgwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDSdrCrMjYU\nFqxd0E4CZy/RjvIOFhIiY5WOgqekOXYVK47+otptKS/bhaL6KW15DwlvFLg3WucL\nO/T0YURxD4bj8HU8v1DFy2KIk54wGD+Y2paeFEP3Yu7U+QQVMTz8xgDDVlcNCBCp\nYCZ8Ou8amD9522PbtyxHGwcXwGnS0e0VUDSXm8kVVyyFrLVhjLblaA3E/iPKXaCx\nLkpSRNkV4sj12Ur5ZvJtqrOfddszW6wNzIvG/41Px/pW0uUWf7KYSIa4FqQR+J6v\nIPeVWMHATYYZnKclA3niwx4VqScJcfKfoPgLervzzJxLz355UPTGWhU3Oj1kyrRg\nBPpb9PNN02Y1AgMBAAGjggE0MIIBMDAdBgNVHQ4EFgQURbJ7H7UzVlpNgEvQRFAC\ncFKeV3YwHwYDVR0jBBgwFoAUksK831XFwZOFSQf3rMkdC2gBB1EwTQYDVR0fBEYw\nRDBCoECgPoY8aHR0cDovL2xhYjAyLjNrZXkuY29tcGFueS9jcmxzL2RlbW8vRGVt\nbyUyME1TJTIwU3ViJTIwQ0EuY3JsMFcGCCsGAQUFBwEBBEswSTBHBggrBgEFBQcw\nAYY7aHR0cDovL2xhYjAyLjNrZXkuY29tcGFueS9jYXMvZGVtby9EZW1vJTIwTVMl\nMjBTdWIlMjBDQS5jcnQwIQYJKwYBBAGCNxQCBBQeEgBXAGUAYgBTAGUAcgB2AGUA\ncjAOBgNVHQ8BAf8EBAMCBaAwEwYDVR0lBAwwCgYIKwYBBQUHAwEwDQYJKoZIhvcN\nAQENBQADggIBAKi79EtWQqljrHoTI4SIssXJFFicT64pnu/U2Zf6RfsSMtV7ZEL1\nKiRVrL9PLbFoMVxxQyffdSNyGk19NsBO7/xEEuwUgpQ6iVOaVZVTHxAEt9PHqyDo\nWur+xhYq6PvyVJOphMqPMUZ3dmBOZyS9BuGgF08XYcWcEu5VKAtZTNtXoTFJrX0x\nXR2szp5nOu2SI3eAW24psOxevo738RsmhhN31nGhdupWPu1Xki2yhEnECPW0motS\n4kpNfGErUx2hoDa9UAkh+Aq/s1zkhFj7ZBP6RolqLUGw+YEGEVGPJyHuD6TKbWe4\nkp5VDHcLt0sc0qwMZ07TQf2+gw54KZKP3YpHal68qA6j1fYdyTLAuk0yXhBX7ROe\nyDyGIZy74xIaTfqlR2rGS2jyLMsmzKU+nt87CYr+2P+gCeEsk1AsDSPeIEZaYG2T\nFH4q29ZQjWucuiGUHpu61+qdvrkgFeKrUmJR9l2rhSopkSeV1teeFd/e9Vo1mCOb\nIlfmlMw8erwOSAAZ8VRB/y1lfCg1dpcRB3443wM4nMc938J435lexKTZ3DGcwpx6\nHaTbGjCWQ654eRUztWW2Z0Pn9FF/VJbi11yw5ucGd/6ThnAB5rAJGfHtfbEFf5wn\n0bmOtWX+yWWB42fYEFecH3X6STNwoXnBck4pzegC2jBEh15a1gy8Vwii\n-----END CERTIFICATE-----",
+  "certificateData": "",
   "uuid": "bde30bad-2bbe-467c-83e5-d3eace339a7e"
 }
 ```
+
+Poll the certificate detail for that `uuid` until its state becomes `Issued`, then read the signed certificate from the detail response.
 
 ## Renew `Certificate` using the Web Interface
 

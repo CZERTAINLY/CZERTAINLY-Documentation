@@ -2,7 +2,7 @@
 sidebar_position: 30
 ---
 
-# Available Connectors
+# Available connectors
 
 `Connectors` can be developed by anyone. There may be number of `Connectors` driven by the community and also `Connectors` developed for some specific purpose and use case.
 
@@ -34,3 +34,11 @@ The following `Connectors` are officially available:
 | X.509 Compliance Provider      | <span class="badge">Compliance Provider</span>   | <span class="badge">x509</span>                                                                            |
 
 — The OTPKI Connector is a v3 stateless connector and advertises no kind.
+
+## Connector NG
+
+[Connector NG](./common-interfaces/overview.md#connector-ng) connectors describe their capabilities through versioned interfaces rather than Function Groups and Kinds. The following Connector NG connectors are officially available:
+
+| Connector Name                   | Interface                                                                                                    |
+|-----------------------------------|---------------------------------------------------------------------------------------------------------------|
+| [Timestamp Formatting Connector](../../signing/timestamping/timestamp-formatting-connector.md) | [Signature Formatting Provider](./provider-interfaces/signature-formatting-provider.md) |
