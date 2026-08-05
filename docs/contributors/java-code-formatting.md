@@ -41,7 +41,8 @@ Linked worktrees are handled. The build mirrors the hook into the shared hooks d
 ## Adopting the gates in a repository
 
 :::warning[Do the reformat first and the version bump last]
-In the other order, your repository is red between the two commits.
+If you commit the parent bump first, the gates go live before the code is formatted.
+Every build between that commit and the reformat then fails, CI included.
 :::
 
 1. Bump the parent version locally. Do not commit it yet.
