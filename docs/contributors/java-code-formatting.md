@@ -63,9 +63,9 @@ Step 6 cannot be done for you. Your IDE and your checkout only honor files that 
 
 `.gitattributes` pins line endings to LF. This matters most on Windows, where a checkout that converts them will fail the format check on files you never touched.
 
-## Windows: refresh your clone once
+## Windows: refresh your worktree once
 
-**If you already had the repository cloned on Windows, your first build after the gates land will fail.** It fails on files the reformat never touched, which is confusing enough to be worth explaining.
+**If you already had the repository checked out on Windows, your first build after the gates land will fail.** It fails on files the reformat never touched, which is confusing enough to be worth explaining.
 
 Git rewrites a file during checkout only when the commit changed that file. The reformat commit changes most of your Java files, so those come back with LF. The rest keep the CRLF endings they have had since you first cloned. `.gitattributes` cannot reach back and fix them.
 
@@ -73,19 +73,27 @@ Spotless reads the bytes on disk, sees CRLF, and fails.
 
 :::warning[`git status` will tell you nothing is wrong]
 Git normalises CRLF as it reads, so it reports a clean tree. You get a failing build with no visible cause. Nothing is wrong with your changes.
+
+To see it, ask Git what is actually on disk:
+
+```bash
+git ls-files --eol -- "*.java"
+```
+
+An `i/lf` index entry against a `w/crlf` worktree entry is the mismatch `git status` hides.
 :::
 
 Any one of these fixes it. Pick by how much local state you want to keep.
 
 | What you do | What it fixes | What it costs |
 |---|---|---|
-| Delete the folder and clone again | Every file in the repository | You lose uncommitted work, stashes and local branches |
-| `git rm --cached -r .` then `git reset --hard` | Every file in the repository | **Discards uncommitted changes.** Commit or stash first |
+| Delete the folder and clone again | Every file in the worktree | You lose uncommitted work, stashes and local branches |
+| `git rm --cached -r .` then `git reset --hard` | Every file in the worktree | **Discards uncommitted changes.** Commit or stash first |
 | `mvn spotless:apply` | Java sources only | Other text files stay on CRLF |
 
-The middle one is the usual choice. You run it once per repository and never again.
+The middle one is the usual choice. You run it once per worktree and never again.
 
-A fresh clone is unaffected, and so is CI. Both check out with LF from the start.
+A fresh clone is unaffected, and so is CI on ephemeral runners — both check out with LF from the start. A **persistent or self-hosted Windows runner** is a long-lived worktree like yours, so it needs the same one-time refresh.
 
 ## When you need to opt out
 
