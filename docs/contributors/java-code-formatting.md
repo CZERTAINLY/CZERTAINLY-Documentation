@@ -45,21 +45,34 @@ If you commit the parent bump first, the gates go live before the code is format
 Every build between that commit and the reformat then fails, CI included.
 :::
 
-1. Bump the parent version locally. Do not commit it yet.
-2. Run `mvn spotless:apply`.
-3. Run `mvn verify` and fix what Checkstyle reports by hand. Wildcard imports are the common one.
-4. Commit the result as a single mechanical reformat commit. Change nothing else in it.
-5. Create a `.git-blame-ignore-revs` file at the repository root, containing that commit's SHA.
-6. Copy `.editorconfig` and `.gitattributes` from the [`dependencies`](https://github.com/OmniTrustILM/dependencies) repository.
-7. Commit the parent bump.
+1. Copy `.editorconfig` and `.gitattributes` from the [`dependencies`](https://github.com/OmniTrustILM/dependencies) repository. Do this before you open the project.
+2. Bump the parent version locally. Do not commit it yet.
+3. Run `mvn spotless:apply`.
+4. Run `mvn verify` and fix what Checkstyle reports by hand. Wildcard imports are the common one.
+5. Commit the reformat as a single mechanical commit. Change nothing else in it — leave the two files from step 1 and the parent bump uncommitted for now.
+6. Create a `.git-blame-ignore-revs` file at the repository root containing that commit's SHA, and commit it.
+7. Commit `.editorconfig` and `.gitattributes`.
+8. Commit the parent bump. This is what turns the gates on, so it goes last.
 
-Step 5 is what keeps `git blame` useful. A one-shot reformat touches nearly every line of every file, and without that file it becomes the last author of all of them. GitHub applies `.git-blame-ignore-revs` automatically in its blame view, and the parent POM wires your local `git blame` to use it too.
+:::danger[Step 1 has to come first, or step 4 will fight you]
+IntelliJ collapses imports into a wildcard at 5 classes or 3 static members by default — exactly what `AvoidStarImport` rejects. `.editorconfig` raises both thresholds to 999.
 
-Step 6 cannot be done for you. Your IDE and your checkout only honor files that exist in your own repository, so the parent POM has no way to deliver them.
+Without it in place, expanding the imports Checkstyle reports re-collapses them in whatever other files your IDE touches in the same pass. The violation count moves sideways instead of down, `git status` shows nothing unusual, and the reformat commit has to be redone.
+
+If the project is already open, **reload it** — a newly added `.editorconfig` is not picked up automatically.
+:::
+
+Step 6 is what keeps `git blame` useful. A one-shot reformat touches nearly every line of every file, and without that file it becomes the last author of all of them. GitHub applies `.git-blame-ignore-revs` automatically in its blame view, and the parent POM wires your local `git blame` to use it too.
+
+Keeping the reformat commit free of anything else is what lets it be skipped wholesale — that is why the config files are copied first but committed after it.
+
+Step 1 cannot be done for you. Your IDE and your checkout only honor files that exist in your own repository, so the parent POM has no way to deliver them.
 
 ## Keeping your IDE in step
 
 `.editorconfig` mirrors the shared formatter profile, and every major IDE reads it. With it in place, your editor produces the same output the gates expect, and Spotless has nothing left to correct.
+
+It also does one thing Spotless cannot: it stops your IDE from *undoing* the import cleanup. IntelliJ collapses imports into a wildcard at 5 classes or 3 static members by default, and `AvoidStarImport` rejects exactly that. `.editorconfig` raises both thresholds to 999, so the two stop disagreeing.
 
 `.gitattributes` pins line endings to LF. This matters most on Windows, where a checkout that converts them will fail the format check on files you never touched.
 
