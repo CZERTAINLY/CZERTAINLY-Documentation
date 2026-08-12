@@ -70,7 +70,9 @@ Step 1 cannot be done for you. Your IDE and your checkout only honor files that 
 
 ## Keeping your IDE in step
 
-`.editorconfig` mirrors the shared formatter profile, and every major IDE reads it. With it in place, your editor produces the same output the gates expect, and Spotless has nothing left to correct.
+`.editorconfig` mirrors the shared formatter profile, and every major IDE reads it. With it in place, your editor is close enough that Spotless usually has nothing left to correct.
+
+One known gap: long annotation member arrays. The shared profile chops them one element per line, and no IntelliJ setting reproduces that. IntelliJ *preserves* the chopped shape once Spotless has applied it, but it will not *produce* it on freshly typed code — so expect `mvn spotless:apply` to rewrite long annotation arrays you have just written. The same applies to annotation arguments that overflow the margin.
 
 It also does one thing Spotless cannot: it stops your IDE from *undoing* the import cleanup. IntelliJ collapses imports into a wildcard at 5 classes or 3 static members by default, and `AvoidStarImport` rejects exactly that. `.editorconfig` raises both thresholds to 999, so the two stop disagreeing.
 
