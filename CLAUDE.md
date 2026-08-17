@@ -48,9 +48,7 @@ The operator, cli and devenv pages follow two rules, enforced upstream: every pa
 
 > **The helm set is pinned behind its fix.** `charts/ilm/docs/overview.md` carried a link out of its own directory (`../../messaging-rabbitmq`), which was hand-patched here after a sync — the exact failure mode the `'throw'` flip exists to prevent. The upstream fix is merged on `helm-charts` `main` but is **not** in the `2.19.0` tag that `chartVersion` pins, so `download-remote-helm-docs` must not be re-run until `chartVersion` advances. If it is, the build now fails loudly instead of regressing silently.
 
-> **Unresolved state — the three new pins are placeholders.** `operatorDocsRef`, `cliDocsRef` and `devenvDocsRef` are all `'REPLACE-ON-MERGE'`. The source branches are not pushed yet, so **no download command in the last three rows works** — each one 404s. The committed pages under `deployment-operator/`, `cli/` and `docs/contributors/` were seeded by copying the local source files byte-for-byte (a simulated first sync) so the site could be reviewed before anything shipped — `cli/commands.md` included, which upstream generates with `make docs`.
->
-> On merge: replace each ref with its 40-character merge SHA, run the matching download, and confirm it reproduces the committed bytes.
+> **The three new pins are merge commits, not tags.** `operatorDocsRef`, `cliDocsRef` and `devenvDocsRef` name the merge commits that first published each synced set, because none of the three repositories has cut a release containing its docs yet. The operator and cli release runbooks move them to `v` + `operatorVersion` / `v` + `cliVersion` at the next release. `cli/commands.md` is generated upstream by `make docs` — never edit it here.
 
 ## Architecture
 
