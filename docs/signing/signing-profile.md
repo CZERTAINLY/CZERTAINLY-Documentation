@@ -107,7 +107,7 @@ Once all references and records are cleared, the profile can be deleted.
 
 ## Related pages
 
-- [Core API - Signing Profile](/api/core-signing-profile/) — OpenAPI specification for managing `Signing Profiles`
+- [Core API - Signing Profile](/api/core-signing-profile) — OpenAPI specification for managing `Signing Profiles`
 - [TSP Profile](./timestamping/tsp-profile.md) — authentication methods and the default Signing Profile
 - [Time Quality Configuration](./timestamping/time-quality-configuration.md) — time-source evaluation parameters
 - [Signing records](./signing-records.md) — record structure and retention
