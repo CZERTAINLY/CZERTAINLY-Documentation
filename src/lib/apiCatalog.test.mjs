@@ -20,6 +20,7 @@ const PUBLISHED_ROUTES = [
     '/api/core-discovery/', '/api/core-entity/', '/api/core-group/', '/api/core-key/',
     '/api/core-local/', '/api/core-location/', '/api/core-notification/', '/api/core-other/',
     '/api/core-ra-profile/', '/api/core-scep/', '/api/core-scheduler/', '/api/core-secret/',
+    '/api/core-signing-profile/', '/api/core-signing-record/',
     '/api/core-time-quality-configuration/', '/api/core-token/', '/api/core-token-profile/',
     '/api/core-tsp-profile/', '/api/core-vault/', '/api/core-vault-profile/',
     '/api/core-workflows/',
@@ -28,16 +29,16 @@ const PUBLISHED_ROUTES = [
     '/api/connector-compliance-provider-v2/', '/api/connector-credential-provider/',
     '/api/connector-cryptography-provider/', '/api/connector-discovery-provider/',
     '/api/connector-entity-provider/', '/api/connector-notification-provider/',
-    '/api/connector-secret-provider/',
+    '/api/connector-secret-provider/', '/api/connector-signature-formatting-provider/',
     '/api/messaging-time-quality/',
-    '/api/protocol-acme/', '/api/protocol-cmp/', '/api/protocol-scep/',
+    '/api/protocol-acme/', '/api/protocol-cmp/', '/api/protocol-scep/', '/api/protocol-tsp/',
     '/api/csc-component/',
 ];
 
 test('publishes exactly the routes the site published before', () => {
     const routes = resolveApiCatalog(apiCatalog, VERSIONS).map((entry) => entry.route);
     assert.deepEqual(routes.slice().sort(), PUBLISHED_ROUTES.slice().sort());
-    assert.equal(routes.length, 48);
+    assert.equal(routes.length, 52);
 });
 
 test('derives document URLs from the entry id', () => {
@@ -76,7 +77,7 @@ test('renders a multi-entry group as a dropdown and a single-entry group as a li
 
     const core = items.find((item) => item.label === 'Core API');
     assert.equal(core.position, 'left');
-    assert.equal(core.items.length, 32);
+    assert.equal(core.items.length, 34);
     assert.deepEqual(core.items[0], {label: 'ACME', to: '/api/core-acme/'});
     assert.equal(core.to, undefined);
 
@@ -92,7 +93,7 @@ test('keeps navbar groups and entries in catalog order', () => {
         ['Core API', 'Connector API', 'Messaging API', 'Protocol API', 'CSC API'],
     );
     const protocol = items.find((item) => item.label === 'Protocol API');
-    assert.deepEqual(protocol.items.map((i) => i.label), ['ACME', 'CMP', 'SCEP']);
+    assert.deepEqual(protocol.items.map((i) => i.label), ['ACME', 'CMP', 'SCEP', 'TSP']);
 });
 
 test('rejects a duplicate id', () => {

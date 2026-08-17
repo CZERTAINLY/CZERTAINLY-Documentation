@@ -29,15 +29,18 @@ yarn coverage               # Unit tests with coverage thresholds enforced
 > re-renders diagrams live as docs change during dev. To render against an already-running server instead, set
 > `PLANTUML_SERVER_URL` (e.g. `PLANTUML_SERVER_URL=http://127.0.0.1:8080 yarn build`).
 
-The build downloads 48 OpenAPI documents from `https://api.otilm.com/` into `static/api-specs/`, so it
+The build downloads 52 OpenAPI documents from `https://api.otilm.com/` into `static/api-specs/`, so it
 is network-dependent. They are **not** rendered at build time — Scalar renders them in the browser.
 
 **Build memory is no longer dominated by the API reference.** Redocusaurus used to server-render every
 operation of every document during static generation, costing ~175 MB of peak heap per document: with
-all 48 the build peaked at ~9.5 GB and took ~65 s, against a ~1.1 GB / 22 s baseline with no documents
-at all. Since the switch to Scalar the cost is close to that baseline — measured on the 2.19.0 tree,
-a cold build peaks at ~3.2 GB RSS and takes ~22 s, and succeeds with a heap limit as low as 3072 MB.
+48 documents the build peaked at ~9.5 GB, against a ~1.1 GB baseline with no documents at all. Since
+the switch to Scalar the cost is close to that baseline — with all 52 it peaks at ~3.3 GB and the
+bundling and generation phases take under 30 s, and it succeeds with a heap limit as low as 3072 MB.
 Adding an API is now an ordinary catalog change, not a build-infrastructure decision.
+
+A *cold* wall-clock build is much longer than that, because `prebuild` renders every PlantUML diagram
+through Docker; only diagrams whose source changed are re-rendered, so a warm build skips it.
 
 The heap limit is set in two places that must stay in sync: the `NODE_OPTIONS` above and
 `.github/workflows/documentation.yml`. It is 4096 MB — headroom over the 3072 MB that was measured to
@@ -45,13 +48,27 @@ work. If a release makes the build fail with a `SIGABRT` heap-limit crash (which
 infrastructure flakiness), raise both together after confirming with one cold build:
 `yarn clear && NODE_OPTIONS=--max_old_space_size=<limit> yarn build`.
 
-### Remote Helm docs
+### Remote docs (five synced sets)
 
-`docs/certificate-key/installation-guide/deployment/deployment-helm/{configurable-parameters,overview,troubleshooting,upgrading}.md` are **not authored here**. `docusaurus-plugin-remote-content` downloads them from `OmniTrustILM/helm-charts` at `chartVersion`, so local edits are overwritten on the next download — fix errors upstream in `charts/ilm/docs/` instead.
+These directories are **not authored here**. `docusaurus-plugin-remote-content` downloads them from their source repositories at a pinned ref, so local edits are overwritten on the next download — fix errors upstream.
 
-```bash
-yarn docusaurus download-remote-helm-docs
-```
+| Target directory | Source repository and path | Pin | Download command |
+|---|---|---|---|
+| `docs/certificate-key/installation-guide/deployment/deployment-helm/` | `OmniTrustILM/helm-charts` `charts/ilm/docs/` | `chartVersion` | `yarn docusaurus download-remote-helm-docs` |
+| `docs/certificate-key/installation-guide/deployment/deployment-operator/` | `OmniTrustILM/operator` `docs/site/` (the five journey pages) | `operatorDocsRef` | `yarn docusaurus download-remote-operator-docs` |
+| `docs/certificate-key/installation-guide/deployment/deployment-operator/custom-resources/` | `OmniTrustILM/operator` `docs/site/custom-resources/` (the four CR guides) | `operatorDocsRef` | `yarn docusaurus download-remote-operator-cr-docs` |
+| `docs/certificate-key/cli/` | `OmniTrustILM/cli` `docs/site/` | `cliDocsRef` | `yarn docusaurus download-remote-cli-docs` |
+| `docs/contributors/development-environment.md` | `OmniTrustILM/development-environment` `docs/site/` | `devenvDocsRef` | `yarn docusaurus download-remote-devenv-docs` |
+
+The two operator entries share `operatorDocsRef` and are always re-pinned together. The `_category_.json` in each target directory **is** authored here — it is not in any `documents` array, so a download never touches it.
+
+The operator, cli and devenv pages follow two rules, enforced upstream: every page carries `sidebar_position` front matter, and links are relative within the synced set (same-directory, or one level between `docs/site/` and `docs/site/custom-resources/` in the operator set) — everything else is an absolute URL. (The helm set predates both rules and carries no front matter.) `markdown.hooks.onBrokenMarkdownLinks` is `'throw'`, so a link violation fails `yarn build` rather than printing a warning nobody reads.
+
+> **The helm set is pinned behind its fix.** `charts/ilm/docs/overview.md` carried a link out of its own directory (`../../messaging-rabbitmq`), which was hand-patched here after a sync — the exact failure mode the `'throw'` flip exists to prevent. The upstream fix is merged on `helm-charts` `main` but is **not** in the `2.19.0` tag that `chartVersion` pins, so `download-remote-helm-docs` must not be re-run until `chartVersion` advances. If it is, the build now fails loudly instead of regressing silently.
+
+> **Unresolved state — the three new pins are placeholders.** `operatorDocsRef`, `cliDocsRef` and `devenvDocsRef` are all `'REPLACE-ON-MERGE'`. The source branches are not pushed yet, so **no download command in the last three rows works** — each one 404s. The committed pages under `deployment-operator/`, `cli/` and `docs/contributors/` were seeded by copying the local source files byte-for-byte (a simulated first sync) so the site could be reviewed before anything shipped — `cli/commands.md` included, which upstream generates with `make docs`.
+>
+> On merge: replace each ref with its 40-character merge SHA, run the matching download, and confirm it reproduces the committed bytes.
 
 ## Architecture
 
@@ -73,7 +90,7 @@ Sidebar is auto-generated from the filesystem (`sidebars.js` uses `autogenerated
 
 ### API Documentation
 
-48 OpenAPI documents are published at `/api/<id>` and rendered by **Scalar**. Everything is driven from
+52 OpenAPI documents are published at `/api/<id>` and rendered by **Scalar**. Everything is driven from
 one catalog, `src/data/apiCatalog.mjs`, which lists each API as an `[id, label]` row inside a group.
 That single list generates the routes **and** the navbar menus — there is no second place to update.
 
@@ -82,10 +99,12 @@ That single list generates the routes **and** the navbar menus — there is no s
 element only when the document is named differently (`core-key` is the one such case). A group with a
 single entry renders as a plain navbar link, a group with several as a dropdown.
 
-Versions live in `src/data/versions.mjs`:
+Versions and the remote-content pins live in `src/data/versions.mjs`:
 - `apiVersion` — core, connector, messaging and protocol documents
 - `chartVersion` — Helm chart (used by `docusaurus-plugin-remote-content`)
 - `cscVersion` — CSC component, versioned independently
+- `operatorVersion`, `cliVersion` — substituted into docs as `%OPERATOR_VERSION%` / `%CLI_VERSION%`
+- `operatorDocsRef`, `cliDocsRef`, `devenvDocsRef` — immutable refs for the synced doc sets
 
 **How it fits together.** `src/plugins/scalarApiPlugin.mjs` runs in `loadContent`, which Docusaurus
 completes before it configures the bundler that copies `static/` — so the plugin can materialize
@@ -97,7 +116,7 @@ block, so they match what Redoc produced.
 
 Scalar renders **in the browser**. Nothing parses an OpenAPI document during static generation, which
 is what keeps the build cheap — but it also means a mistake surfaces as a blank page at runtime
-rather than a build error. `yarn verify-api-build` is the guard: it checks that every one of the 48
+rather than a build error. `yarn verify-api-build` is the guard: it checks that every one of the 52
 pages, every document and the runtime actually landed in `build/`. Note that `onBrokenLinks` cannot
 do this job — `%API_BASE_URL%` expands to an absolute URL, which Docusaurus treats as external.
 
@@ -154,7 +173,7 @@ TSX components used on the homepage and in docs: `HomepageFeatures`, `PlatformMo
 
 - `docusaurus.config.js` — Main config: plugins, presets, navbar, Algolia search, theme
 - `src/data/apiCatalog.mjs` — The published APIs; generates both the `/api/*` routes and the navbar menus
-- `src/data/versions.mjs` — `apiVersion`, `chartVersion`, `cscVersion`
+- `src/data/versions.mjs` — component versions and the remote-content sync pins
 - `sidebars.js` — Auto-generated sidebar config
 - Syntax highlighting includes: PowerShell, Java, HCL, Scala, Bash (via Prism)
 - `onBrokenLinks: 'throw'` — Build fails on broken internal links

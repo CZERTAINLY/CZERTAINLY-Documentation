@@ -42,6 +42,8 @@ export const apiCatalog = [
             ['core-scep', 'SCEP'],
             ['core-scheduler', 'Scheduler'],
             ['core-secret', 'Secret'],
+            ['core-signing-profile', 'Signing Profile'],
+            ['core-signing-record', 'Signing Record'],
             ['core-time-quality-configuration', 'Time Quality Configuration'],
             ['core-token', 'Token'],
             ['core-token-profile', 'Token Profile'],
@@ -65,6 +67,7 @@ export const apiCatalog = [
             ['connector-entity-provider', 'Entity Provider'],
             ['connector-notification-provider', 'Notification Provider'],
             ['connector-secret-provider', 'Secret Provider'],
+            ['connector-signature-formatting-provider', 'Signature Formatting Provider'],
         ],
     },
     {
@@ -79,6 +82,7 @@ export const apiCatalog = [
             ['protocol-acme', 'ACME'],
             ['protocol-cmp', 'CMP'],
             ['protocol-scep', 'SCEP'],
+            ['protocol-tsp', 'TSP'],
         ],
     },
     {
