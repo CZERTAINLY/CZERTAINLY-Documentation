@@ -30,13 +30,27 @@ The build fetches 30+ OpenAPI specs from `https://api.otilm.com/` and renders th
 
 The heap limit is set in two places that must stay in sync: the `NODE_OPTIONS` above and `.github/workflows/documentation.yml`. When a release adds a section or a spec, run one cold build (`yarn clear && NODE_OPTIONS=--max_old_space_size=<limit> yarn build`) before merging — the failure mode is a `SIGABRT` heap-limit crash that reads like CI infrastructure flakiness. To build on a memory-constrained machine, the only effective lever is publishing fewer specs; page count, redirects, and `DOCUSAURUS_SSR_CONCURRENCY` were each measured and make no meaningful difference.
 
-### Remote Helm docs
+### Remote docs (five synced sets)
 
-`docs/certificate-key/installation-guide/deployment/deployment-helm/{configurable-parameters,overview,troubleshooting,upgrading}.md` are **not authored here**. `docusaurus-plugin-remote-content` downloads them from `OmniTrustILM/helm-charts` at `chartVersion`, so local edits are overwritten on the next download — fix errors upstream in `charts/ilm/docs/` instead.
+These directories are **not authored here**. `docusaurus-plugin-remote-content` downloads them from their source repositories at a pinned ref, so local edits are overwritten on the next download — fix errors upstream.
 
-```bash
-yarn docusaurus download-remote-helm-docs
-```
+| Target directory | Source repository and path | Pin | Download command |
+|---|---|---|---|
+| `docs/certificate-key/installation-guide/deployment/deployment-helm/` | `OmniTrustILM/helm-charts` `charts/ilm/docs/` | `chartVersion` | `yarn docusaurus download-remote-helm-docs` |
+| `docs/certificate-key/installation-guide/deployment/deployment-operator/` | `OmniTrustILM/operator` `docs/site/` (the five journey pages) | `operatorDocsRef` | `yarn docusaurus download-remote-operator-docs` |
+| `docs/certificate-key/installation-guide/deployment/deployment-operator/custom-resources/` | `OmniTrustILM/operator` `docs/site/custom-resources/` (the four CR guides) | `operatorDocsRef` | `yarn docusaurus download-remote-operator-cr-docs` |
+| `docs/certificate-key/cli/` | `OmniTrustILM/cli` `docs/site/` | `cliDocsRef` | `yarn docusaurus download-remote-cli-docs` |
+| `docs/contributors/development-environment.md` | `OmniTrustILM/development-environment` `docs/site/` | `devenvDocsRef` | `yarn docusaurus download-remote-devenv-docs` |
+
+The two operator entries share `operatorDocsRef` and are always re-pinned together. The `_category_.json` in each target directory **is** authored here — it is not in any `documents` array, so a download never touches it.
+
+The operator, cli and devenv pages follow two rules, enforced upstream: every page carries `sidebar_position` front matter, and links are relative within the synced set (same-directory, or one level between `docs/site/` and `docs/site/custom-resources/` in the operator set) — everything else is an absolute URL. (The helm set predates both rules and carries no front matter.) `markdown.hooks.onBrokenMarkdownLinks` is `'throw'`, so a link violation fails `yarn build` rather than printing a warning nobody reads.
+
+> **The helm set is pinned behind its fix.** `charts/ilm/docs/overview.md` carried a link out of its own directory (`../../messaging-rabbitmq`), which was hand-patched here after a sync — the exact failure mode the `'throw'` flip exists to prevent. The upstream fix is merged on `helm-charts` `main` but is **not** in the `2.19.0` tag that `chartVersion` pins, so `download-remote-helm-docs` must not be re-run until `chartVersion` advances. If it is, the build now fails loudly instead of regressing silently.
+
+> **Unresolved state — the three new pins are placeholders.** `operatorDocsRef`, `cliDocsRef` and `devenvDocsRef` are all `'REPLACE-ON-MERGE'`. The source branches are not pushed yet, so **no download command in the last three rows works** — each one 404s. The committed pages under `deployment-operator/`, `cli/` and `docs/contributors/` were seeded by copying the local source files byte-for-byte (a simulated first sync) so the site could be reviewed before anything shipped — `cli/commands.md` included, which upstream generates with `make docs`.
+>
+> On merge: replace each ref with its 40-character merge SHA, run the matching download, and confirm it reproduces the committed bytes.
 
 ## Architecture
 
