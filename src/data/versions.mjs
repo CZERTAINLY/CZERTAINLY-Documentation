@@ -20,6 +20,6 @@ export const cliVersion = '1.0.0';
 // operator and cli release runbooks then move them to 'v' + operatorVersion and
 // 'v' + cliVersion. Never point one of these at a branch — a branch pin makes the
 // committed output silently disagree with what the next download produces.
-export const operatorDocsRef = '6f7bbb0e17be68ccab28443dfa84c301f50258b7';
+export const operatorDocsRef = '40ccbc3379993af1c8de31e56d1d216bffce3b7d';
 export const cliDocsRef = '5e2d526f83ff0fd0acc4737476640654a31c85f3';
 export const devenvDocsRef = '873df7f2c90a72c521f071e31f6e7450c4a0ffb9';

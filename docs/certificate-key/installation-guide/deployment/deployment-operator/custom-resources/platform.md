@@ -228,7 +228,7 @@ curl --cacert ilm-ca.crt --cert admin.crt --key admin.key https://<host>/api/v1/
 
 `--cacert` is what makes the internal CA trusted for this call; `-k` skips that verification instead, which is fine for a smoke test and wrong for anything else.
 
-**Password (a Keycloak realm user) — `registerAdmin.password`.** The operator creates an idempotent Keycloak realm user carrying the **superadmin** attribute (`attributes.groups: ["superadmin"]`, which the operator's default realm surfaces as the `roles` claim `Core` grants superadmin on), with the password read from `registerAdmin.password.secretRef`. The administrator then signs in with a username and password through OIDC. This method requires `keycloak.mode: managed`, because the operator needs the Keycloak admin API to create the user, and its outcome is reported by the `AdminUserReady` condition. The operator **never mints or logs the password** — it reads the Secret read-only and hands the value to Keycloak once.
+**Password (a Keycloak realm user) — `registerAdmin.password`.** The operator creates an idempotent Keycloak realm user carrying the **superadmin** attribute (`attributes.groups: ["superadmin"]`, which the operator's default realm surfaces as the `roles` claim `Core` grants superadmin on), with the password read from `registerAdmin.password.secretRef`. The administrator then signs in with a username and password through OIDC. This method requires `keycloak.mode: managed`, because the operator needs the Keycloak admin API to create the user, and its outcome is reported by the `AdminUserReady` condition. The requirement is enforced at admission, not at reconcile: enabling `registerAdmin.password` on any other Keycloak mode makes `kubectl apply` fail outright with `registerAdmin.password requires keycloak.mode=managed`, so nothing is created and no condition is ever set. The operator **never mints or logs the password** — it reads the Secret read-only and hands the value to Keycloak once.
 
 `certificate` defaults **on**, the historical single behavior. Set `certificate.enabled: false` to run password-only, or enable both sub-blocks to let the administrator sign in either way. The full `registerAdmin` field list is in the annotated [`platform-cr-reference.yaml`](https://github.com/OmniTrustILM/operator/blob/main/docs/design/examples/platform-cr-reference.yaml).
 
@@ -272,7 +272,7 @@ Reaching `https://<host>` needs an ingress controller **and** a way for traffic 
 kubectl delete platform ilm -n ilm
 ```
 
-The operator adds a finalizer before doing any work, so deletion runs an orderly teardown before the object is removed. Its own namespaced children — Deployments, Services, ServiceAccounts, ConfigMaps, Secrets, NetworkPolicies, Ingress — are reclaimed by owner-reference garbage collection. The client-CA Secret you created by hand is yours, not the operator's, so it stays until you delete it.
+The operator adds the `platform.otilm.com/finalizer` finalizer before doing any work, so deletion runs an orderly teardown before the object is removed. Its own namespaced children — Deployments, Services, ServiceAccounts, ConfigMaps, Secrets, NetworkPolicies, Ingress — are reclaimed by owner-reference garbage collection. The client-CA Secret you created by hand is yours, not the operator's, so it stays until you delete it.
 
 `spec.deletionPolicy` decides what happens to the **managed infrastructure**, and it defaults to `Retain`:
 
@@ -320,7 +320,7 @@ Anything that applies to *every* component lives under `spec.common`; a per-comp
 
 `database` and `messaging` are required; `keycloak` is optional. Each picks its mode independently:
 
-- **`external`** — you run the service and give the operator the connection coordinates plus a credentials `Secret` (`credentials.secretRef`). No upstream operator is needed. The in-Secret key names are mappable (`usernameKey`/`passwordKey`), so a Vault, External Secrets, or CloudNativePG-shaped Secret works without renaming keys.
+- **`external`** — you run the service and give the operator the connection coordinates plus a credentials `Secret` (`credentials.secretRef`). No upstream operator is needed. The in-Secret key names are mappable (`usernameKey`/`passwordKey`), so a Vault, External Secrets, or CloudNativePG-shaped Secret works without renaming keys. An external broker has one protocol requirement: it must speak **AMQP 1.0**, and `messaging.brokerType` names the dialect — `rabbitmq`, the default, or `servicebus` for Azure Service Bus.
 - **`managed`** — the operator renders the upstream custom resource (a CloudNativePG `Cluster`, a `RabbitmqCluster` plus its topology, or a `Keycloak`) and **reads back** the generated coordinates and credentials by reference. You create **no** credentials Secret for that dependency.
 
 Mixing is common — keep the database on the managed-Postgres service you already run while letting the operator run the broker and Keycloak:
@@ -666,7 +666,7 @@ Beyond the shared surface, four components add fields of their own. `core` carri
 - a `PodDisruptionBudget` with `minAvailable: 1`;
 - **preferred** (soft) pod anti-affinity spreading replicas across nodes by `kubernetes.io/hostname` — preferred rather than required, so a single-node or capacity-constrained cluster still schedules.
 
-Every default is override-safe: it only fills what you left unset, so an explicit `replicas`, `podDisruptionBudget`, or `affinity` on a component always wins.
+Every default is override-safe: it only fills what you left unset, so an explicit `replicas`, `podDisruptionBudget`, or `affinity` on a component always wins. `enabled` is the profile's only field — there is nothing else to set on `highAvailability` itself, because everything it applies is tuned on the components.
 
 Set availability per component directly:
 
