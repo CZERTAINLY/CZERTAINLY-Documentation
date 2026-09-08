@@ -42,7 +42,7 @@ The connector's `/v2/info` endpoint returns an `InfoResponse` with two top-level
     "description": "An example connector for demonstration purposes.",
     "metadata": {
       "author": "Example Author",
-      "license": "MIT"
+      "license": "Apache-2.0"
     }
   },
   "interfaces": [
