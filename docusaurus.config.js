@@ -234,6 +234,11 @@ const config = {
               position: 'left',
               to: '/docs',
             },
+            {
+              label: 'Development Lifecycle',
+              position: 'left',
+              to: '/docs/development-lifecycle/overview',
+            },
             ...apiNavbarItems,
             {
               href: 'https://github.com/OmniTrustILM/ilm/discussions',

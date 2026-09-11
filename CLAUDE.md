@@ -18,6 +18,7 @@ yarn render-diagrams        # Render all PlantUML diagrams to static/img/plantum
 yarn fetch-api-specs        # Download the OpenAPI documents (also runs automatically on start/build)
 yarn copy-scalar-runtime    # Vendor the Scalar bundle (also runs automatically on start/build)
 yarn verify-api-build       # Check ./build has every API page, document and runtime, and that links resolve
+yarn verify-controls        # Check the control catalog and standards mapping agree (also runs on build)
 yarn update-api-anchors     # Rewrite diagram operation links to the fragments Scalar serves
 yarn test                   # Run unit tests (node --test)
 yarn coverage               # Unit tests with coverage thresholds enforced
@@ -203,6 +204,31 @@ Each integration lives in its own directory under `docs/certificate-key/integrat
 - Page order inside the directory comes from `sidebar_position` in the front matter, with the overview at position 1
 - Guides describe what to configure in the third-party product and in the platform. Deploying the connector itself belongs in the installation guide, not here
 - Prefer naming entities and their attributes over navigation paths — product menus change more often than the concepts do
+
+### Development Lifecycle section
+
+The section has three layers: narrative pages that describe how work is done, the control catalog in `controls-and-evidence.md`, and the mapping to external frameworks in `standards-mapping/` — an overview page holding the requirement themes, plus one page per framework. They are kept separate so that a change in practice touches the narrative and at most one control row, never the mapping, and so that adding a standard is a new framework page and a linked entry in the overview, not a change to the themes.
+
+**The catalog is a second surface for every claim the narrative pages make.** If a control row says something the narrative does not, or says it more strongly, the section contradicts itself and a reader comparing the two loses confidence in both. Change a page and its control row together.
+
+**`DL-nn` identifiers are append-only** — never renumbered, never reused, because auditors cite them. A definition is a table row in `controls-and-evidence.md` whose first cell is the identifier, emphasized; a reference is an identifier cited in the mapping's Controls column. `yarn verify-controls` runs in `prebuild` and fails the build on a dangling reference, an orphan control, or a duplicate definition. It also reads the overview's gate table and fails on a `DL-nn` citation there that the catalog does not define — but only a citation in the mapping's own Controls column clears the orphan check, so citing a control in the overview alone still leaves it orphaned.
+
+**Within the section, product and tool names never appear; formats, standards and verification interfaces always do** — SPDX, SLSA, Sigstore and `cosign`, CVE, CWE, OWASP, Semantic Versioning. The test: would replacing this with a competitor change the meaning for the reader? If yes it is a format and gets named; if no it is a tool and does not.
+
+A control's evidence follows the same logic: it names the configuration that enforces it — a repository's rule set, a workflow definition — not the product that implements it, because that configuration is public, authoritative and current, and it names its own current tools. So the documentation stays true when a tool is replaced.
+
+**Paragraphs in the section's narrative pages are single lines in the source**, matching the rest of the site, not hard-wrapped at a fixed column; a line break belongs only between an actual block — a paragraph, list item, or table row — never inside one.
+
+A few facts were wrong in earlier drafts; nobody should reintroduce them:
+
+- The build emits **SPDX** bills of materials, not CycloneDX. CycloneDX appears elsewhere in the organization as a product feature for cryptographic bills of materials — a different thing.
+- **CVSS is not used.** Severity is assessed on impact, exploitability and exposure; do not name a scoring framework.
+- **Signing coverage differs by repository** — some sign each published file, others sign the checksum manifest. Write that each release publishes checksums and signatures alongside its artifacts, never that every artifact is signed.
+- Automated dependency **security updates are not universal** across repositories, so do not claim them as a single mechanism.
+
+Only what is enforced and evidenced belongs in the section. Date an adopted target but not a settled fact — the quarterly release cadence is adopted and effective from the next release cycle, not an established rhythm. Scope claims by criterion rather than by list, so they do not rot as repositories are added: the full rule set is active on every repository that builds a released platform component. Describe where advisories appear rather than asserting that any exist, and say nothing about penetration testing, dynamic security testing or independent external security assessment, in either direction.
+
+Two traps to know before editing. The retired `/docs/qa-strategy/*` URLs are intentionally **not** redirected. And pages under `quality-and-review/` and `standards-mapping/` sit one level deeper than the pages they replaced, so relative links out of those directories need one more `../` than a page directly under the section.
 
 ## CI/CD
 
