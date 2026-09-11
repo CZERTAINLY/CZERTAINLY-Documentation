@@ -16,8 +16,9 @@
     "fetch-api-specs": "node scripts/fetch-api-specs.mjs",
     "copy-scalar-runtime": "node scripts/copy-scalar-runtime.mjs",
     "verify-api-build": "node scripts/verify-api-build.mjs",
+    "verify-controls": "node scripts/verify-controls.mjs",
     "update-api-anchors": "node scripts/update-api-anchors.mjs",
-    "prebuild": "yarn render-diagrams",
+    "prebuild": "yarn render-diagrams && yarn verify-controls",
     "test": "node --test",
     "coverage": "node --test --experimental-test-coverage --test-coverage-lines=80 --test-coverage-branches=80 --test-coverage-functions=80 --test-coverage-exclude='**/*.test.mjs' --test-coverage-exclude='src/data/**' --test-coverage-exclude='scripts/plantuml-server.mjs' --test-coverage-exclude='scripts/render-diagrams.mjs'"
   },
